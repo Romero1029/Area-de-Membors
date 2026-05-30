@@ -1,0 +1,172 @@
+import type { Profile, Product, ModuleWithLessons, CourseProgress } from '@/types'
+
+export const DEMO_PROFILE: Profile = {
+  id: 'demo-admin',
+  full_name: 'Igor Souza',
+  avatar_url: null,
+  bio: 'Administrador da plataforma IDM Tools.',
+  role: 'admin',
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+}
+
+/* Banners principais (estilo iFood) */
+export const DEMO_BANNERS = [
+  {
+    id: 'b1',
+    title: 'Psicanálise Prática',
+    subtitle: 'Do zero ao avançado — 40 aulas',
+    cta: 'Continuar curso',
+    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    emoji: '🧠',
+    slug: 'psicanalise-pratica',
+    badge: 'Em andamento',
+    badgeColor: '#FFA902',
+  },
+  {
+    id: 'b2',
+    title: 'Semana da Numerologia',
+    subtitle: 'Aula ao vivo — Sáb. 14h',
+    cta: 'Reservar lugar',
+    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    emoji: '✨',
+    slug: 'numerologia-despertamente',
+    badge: 'Ao vivo',
+    badgeColor: '#f5576c',
+  },
+  {
+    id: 'b3',
+    title: 'PNL na Prática',
+    subtitle: 'Novo módulo disponível',
+    cta: 'Ver agora',
+    gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    emoji: '🎯',
+    slug: 'pnl-transformacao',
+    badge: 'Novo',
+    badgeColor: '#00B4D8',
+  },
+  {
+    id: 'b4',
+    title: 'Meditação Guiada',
+    subtitle: '21 dias de transformação',
+    cta: 'Começar agora',
+    gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    emoji: '🌿',
+    slug: 'meditacao-guiada',
+    badge: 'Gratuito',
+    badgeColor: '#43e97b',
+  },
+]
+
+/* Produtos com acesso (matriculado) */
+export const DEMO_PRODUCTS: Product[] = [
+  {
+    id: 'prod-1',
+    slug: 'psicanalise-pratica',
+    title: 'Psicanálise Prática',
+    description: 'Fundamentos e aplicações da psicanálise no dia a dia.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+    product_type: 'course',
+    is_published: true,
+    sort_order: 0,
+    created_by: 'demo-admin',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'prod-2',
+    slug: 'numerologia-despertamente',
+    title: 'Numerologia — Mapa de Vida',
+    description: 'Desvende os números que guiam sua jornada.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=400&q=80',
+    product_type: 'course',
+    is_published: true,
+    sort_order: 1,
+    created_by: 'demo-admin',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'prod-3',
+    slug: 'pnl-transformacao',
+    title: 'PNL — Programação Neurolinguística',
+    description: 'Técnicas para reprogramar seus padrões mentais.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=400&q=80',
+    product_type: 'course',
+    is_published: true,
+    sort_order: 2,
+    created_by: 'demo-admin',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+]
+
+/* Produtos BLOQUEADOS (sem acesso) */
+export const DEMO_LOCKED_PRODUCTS = [
+  {
+    id: 'lock-1',
+    slug: 'espiritualidade-avancada',
+    title: 'Espiritualidade Avançada',
+    description: 'Conexão com o sagrado e práticas de expansão de consciência.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=400&q=80',
+    product_type: 'course',
+    category: 'Espiritualidade',
+    lessons: 28,
+  },
+  {
+    id: 'lock-2',
+    slug: 'jornada-interior',
+    title: 'Jornada Interior',
+    description: 'Um mergulho profundo no autoconhecimento com técnicas integradas.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=400&q=80',
+    product_type: 'course',
+    category: 'Autoconhecimento',
+    lessons: 35,
+  },
+  {
+    id: 'lock-3',
+    slug: 'relacionamentos-conscientes',
+    title: 'Relacionamentos Conscientes',
+    description: 'Construa vínculos saudáveis baseados em consciência e respeito.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80',
+    product_type: 'course',
+    category: 'Relacionamentos',
+    lessons: 22,
+  },
+  {
+    id: 'lock-4',
+    slug: 'rituais-e-praticas',
+    title: 'Rituais e Práticas Diárias',
+    description: 'Desenvolva uma rotina de crescimento pessoal consistente.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&q=80',
+    product_type: 'ebook',
+    category: 'Bem-estar',
+    lessons: 15,
+  },
+]
+
+export const DEMO_MODULES: ModuleWithLessons[] = [
+  {
+    id: 'mod-1', product_id: 'prod-1', title: 'Módulo 1 — Fundamentos', description: null, sort_order: 0,
+    created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
+    lessons: [
+      { id: 'les-1', module_id: 'mod-1', title: 'O que é Psicanálise?', description: 'Introdução histórica e conceitual.', lesson_type: 'video', video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', video_duration: 1200, content: null, file_url: null, is_free_preview: true, sort_order: 0, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+      { id: 'les-2', module_id: 'mod-1', title: 'Freud e o Inconsciente', description: null, lesson_type: 'video', video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', video_duration: 1800, content: null, file_url: null, is_free_preview: false, sort_order: 1, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+      { id: 'les-3', module_id: 'mod-1', title: 'O Método Psicanalítico', description: null, lesson_type: 'video', video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', video_duration: 2100, content: null, file_url: null, is_free_preview: false, sort_order: 2, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+    ],
+  },
+  {
+    id: 'mod-2', product_id: 'prod-1', title: 'Módulo 2 — Estruturas Psíquicas', description: null, sort_order: 1,
+    created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
+    lessons: [
+      { id: 'les-4', module_id: 'mod-2', title: 'Id, Ego e Superego', description: null, lesson_type: 'video', video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', video_duration: 1560, content: null, file_url: null, is_free_preview: false, sort_order: 0, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+      { id: 'les-5', module_id: 'mod-2', title: 'Mecanismos de Defesa', description: null, lesson_type: 'video', video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', video_duration: 2400, content: null, file_url: null, is_free_preview: false, sort_order: 1, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+    ],
+  },
+]
+
+export const DEMO_PROGRESS: CourseProgress[] = [
+  { user_id: 'demo-admin', product_id: 'prod-1', total_lessons: 5, completed_lessons: 2, percent_complete: 40 },
+  { user_id: 'demo-admin', product_id: 'prod-2', total_lessons: 8, completed_lessons: 8, percent_complete: 100 },
+  { user_id: 'demo-admin', product_id: 'prod-3', total_lessons: 6, completed_lessons: 0, percent_complete: 0 },
+]
