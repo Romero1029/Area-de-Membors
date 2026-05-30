@@ -1,10 +1,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
-import { BookOpen, Lock, PlayCircle, ChevronRight, Clock } from 'lucide-react'
+import { BookOpen, PlayCircle, ChevronRight, Clock, ShoppingBag } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { DEMO_BANNERS, DEMO_LOCKED_PRODUCTS } from '@/lib/demo-data'
+import { DEMO_BANNERS } from '@/lib/demo-data'
 import type { CourseProgress, Profile } from '@/types'
+import { getFeaturedProduct, getUpsellProducts } from '@/lib/actions/store'
+import { DashboardHeroBanner } from '@/components/marketing/DashboardHeroBanner'
+import { ProductCard } from '@/components/marketing/ProductCard'
 
 type EnrollmentItem = {
   id: string; product_id: string
@@ -25,8 +28,15 @@ export default async function DashboardPage() {
     sb.from('course_progress').select('*').eq('user_id', user.id),
   ])
 
-  const profile = profileRaw as Profile | null
   const enrollments = (enrollmentsRaw ?? []) as EnrollmentItem[]
+  const enrolledIds = enrollments.map((e) => e.product_id)
+
+  const [featuredProduct, upsellProducts] = await Promise.all([
+    getFeaturedProduct(),
+    getUpsellProducts(enrolledIds),
+  ])
+
+  const profile = profileRaw as Profile | null
   const progressMap: Record<string, CourseProgress> = Object.fromEntries(
     ((progressRaw ?? []) as CourseProgress[]).map((p: CourseProgress) => [p.product_id, p])
   )
@@ -38,6 +48,11 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8 max-w-5xl pb-12">
+
+      {/* Banner de produto em destaque */}
+      {featuredProduct && (
+        <DashboardHeroBanner product={featuredProduct} />
+      )}
 
       {/* Hero */}
       <div className="relative rounded-3xl overflow-hidden px-7 py-8"
@@ -122,37 +137,26 @@ export default async function DashboardPage() {
         </section>
       )}
 
-      {/* Bloqueados */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-lg font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>Explore mais conteúdos</h2>
-          <p className="text-sm text-[#5f6b78] mt-0.5">Solicite acesso para desbloquear novos cursos e jornadas.</p>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {DEMO_LOCKED_PRODUCTS.map((product) => (
-            <div key={product.id} className="rounded-2xl overflow-hidden" style={{ background: '#fffaf3', border: '1px solid rgba(23,36,50,0.08)' }}>
-              <div className="relative aspect-video overflow-hidden" style={{ background: '#f0ebe2' }}>
-                <img src={product.thumbnail_url} alt={product.title} className="w-full h-full object-cover" style={{ filter: 'blur(2px) grayscale(30%)', opacity: 0.45 }} />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,250,243,0.95)', boxShadow: '0 4px 16px rgba(23,36,50,0.15)' }}>
-                    <Lock className="w-4 h-4 text-[#5f6b78]" />
-                  </div>
-                </div>
-                <span className="absolute top-2 left-2 text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,250,243,0.9)', color: '#1a2430' }}>{product.category}</span>
-              </div>
-              <div className="p-3.5 space-y-3">
-                <p className="text-sm font-bold text-[#1a2430] leading-snug">{product.title}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#5f6b78] flex items-center gap-1"><BookOpen className="w-3 h-3" />{product.lessons} aulas</span>
-                  <button className="text-xs font-bold px-3 py-1.5 rounded-xl" style={{ background: 'rgba(199,154,59,0.12)', color: '#c79a3b', border: '1px solid rgba(199,154,59,0.25)' }}>
-                    Solicitar acesso
-                  </button>
-                </div>
-              </div>
+      {/* Amplie sua jornada — Upsell de produtos */}
+      {upsellProducts.length > 0 && (
+        <section className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>Amplie sua jornada</h2>
+              <p className="text-sm text-[#5f6b78] mt-0.5">Produtos selecionados para o seu próximo nível.</p>
             </div>
-          ))}
-        </div>
-      </section>
+            <Link href="/loja" className="flex items-center gap-1 text-sm font-semibold" style={{ color: '#c79a3b' }}>
+              <ShoppingBag className="w-3.5 h-3.5" />
+              Ver loja <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {upsellProducts.map((product) => (
+              <ProductCard key={product.id} product={product} compact />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }

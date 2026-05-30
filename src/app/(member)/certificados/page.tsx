@@ -1,12 +1,30 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Award, Copy, ExternalLink } from 'lucide-react'
+import { Award, Share2, ChevronRight, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { getFeaturedProduct } from '@/lib/actions/store'
+import { CopyCodeButton } from './CopyCodeButton'
+import { ShareCertificateButton } from './ShareCertificateButton'
+import { BuyButton } from '@/components/marketing/BuyButton'
 
-export default async function CertificadosPage() {
+export default async function CertificadosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ celebrar?: string }>
+}) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+
+  const params = await searchParams
+  const celebrar = params.celebrar === 'true'
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profileRaw } = await (supabase as any)
+    .from('profiles')
+    .select('full_name')
+    .eq('id', user.id)
+    .single()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: certs } = await (supabase as any)
@@ -16,9 +34,34 @@ export default async function CertificadosPage() {
     .order('issued_at', { ascending: false })
 
   const certificates = certs ?? []
+  const userName = profileRaw?.full_name ?? 'Aluno'
+
+  // Produto para upsell após certificado
+  const nextProduct = celebrar ? await getFeaturedProduct() : null
 
   return (
-    <div className="max-w-3xl space-y-6 pb-10">
+    <div className="max-w-3xl space-y-8 pb-12">
+
+      {/* Banner de celebração */}
+      {celebrar && (
+        <div className="relative overflow-hidden rounded-3xl border border-[#c79a3b]/30 bg-gradient-to-br from-[#c79a3b]/20 via-[#1a2430] to-[#0f2233] p-8 text-center">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#c79a3b]/5 to-transparent" />
+          <div className="relative space-y-2">
+            <div className="flex items-center justify-center gap-2">
+              <Sparkles className="h-5 w-5 text-[#c79a3b]" />
+              <span className="text-sm font-bold uppercase tracking-widest text-[#c79a3b]">Parabéns!</span>
+              <Sparkles className="h-5 w-5 text-[#c79a3b]" />
+            </div>
+            <h2 className="font-fraunces text-2xl font-bold text-white">
+              Você completou o lançamento!
+            </h2>
+            <p className="text-white/60 text-sm">
+              Seu certificado foi emitido. Compartilhe sua conquista!
+            </p>
+          </div>
+        </div>
+      )}
+
       <div>
         <h1 className="text-2xl font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
           Meus Certificados
@@ -50,7 +93,13 @@ export default async function CertificadosPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          {certificates.map((cert: { id: string; full_name: string; certificate_code: string; issued_at: string; certificate_type: string }) => (
+          {certificates.map((cert: {
+            id: string
+            full_name: string
+            certificate_code: string
+            issued_at: string
+            certificate_type: string
+          }) => (
             <div
               key={cert.id}
               className="relative rounded-2xl overflow-hidden"
@@ -59,45 +108,92 @@ export default async function CertificadosPage() {
               {/* Linha dourada topo */}
               <div className="h-1 w-full" style={{ background: 'linear-gradient(90deg, #c79a3b, #e8b84b, #c79a3b)' }} />
 
-              <div className="p-6 flex items-start gap-5">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'rgba(199,154,59,0.15)', border: '1px solid rgba(199,154,59,0.3)' }}>
-                  <Award className="w-7 h-7" style={{ color: '#c79a3b' }} />
-                </div>
-
-                <div className="flex-1 space-y-2">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#c79a3b' }}>
-                      {cert.certificate_type === 'launch' ? 'Lançamento Gratuito' : 'Certificado de Conclusão'}
-                    </p>
-                    <p className="text-base font-bold text-white mt-0.5" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
-                      {cert.full_name}
-                    </p>
-                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                      Instituto Despertamente
-                    </p>
+              <div className="p-6 space-y-4">
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'rgba(199,154,59,0.15)', border: '1px solid rgba(199,154,59,0.3)' }}>
+                    <Award className="w-7 h-7" style={{ color: '#c79a3b' }} />
                   </div>
 
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <code className="text-xs font-bold px-2.5 py-1 rounded-lg" style={{ background: 'rgba(199,154,59,0.12)', color: '#e8b84b' }}>
-                      {cert.certificate_code}
-                    </code>
-                    <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                      Emitido em {new Date(cert.issued_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
-                    </span>
+                  <div className="flex-1 space-y-2">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#c79a3b' }}>
+                        {cert.certificate_type === 'launch' ? 'Lançamento Gratuito' : 'Certificado de Conclusão'}
+                      </p>
+                      <p className="text-base font-bold text-white mt-0.5" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
+                        {cert.full_name}
+                      </p>
+                      <p className="text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                        Instituto Despertamente
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <code className="text-xs font-bold px-2.5 py-1 rounded-lg" style={{ background: 'rgba(199,154,59,0.12)', color: '#e8b84b' }}>
+                        {cert.certificate_code}
+                      </code>
+                      <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                        Emitido em {new Date(cert.issued_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                      </span>
+                    </div>
                   </div>
+
+                  <CopyCodeButton code={cert.certificate_code} />
                 </div>
 
-                <button
-                  onClick={() => navigator.clipboard?.writeText(cert.certificate_code)}
-                  className="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-colors hover:bg-white/10"
-                  style={{ color: 'rgba(255,255,255,0.4)' }}
-                  title="Copiar código"
-                >
-                  <Copy className="w-4 h-4" />
-                </button>
+                {/* Ações do certificado */}
+                <div className="flex flex-wrap gap-2 pt-1 border-t border-white/10">
+                  <ShareCertificateButton
+                    userName={userName}
+                    certType={cert.certificate_type === 'launch' ? 'Lançamento Gratuito' : 'Conclusão de Curso'}
+                    issuedAt={cert.issued_at}
+                  />
+                </div>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Upsell pós-certificado */}
+      {celebrar && nextProduct && (
+        <div className="rounded-2xl border border-[#c79a3b]/20 bg-[#1a2430] p-6 space-y-4">
+          <div className="space-y-1">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#c79a3b]">Qual é o próximo passo?</p>
+            <h3 className="font-fraunces text-xl font-bold text-white">{nextProduct.title}</h3>
+            {nextProduct.short_description && (
+              <p className="text-sm text-white/60">{nextProduct.short_description}</p>
+            )}
+          </div>
+          <div className="flex items-center gap-4">
+            <BuyButton
+              productId={nextProduct.id}
+              label={nextProduct.cta_label ?? 'Quero evoluir'}
+              checkoutUrl={nextProduct.checkout_url}
+              variant="solid"
+            />
+            <Link href="/loja" className="flex items-center gap-1 text-xs text-white/40 hover:text-white/70 transition-colors">
+              Ver todos os produtos <ChevronRight className="h-3 w-3" />
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* CTA para a loja */}
+      {!celebrar && certificates.length > 0 && (
+        <div className="flex items-center justify-between rounded-2xl border border-[#c79a3b]/15 bg-[#c79a3b]/5 p-4">
+          <div className="flex items-center gap-3">
+            <Share2 className="h-5 w-5 text-[#c79a3b]" />
+            <div>
+              <p className="text-sm font-semibold text-[#1a2430]">Pronto para o próximo nível?</p>
+              <p className="text-xs text-[#5f6b78]">Explore nossos cursos e mentorias.</p>
+            </div>
+          </div>
+          <Link
+            href="/loja"
+            className="flex items-center gap-1 rounded-xl border border-[#c79a3b]/30 bg-[#c79a3b]/10 px-4 py-2 text-xs font-bold text-[#c79a3b] hover:bg-[#c79a3b]/20 transition-colors"
+          >
+            Ver loja <ChevronRight className="h-3 w-3" />
+          </Link>
         </div>
       )}
     </div>

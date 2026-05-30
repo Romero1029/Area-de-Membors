@@ -58,9 +58,23 @@ export const DEMO_BANNERS = [
   },
 ]
 
+const PRODUCT_DEFAULTS = {
+  short_description: null,
+  is_featured: false,
+  price: null,
+  original_price: null,
+  currency: 'BRL',
+  payment_type: 'free' as const,
+  cta_label: null,
+  highlights: null,
+  badge_label: null,
+  checkout_url: null,
+}
+
 /* Produtos com acesso (matriculado) */
 export const DEMO_PRODUCTS: Product[] = [
   {
+    ...PRODUCT_DEFAULTS,
     id: 'prod-1',
     slug: 'psicanalise-pratica',
     title: 'Psicanálise Prática',
@@ -74,6 +88,7 @@ export const DEMO_PRODUCTS: Product[] = [
     updated_at: new Date().toISOString(),
   },
   {
+    ...PRODUCT_DEFAULTS,
     id: 'prod-2',
     slug: 'numerologia-despertamente',
     title: 'Numerologia — Mapa de Vida',
@@ -87,6 +102,7 @@ export const DEMO_PRODUCTS: Product[] = [
     updated_at: new Date().toISOString(),
   },
   {
+    ...PRODUCT_DEFAULTS,
     id: 'prod-3',
     slug: 'pnl-transformacao',
     title: 'PNL — Programação Neurolinguística',

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, BookOpen, User, Award, Video, LogOut, Rocket } from 'lucide-react'
+import { LayoutDashboard, BookOpen, User, Award, Video, LogOut, Rocket, ShoppingBag } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/lib/actions/auth'
 import { IdmWordmark } from './IdmWordmark'
@@ -10,6 +10,7 @@ import type { Profile } from '@/types'
 
 const navItems = [
   { href: '/dashboard', label: 'Início', icon: LayoutDashboard },
+  { href: '/loja', label: 'Loja', icon: ShoppingBag, badge: 'Novo' },
   { href: '/lancamento', label: 'Lançamento Gratuito', icon: Rocket, highlight: true },
   { href: '/cursos', label: 'Meus Cursos', icon: BookOpen },
   { href: '/ao-vivo', label: 'Aulas ao Vivo', icon: Video },
@@ -32,7 +33,7 @@ export function Sidebar({ profile }: { profile: Profile }) {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-5 space-y-0.5">
-        {navItems.map(({ href, label, icon: Icon, highlight }) => {
+        {navItems.map(({ href, label, icon: Icon, highlight, badge }) => {
           const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href + '/'))
           return (
             <Link
@@ -55,7 +56,12 @@ export function Sidebar({ profile }: { profile: Profile }) {
               >
                 <Icon className="w-3.5 h-3.5" strokeWidth={2.5} />
               </span>
-              {label}
+              <span className="flex-1 truncate">{label}</span>
+              {badge && !active && (
+                <span className="rounded-full bg-[#c79a3b] px-1.5 py-0.5 text-[10px] font-bold text-[#1a2430] leading-none">
+                  {badge}
+                </span>
+              )}
             </Link>
           )
         })}

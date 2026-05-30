@@ -42,10 +42,20 @@ export interface Database {
           slug: string
           title: string
           description: string | null
+          short_description: string | null
           thumbnail_url: string | null
-          product_type: 'course' | 'ebook' | 'bundle'
+          product_type: 'course' | 'ebook' | 'bundle' | 'mentorship' | 'event'
           is_published: boolean
+          is_featured: boolean
           sort_order: number
+          price: number | null
+          original_price: number | null
+          currency: string
+          payment_type: 'one_time' | 'subscription' | 'free'
+          cta_label: string | null
+          highlights: string[] | null
+          badge_label: string | null
+          checkout_url: string | null
           created_by: string | null
           created_at: string
           updated_at: string
@@ -55,20 +65,40 @@ export interface Database {
           slug: string
           title: string
           description?: string | null
+          short_description?: string | null
           thumbnail_url?: string | null
-          product_type?: 'course' | 'ebook' | 'bundle'
+          product_type?: 'course' | 'ebook' | 'bundle' | 'mentorship' | 'event'
           is_published?: boolean
+          is_featured?: boolean
           sort_order?: number
+          price?: number | null
+          original_price?: number | null
+          currency?: string
+          payment_type?: 'one_time' | 'subscription' | 'free'
+          cta_label?: string | null
+          highlights?: string[] | null
+          badge_label?: string | null
+          checkout_url?: string | null
           created_by?: string | null
         }
         Update: {
           slug?: string
           title?: string
           description?: string | null
+          short_description?: string | null
           thumbnail_url?: string | null
-          product_type?: 'course' | 'ebook' | 'bundle'
+          product_type?: 'course' | 'ebook' | 'bundle' | 'mentorship' | 'event'
           is_published?: boolean
+          is_featured?: boolean
           sort_order?: number
+          price?: number | null
+          original_price?: number | null
+          currency?: string
+          payment_type?: 'one_time' | 'subscription' | 'free'
+          cta_label?: string | null
+          highlights?: string[] | null
+          badge_label?: string | null
+          checkout_url?: string | null
         }
       }
       modules: {
@@ -177,6 +207,113 @@ export interface Database {
           completed?: boolean
           completed_at?: string | null
           watch_seconds?: number
+        }
+      }
+      testimonials: {
+        Row: {
+          id: string
+          product_id: string | null
+          author_name: string
+          author_role: string | null
+          avatar_url: string | null
+          content: string
+          rating: number | null
+          is_featured: boolean
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          product_id?: string | null
+          author_name: string
+          author_role?: string | null
+          avatar_url?: string | null
+          content: string
+          rating?: number | null
+          is_featured?: boolean
+          sort_order?: number
+        }
+        Update: {
+          product_id?: string | null
+          author_name?: string
+          author_role?: string | null
+          avatar_url?: string | null
+          content?: string
+          rating?: number | null
+          is_featured?: boolean
+          sort_order?: number
+        }
+      }
+      payments: {
+        Row: {
+          id: string
+          user_id: string
+          product_id: string
+          mp_preference_id: string | null
+          mp_payment_id: string | null
+          status: 'pending' | 'approved' | 'rejected' | 'cancelled' | 'refunded'
+          amount: number
+          currency: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          product_id: string
+          mp_preference_id?: string | null
+          mp_payment_id?: string | null
+          status?: 'pending' | 'approved' | 'rejected' | 'cancelled' | 'refunded'
+          amount: number
+          currency?: string
+        }
+        Update: {
+          mp_preference_id?: string | null
+          mp_payment_id?: string | null
+          status?: 'pending' | 'approved' | 'rejected' | 'cancelled' | 'refunded'
+          updated_at?: string
+        }
+      }
+      achievements: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          description: string | null
+          icon: string | null
+          xp_reward: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          description?: string | null
+          icon?: string | null
+          xp_reward?: number
+        }
+        Update: {
+          title?: string
+          description?: string | null
+          icon?: string | null
+          xp_reward?: number
+        }
+      }
+      user_achievements: {
+        Row: {
+          id: string
+          user_id: string
+          achievement_id: string
+          unlocked_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          achievement_id: string
+          unlocked_at?: string
+        }
+        Update: {
+          unlocked_at?: string
         }
       }
     }
