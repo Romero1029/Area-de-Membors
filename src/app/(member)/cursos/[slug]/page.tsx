@@ -1,136 +1,197 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { CheckCircle, Circle, Clock, PlayCircle } from 'lucide-react'
+import Image from 'next/image'
+import { CheckCircle, Circle, Clock, PlayCircle, FileText, ClipboardList, Info, Plus, Pencil, Trash2, Lock } from 'lucide-react'
 import { formatDuration } from '@/lib/utils'
 import { DEMO_PRODUCTS, DEMO_MODULES, DEMO_PROGRESS } from '@/lib/demo-data'
+import { CourseTabsClient } from './CourseTabsClient'
 import type { ModuleWithLessons, Progress, Product } from '@/types'
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
-async function getData(slug: string) {
+async function getData(slug: string, userId: string) {
   if (DEMO_MODE) {
-    const product = DEMO_PRODUCTS.find((p) => p.slug === slug) ?? null
+    const product = DEMO_PRODUCTS.find(p => p.slug === slug) ?? null
     if (!product) return null
-    const modules = DEMO_MODULES.filter((m) => m.product_id === product.id)
-    const progress = DEMO_PROGRESS.find((p) => p.product_id === product.id)
+    const modules = DEMO_MODULES.filter(m => m.product_id === product.id)
+    const prog = DEMO_PROGRESS.find(p => p.product_id === product.id)
     const progressMap: Record<string, Progress> = {}
-    if (progress && progress.completed_lessons > 0) {
-      modules[0]?.lessons.slice(0, progress.completed_lessons).forEach((l) => {
-        progressMap[l.id] = { id: `prog-${l.id}`, user_id: 'demo-admin', lesson_id: l.id, completed: true, completed_at: new Date().toISOString(), watch_seconds: l.video_duration ?? 0 }
+    if (prog?.completed_lessons) {
+      modules[0]?.lessons.slice(0, prog.completed_lessons).forEach(l => {
+        progressMap[l.id] = { id: `prog-${l.id}`, user_id: userId, lesson_id: l.id, completed: true, completed_at: new Date().toISOString(), watch_seconds: l.video_duration ?? 0 }
       })
     }
-    return { product, modules, progressMap, isEnrolled: true }
+    return { product, modules, progressMap, isEnrolled: true, isAdmin: false, tasks: [], materials: [] }
   }
 
-  const { redirect } = await import('next/navigation')
   const { createClient } = await import('@/lib/supabase/server')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sb = supabase as any
-  const { data: productRaw } = await sb.from('products').select('*').eq('slug', slug).eq('is_published', true).single()
+
+  const [{ data: productRaw }, { data: profileRaw }, { data: enrollmentRaw }, { data: modulesRaw }, { data: tasksRaw }, { data: materialsRaw }] = await Promise.all([
+    sb.from('products').select('*').eq('slug', slug).eq('is_published', true).single(),
+    sb.from('profiles').select('role').eq('id', user.id).single(),
+    sb.from('enrollments').select('id').eq('user_id', user.id).eq('is_active', true),
+    sb.from('modules').select('*, lessons (*)').eq('product_id', (await sb.from('products').select('id').eq('slug', slug).single()).data?.id).order('sort_order'),
+    sb.from('tasks').select('*').order('sort_order'),
+    sb.from('materials').select('*').order('sort_order'),
+  ])
+
   const product = productRaw as Product | null
   if (!product) return null
-  const { data: enrollmentRaw } = await sb.from('enrollments').select('id').eq('user_id', user!.id).eq('product_id', product.id).eq('is_active', true).single()
-  const { data: modulesRaw } = await sb.from('modules').select('*, lessons (*)').eq('product_id', product.id).order('sort_order')
+  const isAdmin = profileRaw?.role === 'admin'
+  const isEnrolled = isAdmin || !!(enrollmentRaw?.length)
   const modules = (modulesRaw ?? []) as ModuleWithLessons[]
-  const allLessonIds = modules.flatMap((m) => m.lessons.map((l) => l.id))
-  const { data: progressRaw } = await sb.from('progress').select('*').eq('user_id', user!.id).in('lesson_id', allLessonIds)
-  const progressMap: Record<string, Progress> = Object.fromEntries(((progressRaw ?? []) as Progress[]).map((p) => [p.lesson_id, p]))
-  return { product, modules, progressMap, isEnrolled: !!enrollmentRaw }
+  const allLessonIds = modules.flatMap(m => m.lessons.map(l => l.id))
+  const { data: progressRaw } = await sb.from('progress').select('*').eq('user_id', user.id).in('lesson_id', allLessonIds)
+  const progressMap: Record<string, Progress> = Object.fromEntries(((progressRaw ?? []) as Progress[]).map((p: Progress) => [p.lesson_id, p]))
+
+  return { product, modules, progressMap, isEnrolled, isAdmin, tasks: tasksRaw ?? [], materials: materialsRaw ?? [] }
 }
 
 export default async function CoursePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const data = await getData(slug)
+
+  // Precisamos do userId para o demo
+  let userId = 'guest'
+  if (!DEMO_MODE) {
+    const { createClient } = await import('@/lib/supabase/server')
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) redirect('/login')
+    userId = user.id
+  }
+
+  const data = await getData(slug, userId)
   if (!data) notFound()
-  const { product, modules, progressMap, isEnrolled } = data
+  const { product, modules, progressMap, isEnrolled, isAdmin, tasks, materials } = data
 
-  const allLessonIds = modules.flatMap((m) => m.lessons.map((l) => l.id))
-  const totalLessons = allLessonIds.length
-  const completedLessons = Object.values(progressMap).filter((p) => p.completed).length
+  const allLessons = modules.flatMap(m => [...m.lessons].sort((a, b) => a.sort_order - b.sort_order))
+  const totalLessons = allLessons.length
+  const completedLessons = Object.values(progressMap).filter(p => p.completed).length
   const percent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0
-
-  const nextLesson = modules
-    .flatMap((m) => [...m.lessons].sort((a, b) => a.sort_order - b.sort_order))
-    .find((l) => !progressMap[l.id]?.completed)
+  const nextLesson = allLessons.find(l => !progressMap[l.id]?.completed)
 
   return (
-    <div className="max-w-4xl space-y-6">
-      {/* Hero */}
-      <div className="rounded-2xl overflow-hidden" style={{ background: '#111111', border: '1px solid #1a1a1a' }}>
-        {product.thumbnail_url && (
-          <div className="relative h-48 md:h-64 overflow-hidden">
-            <img src={product.thumbnail_url} alt={product.title} className="w-full h-full object-cover opacity-60" />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 30%, #111111 100%)' }} />
-          </div>
+    <div className="min-h-screen bg-[#0f0f0f]">
+
+      {/* ── HERO ── */}
+      <div className="relative w-full overflow-hidden" style={{ minHeight: 320 }}>
+        {product.thumbnail_url ? (
+          <>
+            <Image src={product.thumbnail_url} alt={product.title} fill priority className="object-cover opacity-40" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f0f]/40 via-[#0f0f0f]/60 to-[#0f0f0f]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f0f]/80 to-transparent" />
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0f2233] to-[#0f0f0f]" />
         )}
-        <div className="p-6 space-y-4">
-          <div>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider" style={{ background: 'rgba(255,169,2,0.15)', color: '#FFA902', border: '1px solid rgba(255,169,2,0.3)' }}>
-              {product.product_type}
-            </span>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mt-3">{product.title}</h1>
-            {product.description && <p className="text-sm mt-2 leading-relaxed" style={{ color: '#888888' }}>{product.description}</p>}
+
+        <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 pt-10 pb-8 flex flex-col gap-5">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs text-[#606060]">
+            <Link href="/dashboard" className="hover:text-[#f0f0f0] transition-colors">Início</Link>
+            <span>/</span>
+            <Link href="/cursos" className="hover:text-[#f0f0f0] transition-colors">Meus Cursos</Link>
+            <span>/</span>
+            <span className="text-[#a0a0a0] truncate max-w-[200px]">{product.title}</span>
           </div>
-          <div className="flex items-center gap-4 text-sm" style={{ color: '#666666' }}>
-            <span className="flex items-center gap-1.5"><PlayCircle className="w-4 h-4" />{totalLessons} aulas</span>
-            <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4" />{completedLessons} concluídas</span>
-          </div>
-          {isEnrolled && totalLessons > 0 && (
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs">
-                <span style={{ color: '#555555' }}>Progresso</span>
-                <span className="font-semibold" style={{ color: percent === 100 ? '#22c55e' : '#FFA902' }}>{percent}%</span>
+
+          <div className="grid lg:grid-cols-[1fr_280px] gap-8 items-end">
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-[#c79a3b]/15 border border-[#c79a3b]/25 px-3 py-0.5 text-xs font-bold uppercase tracking-wider text-[#c79a3b]">
+                  {product.product_type === 'course' ? 'Curso' : product.product_type}
+                </span>
+                {isAdmin && (
+                  <span className="rounded-full bg-blue-500/15 border border-blue-500/25 px-3 py-0.5 text-xs font-bold text-blue-400">
+                    Modo Editor
+                  </span>
+                )}
               </div>
-              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1a1a1a' }}>
-                <div className="h-full rounded-full transition-all duration-700" style={{ width: `${percent}%`, background: percent === 100 ? '#22c55e' : '#FFA902' }} />
+
+              <h1 className="font-display text-3xl sm:text-4xl font-bold text-[#f0f0f0] leading-tight">
+                {product.title}
+              </h1>
+
+              {product.short_description && (
+                <p className="text-[#a0a0a0] leading-relaxed max-w-xl">{product.short_description}</p>
+              )}
+
+              <div className="flex flex-wrap items-center gap-4 text-sm text-[#606060]">
+                <span className="flex items-center gap-1.5"><PlayCircle className="h-4 w-4 text-[#c79a3b]" />{totalLessons} aulas</span>
+                <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4 text-[#c79a3b]" />{completedLessons} concluídas</span>
+                {tasks.length > 0 && <span className="flex items-center gap-1.5"><ClipboardList className="h-4 w-4 text-[#c79a3b]" />{tasks.length} tarefas</span>}
               </div>
             </div>
-          )}
-          {isEnrolled && nextLesson && (
-            <Link href={`/cursos/${slug}/aulas/${nextLesson.id}`} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold" style={{ background: '#FFA902', color: '#000', boxShadow: '0 0 20px rgba(255,169,2,0.2)' }}>
-              <PlayCircle className="w-4 h-4" />
-              {completedLessons === 0 ? 'Começar curso' : 'Continuar'}
-            </Link>
-          )}
+
+            {/* Card de CTA */}
+            <div className="rounded-2xl border border-[#2a2a2a] bg-[#1a1a1a] p-5 space-y-4">
+              {isEnrolled && totalLessons > 0 && (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-[#606060]">Seu progresso</span>
+                    <span className="font-bold" style={{ color: percent === 100 ? '#22c55e' : '#c79a3b' }}>{percent}%</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-[#2a2a2a] overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-700" style={{
+                      width: `${percent}%`,
+                      background: percent === 100 ? '#22c55e' : 'linear-gradient(90deg, #c79a3b, #e8b84b)'
+                    }} />
+                  </div>
+                  <p className="text-xs text-[#606060]">{completedLessons} de {totalLessons} aulas</p>
+                </div>
+              )}
+
+              {isEnrolled ? (
+                nextLesson ? (
+                  <Link href={`/cursos/${slug}/aulas/${nextLesson.id}`}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-[#0f0f0f] transition-all hover:brightness-110"
+                    style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}
+                  >
+                    <PlayCircle className="h-4 w-4" />
+                    {completedLessons === 0 ? 'Começar curso' : 'Continuar de onde parei'}
+                  </Link>
+                ) : (
+                  <div className="flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-[#22c55e] bg-[#22c55e]/10 border border-[#22c55e]/20">
+                    <CheckCircle className="h-4 w-4" /> Curso concluído!
+                  </div>
+                )
+              ) : (
+                <Link href="/loja"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-[#0f0f0f] bg-[#c79a3b] hover:bg-[#e8b84b] transition-colors"
+                >
+                  <Lock className="h-4 w-4" /> Garantir acesso
+                </Link>
+              )}
+
+              {isAdmin && (
+                <Link href={`/admin/cursos/${slug}/editar`}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-blue-500/30 py-2.5 text-xs font-semibold text-blue-400 hover:bg-blue-500/10 transition-colors"
+                >
+                  <Pencil className="h-3.5 w-3.5" /> Editar curso
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Módulos */}
-      <div className="space-y-3">
-        <h2 className="text-base font-semibold text-white">Conteúdo do curso</h2>
-        {modules.map((mod) => {
-          const modLessons = [...mod.lessons].sort((a, b) => a.sort_order - b.sort_order)
-          const modCompleted = modLessons.filter((l) => progressMap[l.id]?.completed).length
-          return (
-            <div key={mod.id} className="rounded-xl overflow-hidden" style={{ background: '#111111', border: '1px solid #1a1a1a' }}>
-              <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #1a1a1a' }}>
-                <h3 className="text-sm font-semibold text-white">{mod.title}</h3>
-                <span className="text-xs" style={{ color: '#555555' }}>{modCompleted}/{modLessons.length}</span>
-              </div>
-              <div className="divide-y" style={{ borderColor: '#1a1a1a' }}>
-                {modLessons.map((lesson) => {
-                  const done = !!progressMap[lesson.id]?.completed
-                  return (
-                    <div key={lesson.id} className="flex items-center gap-3 px-4 py-3">
-                      {done ? <CheckCircle className="w-4 h-4 shrink-0" style={{ color: '#22c55e' }} /> : <Circle className="w-4 h-4 shrink-0" style={{ color: '#444444' }} />}
-                      <Link href={`/cursos/${slug}/aulas/${lesson.id}`} className="flex-1 text-sm hover:underline" style={{ color: done ? '#666666' : '#f0f0f0' }}>
-                        {lesson.title}
-                      </Link>
-                      {lesson.video_duration && (
-                        <span className="text-xs flex items-center gap-1 shrink-0" style={{ color: '#555555' }}>
-                          <Clock className="w-3 h-3" />{formatDuration(lesson.video_duration)}
-                        </span>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )
-        })}
+      {/* ── CONTEÚDO COM TABS ── */}
+      <div className="max-w-5xl mx-auto px-5 sm:px-8 pb-20 pt-2">
+        <CourseTabsClient
+          slug={slug}
+          product={product}
+          modules={modules}
+          progressMap={progressMap}
+          isEnrolled={isEnrolled}
+          isAdmin={isAdmin}
+          tasks={tasks}
+          materials={materials}
+        />
       </div>
     </div>
   )
