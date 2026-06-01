@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Search, Bell, Menu, X, LayoutDashboard, BookOpen, ShoppingBag, Video, Award, User, LogOut, ChevronDown } from 'lucide-react'
+import { Search, Bell, Menu, X, LayoutDashboard, BookOpen, ShoppingBag, Video, Award, User, LogOut, ChevronDown, Rocket } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/lib/actions/auth'
 import { IdmWordmark } from './IdmWordmark'
@@ -20,10 +20,11 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Input } from '@/components/ui/input'
 
 const navLinks = [
-  { href: '/dashboard', label: 'Início',      icon: LayoutDashboard },
-  { href: '/cursos',    label: 'Meus Cursos', icon: BookOpen },
-  { href: '/loja',      label: 'Loja',        icon: ShoppingBag, badge: 'Novo' },
-  { href: '/ao-vivo',   label: 'Ao Vivo',     icon: Video },
+  { href: '/dashboard',  label: 'Início',       icon: LayoutDashboard },
+  { href: '/cursos',     label: 'Meus Cursos',  icon: BookOpen },
+  { href: '/lancamento', label: 'Lançamento',   icon: Rocket, highlight: true },
+  { href: '/loja',       label: 'Loja',         icon: ShoppingBag, badge: 'Novo' },
+  { href: '/ao-vivo',    label: 'Ao Vivo',      icon: Video },
 ]
 
 interface TopNavbarProps {
@@ -79,7 +80,7 @@ export function TopNavbar({ profile }: TopNavbarProps) {
 
           {/* Nav links — desktop */}
           <nav className="hidden md:flex items-center gap-1 flex-1">
-            {navLinks.map(({ href, label, badge }) => (
+            {navLinks.map(({ href, label, badge, highlight }) => (
               <Link
                 key={href}
                 href={href}
@@ -87,6 +88,8 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                   'relative px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150',
                   isActive(href)
                     ? 'text-[#c79a3b] bg-[rgba(199,154,59,0.1)]'
+                    : highlight
+                    ? 'text-[#c79a3b] hover:bg-[rgba(199,154,59,0.08)]'
                     : 'text-[#a0a0a0] hover:text-[#f0f0f0] hover:bg-[#242424]'
                 )}
               >
