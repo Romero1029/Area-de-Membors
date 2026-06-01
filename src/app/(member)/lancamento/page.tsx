@@ -1,9 +1,22 @@
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
-import { Lock, Calendar, Clock, ExternalLink, ShoppingCart, Award, Video, Sparkles } from 'lucide-react'
+import Link from 'next/link'
+import {
+  Lock, Calendar, Clock, ExternalLink, ShoppingCart,
+  Award, Play, Users, Sparkles, MessageCircle, ChevronRight,
+  Check,
+} from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { YouTubePlayer } from '@/components/player/YouTubePlayer'
 import { CertificadoForm } from '@/components/lancamento/CertificadoForm'
+import { AnimatedSection, AnimatedCard } from '@/components/marketing/AnimatedSection'
+
+type Live = {
+  id: string; number: number; title: string; description: string
+  date_label: string; time_label: string; live_url: string
+  is_locked: boolean; thumbnail_url: string | null; youtube_id: string | null
+  sort_order: number
+}
 
 export default async function LancamentoPage() {
   const supabase = await createClient()
@@ -13,254 +26,303 @@ export default async function LancamentoPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sb = supabase as any
 
-  const [{ data: config }, { data: lives }, { data: existingCert }] = await Promise.all([
+  const [{ data: config }, { data: livesRaw }, { data: existingCert }, { data: profileRaw }] = await Promise.all([
     sb.from('launch_config').select('*').eq('is_active', true).single(),
     sb.from('launch_lives').select('*').order('sort_order'),
     sb.from('user_certificates').select('*').eq('user_id', user.id).eq('certificate_type', 'launch').single(),
+    sb.from('profiles').select('full_name').eq('id', user.id).single(),
   ])
 
+  const lives: Live[] = livesRaw ?? []
+  const firstName = (profileRaw?.full_name ?? 'Aluno').split(' ')[0]
+
   return (
-    <div className="max-w-4xl space-y-8 pb-16">
+    <div className="min-h-screen w-full bg-[#0f0f0f]">
+      <div className="w-full max-w-4xl mx-auto px-5 sm:px-8 py-10 pb-24 flex flex-col gap-12">
 
-      {/* ── HERO ── */}
-      <div
-        className="relative rounded-3xl overflow-hidden px-7 py-8"
-        style={{ background: 'linear-gradient(135deg, #0f2233 0%, #172432 100%)' }}
-      >
-        <div className="absolute right-6 top-1/2 -translate-y-1/2 opacity-[0.05] pointer-events-none">
-          <Image src="/despertamente-simbolo-branco.png" alt="" width={160} height={160} className="object-contain" />
-        </div>
-        <div className="relative space-y-2">
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full" style={{ background: 'rgba(199,154,59,0.15)', color: '#c79a3b', border: '1px solid rgba(199,154,59,0.25)' }}>
-            <Sparkles className="w-3 h-3" /> Lançamento Gratuito
-          </span>
-          <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
-            Sua jornada começa aqui
-          </h1>
-          <p className="text-[15px]" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Assista a aula introdutória, participe das 3 aulas ao vivo e resgate seu certificado.
-          </p>
-          <div className="flex flex-wrap gap-4 pt-2">
-            {[
-              { label: '1 aula gratuita', color: '#22c55e' },
-              { label: '3 aulas ao vivo', color: '#c79a3b' },
-              { label: 'Certificado exclusivo', color: '#3b82f6' },
-            ].map(({ label, color }) => (
-              <div key={label} className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
-                <span className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.7)' }}>{label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── AULA INTRODUTÓRIA (DESBLOQUEADA) ── */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black text-white shrink-0" style={{ background: '#22c55e' }}>1</div>
-          <div>
-            <h2 className="text-lg font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
-              {config?.intro_title ?? 'Aula Introdutória Gratuita'}
-            </h2>
-            <p className="text-sm text-[#5f6b78]">Desbloqueada — assista agora</p>
-          </div>
-          <span className="ml-auto text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: 'rgba(34,197,94,0.1)', color: '#16a34a', border: '1px solid rgba(34,197,94,0.2)' }}>
-            ✓ Liberado
-          </span>
-        </div>
-
-        <div className="rounded-2xl overflow-hidden" style={{ background: '#fffaf3', border: '1px solid rgba(23,36,50,0.08)' }}>
-          <div className="p-4">
-            {config?.intro_video_url ? (
-              <YouTubePlayer
-                videoUrl={config.intro_video_url}
-                lessonId="intro-launch"
-                productSlug="lancamento"
-                initialCompleted={false}
+        {/* ─── HERO ─── */}
+        <AnimatedSection>
+          <div className="relative w-full overflow-hidden rounded-2xl border border-[#2a2a2a]" style={{ minHeight: 260 }}>
+            {config?.thumbnail_url && (
+              <Image
+                src={config.thumbnail_url}
+                alt="Lançamento"
+                fill
+                priority
+                className="object-cover object-center"
               />
-            ) : (
-              <div className="aspect-video rounded-xl flex items-center justify-center" style={{ background: '#f0ebe2' }}>
-                <div className="text-center space-y-2">
-                  <Video className="w-8 h-8 mx-auto text-[#5f6b78]" />
-                  <p className="text-sm text-[#5f6b78]">Aula em breve</p>
-                </div>
-              </div>
             )}
-            {config?.intro_description && (
-              <p className="text-sm text-[#5f6b78] mt-4 leading-relaxed">{config.intro_description}</p>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3 AULAS AO VIVO ── */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black text-white shrink-0" style={{ background: '#c79a3b' }}>2</div>
-          <div>
-            <h2 className="text-lg font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
-              3 Aulas ao Vivo
-            </h2>
-            <p className="text-sm text-[#5f6b78]">Presenças obrigatórias para o certificado</p>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-4">
-          {(lives ?? []).map((live: { id: string; number: number; title: string; description: string; date_label: string; time_label: string; live_url: string; is_locked: boolean }) => (
-            <div
-              key={live.id}
-              className="rounded-2xl overflow-hidden relative"
-              style={{ background: '#fffaf3', border: '1px solid rgba(23,36,50,0.08)' }}
-            >
-              {/* Topo colorido */}
-              <div
-                className="p-4 relative"
-                style={{
-                  background: live.is_locked
-                    ? 'linear-gradient(135deg, #1a2430, #2d3f52)'
-                    : 'linear-gradient(135deg, #0f2233, #172432)',
-                  opacity: live.is_locked ? 0.7 : 1,
-                }}
-              >
-                <div className="flex items-start justify-between">
-                  <span className="text-xs font-black text-white/60 uppercase tracking-widest">Aula {live.number}</span>
-                  {live.is_locked
-                    ? <Lock className="w-4 h-4 text-white/40" />
-                    : <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                  }
-                </div>
-                <p className="text-sm font-bold text-white mt-2 leading-snug">{live.title}</p>
-              </div>
-
-              {/* Info */}
-              <div className="p-4 space-y-3">
-                <p className="text-xs text-[#5f6b78] leading-relaxed">{live.description}</p>
-
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs text-[#5f6b78]">
-                    <Calendar className="w-3.5 h-3.5 shrink-0" style={{ color: '#c79a3b' }} />
-                    {live.date_label}
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-[#5f6b78]">
-                    <Clock className="w-3.5 h-3.5 shrink-0" style={{ color: '#c79a3b' }} />
-                    {live.time_label}
-                  </div>
-                </div>
-
-                {live.is_locked ? (
-                  <div className="text-xs font-semibold text-center py-2 rounded-xl" style={{ background: 'rgba(23,36,50,0.05)', color: '#5f6b78' }}>
-                    🔒 Disponível em breve
-                  </div>
-                ) : (
-                  <a
-                    href={live.live_url ?? '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90"
-                    style={{ background: 'linear-gradient(135deg, #1a2430, #2d3f52)' }}
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" /> Entrar na aula ao vivo
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── PRODUTO LOW TICKET (BLOQUEADO) ── */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black text-white shrink-0" style={{ background: '#3b82f6' }}>3</div>
-          <div>
-            <h2 className="text-lg font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
-              Oferta Especial para Você
-            </h2>
-            <p className="text-sm text-[#5f6b78]">Exclusivo para participantes do lançamento</p>
-          </div>
-        </div>
-
-        <div
-          className="relative rounded-2xl overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #0f2233, #172432)', border: '1px solid rgba(199,154,59,0.2)' }}
-        >
-          {/* Faixa de desconto */}
-          <div className="absolute top-0 right-0">
-            <div className="px-4 py-2 text-xs font-black text-white rounded-bl-2xl" style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}>
-              OFERTA EXCLUSIVA
-            </div>
-          </div>
-
-          <div className="p-6 md:p-8 grid md:grid-cols-[1fr_auto] gap-6 items-center">
-            <div className="space-y-3">
-              <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#c79a3b' }}>✦ Acesso Imediato</p>
-              <h3 className="text-xl font-bold text-white leading-snug" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
-                {config?.product_name ?? 'Formação Completa'}
-              </h3>
-              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                {config?.product_description ?? 'Acesso completo a toda a formação.'}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f0f] via-[#0f0f0f]/85 to-[#0f0f0f]/40" />
+            <div className="relative z-10 px-8 py-10 space-y-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c79a3b]/30 bg-[#c79a3b]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#c79a3b]">
+                <Sparkles className="h-3 w-3" /> Lançamento Gratuito
+              </span>
+              <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-[#f0f0f0] leading-tight">
+                {config?.intro_title ?? 'Sua jornada começa aqui'}
+              </h1>
+              {config?.subtitle && (
+                <p className="text-sm font-semibold text-[#c79a3b]">{config.subtitle}</p>
+              )}
+              <p className="text-sm text-[#a0a0a0] max-w-lg">
+                Olá, {firstName}! Assista a aula gratuita, entre no grupo exclusivo, participe das 3 aulas ao vivo e resgate seu certificado.
               </p>
-              <div className="flex flex-wrap gap-3 pt-1">
-                {['Acesso vitalício', 'Suporte individual', 'Comunidade exclusiva', 'Certificado oficial'].map((f) => (
-                  <span key={f} className="text-xs px-2.5 py-1 rounded-full" style={{ background: 'rgba(199,154,59,0.12)', color: '#ead29b', border: '1px solid rgba(199,154,59,0.2)' }}>
-                    ✓ {f}
+              {/* Steps visuais */}
+              <div className="flex flex-wrap gap-3 pt-2">
+                {['Aula gratuita', '3 Lives', 'Grupo exclusivo', 'Certificado'].map((s, i) => (
+                  <span key={s} className="flex items-center gap-1.5 text-xs text-[#f0f0f0]/70">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#c79a3b]/20 text-[10px] font-bold text-[#c79a3b]">{i + 1}</span>
+                    {s}
                   </span>
                 ))}
               </div>
             </div>
+          </div>
+        </AnimatedSection>
 
-            <div className="text-center space-y-3 shrink-0">
-              <div>
-                <p className="text-xs text-white/40 line-through">De R$ 497</p>
-                <p className="text-3xl font-black" style={{ color: '#e8b84b' }}>
-                  {config?.product_price ?? 'R$ 97'}
-                </p>
-                <p className="text-xs text-white/40">ou 12x no cartão</p>
+        {/* ─── PASSO 1: AULA INTRODUTÓRIA ─── */}
+        <AnimatedSection delay={0.05}>
+          <div className="w-full space-y-4">
+            <StepHeader number={1} color="#22c55e" title="Aula Introdutória Gratuita" badge="Liberado ✓" />
+
+            <div className="w-full rounded-2xl overflow-hidden border border-[#2a2a2a] bg-[#111111]">
+              <div className="p-4 sm:p-6">
+                {config?.intro_video_url ? (
+                  <YouTubePlayer
+                    videoUrl={config.intro_video_url}
+                    lessonId="intro-launch"
+                    productSlug="lancamento"
+                    initialCompleted={false}
+                  />
+                ) : (
+                  <div className="aspect-video rounded-xl flex flex-col items-center justify-center gap-3 bg-[#1a1a1a] border border-[#2a2a2a]">
+                    <Play className="h-10 w-10 text-[#c79a3b]/40" />
+                    <p className="text-sm text-[#606060]">Aula em breve</p>
+                  </div>
+                )}
               </div>
-              <a
-                href={config?.product_url ?? '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black transition-all hover:opacity-90 hover:-translate-y-0.5"
-                style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#1a2430', boxShadow: '0 8px 32px rgba(199,154,59,0.35)' }}
-              >
-                <ShoppingCart className="w-4 h-4" />
-                Quero garantir!
-              </a>
+              {config?.intro_description && (
+                <div className="px-6 pb-6">
+                  <p className="text-sm text-[#a0a0a0] leading-relaxed">{config.intro_description}</p>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      </section>
+        </AnimatedSection>
 
-      {/* ── CERTIFICADO ── */}
-      <section className="space-y-4" id="certificado">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}>
-            <Award className="w-4 h-4 text-white" />
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
-              Resgate seu Certificado
-            </h2>
-            <p className="text-sm text-[#5f6b78]">Insira as 3 palavras-chave reveladas nas aulas ao vivo</p>
-          </div>
-        </div>
+        {/* ─── PASSO 2: GRUPO EXCLUSIVO ─── */}
+        <AnimatedSection delay={0.08}>
+          <div className="w-full space-y-4">
+            <StepHeader number={2} color="#3b82f6" title="Entre no Grupo Exclusivo" badge="WhatsApp" />
 
-        <div className="rounded-2xl p-6" style={{ background: '#fffaf3', border: '1px solid rgba(23,36,50,0.08)' }}>
-          {/* Aviso estratégico */}
-          {!existingCert && (
-            <div className="rounded-xl px-4 py-3 mb-5 text-sm" style={{ background: 'rgba(199,154,59,0.08)', border: '1px solid rgba(199,154,59,0.2)' }}>
-              <p className="font-bold text-[#1a2430]">💡 Como funciona?</p>
-              <p className="text-[#5f6b78] mt-0.5">
-                Durante cada aula ao vivo, uma palavra-chave especial é revelada.
-                Colete as 3 palavras e resgate seu certificado de participação oficial do Instituto Despertamente.
-              </p>
+            <a
+              href={config?.group_url ?? '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex w-full items-center gap-5 rounded-2xl border border-[#2a2a2a] bg-[#111111] p-6 hover:border-[#c79a3b]/40 hover:bg-[#1a1a1a] transition-all duration-200"
+            >
+              <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/15 border border-[#25D366]/20">
+                <MessageCircle className="h-7 w-7 text-[#25D366]" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-[#f0f0f0] text-base">Grupo Exclusivo — Turma #36</p>
+                <p className="text-sm text-[#606060] mt-0.5">Conteúdos exclusivos, avisos das lives e comunidade de alunos.</p>
+              </div>
+              <div className="flex items-center gap-2 rounded-xl bg-[#25D366] px-4 py-2 text-sm font-bold text-white flex-shrink-0 group-hover:bg-[#20c05c] transition-colors">
+                Entrar <ChevronRight className="h-4 w-4" />
+              </div>
+            </a>
+          </div>
+        </AnimatedSection>
+
+        {/* ─── PASSO 3: 3 AULAS AO VIVO ─── */}
+        <AnimatedSection delay={0.1}>
+          <div className="w-full space-y-5">
+            <StepHeader number={3} color="#c79a3b" title="3 Aulas ao Vivo" badge="Presença obrigatória p/ certificado" />
+
+            <div className="grid gap-5 sm:grid-cols-3">
+              {lives.map((live, i) => (
+                <AnimatedCard key={live.id} delay={0.06 * i}>
+                  <LiveCard live={live} />
+                </AnimatedCard>
+              ))}
             </div>
-          )}
-          <CertificadoForm existingCert={existingCert} />
+          </div>
+        </AnimatedSection>
+
+        {/* ─── PASSO 4: OFERTA LOW TICKET ─── */}
+        <AnimatedSection delay={0.1}>
+          <div className="w-full space-y-4">
+            <StepHeader number={4} color="#e879f9" title="Oferta Exclusiva para Participantes" badge="Low ticket" />
+
+            <div className="relative w-full overflow-hidden rounded-2xl border border-[#c79a3b]/25 bg-gradient-to-br from-[#1a1a0a] via-[#1a1a1a] to-[#0f0f0f]">
+              {/* Faixa topo */}
+              <div className="h-1 w-full bg-gradient-to-r from-[#c79a3b] via-[#e8b84b] to-[#c79a3b]" />
+
+              <div className="p-6 sm:p-8 grid sm:grid-cols-[1fr_200px] gap-6 items-center">
+                {/* Info */}
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#c79a3b]">✦ Oferta exclusiva desta semana</span>
+                    <h3 className="mt-1 font-display text-xl sm:text-2xl font-bold text-[#f0f0f0] leading-snug">
+                      {config?.product_name ?? 'Formação Completa'}
+                    </h3>
+                    <p className="mt-1.5 text-sm text-[#a0a0a0] leading-relaxed">
+                      {config?.product_description ?? 'Acesso completo à formação com suporte individual.'}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {['Acesso vitalício', 'Suporte individual', 'Comunidade exclusiva', 'Certificado oficial'].map((f) => (
+                      <span key={f} className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-[#c79a3b]/10 text-[#e8b84b] border border-[#c79a3b]/20">
+                        <Check className="h-3 w-3" /> {f}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Preço + CTA */}
+                <div className="flex flex-col items-center gap-3 text-center">
+                  <div>
+                    <p className="text-xs text-[#606060] line-through">De R$ 497</p>
+                    <p className="text-4xl font-black text-[#c79a3b] leading-none">
+                      {config?.product_price ?? 'R$ 97'}
+                    </p>
+                    <p className="text-xs text-[#606060] mt-0.5">ou 12× no cartão</p>
+                  </div>
+                  <a
+                    href={config?.product_url ?? '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-black text-[#0f0f0f] transition-all hover:brightness-110 hover:-translate-y-0.5"
+                    style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', boxShadow: '0 8px 24px rgba(199,154,59,0.35)' }}
+                  >
+                    <ShoppingCart className="h-4 w-4" /> Quero garantir!
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </AnimatedSection>
+
+        {/* ─── PASSO 5: CERTIFICADO ─── */}
+        <AnimatedSection delay={0.05}>
+          <div className="w-full space-y-4" id="certificado">
+            <StepHeader number={5} color="#c79a3b" title="Resgate seu Certificado" badge="3 palavras-chave das lives" />
+
+            <div className="w-full rounded-2xl border border-[#2a2a2a] bg-[#111111] p-6 space-y-4">
+              {!existingCert && (
+                <div className="rounded-xl border border-[#c79a3b]/20 bg-[#c79a3b]/5 px-4 py-3">
+                  <p className="text-sm font-bold text-[#f0f0f0]">💡 Como funciona?</p>
+                  <p className="text-xs text-[#a0a0a0] mt-0.5 leading-relaxed">
+                    Em cada aula ao vivo uma palavra-chave especial é revelada. Colete as 3 palavras e resgate seu certificado oficial do Instituto Despertamente.
+                  </p>
+                </div>
+              )}
+              <CertificadoForm existingCert={existingCert} />
+            </div>
+          </div>
+        </AnimatedSection>
+
+      </div>
+    </div>
+  )
+}
+
+/* ─── Componentes auxiliares ─── */
+
+function StepHeader({ number, color, title, badge }: { number: number; color: string; title: string; badge: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div
+        className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-black text-white"
+        style={{ background: color }}
+      >
+        {number}
+      </div>
+      <div className="flex-1 min-w-0">
+        <h2 className="text-lg font-bold text-[#f0f0f0] leading-tight">{title}</h2>
+      </div>
+      <span
+        className="flex-shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide border"
+        style={{ color, borderColor: color + '40', background: color + '15' }}
+      >
+        {badge}
+      </span>
+    </div>
+  )
+}
+
+function LiveCard({ live }: { live: Live }) {
+  return (
+    <div className={`group relative w-full flex flex-col overflow-hidden rounded-2xl border transition-all duration-300 ${live.is_locked ? 'border-[#2a2a2a] opacity-75' : 'border-[#c79a3b]/30 hover:-translate-y-1 hover:shadow-[0_0_24px_rgba(199,154,59,0.15)]'}`}>
+
+      {/* Thumbnail / imagem de referência */}
+      <div className="relative w-full overflow-hidden bg-[#1a1a1a]" style={{ aspectRatio: '16/9' }}>
+        {live.thumbnail_url ? (
+          <Image
+            src={live.thumbnail_url}
+            alt={live.title}
+            fill
+            sizes="(max-width: 640px) 100vw, 33vw"
+            className={`object-cover transition-transform duration-500 ${live.is_locked ? 'grayscale opacity-40' : 'group-hover:scale-105 opacity-60'}`}
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0f2233] to-[#1a2430]" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/50 to-transparent" />
+
+        {/* Número da aula */}
+        <div className="absolute top-3 left-3">
+          <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest ${live.is_locked ? 'bg-[#2a2a2a] text-[#606060]' : 'bg-[#c79a3b] text-[#0f0f0f]'}`}>
+            Aula {live.number}
+          </span>
         </div>
-      </section>
+
+        {/* Lock ou Live */}
+        <div className="absolute top-3 right-3">
+          {live.is_locked
+            ? <Lock className="h-4 w-4 text-[#606060]" />
+            : <div className="flex items-center gap-1.5 rounded-full bg-[#22c55e]/20 border border-[#22c55e]/30 px-2 py-0.5"><div className="h-1.5 w-1.5 rounded-full bg-[#22c55e] animate-pulse" /><span className="text-[10px] font-bold text-[#22c55e]">AO VIVO</span></div>
+          }
+        </div>
+      </div>
+
+      {/* Conteúdo */}
+      <div className="flex flex-1 flex-col gap-3 bg-[#111111] p-4">
+        <h3 className="font-bold text-[#f0f0f0] text-sm leading-snug line-clamp-2">
+          {live.title}
+        </h3>
+
+        {live.description && (
+          <p className="text-xs text-[#606060] leading-relaxed line-clamp-2">{live.description}</p>
+        )}
+
+        <div className="space-y-1.5 mt-auto">
+          <div className="flex items-center gap-1.5 text-xs text-[#a0a0a0]">
+            <Calendar className="h-3.5 w-3.5 text-[#c79a3b] flex-shrink-0" />
+            {live.date_label}
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-[#a0a0a0]">
+            <Clock className="h-3.5 w-3.5 text-[#c79a3b] flex-shrink-0" />
+            {live.time_label}
+          </div>
+        </div>
+
+        {live.is_locked ? (
+          <div className="mt-1 flex items-center justify-center gap-1.5 rounded-xl bg-[#1a1a1a] border border-[#2a2a2a] py-2.5 text-xs font-semibold text-[#606060]">
+            <Lock className="h-3 w-3" /> Disponível em breve
+          </div>
+        ) : (
+          <a
+            href={live.live_url ?? '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-bold text-[#0f0f0f] transition-all hover:brightness-110"
+            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}
+          >
+            <ExternalLink className="h-3.5 w-3.5" /> Entrar na live
+          </a>
+        )}
+      </div>
     </div>
   )
 }
