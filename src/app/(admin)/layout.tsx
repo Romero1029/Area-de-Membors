@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AdminSidebar } from '@/components/layout/AdminSidebar'
-import { TopBar } from '@/components/layout/TopBar'
 import type { Profile } from '@/types'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -16,11 +15,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!profile || profile.role !== 'admin') redirect('/dashboard')
 
   return (
-    <div className="flex min-h-screen" style={{ background: '#f6f0e7' }}>
+    <div className="flex min-h-screen bg-[#0a0a0a]">
       <AdminSidebar profile={profile as Profile} />
       <div className="flex flex-col flex-1 min-w-0">
-        <TopBar profile={profile as Profile} />
-        <main className="flex-1 p-5 md:p-7 animate-fade-in">
+        <main className="flex-1 p-6 md:p-8">
           {children}
         </main>
       </div>
