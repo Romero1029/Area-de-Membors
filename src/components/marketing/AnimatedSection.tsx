@@ -17,7 +17,7 @@ export function AnimatedSection({ children, className = '', delay = 0 }: Animate
   return (
     <motion.div
       ref={ref}
-      className={className}
+      className={`w-full ${className}`}
       initial={{ opacity: 0, y: shouldReduce ? 0 : 24 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: shouldReduce ? 0 : 24 }}
       transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94], delay }}
@@ -35,7 +35,7 @@ export function AnimatedCard({ children, className = '', delay = 0 }: AnimatedSe
   return (
     <motion.div
       ref={ref}
-      className={className}
+      className={`w-full ${className}`}
       initial={{ opacity: 0, y: shouldReduce ? 0 : 16, scale: shouldReduce ? 1 : 0.97 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: shouldReduce ? 0 : 16, scale: shouldReduce ? 1 : 0.97 }}
       transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94], delay }}
