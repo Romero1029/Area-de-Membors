@@ -1,12 +1,22 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { DEMO_PRODUCTS } from '@/lib/demo-data'
 import type { Database } from '@/types/database'
 
 export type StoreProduct = Database['public']['Tables']['products']['Row']
 export type Testimonial = Database['public']['Tables']['testimonials']['Row']
 
+const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
+// Produtos demo com preço (para loja e upsell)
+function getDemoStoreProducts(): StoreProduct[] {
+  return DEMO_PRODUCTS.filter(p => p.price !== null && p.is_published) as unknown as StoreProduct[]
+}
+
 export async function getStoreProducts(): Promise<StoreProduct[]> {
+  if (DEMO_MODE) return getDemoStoreProducts()
+
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase.from('products') as any)
@@ -20,6 +30,10 @@ export async function getStoreProducts(): Promise<StoreProduct[]> {
 }
 
 export async function getFeaturedProduct(): Promise<StoreProduct | null> {
+  if (DEMO_MODE) {
+    return (DEMO_PRODUCTS.find(p => p.is_featured && p.price !== null) ?? null) as unknown as StoreProduct | null
+  }
+
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase.from('products') as any)
@@ -36,6 +50,12 @@ export async function getFeaturedProduct(): Promise<StoreProduct | null> {
 }
 
 export async function getUpsellProducts(enrolledProductIds: string[]): Promise<StoreProduct[]> {
+  if (DEMO_MODE) {
+    return getDemoStoreProducts()
+      .filter(p => !enrolledProductIds.includes(p.id))
+      .slice(0, 3)
+  }
+
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let query = (supabase.from('products') as any)
@@ -55,6 +75,9 @@ export async function getUpsellProducts(enrolledProductIds: string[]): Promise<S
 }
 
 export async function getTestimonials(productId?: string): Promise<Testimonial[]> {
+  // Sem depoimentos no demo
+  if (DEMO_MODE) return []
+
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let query = (supabase.from('testimonials') as any)
@@ -73,6 +96,10 @@ export async function getTestimonials(productId?: string): Promise<Testimonial[]
 }
 
 export async function getProductBySlug(slug: string): Promise<StoreProduct | null> {
+  if (DEMO_MODE) {
+    return (DEMO_PRODUCTS.find(p => p.slug === slug && p.is_published) ?? null) as unknown as StoreProduct | null
+  }
+
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase.from('products') as any)
