@@ -1,94 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap');
 @import "tailwindcss";
 
-/* IDM Despertamente — Design System */
-:root {
-  --bg:           #f6f0e7;
-  --bg-deep:      #efe6da;
-  --surface:      rgba(255, 251, 246, 0.9);
-  --surface-strong: #fffaf3;
-  --surface-dark: #172432;
-  --ink:          #1a2430;
-  --muted:        #5f6b78;
-  --line:         rgba(23, 36, 50, 0.09);
-  --line-strong:  rgba(180, 139, 58, 0.28);
-  --gold:         #c79a3b;
-  --gold-soft:    #ead29b;
-  --gold-light:   #fdf5e8;
-  --teal:         #177c6b;
-  --shadow:       0 24px 80px rgba(42, 50, 59, 0.12);
+/* ============================================================
+   IDM Despertamente — Design System Dark + Gold
+   ============================================================ */
 
-  /* Shadcn tokens */
-  --background:   #f6f0e7;
-  --foreground:   #1a2430;
-  --card:         #fffaf3;
-  --card-foreground: #1a2430;
-  --popover:      #fffaf3;
-  --popover-foreground: #1a2430;
-  --primary:      #c79a3b;
-  --primary-foreground: #fff;
-  --secondary:    #efe6da;
-  --secondary-foreground: #1a2430;
-  --muted-bg:     #efe6da;
-  --muted-foreground: #5f6b78;
-  --accent:       #c79a3b;
-  --accent-foreground: #fff;
-  --destructive:  #DC2626;
+:root {
+  /* Background layers */
+  --bg-base:        #0f0f0f;
+  --bg-surface:     #1a1a1a;
+  --bg-elevated:    #242424;
+  --bg-overlay:     #2d2d2d;
+
+  /* Borders */
+  --border-subtle:  #2a2a2a;
+  --border-muted:   #333333;
+
+  /* Gold — marca IDM */
+  --gold:           #c79a3b;
+  --gold-light:     #e8b84b;
+  --gold-dim:       rgba(199,154,59,0.15);
+  --gold-glow:      0 0 24px rgba(199,154,59,0.22);
+
+  /* Text */
+  --text-primary:   #f0f0f0;
+  --text-secondary: #a0a0a0;
+  --text-muted:     #606060;
+
+  /* Semantic */
+  --success:        #22c55e;
+  --success-dim:    rgba(34,197,94,0.15);
+  --error:          #ef4444;
+  --teal:           #177c6b;
+
+  /* Radius */
+  --radius-sm:      6px;
+  --radius-md:      10px;
+  --radius-lg:      14px;
+  --radius-xl:      20px;
+
+  /* Manter compatibilidade com Shadcn */
+  --background:     var(--bg-base);
+  --foreground:     var(--text-primary);
+  --card:           var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover:        var(--bg-elevated);
+  --popover-foreground: var(--text-primary);
+  --primary:        var(--gold);
+  --primary-foreground: #0f0f0f;
+  --secondary:      var(--bg-elevated);
+  --secondary-foreground: var(--text-secondary);
+  --muted-bg:       var(--bg-surface);
+  --muted-foreground: var(--text-muted);
+  --accent:         var(--gold);
+  --accent-foreground: #0f0f0f;
+  --destructive:    #DC2626;
   --destructive-foreground: #fff;
-  --border:       rgba(23, 36, 50, 0.09);
-  --input:        rgba(23, 36, 50, 0.06);
-  --ring:         #c79a3b;
-  --radius:       0.75rem;
+  --border:         var(--border-subtle);
+  --input:          var(--bg-elevated);
+  --ring:           var(--gold);
+  --radius:         0.75rem;
+
+  /* Legado — manter para páginas que ainda usam */
+  --bg:             var(--bg-base);
+  --ink:            var(--text-primary);
+  --muted:          var(--text-muted);
+  --gold-soft:      rgba(199,154,59,0.4);
+  --gold-light-old: rgba(199,154,59,0.08);
+  --line:           var(--border-subtle);
+  --surface-dark:   var(--bg-surface);
 }
 
 @theme inline {
-  --color-background:   var(--background);
-  --color-foreground:   var(--foreground);
-  --color-card:         var(--card);
-  --color-primary:      var(--primary);
-  --color-secondary:    var(--secondary);
-  --color-muted:        var(--muted-bg);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent:       var(--accent);
-  --color-border:       var(--border);
-  --color-input:        var(--input);
-  --color-ring:         var(--ring);
-  --font-sans:          'Manrope', system-ui, sans-serif;
-  --font-display:       'Fraunces', Georgia, serif;
+  --color-background:        var(--background);
+  --color-foreground:        var(--foreground);
+  --color-card:              var(--card);
+  --color-primary:           var(--primary);
+  --color-secondary:         var(--secondary);
+  --color-muted:             var(--muted-bg);
+  --color-muted-foreground:  var(--muted-foreground);
+  --color-accent:            var(--accent);
+  --color-border:            var(--border);
+  --color-input:             var(--input);
+  --color-ring:              var(--ring);
+  --font-sans:               'Inter', system-ui, sans-serif;
+  --font-display:            'Fraunces', Georgia, serif;
 }
 
-* { box-sizing: border-box; border-color: var(--border); }
+/* ============================================================
+   Base
+   ============================================================ */
 
-html { scroll-behavior: smooth; color-scheme: light; }
+* { box-sizing: border-box; border-color: var(--border-subtle); }
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
 
 body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 15px;
-  line-height: 1.65;
+  line-height: 1.6;
+  letter-spacing: 0.015em;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar suave */
+/* Fontes de exibição — somente para hero e títulos grandes */
+.font-display { font-family: 'Fraunces', Georgia, serif; }
+.font-fraunces { font-family: 'Fraunces', Georgia, serif; }
+
+/* ============================================================
+   Scrollbar dark
+   ============================================================ */
+
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--gold-soft); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border-muted); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
 
-/* Scroll horizontal sem scrollbar */
-.scroll-x { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+/* Scroll horizontal sem scrollbar visível */
+.scroll-x {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 .scroll-x::-webkit-scrollbar { display: none; }
 
-/* Fonte display (Fraunces serif) */
-.font-display { font-family: 'Fraunces', Georgia, serif; }
+/* ============================================================
+   Animações (apenas transform + opacity — 60fps garantido)
+   ============================================================ */
 
-/* Animações */
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
+.animate-fade-in { animation: fade-in 0.25s ease-out forwards; }
 
-/* Gold progress */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up { animation: slide-up 0.3s ease-out forwards; }
+
+@keyframes pulse-gold {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+.animate-pulse-gold { animation: pulse-gold 2s ease-in-out infinite; }
+
+/* Stagger para listas */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.10s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.20s; }
+
+/* ============================================================
+   Progress bar gold
+   ============================================================ */
+
 .progress-gold {
   background: linear-gradient(90deg, #c79a3b 0%, #e8b84b 100%);
 }
+
+/* ============================================================
+   Plyr — dark theme override com gold IDM
+   ============================================================ */
+
+.plyr {
+  --plyr-color-main: #c79a3b;
+  --plyr-video-background: #000;
+  --plyr-font-family: 'Inter', system-ui, sans-serif;
+  --plyr-font-size-base: 13px;
+  --plyr-control-icon-size: 18px;
+  --plyr-control-spacing: 10px;
+  --plyr-range-fill-background: #c79a3b;
+  --plyr-video-progress-buffered-background: rgba(199,154,59,0.2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.plyr--video .plyr__controls {
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  padding: 16px;
+}
+
+/* ============================================================
+   Cards — hover apenas com transform + opacity (GPU-safe)
+   ============================================================ */
+
+.card-netflix {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-netflix:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: var(--gold-glow);
+}
+
+.card-netflix .thumbnail-inner {
+  transition: transform 0.35s ease;
+  overflow: hidden;
+}
+.card-netflix:hover .thumbnail-inner img {
+  transform: scale(1.05);
+}
+
+.card-netflix .play-overlay {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.card-netflix:hover .play-overlay {
+  opacity: 1;
+}
+
+/* ============================================================
+   TopNavbar scroll transparency
+   ============================================================ */
+
+.navbar-transparent {
+  background: transparent;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+.navbar-scrolled {
+  background: rgba(15,15,15,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ============================================================
+   Embla Carousel
+   ============================================================ */
+
+.embla { overflow: hidden; }
+.embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+}
+.embla__slide {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+/* ============================================================
+   Acessibilidade — prefers-reduced-motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Utilitários
+   ============================================================ */
+
+.line-clamp-1 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
+.line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.line-clamp-3 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+
+/* Safe area para iOS (tab bar mobile) */
+.pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 16px); }

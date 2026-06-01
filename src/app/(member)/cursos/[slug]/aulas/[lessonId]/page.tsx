@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, CheckCircle, Circle, Clock, ChevronLeft, ChevronRight } from 'lucide-react'
+import { CheckCircle, Circle, Clock, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
 import { formatDuration } from '@/lib/utils'
 import { YouTubePlayer } from '@/components/player/YouTubePlayer'
+import { CinemaModeWrapper } from '@/components/player/CinemaModeWrapper'
 import { DEMO_PRODUCTS, DEMO_MODULES } from '@/lib/demo-data'
 import type { ModuleWithLessons, Progress, Lesson } from '@/types'
 
@@ -16,8 +17,7 @@ async function getData(slug: string, lessonId: string) {
     const allLessons = modules.flatMap((m) => [...m.lessons].sort((a, b) => a.sort_order - b.sort_order))
     const lesson = allLessons.find((l) => l.id === lessonId)
     if (!lesson) return null
-    const progressMap: Record<string, Progress> = {}
-    return { product: { id: product.id, slug: product.slug, title: product.title }, lesson, modules, allLessons, progressMap }
+    return { product: { id: product.id, slug: product.slug, title: product.title }, lesson, modules, allLessons, progressMap: {} as Record<string, Progress> }
   }
 
   const { redirect } = await import('next/navigation')
@@ -53,84 +53,141 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null
   const currentProgress = progressMap[lessonId]
 
-  return (
-    <div className="max-w-6xl">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm mb-4" style={{ color: '#555555' }}>
-        <Link href="/dashboard" className="hover:text-white transition-colors">Início</Link>
-        <span>/</span>
-        <Link href={`/cursos/${slug}`} className="hover:text-white transition-colors truncate max-w-[200px]">{product.title}</Link>
-        <span>/</span>
-        <span className="text-white truncate max-w-[200px]">{lesson.title}</span>
-      </div>
+  const prevHref = prevLesson ? `/cursos/${slug}/aulas/${prevLesson.id}` : undefined
+  const nextHref = nextLesson ? `/cursos/${slug}/aulas/${nextLesson.id}` : undefined
 
-      <div className="grid lg:grid-cols-[1fr_300px] gap-4">
-        {/* Player */}
-        <div className="space-y-4">
-          {lesson.video_url ? (
-            <YouTubePlayer videoUrl={lesson.video_url} lessonId={lesson.id} productSlug={slug} initialCompleted={currentProgress?.completed} />
-          ) : (
-            <div className="aspect-video rounded-xl flex items-center justify-center" style={{ background: '#111111', border: '1px solid #1a1a1a' }}>
-              <p className="text-sm" style={{ color: '#555555' }}>Sem vídeo para esta aula.</p>
+  // Lista de módulos para o CinemaModeWrapper
+  const moduleListEl = (
+    <div className="divide-y divide-[#1a1a1a]">
+      {modules.map((mod) => {
+        const modLessons = [...mod.lessons].sort((a, b) => a.sort_order - b.sort_order)
+        return (
+          <div key={mod.id}>
+            <div className="px-4 py-2.5 bg-[#0a0a0a]">
+              <p className="text-xs font-semibold text-[#606060]">{mod.title}</p>
             </div>
-          )}
-          <div className="space-y-2">
-            <h1 className="text-xl font-bold text-white">{lesson.title}</h1>
-            {lesson.description && <p className="text-sm leading-relaxed" style={{ color: '#888888' }}>{lesson.description}</p>}
-          </div>
-          <div className="flex items-center gap-3 pt-2">
-            {prevLesson ? (
-              <Link href={`/cursos/${slug}/aulas/${prevLesson.id}`} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium" style={{ background: '#1a1a1a', color: '#888888', border: '1px solid #222222' }}>
-                <ChevronLeft className="w-4 h-4" />Anterior
-              </Link>
-            ) : (
-              <Link href={`/cursos/${slug}`} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium" style={{ background: '#1a1a1a', color: '#888888', border: '1px solid #222222' }}>
-                <ArrowLeft className="w-4 h-4" />Visão geral
-              </Link>
-            )}
-            {nextLesson && (
-              <Link href={`/cursos/${slug}/aulas/${nextLesson.id}`} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold" style={{ background: '#FFA902', color: '#000' }}>
-                Próxima<ChevronRight className="w-4 h-4" />
-              </Link>
-            )}
-          </div>
-        </div>
-
-        {/* Sidebar de aulas */}
-        <div className="rounded-xl overflow-hidden" style={{ background: '#111111', border: '1px solid #1a1a1a', height: 'fit-content' }}>
-          <div className="px-4 py-3" style={{ borderBottom: '1px solid #1a1a1a' }}>
-            <p className="text-xs font-semibold text-white">Conteúdo do curso</p>
-          </div>
-          <div className="max-h-[600px] overflow-y-auto">
-            {modules.map((mod) => {
-              const modLessons = [...mod.lessons].sort((a, b) => a.sort_order - b.sort_order)
+            {modLessons.map((l) => {
+              const done   = !!progressMap[l.id]?.completed
+              const active = l.id === lessonId
               return (
-                <div key={mod.id}>
-                  <div className="px-4 py-2.5" style={{ background: '#0a0a0a', borderBottom: '1px solid #1a1a1a' }}>
-                    <p className="text-xs font-semibold" style={{ color: '#888888' }}>{mod.title}</p>
+                <Link
+                  key={l.id}
+                  href={`/cursos/${slug}/aulas/${l.id}`}
+                  className="flex items-start gap-2.5 px-4 py-2.5 transition-colors hover:bg-[#1a1a1a]"
+                  style={{
+                    borderLeft: active ? '2px solid #c79a3b' : '2px solid transparent',
+                    background: active ? 'rgba(199,154,59,0.06)' : undefined,
+                  }}
+                >
+                  {done
+                    ? <CheckCircle className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#22c55e]" />
+                    : <Circle className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: active ? '#c79a3b' : '#333' }} />
+                  }
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs leading-snug" style={{ color: active ? '#c79a3b' : done ? '#555' : '#ccc' }}>
+                      {l.title}
+                    </p>
+                    {l.video_duration && (
+                      <p className="text-[10px] mt-0.5 flex items-center gap-1 text-[#444]">
+                        <Clock className="w-2.5 h-2.5" />{formatDuration(l.video_duration)}
+                      </p>
+                    )}
                   </div>
-                  {modLessons.map((l) => {
-                    const done = !!progressMap[l.id]?.completed
-                    const active = l.id === lessonId
-                    return (
-                      <Link key={l.id} href={`/cursos/${slug}/aulas/${l.id}`} className="flex items-start gap-2.5 px-4 py-2.5 transition-colors" style={{ background: active ? 'rgba(255,169,2,0.08)' : 'transparent', borderLeft: active ? '2px solid #FFA902' : '2px solid transparent', borderBottom: '1px solid #1a1a1a' }}>
-                        {done ? <CheckCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: '#22c55e' }} /> : <Circle className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: active ? '#FFA902' : '#333333' }} />}
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs leading-snug" style={{ color: active ? '#FFA902' : done ? '#555555' : '#cccccc' }}>{l.title}</p>
-                          {l.video_duration && (
-                            <p className="text-[10px] mt-0.5 flex items-center gap-1" style={{ color: '#444444' }}>
-                              <Clock className="w-2.5 h-2.5" />{formatDuration(l.video_duration)}
-                            </p>
-                          )}
-                        </div>
-                      </Link>
-                    )
-                  })}
-                </div>
+                </Link>
               )
             })}
           </div>
+        )
+      })}
+    </div>
+  )
+
+  return (
+    <div className="min-h-screen bg-[#0f0f0f] px-4 sm:px-6 lg:px-10 py-6">
+
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-xs text-[#606060] mb-5">
+        <Link href="/dashboard" className="hover:text-[#f0f0f0] transition-colors">Início</Link>
+        <span>/</span>
+        <Link href={`/cursos/${slug}`} className="hover:text-[#f0f0f0] transition-colors truncate max-w-[160px]">
+          {product.title}
+        </Link>
+        <span>/</span>
+        <span className="text-[#a0a0a0] truncate max-w-[160px]">{lesson.title}</span>
+      </div>
+
+      <div className="grid lg:grid-cols-[1fr_280px] gap-5 max-w-[1200px]">
+
+        {/* Coluna principal */}
+        <div className="space-y-5">
+
+          {/* Player com CinemaModeWrapper */}
+          <CinemaModeWrapper
+            lessonTitle={lesson.title}
+            prevHref={prevHref}
+            nextHref={nextHref}
+            moduleList={moduleListEl}
+          >
+            {lesson.video_url ? (
+              <YouTubePlayer
+                videoUrl={lesson.video_url}
+                lessonId={lesson.id}
+                productSlug={slug}
+                initialCompleted={currentProgress?.completed}
+              />
+            ) : (
+              <div className="aspect-video rounded-xl flex items-center justify-center bg-[#1a1a1a] border border-[#2a2a2a]">
+                <p className="text-sm text-[#606060]">Sem vídeo para esta aula.</p>
+              </div>
+            )}
+          </CinemaModeWrapper>
+
+          {/* Info da aula */}
+          <div className="space-y-2">
+            <h1 className="text-xl font-bold text-[#f0f0f0] leading-snug">{lesson.title}</h1>
+            {lesson.description && (
+              <p className="text-sm text-[#a0a0a0] leading-relaxed">{lesson.description}</p>
+            )}
+          </div>
+
+          {/* Navegação */}
+          <div className="flex items-center gap-3">
+            {prevLesson ? (
+              <Link
+                href={`/cursos/${slug}/aulas/${prevLesson.id}`}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[#1a1a1a] text-[#a0a0a0] border border-[#2a2a2a] hover:bg-[#242424] hover:text-[#f0f0f0] transition-colors"
+              >
+                <ChevronLeft className="h-4 w-4" /> Anterior
+              </Link>
+            ) : (
+              <Link
+                href={`/cursos/${slug}`}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[#1a1a1a] text-[#a0a0a0] border border-[#2a2a2a] hover:bg-[#242424] hover:text-[#f0f0f0] transition-colors"
+              >
+                <ArrowLeft className="h-4 w-4" /> Visão geral
+              </Link>
+            )}
+            {nextLesson && (
+              <Link
+                href={`/cursos/${slug}/aulas/${nextLesson.id}`}
+                className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold bg-[#c79a3b] text-[#0f0f0f] hover:bg-[#e8b84b] transition-colors"
+              >
+                Próxima <ChevronRight className="h-4 w-4" />
+              </Link>
+            )}
+          </div>
         </div>
+
+        {/* Sidebar de aulas — desktop */}
+        <div className="hidden lg:block rounded-xl bg-[#111111] border border-[#1a1a1a] h-fit max-h-[80vh] overflow-hidden">
+          <div className="px-4 py-3 border-b border-[#1a1a1a]">
+            <p className="text-xs font-semibold text-[#f0f0f0]">Conteúdo do curso</p>
+          </div>
+          <div className="overflow-y-auto max-h-[calc(80vh-44px)]">
+            {moduleListEl}
+          </div>
+        </div>
+
       </div>
     </div>
   )
