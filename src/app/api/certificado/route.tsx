@@ -140,10 +140,7 @@ export async function POST(request: NextRequest) {
 
   try {
     pdfBuffer = await renderToBuffer(
-      <CertificadoPDF
-        nome={nomeFormatado}
-        courseName={process.env.CERT_COURSE_NAME ?? 'Instituto Despertamente'}
-      />
+      <CertificadoPDF nome={nomeFormatado} />
     )
   } catch (e: unknown) {
     console.error('[certificado] PDF generation error:', (e as Error).message)
