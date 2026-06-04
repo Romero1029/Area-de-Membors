@@ -20,11 +20,12 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Input } from '@/components/ui/input'
 
 const navLinks = [
-  { href: '/dashboard',  label: 'Início',       icon: LayoutDashboard },
-  { href: '/cursos',     label: 'Meus Cursos',  icon: BookOpen },
-  { href: '/lancamento', label: 'Lançamento',   icon: Rocket, highlight: true },
-  { href: '/loja',       label: 'Loja',         icon: ShoppingBag, badge: 'Novo' },
-  { href: '/ao-vivo',    label: 'Ao Vivo',      icon: Video },
+  { href: '/dashboard',   label: 'Início',        icon: LayoutDashboard },
+  { href: '/cursos',      label: 'Meus Cursos',   icon: BookOpen },
+  { href: '/certificados',label: 'Certificados',  icon: Award },
+  { href: '/lancamento',  label: 'Lançamento',    icon: Rocket, highlight: true },
+  { href: '/loja',        label: 'Loja',          icon: ShoppingBag, badge: 'Novo' },
+  { href: '/ao-vivo',     label: 'Ao Vivo',       icon: Video },
 ]
 
 interface TopNavbarProps {

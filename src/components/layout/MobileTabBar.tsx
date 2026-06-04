@@ -2,14 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, BookOpen, ShoppingBag, User } from 'lucide-react'
+import { LayoutDashboard, BookOpen, ShoppingBag, Award, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const tabs = [
-  { href: '/dashboard', label: 'Início',  icon: LayoutDashboard },
-  { href: '/cursos',    label: 'Cursos',  icon: BookOpen },
-  { href: '/loja',      label: 'Loja',    icon: ShoppingBag },
-  { href: '/perfil',    label: 'Perfil',  icon: User },
+  { href: '/dashboard',    label: 'Início',       icon: LayoutDashboard },
+  { href: '/cursos',       label: 'Cursos',       icon: BookOpen },
+  { href: '/certificados', label: 'Certificados', icon: Award },
+  { href: '/loja',         label: 'Loja',         icon: ShoppingBag },
+  { href: '/perfil',       label: 'Perfil',       icon: User },
 ]
 
 export function MobileTabBar() {
