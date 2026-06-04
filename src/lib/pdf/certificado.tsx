@@ -110,7 +110,7 @@ export function CertificadoPDF({
 
   // URL da imagem — usa a URL do site em produção, ou placeholder em desenvolvimento
   const siteUrl    = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-  const imageUrl   = bgUrl ?? `${siteUrl}/certificado-bg.png`
+  const imageUrl   = bgUrl ?? `${siteUrl}/CERTIFICADO_NPA_SP_-_.png`
 
   return (
     <Document
