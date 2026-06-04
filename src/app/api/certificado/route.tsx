@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { renderToBuffer } from '@react-pdf/renderer'
-import { createElement } from 'react'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CertificadoPDF } from '@/lib/pdf/certificado'
 
@@ -120,9 +119,9 @@ export async function POST(request: NextRequest) {
   // 9. Registrar tentativa no banco (sanitizado)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('tentativas_certificado') as any).insert({
-    nome:      sanitize(nome),
-    telefone:  telefoneNorm,
-    email:     emailNorm,
+    nome:     sanitize(nome),
+    telefone: telefoneNorm,
+    email:    emailNorm,
     ip,
     acertou,
   })
@@ -130,25 +129,22 @@ export async function POST(request: NextRequest) {
   // 10. Se errou → retornar erro (tentativa já registrada, não pode mais tentar)
   if (!acertou) {
     return NextResponse.json(
-      {
-        error:
-          'Infelizmente você não acertou as palavras-chave da aula.\nVocê não possui mais tentativas disponíveis.',
-      },
+      { error: 'Infelizmente você não acertou as palavras-chave da aula.\nVocê não possui mais tentativas disponíveis.' },
       { status: 400 }
     )
   }
 
-  // 11. Gerar PDF do certificado
+  // 11. Gerar PDF — JSX em .tsx resolve o erro de tipo do renderToBuffer
   const nomeFormatado = sanitize(nome, 100)
   let pdfBuffer: Buffer
 
   try {
-    // createElement evita problemas de JSX em API routes sem configuração especial
-    const element = createElement(CertificadoPDF, {
-      nome: nomeFormatado,
-      courseName: process.env.CERT_COURSE_NAME ?? 'Instituto Despertamente',
-    })
-    pdfBuffer = await renderToBuffer(element)
+    pdfBuffer = await renderToBuffer(
+      <CertificadoPDF
+        nome={nomeFormatado}
+        courseName={process.env.CERT_COURSE_NAME ?? 'Instituto Despertamente'}
+      />
+    )
   } catch (e: unknown) {
     console.error('[certificado] PDF generation error:', (e as Error).message)
     return NextResponse.json({ error: 'Erro ao gerar o certificado. Tente novamente.' }, { status: 500 })
