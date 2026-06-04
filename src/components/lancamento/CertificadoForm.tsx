@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Loader2, Award, CheckCircle, Copy, Check } from 'lucide-react'
+import { Loader2, Award, CheckCircle, Copy, Check, Download } from 'lucide-react'
 import { resgatarCertificado } from '@/lib/actions/lancamento'
 
 interface Certificate {
@@ -15,6 +15,30 @@ export function CertificadoForm({ existingCert }: { existingCert?: Certificate |
   const [error, setError] = useState<string | null>(null)
   const [cert, setCert] = useState<Certificate | null>(existingCert ?? null)
   const [copied, setCopied] = useState(false)
+  const [downloading, setDownloading] = useState(false)
+
+  async function downloadPDF() {
+    if (!cert) return
+    setDownloading(true)
+    try {
+      const params = new URLSearchParams({ nome: cert.full_name, code: cert.certificate_code })
+      const res = await fetch(`/api/certificado/pdf?${params}`)
+      if (!res.ok) throw new Error('Erro ao gerar PDF')
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `certificado-${cert.full_name.toLowerCase().replace(/\s+/g, '-')}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch {
+      // silencia — o certificado visual já está disponível
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -74,6 +98,19 @@ export function CertificadoForm({ existingCert }: { existingCert?: Certificate |
             Emitido em {new Date(cert.issued_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
           </p>
         </div>
+
+        {/* Botão download PDF */}
+        <button
+          onClick={downloadPDF}
+          disabled={downloading}
+          className="w-full h-12 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 transition-all hover:opacity-90 disabled:opacity-60"
+          style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(199,154,59,0.3)' }}
+        >
+          {downloading
+            ? <><Loader2 className="w-4 h-4 animate-spin" /> Gerando PDF...</>
+            : <><Download className="w-4 h-4" /> Baixar Certificado em PDF</>
+          }
+        </button>
 
         <div className="flex items-center gap-2 text-sm font-medium text-green-600 justify-center">
           <CheckCircle className="w-4 h-4" />

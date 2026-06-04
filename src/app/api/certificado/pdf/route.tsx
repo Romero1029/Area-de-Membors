@@ -1,0 +1,39 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { renderToBuffer } from '@react-pdf/renderer'
+import { CertificadoPDF } from '@/lib/pdf/certificado'
+
+// GET /api/certificado/pdf?nome=João&code=IDM-2026-XXXXX
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const nome = searchParams.get('nome')?.trim()
+  const code = searchParams.get('code')?.trim()
+
+  if (!nome) {
+    return NextResponse.json({ error: 'Nome obrigatório.' }, { status: 400 })
+  }
+
+  let pdfBuffer: Buffer
+  try {
+    pdfBuffer = await renderToBuffer(
+      <CertificadoPDF
+        nome={nome}
+        code={code ?? undefined}
+        issuedAt={new Date()}
+      />
+    )
+  } catch (e: unknown) {
+    console.error('[pdf] generation error:', (e as Error).message)
+    return NextResponse.json({ error: 'Erro ao gerar PDF.' }, { status: 500 })
+  }
+
+  const filename = `certificado-${nome.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}.pdf`
+
+  return new NextResponse(new Uint8Array(pdfBuffer), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Cache-Control': 'no-store',
+    },
+  })
+}
