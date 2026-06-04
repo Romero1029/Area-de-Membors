@@ -1,16 +1,24 @@
-import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer'
+import { Document, Page, View, Text, Image, StyleSheet, Font } from '@react-pdf/renderer'
+import path from 'path'
 
 const W = 841.89
 const H = 595.28
 
+// Registrar Allura — fonte caligráfica para o nome no certificado
+Font.register({
+  family: 'Allura',
+  src: path.join(process.cwd(), 'public', 'fonts', 'Allura-Regular.ttf'),
+})
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+// Allura é fonte script — precisa de tamanho maior para boa legibilidade
 function nameFontSize(nome: string): number {
   const l = nome.length
-  if (l <= 18) return 30
-  if (l <= 26) return 26
-  if (l <= 34) return 22
-  return 18
+  if (l <= 18) return 40
+  if (l <= 26) return 34
+  if (l <= 34) return 28
+  return 22
 }
 
 // ─── Estilos ──────────────────────────────────────────────────────────────────
@@ -118,9 +126,9 @@ export function CertificadoPDF({
             <Text style={S.monthBold}>{ano}</Text>
           </View>
 
-          {/* Nome */}
+          {/* Nome em Allura */}
           <View style={S.nameWrapper}>
-            <Text style={{ fontSize, fontFamily: 'Helvetica-Bold', color: '#1a2430', textAlign: 'center' }}>
+            <Text style={{ fontSize, fontFamily: 'Allura', color: '#1a2430', textAlign: 'center' }}>
               {nome}
             </Text>
           </View>
