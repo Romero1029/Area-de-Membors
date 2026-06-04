@@ -12,10 +12,12 @@ function getCertBgPath(): string | undefined {
 }
 
 function registerFonts() {
-  const fontPath = path.join(process.cwd(), 'public', 'fonts', 'Allura-Regular.ttf')
-  if (fs.existsSync(fontPath)) {
-    Font.register({ family: 'Allura', src: fontPath })
-  }
+  try {
+    const fontPath = path.join(process.cwd(), 'public', 'fonts', 'Allura-Regular.ttf')
+    if (fs.existsSync(fontPath)) {
+      Font.register({ family: 'Allura', src: fontPath })
+    }
+  } catch { /* fonte opcional — não bloqueia geração */ }
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
