@@ -1,14 +1,7 @@
-import { Document, Page, View, Text, Image, StyleSheet, Font } from '@react-pdf/renderer'
-import path from 'path'
+import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer'
 
 const W = 841.89
 const H = 595.28
-
-// Registrar Allura — fonte caligráfica para o nome no certificado
-Font.register({
-  family: 'Allura',
-  src: path.join(process.cwd(), 'public', 'fonts', 'Allura-Regular.ttf'),
-})
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

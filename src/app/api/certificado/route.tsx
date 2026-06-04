@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { renderToBuffer } from '@react-pdf/renderer'
+import { renderToBuffer, Font } from '@react-pdf/renderer'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CertificadoPDF } from '@/lib/pdf/certificado'
 import { getLiveDates } from '@/lib/pdf/get-live-dates'
@@ -9,6 +9,13 @@ import path from 'path'
 function getCertBgPath(): string | undefined {
   const filePath = path.join(process.cwd(), 'public', 'CERTIFICADO_NPA_SP_-_.png')
   return fs.existsSync(filePath) ? filePath : undefined
+}
+
+function registerFonts() {
+  const fontPath = path.join(process.cwd(), 'public', 'fonts', 'Allura-Regular.ttf')
+  if (fs.existsSync(fontPath)) {
+    Font.register({ family: 'Allura', src: fontPath })
+  }
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -147,6 +154,7 @@ export async function POST(request: NextRequest) {
   let pdfBuffer: Buffer
 
   try {
+    registerFonts()
     const { diasLive, mesLive, anoLive } = await getLiveDates()
     pdfBuffer = await renderToBuffer(
       <CertificadoPDF
