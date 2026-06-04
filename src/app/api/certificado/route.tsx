@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { renderToBuffer } from '@react-pdf/renderer'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CertificadoPDF } from '@/lib/pdf/certificado'
+import { getLiveDates } from '@/lib/pdf/get-live-dates'
 import fs from 'fs'
 import path from 'path'
 
@@ -146,8 +147,15 @@ export async function POST(request: NextRequest) {
   let pdfBuffer: Buffer
 
   try {
+    const { diasLive, mesLive, anoLive } = await getLiveDates()
     pdfBuffer = await renderToBuffer(
-      <CertificadoPDF nome={nomeFormatado} bgUrl={getCertBgPath()} />
+      <CertificadoPDF
+        nome={nomeFormatado}
+        bgUrl={getCertBgPath()}
+        diasLive={diasLive}
+        mesLive={mesLive}
+        anoLive={anoLive}
+      />
     )
   } catch (e: unknown) {
     console.error('[certificado] PDF generation error:', (e as Error).message)

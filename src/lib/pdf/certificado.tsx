@@ -1,28 +1,15 @@
 import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer'
 
-// A4 paisagem em pontos PDF
 const W = 841.89
 const H = 595.28
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function formatDate(date: Date) {
-  const day   = date.getDate().toString().padStart(2, '0')
-  const month = date.toLocaleDateString('pt-BR', { month: 'long' })
-  const year  = date.getFullYear().toString()
-  return { day, month, year }
-}
-
-function generateCode() {
-  return `IDM-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
-}
-
-// Tamanho de fonte dinâmico baseado no comprimento do nome
 function nameFontSize(nome: string): number {
-  const len = nome.length
-  if (len <= 18) return 30
-  if (len <= 26) return 26
-  if (len <= 34) return 22
+  const l = nome.length
+  if (l <= 18) return 30
+  if (l <= 26) return 26
+  if (l <= 34) return 22
   return 18
 }
 
@@ -33,63 +20,80 @@ const S = StyleSheet.create({
   container: { width: W, height: H, position: 'relative' },
   bg:        { position: 'absolute', top: 0, left: 0, width: W, height: H },
 
-  // ── Dia: logo após "Nos dias" (~15% W, ~39% H)
-  dayWrap: {
+  // "Nos dias [02, 03 e 04]" — após o texto "Nos dias" no template
+  daysWrap: {
     position: 'absolute',
-    top: H * 0.388,      // linha "Nos dias"
-    left: W * 0.148,     // logo após "Nos dias "
-    width: 28,
-    alignItems: 'center',
+    top: H * 0.388,
+    left: W * 0.150,
   },
+  daysText: { fontSize: 11, fontFamily: 'Helvetica-Bold', color: '#1a2430' },
 
-  // ── "de [mês] de [ano]": após o espaço do dia
+  // "[junho de 2026]" — no espaço após o "de" do template
   monthWrap: {
     position: 'absolute',
     top: H * 0.388,
-    left: W * 0.188,     // após espaço do dia
+    left: W * 0.295,
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
+    gap: 2,
   },
+  monthBold:   { fontSize: 11, fontFamily: 'Helvetica-Bold', color: '#1a2430' },
+  monthNormal: { fontSize: 11, fontFamily: 'Helvetica',      color: '#1a2430' },
 
-  dateBold:   { fontSize: 11, fontFamily: 'Helvetica-Bold', color: '#1a2430' },
-  dateNormal: { fontSize: 11, fontFamily: 'Helvetica',      color: '#1a2430' },
-
-  // ── Nome: centralizado na área em branco entre a linha de data e o texto do curso
+  // Nome do aluno — área em branco entre "Certificamos" e "Concluiu"
   nameWrapper: {
     position: 'absolute',
-    top: H * 0.455,       // centro da área em branco do nome
+    top: H * 0.415,
     left: W * 0.12,
-    width: W * 0.76,      // respeita as flores laterais
+    width: W * 0.76,
     alignItems: 'center',
   },
 
-  // ── Código: canto inferior direito
+  // Código
   codeRow: {
     position: 'absolute',
     bottom: H * 0.03,
     right: W * 0.04,
     flexDirection: 'row',
-    alignItems: 'center',
     gap: 4,
   },
   codeLabel: { fontSize: 7.5, fontFamily: 'Helvetica',      color: '#888888' },
   codeValue: { fontSize: 7.5, fontFamily: 'Helvetica-Bold', color: '#c79a3b' },
 })
 
-// ─── Template ─────────────────────────────────────────────────────────────────
+// ─── Props ────────────────────────────────────────────────────────────────────
 
 export type CertificadoPDFProps = {
   nome: string
   code?: string
-  issuedAt?: Date
+  /** Dias do lançamento — ex: "02, 03 e 04" */
+  diasLive?: string
+  /** Mês do lançamento — ex: "junho" */
+  mesLive?: string
+  /** Ano do lançamento — ex: "2026" */
+  anoLive?: string
   bgUrl?: string
 }
 
-export function CertificadoPDF({ nome, code, issuedAt, bgUrl }: CertificadoPDFProps) {
-  const certCode             = code ?? generateCode()
-  const { day, month, year } = formatDate(issuedAt ?? new Date())
-  const fontSize             = nameFontSize(nome)
+function generateCode() {
+  return `IDM-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
+}
+
+// ─── Template ─────────────────────────────────────────────────────────────────
+
+export function CertificadoPDF({
+  nome,
+  code,
+  diasLive,
+  mesLive,
+  anoLive,
+  bgUrl,
+}: CertificadoPDFProps) {
+  const certCode = code ?? generateCode()
+  const fontSize = nameFontSize(nome)
+
+  const dias = diasLive ?? '—'
+  const mes  = mesLive  ?? '—'
+  const ano  = anoLive  ?? new Date().getFullYear().toString()
 
   return (
     <Document
@@ -100,23 +104,21 @@ export function CertificadoPDF({ nome, code, issuedAt, bgUrl }: CertificadoPDFPr
       <Page size="A4" orientation="landscape" style={S.page}>
         <View style={S.container}>
 
-          {/* Fundo */}
           {bgUrl && <Image src={bgUrl} style={S.bg} />}
 
-          {/* Dia */}
-          <View style={S.dayWrap}>
-            <Text style={S.dateBold}>{day}</Text>
+          {/* Dias — preenche o 1º campo em branco "Nos dias ___" */}
+          <View style={S.daysWrap}>
+            <Text style={S.daysText}>{dias}</Text>
           </View>
 
-          {/* "de [mês] de [ano]" */}
+          {/* Mês+ano — preenche o 2º campo em branco "de ___" */}
           <View style={S.monthWrap}>
-            <Text style={S.dateNormal}>de </Text>
-            <Text style={S.dateBold}>{month}</Text>
-            <Text style={S.dateNormal}> de </Text>
-            <Text style={S.dateBold}>{year}</Text>
+            <Text style={S.monthBold}>{mes}</Text>
+            <Text style={S.monthNormal}> de </Text>
+            <Text style={S.monthBold}>{ano}</Text>
           </View>
 
-          {/* Nome — fonte diminui para nomes longos */}
+          {/* Nome */}
           <View style={S.nameWrapper}>
             <Text style={{ fontSize, fontFamily: 'Helvetica-Bold', color: '#1a2430', textAlign: 'center' }}>
               {nome}
