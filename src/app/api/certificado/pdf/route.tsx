@@ -4,12 +4,9 @@ import { CertificadoPDF } from '@/lib/pdf/certificado'
 import fs from 'fs'
 import path from 'path'
 
-function getCertBgBase64(): string | undefined {
+function getCertBgPath(): string | undefined {
   const filePath = path.join(process.cwd(), 'public', 'CERTIFICADO_NPA_SP_-_.png')
-  if (fs.existsSync(filePath)) {
-    return `data:image/png;base64,${fs.readFileSync(filePath).toString('base64')}`
-  }
-  return undefined
+  return fs.existsSync(filePath) ? filePath : undefined
 }
 
 // GET /api/certificado/pdf?nome=João&code=IDM-2026-XXXXX
@@ -29,7 +26,7 @@ export async function GET(request: NextRequest) {
         nome={nome}
         code={code ?? undefined}
         issuedAt={new Date()}
-        bgUrl={getCertBgBase64()}
+        bgUrl={getCertBgPath()}
       />
     )
   } catch (e: unknown) {

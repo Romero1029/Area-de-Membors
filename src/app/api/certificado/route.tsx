@@ -5,12 +5,9 @@ import { CertificadoPDF } from '@/lib/pdf/certificado'
 import fs from 'fs'
 import path from 'path'
 
-function getCertBgBase64(): string | undefined {
+function getCertBgPath(): string | undefined {
   const filePath = path.join(process.cwd(), 'public', 'CERTIFICADO_NPA_SP_-_.png')
-  if (fs.existsSync(filePath)) {
-    return `data:image/png;base64,${fs.readFileSync(filePath).toString('base64')}`
-  }
-  return undefined
+  return fs.existsSync(filePath) ? filePath : undefined
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -150,7 +147,7 @@ export async function POST(request: NextRequest) {
 
   try {
     pdfBuffer = await renderToBuffer(
-      <CertificadoPDF nome={nomeFormatado} bgUrl={getCertBgBase64()} />
+      <CertificadoPDF nome={nomeFormatado} bgUrl={getCertBgPath()} />
     )
   } catch (e: unknown) {
     console.error('[certificado] PDF generation error:', (e as Error).message)

@@ -5,25 +5,36 @@ const W = 841.89
 const H = 595.28
 
 const S = StyleSheet.create({
-  page: { width: W, height: H, padding: 0, backgroundColor: '#ffffff' },
-  bg:   { position: 'absolute', top: 0, left: 0, width: W, height: H },
+  page: { padding: 0, backgroundColor: '#ffffff' },
 
-  // Data — "Nos dias XX de MMMM de AAAA"
-  // Posição: ~23% do topo, 10% da esquerda
+  // Container raiz com dimensões explícitas — impede geração de segunda página
+  container: {
+    width: W,
+    height: H,
+    position: 'relative',
+  },
+
+  bg: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: W,
+    height: H,
+  },
+
   dateRow: {
     position: 'absolute',
-    top: H * 0.265,
-    left: W * 0.083,
+    top: 157,       // ~26% de 595
+    left: 70,       // ~8% de 842
     flexDirection: 'row',
-    gap: 3,
+    alignItems: 'center',
   },
-  dateBold: { fontSize: 12, fontFamily: 'Helvetica-Bold', color: '#1a2430' },
-  dateNormal: { fontSize: 12, fontFamily: 'Helvetica', color: '#1a2430' },
+  dateBold:   { fontSize: 12, fontFamily: 'Helvetica-Bold', color: '#1a2430' },
+  dateNormal: { fontSize: 12, fontFamily: 'Helvetica',      color: '#1a2430' },
 
-  // Nome do aluno — centro vertical entre o cabeçalho e as assinaturas
   nameWrapper: {
     position: 'absolute',
-    top: H * 0.37,
+    top: 220,       // ~37% de 595
     left: 0,
     width: W,
     alignItems: 'center',
@@ -35,19 +46,17 @@ const S = StyleSheet.create({
     textAlign: 'center',
   },
 
-  // Código — rodapé direito
   codeRow: {
     position: 'absolute',
-    bottom: H * 0.03,
-    right: W * 0.04,
+    bottom: 18,
+    right: 34,
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
-  codeLabel: { fontSize: 7.5, fontFamily: 'Helvetica', color: '#888888' },
+  codeLabel: { fontSize: 7.5, fontFamily: 'Helvetica',      color: '#888888' },
   codeValue: { fontSize: 7.5, fontFamily: 'Helvetica-Bold', color: '#c79a3b' },
 })
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatDate(date: Date) {
   const day   = date.getDate().toString().padStart(2, '0')
@@ -60,8 +69,6 @@ function generateCode() {
   return `IDM-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
 }
 
-// ─── Props ────────────────────────────────────────────────────────────────────
-
 export type CertificadoPDFProps = {
   nome: string
   code?: string
@@ -69,10 +76,8 @@ export type CertificadoPDFProps = {
   bgUrl?: string
 }
 
-// ─── Template ─────────────────────────────────────────────────────────────────
-
 export function CertificadoPDF({ nome, code, issuedAt, bgUrl }: CertificadoPDFProps) {
-  const certCode          = code ?? generateCode()
+  const certCode             = code ?? generateCode()
   const { day, month, year } = formatDate(issuedAt ?? new Date())
 
   return (
@@ -82,30 +87,37 @@ export function CertificadoPDF({ nome, code, issuedAt, bgUrl }: CertificadoPDFPr
       subject="Certificado de Participação"
     >
       <Page size="A4" orientation="landscape" style={S.page}>
+        {/*
+          Container com height: H fixo.
+          Todos os filhos são absolutamente posicionados DENTRO desse container.
+          Isso impede que o react-pdf gere uma segunda página.
+        */}
+        <View style={S.container}>
 
-        {/* Fundo */}
-        {bgUrl && <Image src={bgUrl} style={S.bg} />}
+          {/* Fundo */}
+          {bgUrl && <Image src={bgUrl} style={S.bg} />}
 
-        {/* Data */}
-        <View style={S.dateRow}>
-          <Text style={S.dateBold}>{day}</Text>
-          <Text style={S.dateNormal}> de </Text>
-          <Text style={S.dateBold}>{month}</Text>
-          <Text style={S.dateNormal}> de </Text>
-          <Text style={S.dateBold}>{year}</Text>
+          {/* Data */}
+          <View style={S.dateRow}>
+            <Text style={S.dateBold}>{day}</Text>
+            <Text style={S.dateNormal}> de </Text>
+            <Text style={S.dateBold}>{month}</Text>
+            <Text style={S.dateNormal}> de </Text>
+            <Text style={S.dateBold}>{year}</Text>
+          </View>
+
+          {/* Nome */}
+          <View style={S.nameWrapper}>
+            <Text style={S.name}>{nome}</Text>
+          </View>
+
+          {/* Código */}
+          <View style={S.codeRow}>
+            <Text style={S.codeLabel}>Cód:</Text>
+            <Text style={S.codeValue}>{certCode}</Text>
+          </View>
+
         </View>
-
-        {/* Nome */}
-        <View style={S.nameWrapper}>
-          <Text style={S.name}>{nome}</Text>
-        </View>
-
-        {/* Código */}
-        <View style={S.codeRow}>
-          <Text style={S.codeLabel}>Cód:</Text>
-          <Text style={S.codeValue}>{certCode}</Text>
-        </View>
-
       </Page>
     </Document>
   )
