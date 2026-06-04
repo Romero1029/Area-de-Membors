@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
   // 12. Retornar PDF para download
   const filename = `certificado-${nomeFormatado.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}.pdf`
 
-  return new NextResponse(pdfBuffer, {
+  return new NextResponse(new Uint8Array(pdfBuffer), {
     status: 200,
     headers: {
       'Content-Type': 'application/pdf',
