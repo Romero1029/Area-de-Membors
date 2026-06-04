@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // @react-pdf/renderer usa módulos Node.js nativos — não pode ser bundlado pelo webpack
+  serverExternalPackages: ['@react-pdf/renderer'],
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
