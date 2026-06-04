@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { renderToBuffer } from '@react-pdf/renderer'
 import { CertificadoPDF } from '@/lib/pdf/certificado'
+import fs from 'fs'
+import path from 'path'
+
+function getCertBgBase64(): string | undefined {
+  const filePath = path.join(process.cwd(), 'public', 'CERTIFICADO_NPA_SP_-_.png')
+  if (fs.existsSync(filePath)) {
+    return `data:image/png;base64,${fs.readFileSync(filePath).toString('base64')}`
+  }
+  return undefined
+}
 
 // GET /api/certificado/pdf?nome=João&code=IDM-2026-XXXXX
 export async function GET(request: NextRequest) {
@@ -19,6 +29,7 @@ export async function GET(request: NextRequest) {
         nome={nome}
         code={code ?? undefined}
         issuedAt={new Date()}
+        bgUrl={getCertBgBase64()}
       />
     )
   } catch (e: unknown) {
