@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, Check, Star, Sparkles, Brain, Heart, Zap, Shield, PlayCircle, Quote } from 'lucide-react'
 import { getTestimonials } from '@/lib/actions/store'
 import { ComecarAnimated } from './ComecarAnimated'
 
@@ -13,37 +12,6 @@ export const metadata = {
     images: [{ url: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=1200&q=80' }],
   },
 }
-
-const dores = [
-  {
-    icon: Brain,
-    dor: 'Você sabe o que precisa mudar, mas não consegue.',
-    transformacao: 'Com o método IDM, você para de lutar contra si mesmo.',
-  },
-  {
-    icon: Heart,
-    dor: 'Seus relacionamentos se repetem nos mesmos padrões.',
-    transformacao: 'Você identifica a raiz e muda o padrão de uma vez por todas.',
-  },
-  {
-    icon: Zap,
-    dor: 'Você consome conteúdo mas não vê transformação real.',
-    transformacao: 'Aqui é prática. Você sente a mudança antes de terminar o primeiro módulo.',
-  },
-]
-
-const numeros = [
-  { valor: '2.400+', label: 'alunos transformados' },
-  { valor: '94%',    label: 'completam o curso' },
-  { valor: '4.9★',   label: 'avaliação média' },
-  { valor: '8 anos', label: 'de metodologia' },
-]
-
-const passos = [
-  { num: '01', titulo: 'Crie sua conta gratuita', desc: 'Menos de 2 minutos. Sem cartão de crédito.' },
-  { num: '02', titulo: 'Assista a aula de boas-vindas', desc: 'Uma aula que muda sua perspectiva imediatamente.' },
-  { num: '03', titulo: 'Escolha sua jornada', desc: 'Cursos, mentorias ou eventos presenciais.' },
-]
 
 const depoimentosFallback = [
   { nome: 'Ana Beatriz S.', papel: 'Aluna — Psicanálise Prática', texto: 'Eu tentei terapia por anos. O método IDM foi o único que me fez entender POR QUÊ eu agia do jeito que agia. Em 3 semanas mudei mais do que em 3 anos.', estrelas: 5 },
@@ -77,12 +45,7 @@ export default async function ComecarPage() {
       </nav>
 
       {/* Passa todos os dados para o componente animado client-side */}
-      <ComecarAnimated
-        dores={dores}
-        numeros={numeros}
-        passos={passos}
-        depos={depos}
-      />
+      <ComecarAnimated depos={depos} />
 
       {/* ── FOOTER ── */}
       <footer className="border-t border-white/5 py-8 text-center">

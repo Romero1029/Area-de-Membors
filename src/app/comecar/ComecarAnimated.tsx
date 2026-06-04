@@ -3,19 +3,32 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRef } from 'react'
-import type { LucideIcon } from 'lucide-react'
 import { motion, useInView, useReducedMotion, type Variants } from 'framer-motion'
-import { ArrowRight, Check, Star, Sparkles, Shield, Quote } from 'lucide-react'
+import { ArrowRight, Check, Star, Sparkles, Shield, Quote, Brain, Heart, Zap } from 'lucide-react'
 
-interface Dor { icon: LucideIcon; dor: string; transformacao: string }
-interface Numero { valor: string; label: string }
-interface Passo { num: string; titulo: string; desc: string }
+// Dados estáticos ficam aqui dentro — ícones são funções e não podem ser serializados pelo server
+const dores = [
+  { icon: Brain, dor: 'Você sabe o que precisa mudar, mas não consegue.', transformacao: 'Com o método IDM, você para de lutar contra si mesmo.' },
+  { icon: Heart, dor: 'Seus relacionamentos se repetem nos mesmos padrões.', transformacao: 'Você identifica a raiz e muda o padrão de uma vez por todas.' },
+  { icon: Zap, dor: 'Você consome conteúdo mas não vê transformação real.', transformacao: 'Aqui é prática. Você sente a mudança antes de terminar o primeiro módulo.' },
+]
+
+const numeros = [
+  { valor: '2.400+', label: 'alunos transformados' },
+  { valor: '94%',    label: 'completam o curso' },
+  { valor: '4.9★',   label: 'avaliação média' },
+  { valor: '8 anos', label: 'de metodologia' },
+]
+
+const passos = [
+  { num: '01', titulo: 'Crie sua conta gratuita', desc: 'Menos de 2 minutos. Sem cartão de crédito.' },
+  { num: '02', titulo: 'Assista a aula de boas-vindas', desc: 'Uma aula que muda sua perspectiva imediatamente.' },
+  { num: '03', titulo: 'Escolha sua jornada', desc: 'Cursos, mentorias ou eventos presenciais.' },
+]
+
 interface Depo { nome: string; papel: string; texto: string; estrelas: number }
 
 interface Props {
-  dores: Dor[]
-  numeros: Numero[]
-  passos: Passo[]
   depos: Depo[]
 }
 
@@ -53,7 +66,7 @@ function RevealSection({ children, className = '' }: { children: React.ReactNode
   )
 }
 
-export function ComecarAnimated({ dores, numeros, passos, depos }: Props) {
+export function ComecarAnimated({ depos }: Props) {
   const shouldReduce = useReducedMotion()
 
   return (
