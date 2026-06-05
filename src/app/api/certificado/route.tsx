@@ -26,10 +26,7 @@ function registerFonts() {
   try {
     const fontPath = path.join(process.cwd(), 'public', 'fonts', 'Allura-Regular.ttf')
     if (fs.existsSync(fontPath)) {
-      Font.register({
-        family: 'Allura',
-        src: `data:font/truetype;base64,${fs.readFileSync(fontPath).toString('base64')}`,
-      })
+      Font.register({ family: 'Allura', src: fontPath })
     }
   } catch { /* fonte opcional — não bloqueia geração */ }
 }
