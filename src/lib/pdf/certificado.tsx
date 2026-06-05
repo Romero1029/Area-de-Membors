@@ -21,19 +21,19 @@ const S = StyleSheet.create({
   container: { width: W, height: H, position: 'relative' },
   bg:        { position: 'absolute', top: 0, left: 0, width: W, height: H },
 
-  // "Nos dias [02, 03 e 04]" — após o texto "Nos dias" no template
+  // "Nos dias [02, 03 e 04]" — blank1: entre fim de "Nos dias" (~210pt) e início de "de" (~295pt)
   daysWrap: {
     position: 'absolute',
-    top: H * 0.388,
-    left: W * 0.150,
+    top: H * 0.339,
+    left: W * 0.270,
   },
   daysText: { fontSize: 11, fontFamily: 'Helvetica-Bold', color: '#1a2430' },
 
-  // "[junho de 2026]" — no espaço após o "de" do template
+  // "[junho de 2026]" — blank2: após "de" template (~350pt), antes de "Certificamos" (~466pt)
   monthWrap: {
     position: 'absolute',
-    top: H * 0.388,
-    left: W * 0.295,
+    top: H * 0.339,
+    left: W * 0.422,
     flexDirection: 'row',
     gap: 2,
   },
