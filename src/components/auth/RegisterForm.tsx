@@ -4,12 +4,12 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Eye, EyeOff, Loader2, Mail } from 'lucide-react'
 import { registerSchema, type RegisterInput } from '@/lib/validations/auth'
 import { signUp } from '@/lib/actions/auth'
+
+const inputCls = 'w-full h-12 px-4 rounded-2xl text-[#1a2430] text-[15px] outline-none transition-all'
+const inputStyle = { background: 'rgba(255,255,255,0.85)', border: '1.5px solid rgba(23,36,50,0.1)' }
 
 export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -17,11 +17,9 @@ export function RegisterForm() {
   const [success, setSuccess] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterInput>({ resolver: zodResolver(registerSchema) })
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+  })
 
   async function onSubmit(data: RegisterInput) {
     setLoading(true)
@@ -38,16 +36,18 @@ export function RegisterForm() {
 
   if (success) {
     return (
-      <div className="space-y-4 text-center animate-fade-in">
-        <div
-          className="w-16 h-16 rounded-full flex items-center justify-center mx-auto text-2xl"
-          style={{ background: 'rgba(255,169,2,0.15)', border: '1px solid rgba(255,169,2,0.3)' }}
-        >
-          ✉️
+      <div className="space-y-5 text-center animate-fade-in">
+        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
+          style={{ background: 'rgba(199,154,59,0.12)', border: '1px solid rgba(199,154,59,0.25)' }}>
+          <Mail className="w-7 h-7" style={{ color: '#c79a3b' }} />
         </div>
-        <h2 className="text-xl font-bold text-white">Verifique seu e-mail</h2>
-        <p className="text-sm" style={{ color: '#888888' }}>{success}</p>
-        <Link href="/login" className="block text-sm font-medium hover:underline" style={{ color: '#FFA902' }}>
+        <div className="space-y-1">
+          <h2 className="text-xl font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
+            Verifique seu e-mail
+          </h2>
+          <p className="text-sm text-[#5f6b78]">{success}</p>
+        </div>
+        <Link href="/login" className="block text-sm font-semibold hover:underline" style={{ color: '#c79a3b' }}>
           Voltar ao login
         </Link>
       </div>
@@ -55,98 +55,80 @@ export function RegisterForm() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="space-y-1 text-center">
-        <h1 className="text-2xl font-bold text-white">Criar conta</h1>
-        <p className="text-sm" style={{ color: '#888888' }}>
-          Junte-se ao Instituto Despertamente
-        </p>
+    <div className="space-y-7 animate-fade-in">
+      <div className="space-y-1.5">
+        <h1 className="text-[26px] font-bold text-[#1a2430] leading-tight"
+          style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
+          Criar sua conta
+        </h1>
+        <p className="text-base text-[#5f6b78]">Junte-se ao Instituto Despertamente</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
-          <Label htmlFor="full_name" className="text-sm font-medium text-white">Nome completo</Label>
-          <Input
-            id="full_name"
-            placeholder="Seu nome"
-            autoComplete="name"
-            className="h-11 bg-secondary border-border text-white placeholder:text-muted-foreground focus-visible:ring-primary"
+          <label htmlFor="full_name" className="text-sm font-bold text-[#1a2430] block">Nome completo</label>
+          <input
+            id="full_name" type="text" placeholder="Seu nome completo" autoComplete="name"
+            className={inputCls} style={inputStyle}
             {...register('full_name')}
           />
-          {errors.full_name && <p className="text-xs text-destructive">{errors.full_name.message}</p>}
+          {errors.full_name && <p className="text-sm text-red-500">{errors.full_name.message}</p>}
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="email" className="text-sm font-medium text-white">E-mail</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="seu@email.com"
-            autoComplete="email"
-            className="h-11 bg-secondary border-border text-white placeholder:text-muted-foreground focus-visible:ring-primary"
+          <label htmlFor="email" className="text-sm font-bold text-[#1a2430] block">E-mail</label>
+          <input
+            id="email" type="email" placeholder="seu@email.com" autoComplete="email"
+            className={inputCls} style={inputStyle}
             {...register('email')}
           />
-          {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+          {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="password" className="text-sm font-medium text-white">Senha</Label>
+          <label htmlFor="password" className="text-sm font-bold text-[#1a2430] block">Senha</label>
           <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Mínimo 6 caracteres"
-              autoComplete="new-password"
-              className="h-11 bg-secondary border-border text-white placeholder:text-muted-foreground focus-visible:ring-primary pr-10"
+            <input
+              id="password" type={showPassword ? 'text' : 'password'}
+              placeholder="Mínimo 6 caracteres" autoComplete="new-password"
+              className={`${inputCls} pr-12`} style={inputStyle}
               {...register('password')}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white transition-colors"
-            >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            <button type="button" onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#5f6b78] hover:text-[#1a2430] transition-colors">
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
-          {errors.password && <p className="text-xs text-destructive">{errors.password.message}</p>}
+          {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="confirm_password" className="text-sm font-medium text-white">Confirmar senha</Label>
-          <Input
-            id="confirm_password"
-            type="password"
-            placeholder="Repita a senha"
-            autoComplete="new-password"
-            className="h-11 bg-secondary border-border text-white placeholder:text-muted-foreground focus-visible:ring-primary"
+          <label htmlFor="confirm_password" className="text-sm font-bold text-[#1a2430] block">Confirmar senha</label>
+          <input
+            id="confirm_password" type="password" placeholder="Repita a senha" autoComplete="new-password"
+            className={inputCls} style={inputStyle}
             {...register('confirm_password')}
           />
-          {errors.confirm_password && <p className="text-xs text-destructive">{errors.confirm_password.message}</p>}
+          {errors.confirm_password && <p className="text-sm text-red-500">{errors.confirm_password.message}</p>}
         </div>
 
         {serverError && (
-          <div
-            className="text-sm text-center py-2 px-3 rounded-md"
-            style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}
-          >
+          <div className="text-sm text-center py-2.5 px-4 rounded-xl bg-red-50 text-red-600 border border-red-100">
             {serverError}
           </div>
         )}
 
-        <Button
-          type="submit"
-          disabled={loading}
-          className="w-full h-11 text-sm font-semibold"
-          style={{ background: '#FFA902', color: '#000', boxShadow: '0 0 20px rgba(255,169,2,0.2)' }}
-        >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Criar conta'}
-        </Button>
+        <button type="submit" disabled={loading}
+          className="w-full h-12 rounded-2xl text-[15px] font-bold text-white transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2"
+          style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(199,154,59,0.25)' }}>
+          {loading ? <Loader2 className="w-5 h-5 animate-spin text-[#0a0a0a]" /> : 'Criar minha conta'}
+        </button>
       </form>
 
-      <p className="text-center text-sm" style={{ color: '#888888' }}>
+      <p className="text-center text-base text-[#5f6b78]">
         Já tem uma conta?{' '}
-        <Link href="/login" className="font-medium hover:underline" style={{ color: '#FFA902' }}>
-          Entrar
+        <Link href="/login" className="font-bold hover:underline" style={{ color: '#c79a3b' }}>
+          Entrar na plataforma
         </Link>
       </p>
     </div>

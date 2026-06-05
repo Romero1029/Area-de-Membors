@@ -21,10 +21,10 @@ export default async function PerfilPage() {
   }
 
   return (
-    <div className="max-w-xl space-y-6">
+    <div className="max-w-xl mx-auto px-4 sm:px-6 pt-8 pb-16 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Meu Perfil</h1>
-        <p className="text-sm mt-1" style={{ color: '#888888' }}>Gerencie suas informações pessoais.</p>
+        <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>Meu Perfil</h1>
+        <p className="text-sm mt-1 text-white/50">Gerencie suas informações pessoais.</p>
       </div>
       <ProfileForm profile={profile} userEmail={userEmail} />
     </div>

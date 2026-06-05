@@ -4,11 +4,11 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { resetPasswordSchema, type ResetPasswordInput } from '@/lib/validations/auth'
 import { updatePassword } from '@/lib/actions/auth'
+
+const inputCls = 'w-full h-12 px-4 rounded-2xl text-[#1a2430] text-[15px] outline-none transition-all'
+const inputStyle = { background: 'rgba(255,255,255,0.85)', border: '1.5px solid rgba(23,36,50,0.1)' }
 
 export function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -32,65 +32,57 @@ export function ResetPasswordForm() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold text-white">Nova senha</h1>
-        <p className="text-sm" style={{ color: '#888888' }}>
-          Escolha uma nova senha para sua conta.
+    <div className="space-y-7 animate-fade-in">
+      <div className="space-y-1.5">
+        <h1 className="text-[26px] font-bold text-[#1a2430] leading-tight"
+          style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
+          Nova senha
+        </h1>
+        <p className="text-base text-[#5f6b78]">
+          Escolha uma nova senha segura para sua conta.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
-          <Label htmlFor="password" className="text-sm font-medium text-white">Nova senha</Label>
+          <label htmlFor="password" className="text-sm font-bold text-[#1a2430] block">Nova senha</label>
           <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Mínimo 6 caracteres"
-              className="h-11 bg-secondary border-border text-white placeholder:text-muted-foreground focus-visible:ring-primary pr-10"
+            <input
+              id="password" type={showPassword ? 'text' : 'password'}
+              placeholder="Mínimo 6 caracteres" autoComplete="new-password"
+              className={`${inputCls} pr-12`} style={inputStyle}
               {...register('password')}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white transition-colors"
-            >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            <button type="button" onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#5f6b78] hover:text-[#1a2430] transition-colors">
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
-          {errors.password && <p className="text-xs text-destructive">{errors.password.message}</p>}
+          {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="confirm_password" className="text-sm font-medium text-white">Confirmar nova senha</Label>
-          <Input
-            id="confirm_password"
-            type="password"
-            placeholder="Repita a nova senha"
-            className="h-11 bg-secondary border-border text-white placeholder:text-muted-foreground focus-visible:ring-primary"
+          <label htmlFor="confirm_password" className="text-sm font-bold text-[#1a2430] block">Confirmar nova senha</label>
+          <input
+            id="confirm_password" type="password"
+            placeholder="Repita a nova senha" autoComplete="new-password"
+            className={inputCls} style={inputStyle}
             {...register('confirm_password')}
           />
-          {errors.confirm_password && <p className="text-xs text-destructive">{errors.confirm_password.message}</p>}
+          {errors.confirm_password && <p className="text-sm text-red-500">{errors.confirm_password.message}</p>}
         </div>
 
         {serverError && (
-          <div
-            className="text-sm text-center py-2 px-3 rounded-md"
-            style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}
-          >
+          <div className="text-sm text-center py-2.5 px-4 rounded-xl bg-red-50 text-red-600 border border-red-100">
             {serverError}
           </div>
         )}
 
-        <Button
-          type="submit"
-          disabled={loading}
-          className="w-full h-11 text-sm font-semibold"
-          style={{ background: '#FFA902', color: '#000' }}
-        >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Redefinir senha'}
-        </Button>
+        <button type="submit" disabled={loading}
+          className="w-full h-12 rounded-2xl text-[15px] font-bold transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2"
+          style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(199,154,59,0.25)' }}>
+          {loading ? <Loader2 className="w-5 h-5 animate-spin text-[#0a0a0a]" /> : 'Redefinir senha'}
+        </button>
       </form>
     </div>
   )

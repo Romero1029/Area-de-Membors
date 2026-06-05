@@ -4,10 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import { ArrowLeft, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { ArrowLeft, Loader2, Mail } from 'lucide-react'
 import { forgotPasswordSchema, type ForgotPasswordInput } from '@/lib/validations/auth'
 import { sendPasswordReset } from '@/lib/actions/auth'
 
@@ -33,16 +30,18 @@ export function ForgotPasswordForm() {
 
   if (success) {
     return (
-      <div className="space-y-4 text-center animate-fade-in">
-        <div
-          className="w-16 h-16 rounded-full flex items-center justify-center mx-auto text-2xl"
-          style={{ background: 'rgba(255,169,2,0.15)', border: '1px solid rgba(255,169,2,0.3)' }}
-        >
-          📩
+      <div className="space-y-5 text-center animate-fade-in">
+        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
+          style={{ background: 'rgba(199,154,59,0.12)', border: '1px solid rgba(199,154,59,0.25)' }}>
+          <Mail className="w-7 h-7" style={{ color: '#c79a3b' }} />
         </div>
-        <h2 className="text-xl font-bold text-white">E-mail enviado!</h2>
-        <p className="text-sm" style={{ color: '#888888' }}>{success}</p>
-        <Link href="/login" className="block text-sm font-medium hover:underline" style={{ color: '#FFA902' }}>
+        <div className="space-y-1">
+          <h2 className="text-xl font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
+            E-mail enviado!
+          </h2>
+          <p className="text-sm text-[#5f6b78]">{success}</p>
+        </div>
+        <Link href="/login" className="block text-sm font-semibold hover:underline" style={{ color: '#c79a3b' }}>
           Voltar ao login
         </Link>
       </div>
@@ -50,51 +49,44 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold text-white">Esqueceu a senha?</h1>
-        <p className="text-sm" style={{ color: '#888888' }}>
-          Digite seu e-mail e enviaremos um link para redefinir sua senha.
+    <div className="space-y-7 animate-fade-in">
+      <div className="space-y-1.5">
+        <h1 className="text-[26px] font-bold text-[#1a2430] leading-tight"
+          style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
+          Recuperar senha
+        </h1>
+        <p className="text-base text-[#5f6b78]">
+          Enviaremos um link para redefinir sua senha.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
-          <Label htmlFor="email" className="text-sm font-medium text-white">E-mail</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="seu@email.com"
-            className="h-11 bg-secondary border-border text-white placeholder:text-muted-foreground focus-visible:ring-primary"
+          <label htmlFor="email" className="text-sm font-bold text-[#1a2430] block">E-mail</label>
+          <input
+            id="email" type="email" placeholder="seu@email.com" autoComplete="email"
+            className="w-full h-12 px-4 rounded-2xl text-[#1a2430] text-[15px] outline-none transition-all"
+            style={{ background: 'rgba(255,255,255,0.85)', border: '1.5px solid rgba(23,36,50,0.1)' }}
             {...register('email')}
           />
-          {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+          {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
         </div>
 
         {serverError && (
-          <div
-            className="text-sm text-center py-2 px-3 rounded-md"
-            style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}
-          >
+          <div className="text-sm text-center py-2.5 px-4 rounded-xl bg-red-50 text-red-600 border border-red-100">
             {serverError}
           </div>
         )}
 
-        <Button
-          type="submit"
-          disabled={loading}
-          className="w-full h-11 text-sm font-semibold"
-          style={{ background: '#FFA902', color: '#000' }}
-        >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Enviar link de redefinição'}
-        </Button>
+        <button type="submit" disabled={loading}
+          className="w-full h-12 rounded-2xl text-[15px] font-bold transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2"
+          style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(199,154,59,0.25)' }}>
+          {loading ? <Loader2 className="w-5 h-5 animate-spin text-[#0a0a0a]" /> : 'Enviar link de redefinição'}
+        </button>
       </form>
 
-      <Link
-        href="/login"
-        className="flex items-center gap-1.5 text-sm hover:underline transition-colors"
-        style={{ color: '#888888' }}
-      >
+      <Link href="/login"
+        className="flex items-center gap-1.5 text-sm font-medium hover:underline transition-colors text-[#5f6b78] hover:text-[#1a2430]">
         <ArrowLeft className="w-4 h-4" />
         Voltar ao login
       </Link>

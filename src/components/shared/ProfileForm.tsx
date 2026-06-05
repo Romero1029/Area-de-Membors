@@ -49,7 +49,7 @@ export function ProfileForm({ profile, userEmail }: { profile: Profile; userEmai
         <div className="relative">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold overflow-hidden"
-            style={{ background: 'rgba(255,169,2,0.15)', color: '#FFA902', border: '2px solid rgba(255,169,2,0.3)' }}
+            style={{ background: 'rgba(255,169,2,0.15)', color: '#c79a3b', border: '2px solid rgba(255,169,2,0.3)' }}
           >
             {avatarUrl ? (
               <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
@@ -59,7 +59,7 @@ export function ProfileForm({ profile, userEmail }: { profile: Profile; userEmai
             type="button"
             onClick={() => fileRef.current?.click()}
             className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center transition-colors"
-            style={{ background: '#FFA902', color: '#000' }}
+            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a' }}
           >
             {avatarLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Camera className="w-3 h-3" />}
           </button>
@@ -121,7 +121,7 @@ export function ProfileForm({ profile, userEmail }: { profile: Profile; userEmai
           type="submit"
           disabled={loading}
           className="h-11 px-6 text-sm font-semibold"
-          style={{ background: '#FFA902', color: '#000' }}
+          style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 4px 12px rgba(199,154,59,0.2)' }}
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Salvar alterações'}
         </Button>
