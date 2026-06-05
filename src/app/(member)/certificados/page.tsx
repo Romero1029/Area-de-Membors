@@ -40,7 +40,7 @@ export default async function CertificadosPage({
   const nextProduct = celebrar ? await getFeaturedProduct() : null
 
   return (
-    <div className="max-w-3xl space-y-8 pb-12">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-8 space-y-8 pb-16">
 
       {/* Banner de celebração */}
       {celebrar && (
@@ -63,10 +63,10 @@ export default async function CertificadosPage({
       )}
 
       <div>
-        <h1 className="text-2xl font-bold text-[#1a2430]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
+        <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
           Meus Certificados
         </h1>
-        <p className="text-sm text-[#5f6b78] mt-1">Seus certificados de participação e conclusão.</p>
+        <p className="text-sm text-white/50 mt-1">Seus certificados de participação e conclusão.</p>
       </div>
 
       {certificates.length === 0 ? (
@@ -180,12 +180,12 @@ export default async function CertificadosPage({
 
       {/* CTA para a loja */}
       {!celebrar && certificates.length > 0 && (
-        <div className="flex items-center justify-between rounded-2xl border border-[#c79a3b]/15 bg-[#c79a3b]/5 p-4">
+        <div className="flex items-center justify-between rounded-2xl border border-[#c79a3b]/20 bg-[#c79a3b]/8 p-4" style={{ background: 'rgba(199,154,59,0.07)' }}>
           <div className="flex items-center gap-3">
             <Share2 className="h-5 w-5 text-[#c79a3b]" />
             <div>
-              <p className="text-sm font-semibold text-[#1a2430]">Pronto para o próximo nível?</p>
-              <p className="text-xs text-[#5f6b78]">Explore nossos cursos e mentorias.</p>
+              <p className="text-sm font-semibold text-white">Pronto para o próximo nível?</p>
+              <p className="text-xs text-white/50">Explore nossos cursos e mentorias.</p>
             </div>
           </div>
           <Link
