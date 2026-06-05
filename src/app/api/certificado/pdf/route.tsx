@@ -5,16 +5,24 @@ import { getLiveDates } from '@/lib/pdf/get-live-dates'
 import fs from 'fs'
 import path from 'path'
 
-function getCertBgPath(): string | undefined {
+function getCertBgDataUri(): string | undefined {
   const filePath = path.join(process.cwd(), 'public', 'CERTIFICADO_NPA_SP_-_.png')
-  return fs.existsSync(filePath) ? filePath : undefined
+  if (!fs.existsSync(filePath)) return undefined
+  try {
+    return `data:image/png;base64,${fs.readFileSync(filePath).toString('base64')}`
+  } catch {
+    return undefined
+  }
 }
 
 function registerFonts() {
   try {
     const fontPath = path.join(process.cwd(), 'public', 'fonts', 'Allura-Regular.ttf')
     if (fs.existsSync(fontPath)) {
-      Font.register({ family: 'Allura', src: fontPath })
+      Font.register({
+        family: 'Allura',
+        src: `data:font/truetype;base64,${fs.readFileSync(fontPath).toString('base64')}`,
+      })
     }
   } catch { /* fonte opcional — não bloqueia geração */ }
 }
@@ -37,7 +45,7 @@ export async function GET(request: NextRequest) {
       <CertificadoPDF
         nome={nome}
         code={code ?? undefined}
-        bgUrl={getCertBgPath()}
+        bgUrl={getCertBgDataUri()}
         diasLive={diasLive}
         mesLive={mesLive}
         anoLive={anoLive}

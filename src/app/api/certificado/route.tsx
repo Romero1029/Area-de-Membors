@@ -6,16 +6,30 @@ import { getLiveDates } from '@/lib/pdf/get-live-dates'
 import fs from 'fs'
 import path from 'path'
 
-function getCertBgPath(): string | undefined {
+// No Windows, path.join retorna barras invertidas (C:\...) que url.parse() dentro do
+// @react-pdf/renderer interpreta "C:" como protocolo de URL — o handler local é
+// bypassado e fetch('C:\\...') lança "Failed to parse URL".
+// Solução: ler os arquivos como Buffer e entregar como data URI base64,
+// eliminando qualquer resolução de caminho pela biblioteca.
+
+function getCertBgDataUri(): string | undefined {
   const filePath = path.join(process.cwd(), 'public', 'CERTIFICADO_NPA_SP_-_.png')
-  return fs.existsSync(filePath) ? filePath : undefined
+  if (!fs.existsSync(filePath)) return undefined
+  try {
+    return `data:image/png;base64,${fs.readFileSync(filePath).toString('base64')}`
+  } catch {
+    return undefined
+  }
 }
 
 function registerFonts() {
   try {
     const fontPath = path.join(process.cwd(), 'public', 'fonts', 'Allura-Regular.ttf')
     if (fs.existsSync(fontPath)) {
-      Font.register({ family: 'Allura', src: fontPath })
+      Font.register({
+        family: 'Allura',
+        src: `data:font/truetype;base64,${fs.readFileSync(fontPath).toString('base64')}`,
+      })
     }
   } catch { /* fonte opcional — não bloqueia geração */ }
 }
@@ -161,7 +175,7 @@ export async function POST(request: NextRequest) {
     pdfBuffer = await renderToBuffer(
       <CertificadoPDF
         nome={nomeFormatado}
-        bgUrl={getCertBgPath()}
+        bgUrl={getCertBgDataUri()}
         diasLive={diasLive}
         mesLive={mesLive}
         anoLive={anoLive}
