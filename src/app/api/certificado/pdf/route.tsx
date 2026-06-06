@@ -54,12 +54,16 @@ export async function GET(request: NextRequest) {
   }
 
   const filename = `certificado-${nome.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}.pdf`
+  const forceDownload = searchParams.get('download') === '1'
+  const disposition = forceDownload
+    ? `attachment; filename="${filename}"`
+    : `inline; filename="${filename}"`
 
   return new NextResponse(new Uint8Array(pdfBuffer), {
     status: 200,
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Content-Disposition': disposition,
       'Cache-Control': 'no-store',
     },
   })

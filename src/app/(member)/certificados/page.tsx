@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Award, Share2, ChevronRight, Sparkles } from 'lucide-react'
+import { Award, Share2, ChevronRight, Sparkles, Download, Eye } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { getFeaturedProduct } from '@/lib/actions/store'
 import { CopyCodeButton } from './CopyCodeButton'
@@ -141,7 +141,28 @@ export default async function CertificadosPage({
                 </div>
 
                 {/* Ações do certificado */}
-                <div className="flex flex-wrap gap-2 pt-1 border-t border-white/10">
+                <div className="flex flex-wrap gap-2 pt-3 border-t border-white/10">
+                  {/* Visualizar PDF */}
+                  <Link
+                    href={`/api/certificado/pdf?nome=${encodeURIComponent(cert.full_name)}&code=${cert.certificate_code}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:opacity-90 hover:-translate-y-0.5"
+                    style={{ background: 'rgba(199,154,59,0.15)', color: '#e8b84b', border: '1px solid rgba(199,154,59,0.3)' }}
+                  >
+                    <Eye className="h-3.5 w-3.5" /> Visualizar PDF
+                  </Link>
+
+                  {/* Baixar PDF */}
+                  <a
+                    href={`/api/certificado/pdf?nome=${encodeURIComponent(cert.full_name)}&code=${cert.certificate_code}&download=1`}
+                    download={`certificado-${cert.certificate_code}.pdf`}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:opacity-90 hover:-translate-y-0.5"
+                    style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a' }}
+                  >
+                    <Download className="h-3.5 w-3.5" /> Baixar PDF
+                  </a>
+
                   <ShareCertificateButton
                     userName={userName}
                     certType={cert.certificate_type === 'launch' ? 'Lançamento Gratuito' : 'Conclusão de Curso'}
