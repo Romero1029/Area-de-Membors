@@ -4,9 +4,23 @@ import {
   DEMO_PRODUCTS, DEMO_PROGRESS,
 } from '@/lib/demo-data'
 import { getFeaturedProduct, getUpsellProducts } from '@/lib/actions/store'
+import dynamic from 'next/dynamic'
 import { getBannerSlides } from '@/lib/actions/banners'
-import { HeroCarousel } from '@/components/ui/HeroCarousel'
 import { CourseCarousel } from '@/components/ui/CourseCarousel'
+
+const HeroCarousel = dynamic(
+  () => import('@/components/ui/HeroCarousel').then(m => ({ default: m.HeroCarousel })),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="w-full bg-[#0f0f0f]"
+        style={{ height: 'clamp(340px, 60vw, 600px)' }}
+        aria-hidden="true"
+      />
+    ),
+  }
+)
 import { PromoBanner } from '@/components/ui/PromoBanner'
 import type { CourseProgress, Profile } from '@/types'
 import type { HeroSlideItem } from '@/components/ui/HeroCarousel'
