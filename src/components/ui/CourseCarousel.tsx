@@ -42,7 +42,10 @@ export function CourseCarousel({ title, subtitle, items, showAllHref, emptyMessa
     emblaApi.on('select', updateButtons)
     emblaApi.on('reInit', updateButtons)
     updateButtons()
-    return () => { emblaApi.off('select', updateButtons); emblaApi.off('reInit', updateButtons) }
+    return () => {
+      emblaApi.off('select', updateButtons)
+      emblaApi.off('reInit', updateButtons)
+    }
   }, [emblaApi, updateButtons])
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
@@ -52,7 +55,7 @@ export function CourseCarousel({ title, subtitle, items, showAllHref, emptyMessa
     return (
       <section className="space-y-4 px-4 sm:px-6 lg:px-10">
         <SectionHeader title={title} subtitle={subtitle} showAllHref={showAllHref} showArrows={false} canPrev={false} canNext={false} onPrev={scrollPrev} onNext={scrollNext} />
-        <p className="text-sm text-[#606060]">{emptyMessage}</p>
+        <p className="text-sm text-[#505050]">{emptyMessage}</p>
       </section>
     )
   }
@@ -60,13 +63,14 @@ export function CourseCarousel({ title, subtitle, items, showAllHref, emptyMessa
   if (items.length === 0) return null
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-5">
+      {/* Header com padding lateral */}
       <div className="px-4 sm:px-6 lg:px-10">
         <SectionHeader
           title={title}
           subtitle={subtitle}
           showAllHref={showAllHref}
-          showArrows={items.length > 4}
+          showArrows={items.length > 3}
           canPrev={canPrev}
           canNext={canNext}
           onPrev={scrollPrev}
@@ -76,14 +80,25 @@ export function CourseCarousel({ title, subtitle, items, showAllHref, emptyMessa
 
       {/* Carrossel */}
       <div className="relative group/carousel">
+        {/* Fade esquerda */}
+        {canPrev && (
+          <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none hidden md:block"
+            style={{ background: 'linear-gradient(to right, #0f0f0f, transparent)' }} />
+        )}
+        {/* Fade direita */}
+        {canNext && (
+          <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none hidden md:block"
+            style={{ background: 'linear-gradient(to left, #0f0f0f, transparent)' }} />
+        )}
+
         {/* Seta esquerda */}
         {canPrev && (
           <button
             onClick={scrollPrev}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 h-full w-12 items-center justify-center bg-gradient-to-r from-[#0f0f0f] to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-200"
+            className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full items-center justify-center border border-white/10 bg-black/60 backdrop-blur-sm opacity-0 group-hover/carousel:opacity-100 transition-all duration-200 hover:bg-black/80"
             aria-label="Anterior"
           >
-            <ChevronLeft className="h-6 w-6 text-[#f0f0f0]" />
+            <ChevronLeft className="h-5 w-5 text-white" />
           </button>
         )}
 
@@ -91,26 +106,26 @@ export function CourseCarousel({ title, subtitle, items, showAllHref, emptyMessa
         {canNext && (
           <button
             onClick={scrollNext}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 h-full w-12 items-center justify-center bg-gradient-to-l from-[#0f0f0f] to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-200"
+            className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full items-center justify-center border border-white/10 bg-black/60 backdrop-blur-sm opacity-0 group-hover/carousel:opacity-100 transition-all duration-200 hover:bg-black/80"
             aria-label="Próximo"
           >
-            <ChevronRight className="h-6 w-6 text-[#f0f0f0]" />
+            <ChevronRight className="h-5 w-5 text-white" />
           </button>
         )}
 
         {/* Embla viewport */}
-        <div className="embla overflow-hidden" ref={emblaRef}>
-          <div className="embla__container flex gap-3 px-4 sm:px-6 lg:px-10">
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-3 sm:gap-4 px-4 sm:px-6 lg:px-10">
             {items.map(({ product, progress }, i) => (
               <div
                 key={product.id}
-                className="embla__slide flex-none w-[160px] sm:w-[190px] md:w-[210px] lg:w-[230px]"
+                className="flex-none w-[150px] sm:w-[180px] md:w-[200px] lg:w-[220px]"
               >
                 <CourseCardNetflix
                   product={product}
                   progress={progress}
                   href={`/cursos/${product.slug}`}
-                  priority={i < 3}
+                  priority={i < 4}
                 />
               </div>
             ))}
@@ -136,23 +151,40 @@ function SectionHeader({
   return (
     <div className="flex items-end justify-between gap-4">
       <div>
-        <h2 className="text-[#f0f0f0] font-bold text-lg sm:text-xl leading-tight">{title}</h2>
-        {subtitle && <p className="text-[#606060] text-sm mt-0.5">{subtitle}</p>}
+        <h2 className="text-[#f0f0f0] font-bold leading-tight" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="text-[#505050] text-sm mt-0.5">{subtitle}</p>
+        )}
       </div>
+
       <div className="flex items-center gap-2 flex-shrink-0">
         {showArrows && (
           <>
-            <button onClick={onPrev} disabled={!canPrev} className="hidden md:flex h-7 w-7 rounded-full bg-[#242424] items-center justify-center disabled:opacity-30 hover:bg-[#333] transition-colors">
-              <ChevronLeft className="h-3.5 w-3.5 text-[#f0f0f0]" />
+            <button
+              onClick={onPrev}
+              disabled={!canPrev}
+              className="hidden md:flex h-8 w-8 rounded-full bg-[#1e1e1e] border border-[#2a2a2a] items-center justify-center disabled:opacity-20 hover:bg-[#2a2a2a] transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4 text-[#f0f0f0]" />
             </button>
-            <button onClick={onNext} disabled={!canNext} className="hidden md:flex h-7 w-7 rounded-full bg-[#242424] items-center justify-center disabled:opacity-30 hover:bg-[#333] transition-colors">
-              <ChevronRight className="h-3.5 w-3.5 text-[#f0f0f0]" />
+            <button
+              onClick={onNext}
+              disabled={!canNext}
+              className="hidden md:flex h-8 w-8 rounded-full bg-[#1e1e1e] border border-[#2a2a2a] items-center justify-center disabled:opacity-20 hover:bg-[#2a2a2a] transition-colors"
+            >
+              <ChevronRight className="h-4 w-4 text-[#f0f0f0]" />
             </button>
           </>
         )}
         {showAllHref && (
-          <Link href={showAllHref} className="flex items-center gap-1 text-xs font-semibold text-[#c79a3b] hover:text-[#e8b84b] transition-colors">
-            Ver todos <ArrowRight className="h-3 w-3" />
+          <Link
+            href={showAllHref}
+            className="flex items-center gap-1 text-xs font-semibold transition-colors"
+            style={{ color: '#c79a3b' }}
+          >
+            Ver todos <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         )}
       </div>

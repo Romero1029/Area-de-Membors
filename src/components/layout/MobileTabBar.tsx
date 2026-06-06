@@ -3,14 +3,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, BookOpen, ShoppingBag, Award, User } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 const tabs = [
-  { href: '/dashboard',    label: 'Início',       icon: LayoutDashboard },
-  { href: '/cursos',       label: 'Cursos',       icon: BookOpen },
-  { href: '/certificados', label: 'Certificados', icon: Award },
-  { href: '/loja',         label: 'Loja',         icon: ShoppingBag },
-  { href: '/perfil',       label: 'Perfil',       icon: User },
+  { href: '/dashboard',    label: 'Início',   icon: LayoutDashboard },
+  { href: '/cursos',       label: 'Cursos',   icon: BookOpen },
+  { href: '/loja',         label: 'Loja',     icon: ShoppingBag },
+  { href: '/certificados', label: 'Certific', icon: Award },
+  { href: '/perfil',       label: 'Perfil',   icon: User },
 ]
 
 export function MobileTabBar() {
@@ -23,27 +22,52 @@ export function MobileTabBar() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-[#0f0f0f] border-t border-[#2a2a2a]"
-      style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 8px)' }}
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden"
+      style={{
+        background: 'rgba(10,10,10,0.92)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+        paddingBottom: 'max(env(safe-area-inset-bottom), 6px)',
+      }}
     >
-      <div className="flex items-center justify-around px-2 pt-2 pb-1">
+      <div className="flex items-stretch justify-around px-1 pt-1.5 pb-0.5">
         {tabs.map(({ href, label, icon: Icon }) => {
           const active = isActive(href)
           return (
             <Link
               key={href}
               href={href}
-              className="flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-xl transition-colors"
-              style={{
-                background: active ? 'rgba(199,154,59,0.1)' : 'transparent',
-              }}
+              className="flex flex-col items-center justify-center gap-0.5 min-w-0 flex-1 px-1 py-1.5 rounded-xl transition-all duration-200 relative"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
-              <Icon
-                className={cn('h-5 w-5 transition-colors', active ? 'text-[#c79a3b]' : 'text-[#606060]')}
-                strokeWidth={active ? 2.5 : 1.8}
-              />
+              {/* Pill indicator */}
+              {active && (
+                <span
+                  className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full"
+                  style={{ background: 'linear-gradient(90deg, #c79a3b, #e8b84b)' }}
+                />
+              )}
+
+              <div
+                className="flex items-center justify-center w-9 h-7 rounded-xl transition-all duration-200"
+                style={{
+                  background: active ? 'rgba(199,154,59,0.12)' : 'transparent',
+                }}
+              >
+                <Icon
+                  style={{
+                    width: '1.125rem',
+                    height: '1.125rem',
+                    color: active ? '#c79a3b' : '#505050',
+                    strokeWidth: active ? 2.5 : 1.8,
+                    transition: 'color 0.2s, stroke-width 0.2s',
+                  }}
+                />
+              </div>
               <span
-                className={cn('text-[10px] font-medium transition-colors', active ? 'text-[#c79a3b]' : 'text-[#606060]')}
+                className="text-[9.5px] font-semibold leading-none transition-colors duration-200 truncate max-w-full"
+                style={{ color: active ? '#c79a3b' : '#505050' }}
               >
                 {label}
               </span>

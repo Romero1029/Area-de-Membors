@@ -26,6 +26,14 @@ type EnrollmentItem = {
   } | null
 }
 
+function SectionDivider() {
+  return (
+    <div className="px-4 sm:px-6 lg:px-10">
+      <div className="h-px w-full" style={{ background: 'linear-gradient(to right, transparent, rgba(199,154,59,0.12), transparent)' }} />
+    </div>
+  )
+}
+
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -68,7 +76,6 @@ export default async function DashboardPage() {
 
   if (!profile) redirect('/login')
 
-  // Classificar cursos por progresso
   const enrolled = enrollments.filter(e => e.products)
   const inProgress = enrolled.filter(e => {
     const p = progressMap[e.product_id]
@@ -80,7 +87,6 @@ export default async function DashboardPage() {
   })
   const completed = enrolled.filter(e => progressMap[e.product_id]?.percent_complete === 100)
 
-  // Produtos para upsell
   const enrolledIds = enrolled.map(e => e.product_id)
   const [upsellProducts, featuredProduct, herobannerSlides, promoSlides] = await Promise.all([
     isDemo ? Promise.resolve([]) : getUpsellProducts(enrolledIds),
@@ -89,8 +95,6 @@ export default async function DashboardPage() {
     isDemo ? Promise.resolve([]) : getBannerSlides('promo'),
   ])
 
-  // Montar slides do hero
-  // Banners admin têm prioridade; se não houver, usar cursos matriculados
   const heroSlides: HeroSlideItem[] = herobannerSlides.length > 0
     ? herobannerSlides.map(b => ({ kind: 'banner' as const, banner: b }))
     : ([
@@ -115,7 +119,6 @@ export default async function DashboardPage() {
         })) : []),
       ] as HeroSlideItem[]).slice(0, 4)
 
-  // Demo fallback hero
   const demoHeroSlides: HeroSlideItem[] = isDemo
     ? DEMO_PRODUCTS.slice(0, 3).map((p, i) => ({
         kind: 'product' as const,
@@ -127,91 +130,141 @@ export default async function DashboardPage() {
 
   const finalHeroSlides = isDemo ? demoHeroSlides : heroSlides
 
+  const firstName = (profile?.full_name ?? '').split(' ')[0] || 'Bem-vindo'
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite'
+
+  const hasContent = enrolled.length > 0
+
   return (
     <div className="min-h-screen bg-[#0f0f0f]">
 
-      {/* Hero Carousel — banners admin ou cursos */}
+      {/* Hero Carousel */}
       {finalHeroSlides.length > 0 && (
         <HeroCarousel slides={finalHeroSlides} />
       )}
 
+      {/* Saudação rápida logo após o hero */}
+      {hasContent && (
+        <div className="px-4 sm:px-6 lg:px-10 pt-8 pb-2">
+          <p className="text-[#505050] text-sm">
+            {greeting}, <span className="text-[#c79a3b] font-semibold">{firstName}</span>
+          </p>
+        </div>
+      )}
+
       {/* Conteúdo principal */}
-      <div className="space-y-12 py-10">
+      <div className="py-6 pb-24 md:pb-12 space-y-0">
 
         {/* Continue assistindo */}
         {inProgress.length > 0 && (
-          <CourseCarousel
-            title="Continue assistindo"
-            subtitle="Retome de onde parou"
-            items={inProgress.map(e => ({
-              product: e.products! as unknown as Parameters<typeof CourseCarousel>[0]['items'][0]['product'],
-              progress: progressMap[e.product_id],
-            }))}
-            showAllHref="/cursos?filtro=em-andamento"
-          />
+          <>
+            <div className="py-6">
+              <CourseCarousel
+                title="Continue assistindo"
+                subtitle="Retome de onde parou"
+                items={inProgress.map(e => ({
+                  product: e.products! as unknown as Parameters<typeof CourseCarousel>[0]['items'][0]['product'],
+                  progress: progressMap[e.product_id],
+                }))}
+                showAllHref="/cursos?filtro=em-andamento"
+              />
+            </div>
+            <SectionDivider />
+          </>
         )}
 
         {/* Seção de propaganda — primeiro bloco */}
         {promoSlides.length > 0 && (
-          <PromoBanner slides={promoSlides.slice(0, 2)} />
+          <>
+            <div className="py-8 px-4 sm:px-6 lg:px-10">
+              <PromoBanner slides={promoSlides.slice(0, 2)} />
+            </div>
+            <SectionDivider />
+          </>
         )}
 
         {/* Cursos não iniciados */}
         {notStarted.length > 0 && (
-          <CourseCarousel
-            title="Seus cursos"
-            subtitle="Prontos para começar"
-            items={notStarted.map(e => ({
-              product: e.products! as unknown as Parameters<typeof CourseCarousel>[0]['items'][0]['product'],
-              progress: progressMap[e.product_id],
-            }))}
-            showAllHref="/cursos"
-          />
+          <>
+            <div className="py-6">
+              <CourseCarousel
+                title="Seus cursos"
+                subtitle="Prontos para começar"
+                items={notStarted.map(e => ({
+                  product: e.products! as unknown as Parameters<typeof CourseCarousel>[0]['items'][0]['product'],
+                  progress: progressMap[e.product_id],
+                }))}
+                showAllHref="/cursos"
+              />
+            </div>
+            <SectionDivider />
+          </>
         )}
 
         {/* Upsell — expanda sua jornada */}
         {upsellProducts.length > 0 && (
-          <CourseCarousel
-            title="Expanda sua jornada"
-            subtitle="Cursos e mentorias para o próximo nível"
-            items={upsellProducts.map(p => ({ product: p }))}
-            showAllHref="/loja"
-          />
+          <>
+            <div className="py-6">
+              <CourseCarousel
+                title="Expanda sua jornada"
+                subtitle="Cursos e mentorias para o próximo nível"
+                items={upsellProducts.map(p => ({ product: p }))}
+                showAllHref="/loja"
+              />
+            </div>
+            <SectionDivider />
+          </>
         )}
 
-        {/* Seção de propaganda — segundo bloco (se tiver mais de 2) */}
+        {/* Seção de propaganda — segundo bloco */}
         {promoSlides.length > 2 && (
-          <PromoBanner slides={promoSlides.slice(2, 4)} />
+          <>
+            <div className="py-8 px-4 sm:px-6 lg:px-10">
+              <PromoBanner slides={promoSlides.slice(2, 4)} />
+            </div>
+            <SectionDivider />
+          </>
         )}
 
         {/* Concluídos */}
         {completed.length > 0 && (
-          <CourseCarousel
-            title="Concluídos"
-            subtitle="Seus certificados conquistados"
-            items={completed.map(e => ({
-              product: e.products! as unknown as Parameters<typeof CourseCarousel>[0]['items'][0]['product'],
-              progress: progressMap[e.product_id],
-            }))}
-            showAllHref="/certificados"
-          />
+          <div className="py-6">
+            <CourseCarousel
+              title="Concluídos"
+              subtitle="Seus certificados conquistados"
+              items={completed.map(e => ({
+                product: e.products! as unknown as Parameters<typeof CourseCarousel>[0]['items'][0]['product'],
+                progress: progressMap[e.product_id],
+              }))}
+              showAllHref="/certificados"
+            />
+          </div>
         )}
 
         {/* Estado vazio */}
         {enrolled.length === 0 && (
-          <div className="px-6 sm:px-10 lg:px-16 py-20 text-center space-y-5">
-            <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center"
-              style={{ background: 'rgba(199,154,59,0.1)', border: '1px solid rgba(199,154,59,0.2)' }}>
-              <span className="text-2xl">🎓</span>
+          <div className="px-4 sm:px-6 lg:px-10 py-24 text-center space-y-6">
+            <div
+              className="w-20 h-20 rounded-3xl mx-auto flex items-center justify-center"
+              style={{ background: 'rgba(199,154,59,0.08)', border: '1px solid rgba(199,154,59,0.15)' }}
+            >
+              <span className="text-3xl">🎓</span>
             </div>
-            <div>
-              <p className="text-[#f0f0f0] font-semibold text-lg">Você ainda não tem cursos.</p>
-              <p className="text-[#606060] text-sm mt-1">Explore nossa biblioteca e comece sua transformação.</p>
+            <div className="space-y-2">
+              <p className="text-[#f0f0f0] font-semibold text-xl">Comece sua jornada</p>
+              <p className="text-[#606060] text-sm max-w-xs mx-auto">
+                Explore nossa biblioteca de cursos e encontre o próximo passo na sua transformação.
+              </p>
             </div>
             <a
               href="/loja"
-              className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all hover:opacity-90 hover:-translate-y-0.5"
-              style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(199,154,59,0.25)' }}
+              className="inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-sm font-bold transition-all hover:opacity-90 hover:-translate-y-0.5 active:scale-[0.97]"
+              style={{
+                background: 'linear-gradient(135deg, #c79a3b, #e8b84b)',
+                color: '#0a0a0a',
+                boxShadow: '0 8px 28px rgba(199,154,59,0.25)',
+              }}
             >
               Explorar cursos
             </a>
