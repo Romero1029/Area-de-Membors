@@ -4,9 +4,12 @@ import {
   DEMO_PRODUCTS, DEMO_PROGRESS,
 } from '@/lib/demo-data'
 import { getFeaturedProduct, getUpsellProducts } from '@/lib/actions/store'
+import { getBannerSlides } from '@/lib/actions/banners'
 import { HeroCarousel } from '@/components/ui/HeroCarousel'
 import { CourseCarousel } from '@/components/ui/CourseCarousel'
+import { PromoBanner } from '@/components/ui/PromoBanner'
 import type { CourseProgress, Profile } from '@/types'
+import type { HeroSlideItem } from '@/components/ui/HeroCarousel'
 
 type EnrollmentItem = {
   id: string
@@ -77,41 +80,61 @@ export default async function DashboardPage() {
   })
   const completed = enrolled.filter(e => progressMap[e.product_id]?.percent_complete === 100)
 
-  // Produtos para upsell (não matriculados, com preço)
+  // Produtos para upsell
   const enrolledIds = enrolled.map(e => e.product_id)
-  const upsellProducts = isDemo ? [] : await getUpsellProducts(enrolledIds)
-  const featuredProduct = isDemo ? null : await getFeaturedProduct()
+  const [upsellProducts, featuredProduct, herobannerSlides, promoSlides] = await Promise.all([
+    isDemo ? Promise.resolve([]) : getUpsellProducts(enrolledIds),
+    isDemo ? Promise.resolve(null) : getFeaturedProduct(),
+    isDemo ? Promise.resolve([]) : getBannerSlides('hero'),
+    isDemo ? Promise.resolve([]) : getBannerSlides('promo'),
+  ])
 
-  // Slides do hero: cursos em andamento + destaque do upsell
-  const heroSlides = [
-    ...inProgress.slice(0, 3).map(e => ({
-      product: e.products!,
-      enrolled: true,
-      progress: progressMap[e.product_id],
-    })),
-    ...(featuredProduct && !enrolledIds.includes(featuredProduct.id) ? [{
-      product: featuredProduct,
-      enrolled: false,
-    }] : []),
-    // Se não tiver nada em andamento, mostrar os cursos não iniciados
-    ...(inProgress.length === 0 ? notStarted.slice(0, 2).map(e => ({
-      product: e.products!,
-      enrolled: true,
-      progress: progressMap[e.product_id],
-    })) : []),
-  ].slice(0, 4)
+  // Montar slides do hero
+  // Banners admin têm prioridade; se não houver, usar cursos matriculados
+  const heroSlides: HeroSlideItem[] = herobannerSlides.length > 0
+    ? herobannerSlides.map(b => ({ kind: 'banner' as const, banner: b }))
+    : [
+        ...inProgress.slice(0, 3).map(e => ({
+          kind: 'product' as const,
+          product: e.products!,
+          enrolled: true,
+          progress: progressMap[e.product_id],
+        })),
+        ...(featuredProduct && !enrolledIds.includes(featuredProduct.id) ? [{
+          kind: 'product' as const,
+          product: featuredProduct,
+          enrolled: false,
+        }] : []),
+        ...(inProgress.length === 0 ? notStarted.slice(0, 2).map(e => ({
+          kind: 'product' as const,
+          product: e.products!,
+          enrolled: true,
+          progress: progressMap[e.product_id],
+        })) : []),
+      ].slice(0, 4)
+
+  // Demo fallback hero
+  const demoHeroSlides: HeroSlideItem[] = isDemo
+    ? DEMO_PRODUCTS.slice(0, 3).map((p, i) => ({
+        kind: 'product' as const,
+        product: p,
+        enrolled: true,
+        progress: DEMO_PROGRESS[i],
+      }))
+    : []
+
+  const finalHeroSlides = isDemo ? demoHeroSlides : heroSlides
 
   return (
     <div className="min-h-screen bg-[#0f0f0f]">
 
-      {/* Hero Carousel */}
-      {heroSlides.length > 0 && (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        <HeroCarousel slides={heroSlides as any} />
+      {/* Hero Carousel — banners admin ou cursos */}
+      {finalHeroSlides.length > 0 && (
+        <HeroCarousel slides={finalHeroSlides} />
       )}
 
-      {/* Carrosséis de conteúdo */}
-      <div className="space-y-10 py-8">
+      {/* Conteúdo principal */}
+      <div className="space-y-12 py-10">
 
         {/* Continue assistindo */}
         {inProgress.length > 0 && (
@@ -124,6 +147,11 @@ export default async function DashboardPage() {
             }))}
             showAllHref="/cursos?filtro=em-andamento"
           />
+        )}
+
+        {/* Seção de propaganda — primeiro bloco */}
+        {promoSlides.length > 0 && (
+          <PromoBanner slides={promoSlides.slice(0, 2)} />
         )}
 
         {/* Cursos não iniciados */}
@@ -149,6 +177,11 @@ export default async function DashboardPage() {
           />
         )}
 
+        {/* Seção de propaganda — segundo bloco (se tiver mais de 2) */}
+        {promoSlides.length > 2 && (
+          <PromoBanner slides={promoSlides.slice(2, 4)} />
+        )}
+
         {/* Concluídos */}
         {completed.length > 0 && (
           <CourseCarousel
@@ -164,11 +197,19 @@ export default async function DashboardPage() {
 
         {/* Estado vazio */}
         {enrolled.length === 0 && (
-          <div className="px-6 sm:px-10 lg:px-16 py-16 text-center space-y-4">
-            <p className="text-[#a0a0a0] text-lg">Você ainda não tem cursos.</p>
+          <div className="px-6 sm:px-10 lg:px-16 py-20 text-center space-y-5">
+            <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center"
+              style={{ background: 'rgba(199,154,59,0.1)', border: '1px solid rgba(199,154,59,0.2)' }}>
+              <span className="text-2xl">🎓</span>
+            </div>
+            <div>
+              <p className="text-[#f0f0f0] font-semibold text-lg">Você ainda não tem cursos.</p>
+              <p className="text-[#606060] text-sm mt-1">Explore nossa biblioteca e comece sua transformação.</p>
+            </div>
             <a
               href="/loja"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#c79a3b] px-6 py-3 text-sm font-bold text-[#0f0f0f] hover:bg-[#e8b84b] transition-colors"
+              className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all hover:opacity-90 hover:-translate-y-0.5"
+              style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(199,154,59,0.25)' }}
             >
               Explorar cursos
             </a>
