@@ -45,12 +45,13 @@ function normalise(s: AnySlide): HeroSlideItem {
 }
 
 interface HeroCarouselProps {
-  slides: AnySlide[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  slides: any[]
   autoPlayInterval?: number
 }
 
 export function HeroCarousel({ slides: rawSlides, autoPlayInterval = 6000 }: HeroCarouselProps) {
-  const slides = rawSlides.map(normalise)
+  const slides: HeroSlideItem[] = (rawSlides as AnySlide[]).map(normalise)
   const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
   const shouldReduce = useReducedMotion()

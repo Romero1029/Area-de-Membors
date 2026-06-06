@@ -93,10 +93,11 @@ export default async function DashboardPage() {
   // Banners admin têm prioridade; se não houver, usar cursos matriculados
   const heroSlides: HeroSlideItem[] = herobannerSlides.length > 0
     ? herobannerSlides.map(b => ({ kind: 'banner' as const, banner: b }))
-    : [
+    : ([
         ...inProgress.slice(0, 3).map(e => ({
           kind: 'product' as const,
-          product: e.products!,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          product: e.products! as unknown as any,
           enrolled: true,
           progress: progressMap[e.product_id],
         })),
@@ -107,11 +108,12 @@ export default async function DashboardPage() {
         }] : []),
         ...(inProgress.length === 0 ? notStarted.slice(0, 2).map(e => ({
           kind: 'product' as const,
-          product: e.products!,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          product: e.products! as unknown as any,
           enrolled: true,
           progress: progressMap[e.product_id],
         })) : []),
-      ].slice(0, 4)
+      ] as HeroSlideItem[]).slice(0, 4)
 
   // Demo fallback hero
   const demoHeroSlides: HeroSlideItem[] = isDemo
