@@ -1,14 +1,15 @@
+import { redirect } from 'next/navigation'
 import { DEMO_PROFILE } from '@/lib/demo-data'
 import { ProfileForm } from '@/components/shared/ProfileForm'
+import { IS_DEMO } from '@/lib/constants'
 
-const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+export const metadata = { title: 'Meu Perfil — Instituto Despertamente' }
 
 export default async function PerfilPage() {
-  let profile = DEMO_PROFILE
-  let userEmail = 'admin@idmtools.com'
+  let profile = IS_DEMO ? DEMO_PROFILE : null
+  let userEmail = IS_DEMO ? 'admin@idmtools.com' : ''
 
-  if (!DEMO_MODE) {
-    const { redirect } = await import('next/navigation')
+  if (!IS_DEMO) {
     const { createClient } = await import('@/lib/supabase/server')
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -17,8 +18,10 @@ export default async function PerfilPage() {
     const { data } = await (supabase.from('profiles') as any).select('*').eq('id', user!.id).single()
     if (!data) redirect('/login')
     profile = data
-    userEmail = user!.email ?? ''
+    userEmail = user?.email ?? ''
   }
+
+  if (!profile) redirect('/login')
 
   return (
     <div className="max-w-xl mx-auto px-4 sm:px-6 pt-8 pb-16 space-y-6">

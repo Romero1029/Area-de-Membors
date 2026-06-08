@@ -1,8 +1,9 @@
 'use client'
 
 import { useCallback, useRef, useState } from 'react'
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ReactPlayer = require('react-player').default as any
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore — react-player/youtube is a valid CJS subpath with no .d.ts
+import ReactPlayer from 'react-player/youtube'
 import { CheckCircle, Loader2 } from 'lucide-react'
 import { markLessonComplete } from '@/lib/actions/progress'
 

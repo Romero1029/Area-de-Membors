@@ -7,6 +7,8 @@ import { CopyCodeButton } from './CopyCodeButton'
 import { ShareCertificateButton } from './ShareCertificateButton'
 import { BuyButton } from '@/components/marketing/BuyButton'
 
+export const metadata = { title: 'Meus Certificados — Instituto Despertamente' }
+
 export default async function CertificadosPage({
   searchParams,
 }: {
@@ -70,26 +72,32 @@ export default async function CertificadosPage({
       </div>
 
       {certificates.length === 0 ? (
-        <div
-          className="rounded-2xl p-14 text-center space-y-4"
-          style={{ background: '#fffaf3', border: '1px dashed rgba(23,36,50,0.12)' }}
-        >
-          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto" style={{ background: 'rgba(199,154,59,0.1)', border: '1px solid rgba(199,154,59,0.2)' }}>
+        <div className="rounded-2xl p-14 text-center space-y-4 border border-dashed border-[#2a2a2a] bg-[#111111]">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto" style={{ background: 'rgba(199,154,59,0.08)', border: '1px solid rgba(199,154,59,0.15)' }}>
             <Award className="w-7 h-7" style={{ color: '#c79a3b' }} />
           </div>
           <div>
-            <p className="font-bold text-[#1a2430]">Nenhum certificado ainda</p>
-            <p className="text-sm text-[#5f6b78] mt-1">
-              Participe das aulas ao vivo e resgate seu primeiro certificado.
+            <p className="font-bold text-[#f0f0f0]">Nenhum certificado ainda</p>
+            <p className="text-sm text-[#606060] mt-1">
+              Complete um curso ou participe das aulas ao vivo para receber seu certificado.
             </p>
           </div>
-          <Link
-            href="/lancamento#certificado"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
-            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}
-          >
-            <Award className="w-4 h-4" /> Resgatar certificado
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/cursos"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-[#0a0a0a] transition-all hover:opacity-90"
+              style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}
+            >
+              <Award className="w-4 h-4" /> Ver meus cursos
+            </Link>
+            <Link
+              href="/lancamento#certificado"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-[#c79a3b] transition-all hover:bg-[#c79a3b]/10"
+              style={{ border: '1px solid rgba(199,154,59,0.25)' }}
+            >
+              Resgatar certificado de lançamento
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="space-y-4">

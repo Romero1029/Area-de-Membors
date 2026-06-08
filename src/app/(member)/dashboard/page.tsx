@@ -9,6 +9,8 @@ import { HeroCarousel } from '@/components/ui/HeroCarouselLazy'
 import { CourseCarousel } from '@/components/ui/CourseCarousel'
 import { PromoBanner } from '@/components/ui/PromoBanner'
 import type { CourseProgress, Profile } from '@/types'
+
+export const metadata = { title: 'Início — Instituto Despertamente' }
 import type { HeroSlideItem } from '@/components/ui/HeroCarousel'
 
 type EnrollmentItem = {

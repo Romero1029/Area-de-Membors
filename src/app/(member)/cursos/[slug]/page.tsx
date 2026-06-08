@@ -31,17 +31,17 @@ async function getData(slug: string, userId: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sb = supabase as any
 
-  const [{ data: productRaw }, { data: profileRaw }, { data: enrollmentRaw }, { data: modulesRaw }, { data: tasksRaw }, { data: materialsRaw }] = await Promise.all([
-    sb.from('products').select('*').eq('slug', slug).eq('is_published', true).single(),
-    sb.from('profiles').select('role').eq('id', user.id).single(),
-    sb.from('enrollments').select('id').eq('user_id', user.id).eq('is_active', true),
-    sb.from('modules').select('*, lessons (*)').eq('product_id', (await sb.from('products').select('id').eq('slug', slug).single()).data?.id).order('sort_order'),
-    sb.from('tasks').select('*').order('sort_order'),
-    sb.from('materials').select('*').order('sort_order'),
-  ])
-
+  const { data: productRaw } = await sb.from('products').select('*').eq('slug', slug).eq('is_published', true).single()
   const product = productRaw as Product | null
   if (!product) return null
+
+  const [{ data: profileRaw }, { data: enrollmentRaw }, { data: modulesRaw }, { data: tasksRaw }, { data: materialsRaw }] = await Promise.all([
+    sb.from('profiles').select('role').eq('id', user.id).single(),
+    sb.from('enrollments').select('id').eq('user_id', user.id).eq('is_active', true),
+    sb.from('modules').select('*, lessons (*)').eq('product_id', product.id).order('sort_order'),
+    sb.from('tasks').select('*').eq('product_id', product.id).order('sort_order'),
+    sb.from('materials').select('*').eq('product_id', product.id).order('sort_order'),
+  ])
   const isAdmin = profileRaw?.role === 'admin'
   const isEnrolled = isAdmin || !!(enrollmentRaw?.length)
   const modules = (modulesRaw ?? []) as ModuleWithLessons[]

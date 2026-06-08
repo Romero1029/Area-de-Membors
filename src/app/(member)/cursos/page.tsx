@@ -5,6 +5,8 @@ import { CourseCardNetflix } from '@/components/ui/CourseCardNetflix'
 import { FilterTabs } from './FilterTabs'
 import type { CourseProgress } from '@/types'
 
+export const metadata = { title: 'Meus Cursos — Instituto Despertamente' }
+
 export default async function CoursesPage({
   searchParams,
 }: {

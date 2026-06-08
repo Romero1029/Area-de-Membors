@@ -68,12 +68,12 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3">
-        <a href="/admin/produtos" className="rounded-xl p-5 transition-colors" style={{ background: '#111111', border: '1px solid #1a1a1a' }}>
+        <a href="/admin/cursos" className="rounded-xl p-5 transition-colors hover:border-[#c79a3b]/30" style={{ background: '#111111', border: '1px solid #1a1a1a' }}>
           <BookOpen className="w-6 h-6 mb-3" style={{ color: '#FFA902' }} />
-          <p className="font-semibold text-white">Gerenciar Produtos</p>
+          <p className="font-semibold text-white">Gerenciar Cursos</p>
           <p className="text-xs mt-1" style={{ color: '#555555' }}>Criar e editar cursos, módulos e aulas.</p>
         </a>
-        <a href="/admin/alunos" className="rounded-xl p-5 transition-colors" style={{ background: '#111111', border: '1px solid #1a1a1a' }}>
+        <a href="/admin/alunos" className="rounded-xl p-5 transition-colors hover:border-[#3b82f6]/30" style={{ background: '#111111', border: '1px solid #1a1a1a' }}>
           <Users className="w-6 h-6 mb-3" style={{ color: '#3b82f6' }} />
           <p className="font-semibold text-white">Gerenciar Alunos</p>
           <p className="text-xs mt-1" style={{ color: '#555555' }}>Ver alunos e gerenciar matrículas.</p>
