@@ -1,11 +1,12 @@
 'use client'
 
 import { useCallback, useRef, useState } from 'react'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore — react-player/youtube is a valid CJS subpath with no .d.ts
-import ReactPlayer from 'react-player/youtube'
+import dynamic from 'next/dynamic'
 import { CheckCircle, Loader2 } from 'lucide-react'
 import { markLessonComplete } from '@/lib/actions/progress'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false }) as any
 
 interface YouTubePlayerProps {
   videoUrl: string
@@ -54,9 +55,8 @@ export function YouTubePlayer({ videoUrl, lessonId, productSlug, initialComplete
             onReady={() => setReady(true)}
             onProgress={handleProgress}
             config={{
-              playerVars: {
-                rel: 0,
-                modestbranding: 1,
+              youtube: {
+                playerVars: { rel: 0, modestbranding: 1 },
               },
             }}
           />
