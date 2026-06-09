@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { ChevronLeft, ChevronRight, ArrowRight, Play } from 'lucide-react'
 
 // ─────────────────────────────────────────────
@@ -266,72 +265,81 @@ export function ComecarAnimated({
           1 — HERO
       ══════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-10 py-28 text-center overflow-hidden"
-        style={DOT_GRID}
+        className="relative overflow-hidden"
+        style={{ minHeight: 'clamp(400px, 52vh, 580px)' }}
       >
-        {/* Glow central */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[700px] h-[500px] rounded-full bg-[#FFB800]/5 blur-[140px]" />
-        </div>
+        {/* Foto de fundo — salve em /public/hero-banner.jpg após enhancement no ChatGPT */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/hero-banner.jpg')" }}
+          aria-hidden="true"
+        />
+        {/* Fallback navy quando imagem não existe */}
+        <div className="absolute inset-0 -z-10 bg-[#0B1A3B]" aria-hidden="true" />
+        {/* Overlay gradiente: mais escuro à esquerda p/ legibilidade */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(100deg, rgba(11,26,59,0.93) 0%, rgba(11,26,59,0.78) 42%, rgba(11,26,59,0.50) 100%)',
+          }}
+          aria-hidden="true"
+        />
 
-        {/* Badge 50% OFF — canto superior esquerdo */}
-        <div className="absolute top-20 sm:top-24 left-5 sm:left-10 z-10">
-          <div
-            className="inline-flex items-baseline gap-1 rounded-xl bg-[#FFB800] px-3 py-1.5"
-            style={{ boxShadow: '0 4px 24px rgba(255,184,0,0.4)' }}
-          >
-            <span className="text-xl sm:text-2xl font-black text-[#0B0F1A] leading-none">50%</span>
-            <span className="text-[10px] font-bold text-[#0B0F1A] uppercase tracking-widest">OFF</span>
+        {/* Conteúdo */}
+        <div
+          className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 flex items-center"
+          style={{ minHeight: 'clamp(400px, 52vh, 580px)' }}
+        >
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center w-full py-14 sm:py-16">
+
+            {/* Esquerda — copy */}
+            <div className="space-y-4">
+              <p className="text-white text-lg sm:text-xl lg:text-2xl leading-[1.55]">
+                Aqui no{' '}
+                <strong className="font-extrabold text-[#FFB800]">DespertaMente</strong>
+                <br />
+                você não se forma,
+                <br />
+                <strong className="font-extrabold text-white">VOCÊ</strong> se torna
+              </p>
+              <h1
+                className="font-black text-[#FFB800] leading-none uppercase"
+                style={{ fontSize: 'clamp(2.1rem, 5.5vw, 4.2rem)' }}
+              >
+                PSICANALISTA
+                <br />
+                INTEGRATIVO!
+              </h1>
+              <div className="w-10 h-[2px] bg-white/45 rounded-full" />
+              <p className="text-white font-semibold text-sm sm:text-base leading-snug">
+                Porque a mente
+                <br />
+                inconsciente é{' '}
+                <span className="font-black text-[#FFB800]">ATEMPORAL!</span>
+              </p>
+            </div>
+
+            {/* Direita — badge 50% */}
+            <div className="flex flex-col items-start lg:items-end justify-center lg:text-right">
+              <p
+                className="text-white font-extrabold uppercase leading-tight tracking-[0.06em]"
+                style={{ fontSize: 'clamp(0.85rem, 1.8vw, 1.25rem)' }}
+              >
+                INSCRIÇÕES ABERTAS COM
+              </p>
+              <p
+                className="text-[#FFB800] font-black leading-[0.85] mt-1 select-none"
+                style={{
+                  fontSize: 'clamp(72px, 16vw, 200px)',
+                  textShadow: '0 0 60px rgba(255,184,0,0.3)',
+                }}
+              >
+                50%
+              </p>
+            </div>
           </div>
-          <p className="text-[10px] text-white/28 mt-1.5 ml-0.5">na primeira formação</p>
         </div>
-
-        {/* Logo */}
-        <div className="relative z-10 mb-8">
-          <Image
-            src="/despertamente-simbolo-branco.png"
-            alt="Instituto Despertamente"
-            width={68}
-            height={68}
-            className="object-contain mx-auto opacity-90"
-            priority
-          />
-        </div>
-
-        {/* Copy */}
-        <div className="relative z-10 max-w-3xl space-y-5">
-          <p className="text-[11px] font-mono tracking-[0.25em] uppercase text-[#FFB800]/60">
-            Instituto Despertamente
-          </p>
-          <h1
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.02] tracking-tight"
-          >
-            Transforme quem<br />
-            <span className="text-[#FFB800]">você é</span> por dentro.
-          </h1>
-          <p className="text-base sm:text-lg text-white/48 leading-relaxed max-w-xl mx-auto">
-            Neurociência, Psicanálise e PNL integrados em um método que explica por que você age como age — e como mudar de verdade.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
-            <Link
-              href="/turma38"
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#FFB800] px-8 py-4 text-base font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
-              style={{ boxShadow: '0 8px 44px rgba(255,184,0,0.32)' }}
-            >
-              Quero começar <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/login"
-              className="text-sm font-medium text-white/38 hover:text-white/72 transition-colors py-4"
-            >
-              Já tenho conta →
-            </Link>
-          </div>
-          <p className="text-xs text-white/20 pt-1">2.400+ alunos · 94% de conclusão · 4.9 ★</p>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0B0F1A] to-transparent pointer-events-none" />
       </section>
 
       {/* ══════════════════════════════════
@@ -382,25 +390,18 @@ export function ComecarAnimated({
       </section>
 
       {/* ══════════════════════════════════
-          3 — BANNER AMARELO FULL-WIDTH
+          3 — DIVISOR AMARELO (lead fino)
       ══════════════════════════════════ */}
-      <FadeIn direction="none">
-        <section id="projetos" className="bg-[#FFB800] py-14 sm:py-20 px-5 sm:px-10 text-center">
-          <p className="text-[11px] font-mono tracking-[0.25em] uppercase text-[#0B0F1A]/40 mb-3">
-            Instituto Despertamente
-          </p>
-          <h2
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#0B0F1A] leading-[1.05]"
-          >
-            Projetos que Impactam<br />
-            <span className="italic">sua Mente.</span>
-          </h2>
-          <p className="mt-4 text-sm text-[#0B0F1A]/48 max-w-lg mx-auto leading-relaxed">
-            Cada programa foi desenvolvido para criar mudanças reais — não só conhecimento teórico.
-          </p>
-        </section>
-      </FadeIn>
+      <div
+        id="projetos"
+        className="w-full"
+        aria-hidden="true"
+        style={{
+          height: '3px',
+          background: '#FFB800',
+          boxShadow: '0 0 18px rgba(255,184,0,0.55), 0 0 40px rgba(255,184,0,0.18)',
+        }}
+      />
 
       {/* ══════════════════════════════════
           4 — GRID 3 PROJETOS
