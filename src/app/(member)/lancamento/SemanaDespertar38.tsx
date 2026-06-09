@@ -15,7 +15,7 @@ import {
 const WA_GROUP_URL   = 'https://chat.whatsapp.com/XXXXXXXXXX'
 const INTRO_VIDEO_ID = ''
 const EBOOK_URL      = '#'
-const BANNER_URL     = ''  // ex: '/banner-sdw38.png' — deixe '' para usar placeholder
+const BANNER_URL     = ''  // ex: '/banner-sdw38.png'
 
 const OFERTA = {
   ativo: false,
@@ -63,9 +63,9 @@ const AULAS: Aula[] = [
   },
 ]
 
-// XP por passo (Zichermann & Cunningham — "Gamification by Design")
 const XP_PER_STEP = 200
 const TOTAL_STEPS  = 5
+const STORAGE_KEY  = 'sdw38_progress'
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -84,7 +84,6 @@ const EMPTY: Progress = {
   step3_modal_visto: false, step3_oferta: false,
   step4_aula1: false, step4_aula2: false, step4_aula3: false,
 }
-const STORAGE_KEY = 'sdw38_progress'
 type StepStatus = 'locked' | 'available' | 'done'
 
 // ─────────────────────────────────────────────
@@ -127,14 +126,12 @@ function ProgressTracker({ done, total, xp }: { done: number; total: number; xp:
         </div>
         <span className="text-xs font-mono text-[#404040]">{pct}%</span>
       </div>
-      {/* Track */}
-      <div className="h-1.5 w-full rounded-full bg-white/6 overflow-hidden">
+      <div className="h-1.5 w-full rounded-full bg-white/[0.06] overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-700 ease-out"
           style={{ width: `${pct}%`, background: 'linear-gradient(90deg, #c79a3b, #e8b84b)' }}
         />
       </div>
-      {/* Milestones */}
       <div className="flex justify-between">
         {Array.from({ length: total }).map((_, i) => (
           <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors duration-500 ${i < done ? 'bg-[#c79a3b]' : 'bg-white/10'}`} />
@@ -146,8 +143,6 @@ function ProgressTracker({ done, total, xp }: { done: number; total: number; xp:
 
 // ─────────────────────────────────────────────
 // STEP NUMBER BADGE
-// Ref: Self-Determination Theory (Deci & Ryan) —
-// senso de competência via feedback visual claro
 // ─────────────────────────────────────────────
 function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
   if (status === 'done') {
@@ -159,7 +154,7 @@ function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
   }
   if (status === 'locked') {
     return (
-      <div className="w-10 h-10 rounded-full bg-white/4 border-2 border-white/10 flex items-center justify-center shrink-0">
+      <div className="w-10 h-10 rounded-full bg-white/[0.04] border-2 border-white/10 flex items-center justify-center shrink-0">
         <Lock className="h-3.5 w-3.5 text-[#353535]" />
       </div>
     )
@@ -167,7 +162,6 @@ function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
   return (
     <div className="w-10 h-10 rounded-full bg-[#c79a3b]/15 border-2 border-[#c79a3b]/50 flex items-center justify-center shrink-0 relative">
       <span className="text-sm font-bold text-[#c79a3b]">{numero}</span>
-      {/* Pulse ring */}
       <span className="absolute inset-0 rounded-full border border-[#c79a3b]/30 animate-ping" />
     </div>
   )
@@ -175,8 +169,6 @@ function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
 
 // ─────────────────────────────────────────────
 // STEP CARD
-// Ref: Fogg Behavior Model — cada card tem
-// motivação + habilidade + gatilho explícito
 // ─────────────────────────────────────────────
 function StepCard({
   numero, titulo, status, subtitle, badge, children,
@@ -187,14 +179,12 @@ function StepCard({
   const border =
     status === 'done'      ? 'border-[#22c55e]/15' :
     status === 'available' ? 'border-[#c79a3b]/25'  :
-                             'border-white/5'
+                             'border-white/[0.05]'
 
-  const bg =
-    status === 'available' ? 'bg-[#0d0c09]' : 'bg-[#080808]'
+  const bg = status === 'available' ? 'bg-[#0d0c09]' : 'bg-[#080808]'
 
   return (
     <div className={`rounded-2xl border ${border} ${bg} overflow-hidden transition-all duration-300 ${status === 'locked' ? 'opacity-40' : ''}`}>
-      {/* Header da etapa */}
       <div className="flex items-start gap-4 px-5 py-5">
         <StepBadge numero={numero} status={status} />
         <div className="flex-1 min-w-0 pt-0.5">
@@ -215,9 +205,8 @@ function StepCard({
           )}
         </div>
       </div>
-      {/* Corpo — só renderiza quando disponível ou feito */}
       {status !== 'locked' && children && (
-        <div className="border-t border-white/5 px-5 pb-5 pt-4">
+        <div className="border-t border-white/[0.05] px-5 pb-5 pt-4">
           {children}
         </div>
       )}
@@ -227,8 +216,6 @@ function StepCard({
 
 // ─────────────────────────────────────────────
 // OFERTA MODAL
-// Ref: Variable Reward (Skinner) — revelação
-// progressiva de recompensa aumenta engajamento
 // ─────────────────────────────────────────────
 function OfertaModal({ firstName, onAceitar, onFechar }: {
   firstName: string; onAceitar: () => void; onFechar: () => void
@@ -262,12 +249,12 @@ function OfertaModal({ firstName, onAceitar, onFechar }: {
           <div className="w-9 h-1 rounded-full bg-white/10" />
         </div>
         <button onClick={onFechar}
-          className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-[#484848] hover:text-[#a0a0a0] transition-colors">
+          className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/[0.05] flex items-center justify-center text-[#484848] hover:text-[#a0a0a0] transition-colors">
           <X className="h-3.5 w-3.5" />
         </button>
 
         <div className="px-6 sm:px-7 pt-5 pb-7 space-y-5">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-[#c79a3b]/25 bg-[#c79a3b]/8 px-3 py-1">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-[#c79a3b]/25 bg-[#c79a3b]/[0.08] px-3 py-1">
             <Sparkles className="h-3 w-3 text-[#c79a3b]" />
             <span className="text-[11px] font-mono uppercase tracking-widest text-[#c79a3b]">
               {firstName}, você foi selecionado
@@ -281,13 +268,13 @@ function OfertaModal({ firstName, onAceitar, onFechar }: {
                 {OFERTA.atencao}
               </h2>
               <p className="text-sm text-[#565656] leading-relaxed">{OFERTA.interesse}</p>
-              <div className="rounded-2xl border border-white/6 bg-[#080808] p-4 space-y-3">
+              <div className="rounded-2xl border border-white/[0.06] bg-[#080808] p-4 space-y-3">
                 <div>
                   <p className="text-[11px] font-mono uppercase tracking-widest text-[#c79a3b]/60 mb-1">Oferta exclusiva</p>
                   <p className="text-base font-semibold text-[#e0e0e0] leading-snug">{OFERTA.nome}</p>
                   <p className="text-xs text-[#484848] mt-1 leading-relaxed">{OFERTA.descricao}</p>
                 </div>
-                <div className="h-px bg-white/5" />
+                <div className="h-px bg-white/[0.05]" />
                 <ul className="space-y-2">
                   {OFERTA.beneficios.map((b, i) => (
                     <li key={i} className="flex items-start gap-2.5">
@@ -327,7 +314,7 @@ function OfertaModal({ firstName, onAceitar, onFechar }: {
               <p className="text-sm text-[#565656] leading-relaxed">
                 A maioria das pessoas desiste antes da aula introdutória. Você foi até aqui — e por isso uma condição especial foi reservada para o seu perfil.
               </p>
-              <div className="rounded-xl border border-[#c79a3b]/12 bg-[#c79a3b]/4 px-4 py-3 space-y-1">
+              <div className="rounded-xl border border-[#c79a3b]/12 bg-[#c79a3b]/[0.04] px-4 py-3 space-y-1">
                 <p className="text-xs font-semibold text-[#c79a3b]/70">Oferta exclusiva em breve</p>
                 <p className="text-xs text-[#505050] leading-relaxed">
                   Os detalhes do produto serão revelados durante a Semana do Despertar. Você já está na fila de acesso prioritário.
@@ -352,6 +339,42 @@ function OfertaModal({ firstName, onAceitar, onFechar }: {
 }
 
 // ─────────────────────────────────────────────
+// MINI TIMELINE — jornada dos 5 passos
+// Ref: Nielsen Norman — progressive disclosure
+// ─────────────────────────────────────────────
+function MiniTimeline({ currentStep }: { currentStep: number }) {
+  const steps = ['VIP', 'Intro', 'Acesso', 'Aulas', 'Cert.']
+  return (
+    <div className="flex items-center">
+      {steps.map((label, i) => {
+        const idx = i + 1
+        const done = idx < currentStep
+        const active = idx === currentStep
+        return (
+          <div key={label} className="flex items-center flex-1 last:flex-none">
+            <div className="flex flex-col items-center gap-1">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-500 ${
+                done   ? 'bg-[#22c55e]/80 text-[#0a0a0a]' :
+                active ? 'bg-[#c79a3b] text-[#0a0a0a]' :
+                         'border border-white/[0.08] text-[#303040]'
+              }`}>
+                {done ? '✓' : idx}
+              </div>
+              <span className={`text-[9px] uppercase tracking-[0.06em] transition-colors duration-500 ${
+                done ? 'text-[#22c55e]/50' : active ? 'text-[#c79a3b]' : 'text-[#252535]'
+              }`}>{label}</span>
+            </div>
+            {i < steps.length - 1 && (
+              <div className={`flex-1 h-px mx-1.5 mb-3.5 transition-colors duration-500 ${done ? 'bg-[#22c55e]/20' : 'bg-white/[0.05]'}`} />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────
 // MAIN COMPONENT
 // ─────────────────────────────────────────────
 export function SemanaDespertar38({ firstName }: { firstName: string }) {
@@ -367,7 +390,6 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
     setHydrated(true)
   }, [])
 
-  // Modal após completar aula introdutória
   useEffect(() => {
     if (!hydrated) return
     if (progress.step2_intro && !progress.step3_modal_visto) {
@@ -395,9 +417,9 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
   const s4: StepStatus = !step3_oferta   ? 'locked'    : todasAulasFeitas ? 'done' : 'available'
   const s5: StepStatus = !todasAulasFeitas ? 'locked'  : 'available'
 
-  // XP e contagem de etapas concluídas
   const stepsCompleted = [step1_vip, step2_intro, step3_oferta, todasAulasFeitas, false].filter(Boolean).length
   const xp = stepsCompleted * XP_PER_STEP
+  const currentStep = stepsCompleted + 1
 
   return (
     <>
@@ -409,265 +431,330 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
         />
       )}
 
-      <div className="min-h-screen w-full" style={{ background: 'linear-gradient(160deg, #0c0c0a 0%, #0f0f0f 40%, #0a0a08 100%)' }}>
+      <div className="min-h-screen w-full" style={{ background: 'linear-gradient(160deg, #0a0a08 0%, #0d0d0a 50%, #0a0a08 100%)' }}>
         <div className="w-full max-w-2xl mx-auto px-5 sm:px-8 pt-10 pb-24">
 
-          {/* ── BANNER ─────────────────────────── */}
-          {BANNER_URL ? (
-            <div className="w-full rounded-2xl overflow-hidden mb-6 relative">
+          {/* ── BANNER OPCIONAL ─────────────────────────── */}
+          {BANNER_URL && (
+            <div className="w-full rounded-xl overflow-hidden mb-8 relative">
               <img
                 src={BANNER_URL}
                 alt="Semana do Despertar #38"
                 className="w-full block"
-                style={{ maxHeight: 280, objectFit: 'cover' }}
+                style={{ maxHeight: 260, objectFit: 'cover' }}
               />
-              {/* fade bottom */}
               <div
-                className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none rounded-b-2xl"
-                style={{ background: 'linear-gradient(to bottom, transparent, #0c0c0a)' }}
+                className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none rounded-b-xl"
+                style={{ background: 'linear-gradient(to bottom, transparent, #0a0a08)' }}
               />
-            </div>
-          ) : (
-            <div
-              className="w-full rounded-2xl overflow-hidden mb-6 flex items-center justify-center border border-white/6 bg-[#0d0d0d]"
-              style={{ height: 200 }}
-            >
-              <p className="text-xs font-mono text-[#2a2a2a] tracking-widest uppercase">
-                Banner de Boas-Vindas — configure BANNER_URL
-              </p>
             </div>
           )}
 
-          {/* ── HEADER ─────────────────────────── */}
-          <div className="mb-8 space-y-5">
-            {/* Identidade + boas-vindas */}
-            <div>
-              <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#404040] mb-2">
-                Instituto Despertamente
-              </p>
-              <h1 style={{ fontFamily:"'Fraunces',Georgia,serif" }}
-                className="text-3xl sm:text-4xl font-bold text-[#f0f0f0] leading-[1.1]">
-                Semana do Despertar <span className="text-[#c79a3b]">#38</span>
-              </h1>
-              <p className="mt-2 text-sm text-[#505050]">
-                Olá, <span className="text-[#a0a0a0] font-medium">{firstName}</span>! Siga as etapas abaixo para aproveitar tudo.
-              </p>
+          {/* ── HERO EDITORIAL (Atenção + Interesse) ────── */}
+          {/* Ref: AIDA Elias St. Elmo Lewis (1898) — Atenção via headline direta */}
+          {/* Ref: Nielsen Norman F-pattern — headline left-aligned, institucional */}
+          <div className="mb-10">
+            {/* Barra superior editorial */}
+            <div className="flex items-center justify-between border-t border-b py-2.5 mb-7" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+              <span className="text-[10px] uppercase tracking-[0.22em]" style={{ color: '#303048' }}>Instituto Despertamente</span>
+              <span className="text-[10px] uppercase tracking-[0.15em] border px-2 py-0.5 rounded" style={{ color: '#303048', borderColor: '#252535' }}>SDW #38</span>
             </div>
 
-            {/* Progress tracker gamificado */}
-            <div className="rounded-2xl border border-white/6 bg-[#0d0d0d] px-5 py-4">
-              <ProgressTracker done={stepsCompleted} total={TOTAL_STEPS} xp={xp} />
-            </div>
+            {/* Headline — Atenção */}
+            <h1
+              style={{ fontFamily: "'Fraunces',Georgia,serif", lineHeight: 0.93 }}
+              className="text-[2.6rem] sm:text-[3.4rem] font-bold text-[#e8eaf0] mb-5"
+            >
+              Sua vaga<br />está<br />confirmada.
+            </h1>
+
+            {/* Separador */}
+            <div className="h-px mb-5" style={{ background: 'rgba(255,255,255,0.06)' }} />
+
+            {/* Copy institucional — Interesse */}
+            <p className="text-sm leading-relaxed mb-7" style={{ color: '#555568' }}>
+              Acesse os materiais exclusivos e as aulas ao vivo seguindo as etapas abaixo.
+              Cada etapa desbloqueada é um avanço real na sua formação.
+            </p>
+
+            {/* Mini timeline — jornada visual dos 5 passos */}
+            <MiniTimeline currentStep={step1_vip ? currentStep : 1} />
           </div>
 
-          {/* ── ETAPAS ─────────────────────────── */}
-          <div className="space-y-3">
+          {/* ── HICK'S LAW: AÇÃO ÚNICA QUANDO STEP 1 PENDENTE ── */}
+          {/* Ref: Hick & Hyman (1952) — menos opções visíveis = maior conversão */}
+          {/* Ref: Fogg Behavior Model — motivação + habilidade + gatilho explícito */}
+          {!step1_vip && (
+            <div className="mb-8">
+              <p className="text-[11px] mb-3" style={{ color: '#50504a' }}>
+                ⬇ &nbsp;Comece agora — apenas 1 passo:
+              </p>
 
-            {/* ETAPA 1 — GRUPO VIP */}
-            <StepCard
-              numero={1}
-              titulo="Entre no Grupo VIP"
-              status={s1}
-              subtitle="Receba avisos, conteúdos e acesso à comunidade de alunos."
-            >
-              <a href={WA_GROUP_URL} target="_blank" rel="noopener noreferrer"
-                onClick={() => mark('step1_vip')}
-                className="group flex items-center gap-4 rounded-xl border border-[#25D366]/20 bg-[#25D366]/6 p-4 hover:bg-[#25D366]/10 transition-colors">
-                <div className="w-10 h-10 rounded-xl bg-[#25D366]/15 flex items-center justify-center shrink-0">
-                  <MessageCircle className="h-5 w-5 text-[#25D366]" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#f0f0f0]">Grupo Exclusivo — Turma #38</p>
-                  <p className="text-xs text-[#606060] mt-0.5">WhatsApp · Avisos e comunidade</p>
-                </div>
-                <div className="flex items-center gap-1 rounded-lg bg-[#25D366] px-3 py-1.5 text-xs font-bold text-white shrink-0">
-                  Entrar <ChevronRight className="h-3 w-3" />
-                </div>
-              </a>
-              {!step1_vip && (
-                <button onClick={() => mark('step1_vip')}
-                  className="mt-3 w-full text-xs text-[#383838] hover:text-[#606060] transition-colors py-2">
-                  Já entrei no grupo →
+              {/* CTA principal — WhatsApp */}
+              <div
+                className="rounded-2xl p-6 mb-4"
+                style={{
+                  border: '1px solid rgba(37,211,102,0.28)',
+                  background: 'linear-gradient(160deg, rgba(37,211,102,0.06) 0%, rgba(37,211,102,0.02) 100%)',
+                }}
+              >
+                <p className="text-[10px] uppercase tracking-[0.22em] mb-3" style={{ color: 'rgba(37,211,102,0.55)' }}>
+                  Passo imediato
+                </p>
+                <h2
+                  style={{ fontFamily: "'Fraunces',Georgia,serif", lineHeight: 1.12 }}
+                  className="text-2xl sm:text-[1.75rem] font-bold text-[#f0f0e8] mb-3"
+                >
+                  Entre no<br />Grupo VIP
+                </h2>
+                <p className="text-sm leading-relaxed mb-6" style={{ color: '#505050' }}>
+                  Lá você recebe os links das aulas ao vivo, materiais e comunicados
+                  em primeira mão — antes de qualquer outra pessoa.
+                </p>
+                <a
+                  href={WA_GROUP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => mark('step1_vip')}
+                  className="flex items-center justify-center gap-3 rounded-xl py-4 text-[15px] font-bold text-white transition-all active:scale-[0.98]"
+                  style={{ background: '#25D366', boxShadow: '0 8px 32px rgba(37,211,102,0.25)' }}
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  Entrar no Grupo WhatsApp
+                </a>
+                <button
+                  onClick={() => mark('step1_vip')}
+                  className="w-full mt-3 py-2 text-[11px] transition-colors hover:text-[#585850]"
+                  style={{ color: '#383830' }}
+                >
+                  Já entrei no grupo — continuar ›
                 </button>
-              )}
-            </StepCard>
+              </div>
 
-            {/* ETAPA 2 — AULA INTRODUTÓRIA */}
-            <StepCard
-              numero={2}
-              titulo="Assista a Aula Introdutória"
-              status={s2}
-              subtitle="Prepare sua mente para a semana que começa."
-            >
-              {INTRO_VIDEO_ID ? (
-                <div className="rounded-xl overflow-hidden bg-black aspect-video mb-4">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${INTRO_VIDEO_ID}`}
-                    title="Aula Introdutória"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen className="w-full h-full"
-                  />
-                </div>
-              ) : (
-                <div className="rounded-xl border border-white/6 bg-[#0a0a0a] aspect-video flex flex-col items-center justify-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-white/4 border border-white/8 flex items-center justify-center">
-                    <Play className="h-5 w-5 text-[#404040] ml-0.5" />
-                  </div>
-                  <p className="text-xs text-[#404040]">Aula disponível em breve</p>
-                </div>
-              )}
-
-              <a href={EBOOK_URL} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-xl border border-white/8 bg-[#0a0a0a] p-4 hover:border-white/15 transition-colors group mb-4">
-                <div className="w-9 h-9 rounded-lg bg-[#c79a3b]/10 flex items-center justify-center shrink-0">
-                  <Download className="h-4 w-4 text-[#c79a3b]" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#d0d0d0] group-hover:text-[#f0f0f0] transition-colors">Material de Apoio — E-book</p>
-                  <p className="text-xs text-[#484848] mt-0.5">Baixe o material complementar da aula.</p>
-                </div>
-                <ExternalLink className="h-3.5 w-3.5 text-[#404040] shrink-0" />
-              </a>
-
-              {!step2_intro && (
-                <button onClick={() => mark('step2_intro')}
-                  className="w-full rounded-xl border border-[#c79a3b]/20 bg-[#c79a3b]/4 py-3.5 text-sm font-semibold text-[#c79a3b] hover:bg-[#c79a3b]/8 transition-colors">
-                  ✓ Concluí a aula introdutória — próxima etapa
-                </button>
-              )}
-            </StepCard>
-
-            {/* ETAPA 3 — ACESSO ESPECIAL */}
-            <StepCard
-              numero={3}
-              titulo="Acesso Especial"
-              status={s3}
-              subtitle="Uma condição exclusiva foi reservada para você."
-              badge={
-                step3_modal_visto && s3 !== 'locked' ? (
-                  <span className="inline-flex items-center gap-1 rounded-full border border-[#c79a3b]/25 bg-[#c79a3b]/8 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-[#c79a3b]">
-                    <Sparkles className="h-2.5 w-2.5" /> selecionado
+              {/* Próximos passos como chips bloqueados */}
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: 'Aula Introdutória' },
+                  { label: 'Acesso Especial' },
+                  { label: 'Aulas ao Vivo' },
+                  { label: 'Certificado' },
+                ].map(({ label }) => (
+                  <span
+                    key={label}
+                    className="text-[10px] rounded-md px-2.5 py-1"
+                    style={{ color: '#303040', border: '1px solid rgba(255,255,255,0.05)' }}
+                  >
+                    🔒 {label}
                   </span>
-                ) : undefined
-              }
-            >
-              {step3_oferta ? (
-                <div className="flex items-center gap-3 rounded-xl border border-[#22c55e]/15 bg-[#22c55e]/4 p-4">
-                  <div className="w-9 h-9 rounded-xl bg-[#22c55e]/10 border border-[#22c55e]/20 flex items-center justify-center shrink-0">
-                    <Check className="h-4 w-4 text-[#22c55e]" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-[#d0d0d0]">Condição reservada ✓</p>
-                    <p className="text-xs text-[#484848] mt-0.5">Sua condição exclusiva está garantida para este evento.</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="rounded-xl border border-[#c79a3b]/15 bg-[#c79a3b]/4 px-4 py-3 flex items-start gap-3">
-                    <Sparkles className="h-4 w-4 text-[#c79a3b]/60 shrink-0 mt-0.5" />
-                    <div className="space-y-0.5">
-                      <p className="text-xs font-semibold text-[#c0c0c0]">Condição exclusiva reservada</p>
-                      <p className="text-xs text-[#505050] leading-relaxed">
-                        {OFERTA.ativo ? OFERTA.descricao : 'Sua condição especial está reservada. Ela será revelada durante a Semana do Despertar.'}
-                      </p>
-                    </div>
-                  </div>
-                  {OFERTA.ativo ? (
-                    <div className="flex items-center justify-between gap-4">
-                      <p className="text-2xl font-bold text-[#c79a3b]">{OFERTA.preco}</p>
-                      <a href={OFERTA.url} target="_blank" rel="noopener noreferrer"
-                        onClick={() => mark('step3_oferta')}
-                        className="flex items-center gap-2 rounded-xl bg-[#c79a3b] px-5 py-3 text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors">
-                        <ShoppingBag className="h-4 w-4" /> Garantir
-                      </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── PROGRESSO + ETAPAS (após step 1 concluído) ── */}
+          {step1_vip && (
+            <>
+              {/* Progress tracker */}
+              <div className="rounded-2xl border mb-6 px-5 py-4" style={{ borderColor: 'rgba(255,255,255,0.06)', background: '#0d0d0a' }}>
+                <ProgressTracker done={stepsCompleted} total={TOTAL_STEPS} xp={xp} />
+              </div>
+
+              <div className="space-y-3">
+
+                {/* ETAPA 1 — done */}
+                <StepCard numero={1} titulo="Grupo VIP" status={s1} />
+
+                {/* ETAPA 2 — AULA INTRODUTÓRIA */}
+                <StepCard
+                  numero={2}
+                  titulo="Assista a Aula Introdutória"
+                  status={s2}
+                  subtitle="Prepare sua mente para a semana que começa."
+                >
+                  {INTRO_VIDEO_ID ? (
+                    <div className="rounded-xl overflow-hidden bg-black aspect-video mb-4">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${INTRO_VIDEO_ID}`}
+                        title="Aula Introdutória"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen className="w-full h-full"
+                      />
                     </div>
                   ) : (
-                    <button onClick={() => mark('step3_oferta')}
-                      className="w-full rounded-xl border border-[#c79a3b]/20 bg-[#c79a3b]/4 py-3.5 text-sm font-semibold text-[#c79a3b] hover:bg-[#c79a3b]/8 transition-colors">
-                      ✓ Entendi — continuar para as aulas
+                    <div className="rounded-xl border aspect-video flex flex-col items-center justify-center gap-3 mb-4" style={{ borderColor: 'rgba(255,255,255,0.06)', background: '#0a0a0a' }}>
+                      <div className="w-12 h-12 rounded-full border flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)' }}>
+                        <Play className="h-5 w-5 ml-0.5" style={{ color: '#404040' }} />
+                      </div>
+                      <p className="text-xs" style={{ color: '#404040' }}>Aula disponível em breve</p>
+                    </div>
+                  )}
+
+                  <a href={EBOOK_URL} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-3 rounded-xl border p-4 mb-4 group transition-colors hover:border-white/15"
+                    style={{ borderColor: 'rgba(255,255,255,0.08)', background: '#0a0a0a' }}>
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(199,154,59,0.10)' }}>
+                      <Download className="h-4 w-4 text-[#c79a3b]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-[#d0d0d0] group-hover:text-[#f0f0f0] transition-colors">Material de Apoio — E-book</p>
+                      <p className="text-xs mt-0.5" style={{ color: '#484848' }}>Baixe o material complementar da aula.</p>
+                    </div>
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0" style={{ color: '#404040' }} />
+                  </a>
+
+                  {!step2_intro && (
+                    <button onClick={() => mark('step2_intro')}
+                      className="w-full rounded-xl border py-3.5 text-sm font-semibold text-[#c79a3b] transition-colors hover:bg-[#c79a3b]/[0.08]"
+                      style={{ borderColor: 'rgba(199,154,59,0.20)', background: 'rgba(199,154,59,0.04)' }}>
+                      ✓ Concluí a aula introdutória — próxima etapa
                     </button>
                   )}
-                  <button onClick={() => setShowModal(true)}
-                    className="w-full text-[11px] text-[#303030] hover:text-[#505050] transition-colors py-1">
-                    Ver detalhes da condição →
-                  </button>
-                </div>
-              )}
-            </StepCard>
+                </StepCard>
 
-            {/* ETAPA 4 — 3 AULAS AO VIVO */}
-            <StepCard
-              numero={4}
-              titulo="Assista às 3 Aulas ao Vivo"
-              status={s4}
-              subtitle={`${[step4_aula1, step4_aula2, step4_aula3].filter(Boolean).length}/3 aulas assistidas`}
-            >
-              <div className="space-y-3">
-                {AULAS.map((aula) => {
-                  const aulaKey = `step4_aula${aula.id}` as keyof Progress
-                  const aulaFeita = progress[aulaKey]
-                  return (
-                    <div key={aula.id}
-                      className={`rounded-xl border p-4 space-y-3 transition-all duration-300 ${
-                        aulaFeita ? 'border-[#22c55e]/20 bg-[#22c55e]/4' : 'border-white/8 bg-[#0a0a0a]'
-                      }`}>
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-[11px] font-mono text-[#404040]">Aula {aula.id}</p>
-                          <p className="text-sm font-semibold text-[#d0d0d0] leading-snug mt-0.5">{aula.titulo}</p>
-                          <p className="text-xs text-[#484848] mt-1">{aula.data} · {aula.horario}</p>
-                        </div>
-                        {aulaFeita && (
-                          <div className="w-7 h-7 rounded-full bg-[#22c55e]/15 border border-[#22c55e]/25 flex items-center justify-center shrink-0">
-                            <Check className="h-3.5 w-3.5 text-[#22c55e]" />
-                          </div>
-                        )}
+                {/* ETAPA 3 — ACESSO ESPECIAL */}
+                <StepCard
+                  numero={3}
+                  titulo="Acesso Especial"
+                  status={s3}
+                  subtitle="Uma condição exclusiva foi reservada para você."
+                  badge={
+                    step3_modal_visto && s3 !== 'locked' ? (
+                      <span className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-[#c79a3b]"
+                        style={{ borderColor: 'rgba(199,154,59,0.25)', background: 'rgba(199,154,59,0.08)' }}>
+                        <Sparkles className="h-2.5 w-2.5" /> selecionado
+                      </span>
+                    ) : undefined
+                  }
+                >
+                  {step3_oferta ? (
+                    <div className="flex items-center gap-3 rounded-xl border p-4" style={{ borderColor: 'rgba(34,197,94,0.15)', background: 'rgba(34,197,94,0.04)' }}>
+                      <div className="w-9 h-9 rounded-xl border flex items-center justify-center shrink-0" style={{ background: 'rgba(34,197,94,0.10)', borderColor: 'rgba(34,197,94,0.20)' }}>
+                        <Check className="h-4 w-4 text-[#22c55e]" />
                       </div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <a href={aula.youtubeUrl} target="_blank" rel="noopener noreferrer"
-                          onClick={() => mark(aulaKey)}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-[#FF0000]/10 border border-[#FF0000]/20 px-3 py-1.5 text-[11px] font-semibold text-[#FF6666] hover:bg-[#FF0000]/15 transition-colors">
-                          <Video className="h-3.5 w-3.5" /> Ativar lembrete <Bell className="h-3 w-3" />
-                        </a>
-                        <button onClick={() => openCalendar(aula)}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/4 px-3 py-1.5 text-[11px] font-semibold text-[#a0a0a0] hover:border-white/20 hover:text-[#d0d0d0] transition-colors">
-                          <Calendar className="h-3.5 w-3.5" /> Agendar
-                        </button>
+                      <div>
+                        <p className="text-sm font-semibold text-[#d0d0d0]">Condição reservada ✓</p>
+                        <p className="text-xs mt-0.5" style={{ color: '#484848' }}>Sua condição exclusiva está garantida para este evento.</p>
                       </div>
                     </div>
-                  )
-                })}
-              </div>
-              <p className="text-[11px] text-[#383838] mt-3 leading-relaxed">
-                Clique em "Ativar lembrete" para ser notificado quando a aula começar. O calendário detecta iOS, Android ou desktop automaticamente.
-              </p>
-            </StepCard>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="rounded-xl border px-4 py-3 flex items-start gap-3" style={{ borderColor: 'rgba(199,154,59,0.15)', background: 'rgba(199,154,59,0.04)' }}>
+                        <Sparkles className="h-4 w-4 shrink-0 mt-0.5" style={{ color: 'rgba(199,154,59,0.60)' }} />
+                        <div className="space-y-0.5">
+                          <p className="text-xs font-semibold text-[#c0c0c0]">Condição exclusiva reservada</p>
+                          <p className="text-xs leading-relaxed" style={{ color: '#505050' }}>
+                            {OFERTA.ativo ? OFERTA.descricao : 'Sua condição especial está reservada. Ela será revelada durante a Semana do Despertar.'}
+                          </p>
+                        </div>
+                      </div>
+                      {OFERTA.ativo ? (
+                        <div className="flex items-center justify-between gap-4">
+                          <p className="text-2xl font-bold text-[#c79a3b]">{OFERTA.preco}</p>
+                          <a href={OFERTA.url} target="_blank" rel="noopener noreferrer"
+                            onClick={() => mark('step3_oferta')}
+                            className="flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-[#080808] transition-colors hover:bg-[#e8b84b]"
+                            style={{ background: '#c79a3b' }}>
+                            <ShoppingBag className="h-4 w-4" /> Garantir
+                          </a>
+                        </div>
+                      ) : (
+                        <button onClick={() => mark('step3_oferta')}
+                          className="w-full rounded-xl border py-3.5 text-sm font-semibold text-[#c79a3b] transition-colors hover:bg-[#c79a3b]/[0.08]"
+                          style={{ borderColor: 'rgba(199,154,59,0.20)', background: 'rgba(199,154,59,0.04)' }}>
+                          ✓ Entendi — continuar para as aulas
+                        </button>
+                      )}
+                      <button onClick={() => setShowModal(true)}
+                        className="w-full text-[11px] transition-colors hover:text-[#505050] py-1"
+                        style={{ color: '#303030' }}>
+                        Ver detalhes da condição →
+                      </button>
+                    </div>
+                  )}
+                </StepCard>
 
-            {/* ETAPA 5 — CERTIFICADO */}
-            <StepCard
-              numero={5}
-              titulo="Resgate seu Certificado"
-              status={s5}
-              subtitle="Disponível após concluir as 3 aulas ao vivo."
-            >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                <div className="w-14 h-14 rounded-2xl bg-[#c79a3b]/10 border border-[#c79a3b]/20 flex items-center justify-center shrink-0">
-                  <Award className="h-7 w-7 text-[#c79a3b]" />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-semibold text-[#f0f0f0]">Certificado da Semana do Despertar #38</p>
-                  <p className="text-xs text-[#505050] leading-relaxed">
-                    Resgate com as palavras-chave reveladas ao vivo durante as aulas.
+                {/* ETAPA 4 — 3 AULAS AO VIVO */}
+                <StepCard
+                  numero={4}
+                  titulo="Assista às 3 Aulas ao Vivo"
+                  status={s4}
+                  subtitle={`${[step4_aula1, step4_aula2, step4_aula3].filter(Boolean).length}/3 aulas assistidas`}
+                >
+                  <div className="space-y-3">
+                    {AULAS.map((aula) => {
+                      const aulaKey = `step4_aula${aula.id}` as keyof Progress
+                      const aulaFeita = progress[aulaKey]
+                      return (
+                        <div key={aula.id}
+                          className="rounded-xl border p-4 space-y-3 transition-all duration-300"
+                          style={{
+                            borderColor: aulaFeita ? 'rgba(34,197,94,0.20)' : 'rgba(255,255,255,0.08)',
+                            background: aulaFeita ? 'rgba(34,197,94,0.04)' : '#0a0a0a',
+                          }}>
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-[11px] font-mono" style={{ color: '#404040' }}>Aula {aula.id}</p>
+                              <p className="text-sm font-semibold text-[#d0d0d0] leading-snug mt-0.5">{aula.titulo}</p>
+                              <p className="text-xs mt-1" style={{ color: '#484848' }}>{aula.data} · {aula.horario}</p>
+                            </div>
+                            {aulaFeita && (
+                              <div className="w-7 h-7 rounded-full border flex items-center justify-center shrink-0"
+                                style={{ background: 'rgba(34,197,94,0.15)', borderColor: 'rgba(34,197,94,0.25)' }}>
+                                <Check className="h-3.5 w-3.5 text-[#22c55e]" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <a href={aula.youtubeUrl} target="_blank" rel="noopener noreferrer"
+                              onClick={() => mark(aulaKey)}
+                              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[11px] font-semibold transition-colors hover:bg-[#FF0000]/15"
+                              style={{ background: 'rgba(255,0,0,0.10)', borderColor: 'rgba(255,0,0,0.20)', color: '#FF6666' }}>
+                              <Video className="h-3.5 w-3.5" /> Ativar lembrete <Bell className="h-3 w-3" />
+                            </a>
+                            <button onClick={() => openCalendar(aula)}
+                              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[11px] font-semibold text-[#a0a0a0] transition-colors hover:border-white/20 hover:text-[#d0d0d0]"
+                              style={{ borderColor: 'rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.04)' }}>
+                              <Calendar className="h-3.5 w-3.5" /> Agendar
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <p className="text-[11px] mt-3 leading-relaxed" style={{ color: '#383838' }}>
+                    Clique em "Ativar lembrete" para ser notificado quando a aula começar.
                   </p>
-                </div>
-                <Link href="/certificados"
-                  className="flex items-center gap-2 rounded-xl bg-[#c79a3b] px-5 py-3 text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors shrink-0">
-                  <Award className="h-4 w-4" /> Resgatar
-                </Link>
-              </div>
-            </StepCard>
+                </StepCard>
 
-          </div>
+                {/* ETAPA 5 — CERTIFICADO */}
+                <StepCard
+                  numero={5}
+                  titulo="Resgate seu Certificado"
+                  status={s5}
+                  subtitle="Disponível após concluir as 3 aulas ao vivo."
+                >
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                    <div className="w-14 h-14 rounded-2xl border flex items-center justify-center shrink-0"
+                      style={{ background: 'rgba(199,154,59,0.10)', borderColor: 'rgba(199,154,59,0.20)' }}>
+                      <Award className="h-7 w-7 text-[#c79a3b]" />
+                    </div>
+                    <div className="flex-1 space-y-1">
+                      <p className="text-sm font-semibold text-[#f0f0f0]">Certificado da Semana do Despertar #38</p>
+                      <p className="text-xs leading-relaxed" style={{ color: '#505050' }}>
+                        Resgate com as palavras-chave reveladas ao vivo durante as aulas.
+                      </p>
+                    </div>
+                    <Link href="/certificados"
+                      className="flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-[#080808] transition-colors hover:bg-[#e8b84b] shrink-0"
+                      style={{ background: '#c79a3b' }}>
+                      <Award className="h-4 w-4" /> Resgatar
+                    </Link>
+                  </div>
+                </StepCard>
+
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
