@@ -48,6 +48,60 @@ const DOT_GRID = {
 }
 
 // ─────────────────────────────────────────────
+// CURSOR LOGO — troque o src por /logo-cursor.png
+// quando subir o logo 3D na pasta /public
+// ─────────────────────────────────────────────
+const CURSOR_LOGO_SRC = '/despertamente-simbolo.png' // ← troque quando tiver o 3D
+
+function CursorLogo() {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    let tx = -300, ty = -300
+    let cx = -300, cy = -300
+    let raf: number
+
+    const onMove = (e: MouseEvent) => {
+      tx = e.clientX
+      ty = e.clientY
+    }
+    window.addEventListener('mousemove', onMove, { passive: true })
+
+    const loop = () => {
+      cx += (tx - cx) * 0.1
+      cy += (ty - cy) * 0.1
+      if (ref.current) {
+        ref.current.style.left = cx + 'px'
+        ref.current.style.top  = cy + 'px'
+      }
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      cancelAnimationFrame(raf)
+    }
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      className="fixed z-[9999] pointer-events-none -translate-x-1/2 -translate-y-1/2 hidden md:block"
+      style={{ top: -300, left: -300, willChange: 'left, top' }}
+    >
+      <img
+        src={CURSOR_LOGO_SRC}
+        alt=""
+        className="w-14 h-14 object-contain select-none"
+        style={{ filter: 'drop-shadow(0 0 10px rgba(255,184,0,0.9)) drop-shadow(0 0 24px rgba(255,184,0,0.4))' }}
+        draggable={false}
+      />
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────
 // SCROLL ANIMATION
 // ─────────────────────────────────────────────
 type Direction = 'up' | 'left' | 'right' | 'none'
@@ -261,6 +315,9 @@ export function ComecarAnimated({
   return (
     <main className="bg-[#0B0F1A] text-white overflow-x-hidden">
 
+      {/* Logo que segue o cursor (desktop) */}
+      <CursorLogo />
+
       {/* ══════════════════════════════════
           1 — HERO
       ══════════════════════════════════ */}
@@ -274,50 +331,106 @@ export function ComecarAnimated({
       </section>
 
       {/* ══════════════════════════════════
-          2 — AULA GRATUITA
+          2 — PSICANÁLISE INTEGRATIVA
       ══════════════════════════════════ */}
-      <section className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-28">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <FadeIn direction="left">
-            <ImgPlaceholder aspect="aspect-video" label="Imagem — Aula Gratuita" />
-          </FadeIn>
-          <FadeIn direction="right" delay={120}>
-            <div className="space-y-6">
-              <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#FFB800]/60">
-                Acesso imediato
-              </p>
-              <h2
-                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                className="text-4xl sm:text-5xl font-bold leading-[1.05]"
-              >
-                Aula gratuita<br />para começar.
-              </h2>
-              <p className="text-[#8B9DC3] leading-relaxed">
-                Antes de qualquer decisão, assista à aula introdutória. Entenda o Método IDM e veja se faz sentido para você.
-              </p>
-              <ul className="space-y-3">
-                {[
-                  'Por que você repete os mesmos padrões',
-                  'Como neurociência e psicanálise se conectam',
-                  'O que diferencia o Método IDM',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-white/68">
-                    <span className="w-5 h-5 rounded-full bg-[#FFB800]/10 border border-[#FFB800]/20 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-bold text-[#FFB800]">
-                      {i + 1}
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/turma38"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#FFB800] px-6 py-3.5 text-sm font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
-              >
-                Assistir aula gratuita <ArrowRight className="h-4 w-4" />
-              </Link>
+      <section className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-28 text-center">
+
+        {/* Pill badge */}
+        <FadeIn direction="none">
+          <div className="flex justify-center mb-8">
+            <span
+              className="inline-block rounded-full bg-[#FFB800] px-8 py-2.5 text-xs font-extrabold uppercase tracking-widest text-[#0B0F1A]"
+              style={{ boxShadow: '0 4px 24px rgba(255,184,0,0.35)' }}
+            >
+              Formação Certificada · Parceria Universitária
+            </span>
+          </div>
+        </FadeIn>
+
+        {/* Headline */}
+        <FadeIn delay={80}>
+          <h2
+            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.04] mb-4"
+          >
+            Psicanálise Integrativa
+          </h2>
+        </FadeIn>
+
+        {/* Subheadline */}
+        <FadeIn delay={160}>
+          <p className="text-[#8B9DC3] text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-3">
+            Em parceria com a{' '}
+            <span className="text-white font-semibold">Universidade Anhanguera</span>,
+            nossa formação em Psicanálise Integrativa segue as{' '}
+            <span className="text-white font-semibold">diretrizes do MEC</span>{' '}
+            e possui{' '}
+            <span className="text-white font-semibold">PPC aprovado</span> —
+            garantindo que seu certificado tenha validade e reconhecimento real.
+          </p>
+        </FadeIn>
+
+        {/* CTA */}
+        <FadeIn delay={220}>
+          <div className="flex justify-center mt-7 mb-12">
+            <Link
+              href="/turma38"
+              className="inline-flex items-center gap-2 rounded-full bg-[#FFB800] px-8 py-3.5 text-sm font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
+              style={{ boxShadow: '0 6px 32px rgba(255,184,0,0.3)' }}
+            >
+              Criar Minha Conta
+            </Link>
+          </div>
+        </FadeIn>
+
+        {/* Logo + Image grid */}
+        <FadeIn direction="up" delay={100}>
+          <div className="relative">
+            {/* IDM logo flutuando acima do grid */}
+            <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+              <img
+                src={CURSOR_LOGO_SRC}
+                alt="IDM"
+                className="w-16 h-16 object-contain mx-auto"
+                style={{
+                  filter: 'drop-shadow(0 0 16px rgba(255,184,0,1)) drop-shadow(0 0 40px rgba(255,184,0,0.5))',
+                }}
+              />
+              {/* Glow halo atrás */}
+              <div
+                className="absolute inset-0 -z-10 rounded-full blur-2xl"
+                style={{ background: 'rgba(255,184,0,0.25)', transform: 'scale(2.5)' }}
+              />
             </div>
-          </FadeIn>
-        </div>
+
+            {/* Grid assimétrico — esquerda alta + direita 2 empilhadas */}
+            <div
+              className="grid grid-cols-2 gap-2 sm:gap-3 pt-8"
+              style={{ height: 'clamp(320px, 50vw, 520px)' }}
+            >
+              {/* Esquerda — tall */}
+              <div className="h-full rounded-2xl border border-dashed border-white/10 bg-white/[0.03] flex items-center justify-center">
+                <p className="text-[10px] font-mono text-white/15 tracking-widest uppercase text-center px-4">
+                  Imagem 1
+                </p>
+              </div>
+
+              {/* Direita — 2 empilhadas */}
+              <div className="flex flex-col gap-2 sm:gap-3 h-full">
+                <div className="flex-1 rounded-2xl border border-dashed border-white/10 bg-white/[0.03] flex items-center justify-center">
+                  <p className="text-[10px] font-mono text-white/15 tracking-widest uppercase text-center px-4">
+                    Imagem 2
+                  </p>
+                </div>
+                <div className="flex-1 rounded-2xl border border-dashed border-white/10 bg-white/[0.03] flex items-center justify-center">
+                  <p className="text-[10px] font-mono text-white/15 tracking-widest uppercase text-center px-4">
+                    Imagem 3
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
       </section>
 
       {/* ══════════════════════════════════
