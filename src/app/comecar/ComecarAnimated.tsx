@@ -264,82 +264,13 @@ export function ComecarAnimated({
       {/* ══════════════════════════════════
           1 — HERO
       ══════════════════════════════════ */}
-      <section
-        className="relative overflow-hidden"
-        style={{ minHeight: 'clamp(400px, 52vh, 580px)' }}
-      >
-        {/* Foto de fundo — salve em /public/hero-banner.jpg após enhancement no ChatGPT */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/hero-banner.png')" }}
-          aria-hidden="true"
+      <section className="w-full">
+        <img
+          src="/hero-banner.png"
+          alt="Instituto Despertamente"
+          className="w-full block"
+          style={{ display: 'block' }}
         />
-        {/* Fallback navy quando imagem não existe */}
-        <div className="absolute inset-0 -z-10 bg-[#0B1A3B]" aria-hidden="true" />
-        {/* Overlay gradiente: mais escuro à esquerda p/ legibilidade */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(100deg, rgba(11,26,59,0.93) 0%, rgba(11,26,59,0.78) 42%, rgba(11,26,59,0.50) 100%)',
-          }}
-          aria-hidden="true"
-        />
-
-        {/* Conteúdo */}
-        <div
-          className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 flex items-center"
-          style={{ minHeight: 'clamp(400px, 52vh, 580px)' }}
-        >
-          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center w-full py-14 sm:py-16">
-
-            {/* Esquerda — copy */}
-            <div className="space-y-4">
-              <p className="text-white text-lg sm:text-xl lg:text-2xl leading-[1.55]">
-                Aqui no{' '}
-                <strong className="font-extrabold text-[#FFB800]">DespertaMente</strong>
-                <br />
-                você não se forma,
-                <br />
-                <strong className="font-extrabold text-white">VOCÊ</strong> se torna
-              </p>
-              <h1
-                className="font-black text-[#FFB800] leading-none uppercase"
-                style={{ fontSize: 'clamp(2.1rem, 5.5vw, 4.2rem)' }}
-              >
-                PSICANALISTA
-                <br />
-                INTEGRATIVO!
-              </h1>
-              <div className="w-10 h-[2px] bg-white/45 rounded-full" />
-              <p className="text-white font-semibold text-sm sm:text-base leading-snug">
-                Porque a mente
-                <br />
-                inconsciente é{' '}
-                <span className="font-black text-[#FFB800]">ATEMPORAL!</span>
-              </p>
-            </div>
-
-            {/* Direita — badge 50% */}
-            <div className="flex flex-col items-start lg:items-end justify-center lg:text-right">
-              <p
-                className="text-white font-extrabold uppercase leading-tight tracking-[0.06em]"
-                style={{ fontSize: 'clamp(0.85rem, 1.8vw, 1.25rem)' }}
-              >
-                INSCRIÇÕES ABERTAS COM
-              </p>
-              <p
-                className="text-[#FFB800] font-black leading-[0.85] mt-1 select-none"
-                style={{
-                  fontSize: 'clamp(72px, 16vw, 200px)',
-                  textShadow: '0 0 60px rgba(255,184,0,0.3)',
-                }}
-              >
-                50%
-              </p>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* ══════════════════════════════════
