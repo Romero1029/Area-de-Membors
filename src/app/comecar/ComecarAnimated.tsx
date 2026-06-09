@@ -271,7 +271,7 @@ export function ComecarAnimated({
         {/* Foto de fundo — salve em /public/hero-banner.jpg após enhancement no ChatGPT */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/hero-banner.jpg')" }}
+          style={{ backgroundImage: "url('/hero-banner.png')" }}
           aria-hidden="true"
         />
         {/* Fallback navy quando imagem não existe */}
