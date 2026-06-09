@@ -42,11 +42,6 @@ function ImgPlaceholder({ aspect = 'aspect-video', label = '' }: { aspect?: stri
   )
 }
 
-const DOT_GRID = {
-  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)',
-  backgroundSize: '40px 40px',
-}
-
 // ─────────────────────────────────────────────
 // LOGO PATH
 // ─────────────────────────────────────────────
@@ -62,13 +57,10 @@ function PsicanaliseSection() {
     <section className="max-w-5xl mx-auto px-6 sm:px-10 pt-14 pb-10">
 
       {/* ── Texto central ── */}
-      <FadeIn direction="none" className="text-center space-y-4 mb-8">
-        <span
-          className="inline-block rounded-full bg-[#FFB800] px-6 py-2 text-[11px] font-black uppercase tracking-[0.13em] text-[#0D1638]"
-          style={{ boxShadow: '0 0 0 5px rgba(255,184,0,0.12), 0 4px 18px rgba(255,184,0,0.28)' }}
-        >
+      <FadeIn direction="none" className="text-center space-y-5 mb-10">
+        <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">
           Formação Certificada · Parceria Universitária
-        </span>
+        </p>
 
         <h2
           style={{ fontFamily: "'Fraunces', Georgia, serif" }}
@@ -77,18 +69,17 @@ function PsicanaliseSection() {
           Psicanálise Integrativa
         </h2>
 
-        <p className="text-white/48 text-base sm:text-lg max-w-sm mx-auto leading-snug">
+        <p className="text-white/50 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
           Parceria com a{' '}
-          <strong className="text-white/85 font-semibold">Universidade Anhanguera</strong>.
+          <span className="text-white/80 font-medium">Universidade Anhanguera</span>.
           {' '}Certificado nas diretrizes do{' '}
-          <strong className="text-white/85 font-semibold">MEC</strong> com PPC aprovado.
+          <span className="text-white/80 font-medium">MEC</span> com PPC aprovado.
         </p>
 
-        <div className="pt-1">
+        <div className="pt-2">
           <Link
             href="/turma38"
-            className="inline-flex rounded-full bg-[#FFB800] px-8 py-3 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
-            style={{ boxShadow: '0 4px 28px rgba(255,184,0,0.35)' }}
+            className="inline-flex rounded-xl bg-[#FFB800] px-8 py-3.5 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
           >
             Criar Minha Conta
           </Link>
@@ -135,66 +126,28 @@ function PsicanaliseSection() {
 // ─────────────────────────────────────────────
 // SEÇÃO — SOBRE O INSTITUTO
 // ─────────────────────────────────────────────
-const VALORES = ['Integratividade', 'Consciência', 'Transformação', 'Presença']
-
-function SobreCarousel() {
-  const [idx, setIdx] = useState(0)
-  const total = VALORES.length
-  const prev  = () => setIdx(i => (i === 0 ? total - 1 : i - 1))
-  const next  = () => setIdx(i => (i === total - 1 ? 0 : i + 1))
-
-  return (
-    <div className="space-y-4">
-      <p
-        style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-        className="text-center text-xl font-bold text-white tracking-wide"
-      >
-        {VALORES[idx]}
-      </p>
-      <div className="flex items-center gap-3 sm:gap-5">
-        <button
-          onClick={prev}
-          type="button"
-          className="w-10 h-10 shrink-0 rounded-full border border-white/15 bg-white/4 flex items-center justify-center text-white/60 hover:text-white hover:border-[#FFB800]/35 hover:bg-[#FFB800]/8 transition-all"
-          aria-label="Anterior"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div className="flex-1 aspect-square rounded-2xl bg-[#111D48] border border-white/7" />
-        <button
-          onClick={next}
-          type="button"
-          className="w-10 h-10 shrink-0 rounded-full border border-white/15 bg-white/4 flex items-center justify-center text-white/60 hover:text-white hover:border-[#FFB800]/35 hover:bg-[#FFB800]/8 transition-all"
-          aria-label="Próximo"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-      </div>
-      <div className="flex justify-center gap-2">
-        {VALORES.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => setIdx(i)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === idx ? 'w-6 bg-[#FFB800]' : 'w-1.5 bg-white/20 hover:bg-white/40'
-            }`}
-          />
-        ))}
-      </div>
-    </div>
-  )
-}
-
 function SobreSection() {
   return (
-    <section className="max-w-5xl mx-auto px-6 sm:px-10 pt-14 pb-10">
+    <section className="max-w-5xl mx-auto px-6 sm:px-10 pt-20 pb-16">
 
-      {/* Pill outlined */}
-      <FadeIn direction="none" className="flex justify-center mb-10">
-        <span className="inline-block rounded-full border border-white/35 px-6 py-2 text-sm font-semibold text-white/80 tracking-wide">
-          Sobre o Instituto Despertamente
-        </span>
+      {/* Overline + headline + descrição */}
+      <FadeIn direction="none" className="mb-12">
+        <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium mb-4">
+          Sobre o Instituto
+        </p>
+        <div className="grid lg:grid-cols-2 gap-8 items-end">
+          <h2
+            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+            className="text-4xl sm:text-5xl font-bold leading-[1.08] text-white"
+          >
+            Uma instituição<br />construída para<br />transformar vidas.
+          </h2>
+          <p className="text-[#8B9DC3] leading-relaxed text-base">
+            O Instituto Despertamente foi fundado para democratizar o acesso ao conhecimento
+            em psicanálise, neurociência e desenvolvimento humano — com rigor acadêmico,
+            metodologia integrativa e impacto real.
+          </p>
+        </div>
       </FadeIn>
 
       {/* Mosaico 3 + 2 */}
@@ -208,9 +161,25 @@ function SobreSection() {
         </div>
       </FadeIn>
 
-      {/* Carousel de valores */}
-      <FadeIn delay={80} className="mt-10 max-w-xs mx-auto sm:max-w-sm">
-        <SobreCarousel />
+      {/* Números institucionais */}
+      <FadeIn delay={80}>
+        <div className="mt-12 grid grid-cols-3 border-t border-white/8 pt-10 gap-8">
+          {[
+            { n: '12.000+', label: 'alunos formados' },
+            { n: '38',      label: 'turmas realizadas' },
+            { n: '9 anos',  label: 'de metodologia' },
+          ].map(({ n, label }) => (
+            <div key={label} className="space-y-1">
+              <p
+                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                className="text-3xl sm:text-4xl font-bold text-white"
+              >
+                {n}
+              </p>
+              <p className="text-xs text-white/35 uppercase tracking-[0.15em]">{label}</p>
+            </div>
+          ))}
+        </div>
       </FadeIn>
 
     </section>
@@ -289,11 +258,7 @@ function VideoCard({
 
   return (
     <div
-      className={`rounded-2xl overflow-hidden border transition-all duration-500 ${
-        active
-          ? 'border-[#FFB800]/30 shadow-[0_0_48px_rgba(255,184,0,0.12)]'
-          : 'border-white/7'
-      }`}
+      className="rounded-2xl overflow-hidden border border-white/7 transition-all duration-500"
     >
       <div className="relative aspect-video bg-[#0A0D17]">
         {video_id && playing ? (
@@ -339,7 +304,7 @@ function VideoCard({
           <p className="text-[11px] text-[#8B9DC3] mt-0.5 truncate">{papel}</p>
         </div>
         {active && (
-          <div className="w-2 h-2 rounded-full bg-[#FFB800] shrink-0 animate-pulse" />
+          <div className="w-1.5 h-1.5 rounded-full bg-white/30 shrink-0" />
         )}
       </div>
     </div>
@@ -387,7 +352,7 @@ function VideoCarousel() {
         <button
           onClick={prev}
           type="button"
-          className="w-11 h-11 rounded-full border border-white/12 bg-white/4 flex items-center justify-center text-white/50 hover:text-white hover:border-[#FFB800]/35 hover:bg-[#FFB800]/8 transition-all duration-200"
+          className="w-11 h-11 rounded-full border border-white/12 bg-white/4 flex items-center justify-center text-white/50 hover:text-white hover:border-white/25 transition-all duration-200"
           aria-label="Anterior"
         >
           <ChevronLeft className="h-5 w-5" />
@@ -408,7 +373,7 @@ function VideoCarousel() {
         <button
           onClick={next}
           type="button"
-          className="w-11 h-11 rounded-full border border-white/12 bg-white/4 flex items-center justify-center text-white/50 hover:text-white hover:border-[#FFB800]/35 hover:bg-[#FFB800]/8 transition-all duration-200"
+          className="w-11 h-11 rounded-full border border-white/12 bg-white/4 flex items-center justify-center text-white/50 hover:text-white hover:border-white/25 transition-all duration-200"
           aria-label="Próximo"
         >
           <ChevronRight className="h-5 w-5" />
@@ -454,23 +419,9 @@ export function ComecarAnimated({
       <SobreSection />
 
       {/* ══════════════════════════════════
-          4 — DIVISOR AMARELO (lead fino)
-      ══════════════════════════════════ */}
-      <div
-        id="projetos"
-        className="w-full"
-        aria-hidden="true"
-        style={{
-          height: '3px',
-          background: '#FFB800',
-          boxShadow: '0 0 18px rgba(255,184,0,0.55), 0 0 40px rgba(255,184,0,0.18)',
-        }}
-      />
-
-      {/* ══════════════════════════════════
           4 — GRID 3 PROJETOS
       ══════════════════════════════════ */}
-      <section className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-24">
+      <section id="projetos" className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-24 border-t border-white/6">
         <div className="grid sm:grid-cols-3 gap-6">
           {[
             { titulo: 'Psicanálise Integrativa', href: '/programas/psicanalise-integrativa', label: 'Psicanálise' },
@@ -550,7 +501,7 @@ export function ComecarAnimated({
       <section id="formacao" className="bg-[#111827] py-20 sm:py-28 px-5 sm:px-10">
         <div className="max-w-6xl mx-auto space-y-12">
           <FadeIn className="text-center space-y-4 max-w-2xl mx-auto">
-            <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#FFB800]/60">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">
               Formação completa
             </p>
             <h2
@@ -612,7 +563,7 @@ export function ComecarAnimated({
           </FadeIn>
           <FadeIn direction="right" delay={120}>
             <div className="space-y-6">
-              <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#FFB800]/60">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">
                 Reconhecimento
               </p>
               <h2
@@ -630,8 +581,8 @@ export function ComecarAnimated({
                   'Vinculado ao seu CPF para verificação',
                   'Compartilhável no LinkedIn e portfólio',
                 ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-white/68">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#FFB800] shrink-0" />
+                  <li key={i} className="flex items-center gap-3 text-sm text-white/60">
+                    <span className="text-white/25 shrink-0 select-none">—</span>
                     {item}
                   </li>
                 ))}
@@ -647,7 +598,7 @@ export function ComecarAnimated({
       <section className="bg-[#111827] py-20 sm:py-28 px-5 sm:px-10">
         <div className="max-w-6xl mx-auto space-y-10">
           <FadeIn className="text-center space-y-4">
-            <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#FFB800]/60">Presencial</p>
+            <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">Presencial</p>
             <h2
               style={{ fontFamily: "'Fraunces', Georgia, serif" }}
               className="text-4xl sm:text-5xl font-bold leading-[1.05]"
@@ -705,7 +656,7 @@ export function ComecarAnimated({
       ══════════════════════════════════ */}
       <section id="depoimentos" className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-28">
         <FadeIn className="text-center space-y-3 mb-12">
-          <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#FFB800]/60">
+          <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">
             Quem já passou pelo IDM
           </p>
           <h2
@@ -723,14 +674,8 @@ export function ComecarAnimated({
       {/* ══════════════════════════════════
           10 — CTA FINAL
       ══════════════════════════════════ */}
-      <section
-        className="relative py-28 sm:py-36 px-5 sm:px-10 text-center overflow-hidden"
-        style={{ ...DOT_GRID, background: '#0D1638' }}
-      >
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[500px] h-[300px] rounded-full bg-[#FFB800]/5 blur-[110px]" />
-        </div>
-        <FadeIn className="relative max-w-2xl mx-auto space-y-6">
+      <section className="border-t border-white/6 py-28 sm:py-36 px-5 sm:px-10 text-center bg-[#0D1638]">
+        <FadeIn className="max-w-2xl mx-auto space-y-6">
           <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#FFB800]/50">
             Livre formação
           </p>
