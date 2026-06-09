@@ -2,21 +2,18 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, BookOpen, ShoppingBag, Award, User } from 'lucide-react'
+import { CalendarDays, ShoppingBag, Award } from 'lucide-react'
 
 const tabs = [
-  { href: '/dashboard',    label: 'Início',   icon: LayoutDashboard },
-  { href: '/cursos',       label: 'Cursos',   icon: BookOpen },
-  { href: '/loja',         label: 'Loja',     icon: ShoppingBag },
+  { href: '/lancamento',   label: 'Semana',  icon: CalendarDays },
   { href: '/certificados', label: 'Certific', icon: Award },
-  { href: '/perfil',       label: 'Perfil',   icon: User },
+  { href: '/loja',         label: 'Loja',     icon: ShoppingBag },
 ]
 
 export function MobileTabBar() {
   const pathname = usePathname()
 
   function isActive(href: string) {
-    if (href === '/dashboard') return pathname === '/dashboard'
     return pathname.startsWith(href)
   }
 

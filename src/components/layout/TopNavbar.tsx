@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { Search, Bell, Menu, X, LayoutDashboard, BookOpen, ShoppingBag, Video, Award, User, LogOut, ChevronDown, Rocket } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Bell, Menu, X, ShoppingBag, Award, User, LogOut, ChevronDown, CalendarDays } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/lib/actions/auth'
 import { IdmWordmark } from './IdmWordmark'
@@ -17,15 +17,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Input } from '@/components/ui/input'
 
 const navLinks = [
-  { href: '/dashboard',   label: 'Início',        icon: LayoutDashboard },
-  { href: '/cursos',      label: 'Meus Cursos',   icon: BookOpen },
-  { href: '/certificados',label: 'Certificados',  icon: Award },
-  { href: '/lancamento',  label: 'Lançamento',    icon: Rocket, highlight: true },
-  { href: '/loja',        label: 'Loja',          icon: ShoppingBag, badge: 'Novo' },
-  { href: '/ao-vivo',     label: 'Ao Vivo',       icon: Video },
+  { href: '/lancamento',   label: 'Semana do Despertar', icon: CalendarDays, highlight: true },
+  { href: '/certificados', label: 'Certificados',         icon: Award },
+  { href: '/loja',         label: 'Loja',                 icon: ShoppingBag },
 ]
 
 interface TopNavbarProps {
@@ -34,10 +30,7 @@ interface TopNavbarProps {
 
 export function TopNavbar({ profile }: TopNavbarProps) {
   const pathname = usePathname()
-  const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
@@ -49,15 +42,6 @@ export function TopNavbar({ profile }: TopNavbarProps) {
   function isActive(href: string) {
     if (href === '/dashboard') return pathname === '/dashboard'
     return pathname.startsWith(href)
-  }
-
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      router.push(`/cursos?busca=${encodeURIComponent(searchQuery.trim())}`)
-      setSearchOpen(false)
-      setSearchQuery('')
-    }
   }
 
   const initials = profile.full_name
@@ -75,18 +59,18 @@ export function TopNavbar({ profile }: TopNavbarProps) {
         <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 flex items-center gap-6">
 
           {/* Logo */}
-          <Link href="/dashboard" className="flex-shrink-0">
+          <Link href="/lancamento" className="flex-shrink-0">
             <IdmWordmark size="sm" variant="white" />
           </Link>
 
           {/* Nav links — desktop */}
           <nav className="hidden md:flex items-center gap-1 flex-1">
-            {navLinks.map(({ href, label, badge, highlight }) => (
+            {navLinks.map(({ href, label, highlight }) => (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  'relative px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150',
+                  'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150',
                   isActive(href)
                     ? 'text-[#c79a3b] bg-[rgba(199,154,59,0.1)]'
                     : highlight
@@ -95,47 +79,12 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                 )}
               >
                 {label}
-                {badge && !isActive(href) && (
-                  <span className="absolute -top-1 -right-1 rounded-full bg-[#c79a3b] px-1 py-px text-[9px] font-bold text-[#0f0f0f] leading-none">
-                    {badge}
-                  </span>
-                )}
               </Link>
             ))}
           </nav>
 
           {/* Ações direita */}
           <div className="flex items-center gap-2 ml-auto">
-
-            {/* Search — desktop */}
-            <div className="hidden md:block">
-              {searchOpen ? (
-                <form onSubmit={handleSearch} className="flex items-center gap-2 animate-fade-in">
-                  <Input
-                    autoFocus
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Buscar cursos..."
-                    className="w-48 h-8 text-sm bg-[#242424] border-[#333] text-[#f0f0f0] placeholder:text-[#606060]"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => { setSearchOpen(false); setSearchQuery('') }}
-                    className="text-[#606060] hover:text-[#f0f0f0] transition-colors"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </form>
-              ) : (
-                <button
-                  onClick={() => setSearchOpen(true)}
-                  className="p-2 rounded-lg text-[#a0a0a0] hover:text-[#f0f0f0] hover:bg-[#242424] transition-colors"
-                  aria-label="Buscar"
-                >
-                  <Search className="h-4.5 w-4.5" />
-                </button>
-              )}
-            </div>
 
             {/* Notificações */}
             <button
@@ -217,7 +166,7 @@ export function TopNavbar({ profile }: TopNavbarProps) {
 
                   {/* Links mobile */}
                   <nav className="flex-1 px-3 py-4 space-y-1">
-                    {[...navLinks, { href: '/certificados', label: 'Certificados', icon: Award }, { href: '/perfil', label: 'Meu Perfil', icon: User }].map(({ href, label, icon: Icon }) => (
+                    {[...navLinks, { href: '/perfil', label: 'Meu Perfil', icon: User }].map(({ href, label, icon: Icon }) => (
                       <Link
                         key={href}
                         href={href}
@@ -234,21 +183,6 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                       </Link>
                     ))}
                   </nav>
-
-                  {/* Busca mobile */}
-                  <div className="px-5 pb-4">
-                    <form onSubmit={handleSearch} className="flex gap-2">
-                      <Input
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
-                        placeholder="Buscar cursos..."
-                        className="flex-1 h-9 text-sm bg-[#1a1a1a] border-[#2a2a2a] text-[#f0f0f0] placeholder:text-[#606060]"
-                      />
-                      <button type="submit" className="px-3 rounded-lg bg-[#c79a3b] text-[#0f0f0f]">
-                        <Search className="h-4 w-4" />
-                      </button>
-                    </form>
-                  </div>
 
                   {/* Sair mobile */}
                   <div className="px-3 pb-6 border-t border-[#2a2a2a] pt-3">
