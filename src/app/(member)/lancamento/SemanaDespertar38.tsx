@@ -15,6 +15,7 @@ import {
 const WA_GROUP_URL   = 'https://chat.whatsapp.com/XXXXXXXXXX'
 const INTRO_VIDEO_ID = ''
 const EBOOK_URL      = '#'
+const BANNER_URL     = ''  // ex: '/banner-sdw38.png' — deixe '' para usar placeholder
 
 const OFERTA = {
   ativo: false,
@@ -410,6 +411,32 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
       <div className="min-h-screen w-full" style={{ background: 'linear-gradient(160deg, #0c0c0a 0%, #0f0f0f 40%, #0a0a08 100%)' }}>
         <div className="w-full max-w-2xl mx-auto px-5 sm:px-8 pt-10 pb-24">
+
+          {/* ── BANNER ─────────────────────────── */}
+          {BANNER_URL ? (
+            <div className="w-full rounded-2xl overflow-hidden mb-6 relative">
+              <img
+                src={BANNER_URL}
+                alt="Semana do Despertar #38"
+                className="w-full block"
+                style={{ maxHeight: 280, objectFit: 'cover' }}
+              />
+              {/* fade bottom */}
+              <div
+                className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none rounded-b-2xl"
+                style={{ background: 'linear-gradient(to bottom, transparent, #0c0c0a)' }}
+              />
+            </div>
+          ) : (
+            <div
+              className="w-full rounded-2xl overflow-hidden mb-6 flex items-center justify-center border border-white/6 bg-[#0d0d0d]"
+              style={{ height: 200 }}
+            >
+              <p className="text-xs font-mono text-[#2a2a2a] tracking-widest uppercase">
+                Banner de Boas-Vindas — configure BANNER_URL
+              </p>
+            </div>
+          )}
 
           {/* ── HEADER ─────────────────────────── */}
           <div className="mb-8 space-y-5">
