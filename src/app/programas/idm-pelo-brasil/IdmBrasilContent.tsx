@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRef } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Check, MessageCircle, MapPin, Calendar } from 'lucide-react'
+import { ArrowRight, MessageCircle, MapPin } from 'lucide-react'
 import {
   Accordion,
   AccordionContent,
@@ -13,30 +13,10 @@ import {
 
 const WA_URL = 'https://wa.me/5511999999999?text=Olá! Quero saber mais sobre o IDM pelo Brasil.'
 
-// ─────────────────────────────────────────────
-// STATIC CONTENT
-// ─────────────────────────────────────────────
-
-const painPoints = [
-  {
-    problema: 'Você aprende online mas sente que a transformação real acontece ao vivo, com pessoas.',
-    solucao: 'Imersão presencial',
-  },
-  {
-    problema: 'Você quer estudar psicanálise e PNL mas não mora em São Paulo ou Rio.',
-    solucao: 'IDM vem até você',
-  },
-  {
-    problema: 'Você quer um processo intensivo — não espalhado por meses de conteúdo assíncrono.',
-    solucao: 'Imersão de 4 dias',
-  },
-]
-
 const diasPrograma = [
   {
     numero: '01',
     titulo: 'Mapeamento do Inconsciente',
-    subtitulo: 'Dia 1',
     conteudo: [
       'O que são padrões inconscientes e como se formam',
       'Técnica de mapeamento de comportamentos automáticos',
@@ -47,7 +27,6 @@ const diasPrograma = [
   {
     numero: '02',
     titulo: 'Técnicas Integrativas ao Vivo',
-    subtitulo: 'Dia 2',
     conteudo: [
       'Regressão terapêutica guiada em grupo supervisionado',
       'Trabalho corporal: o corpo como mapa emocional',
@@ -58,107 +37,93 @@ const diasPrograma = [
   {
     numero: '03',
     titulo: 'PNL Aplicada',
-    subtitulo: 'Dia 3',
     conteudo: [
       'Fundamentos de PNL para transformação de padrões',
       'Ancoragem: como criar novos estados mentais no corpo',
-      'Ressignificação rápida — técnicas práticas aplicadas ao vivo',
-      'Como integrar PNL ao seu dia a dia imediatamente',
+      'Ressignificação rápida — técnicas práticas ao vivo',
+      'Como integrar PNL ao dia a dia imediatamente',
     ],
   },
   {
     numero: '04',
     titulo: 'Supervisão e Integração',
-    subtitulo: 'Dia 4',
     conteudo: [
-      'Revisão e consolidação dos quatro dias de trabalho',
+      'Revisão e consolidação dos quatro dias',
       'Sessão de supervisão em grupos pequenos',
-      'Plano de aplicação individual — o que você vai fazer na semana seguinte',
-      'Emissão do certificado de conclusão do workshop',
+      'Plano de aplicação individual — o que você faz na semana seguinte',
+      'Emissão do certificado de conclusão',
     ],
   },
 ]
 
-const proximasEditions = [
-  { cidade: 'São Paulo — SP', data: 'Em breve', vagas: 'Vagas limitadas' },
-  { cidade: 'Rio de Janeiro — RJ', data: 'Em breve', vagas: 'Vagas limitadas' },
-  { cidade: 'Belo Horizonte — MG', data: 'Em breve', vagas: 'Vagas limitadas' },
-  { cidade: 'Curitiba — PR', data: 'Em breve', vagas: 'Vagas limitadas' },
-]
-
 const incluso = [
   '4 dias de imersão presencial com o time IDM',
-  'Materiais didáticos físicos incluídos',
-  'Supervisão clínica em grupos pequenos (máx. 15 pessoas)',
-  'Acesso à plataforma IDM Membros por 30 dias pós-evento',
+  'Materiais didáticos físicos',
+  'Supervisão clínica em grupos (máx. 15 pessoas)',
+  'Acesso à plataforma IDM Membros por 30 dias',
   'Certificado digital de conclusão',
-  'Acesso à comunidade exclusiva de alunos IDM',
+  'Comunidade exclusiva de alunos IDM',
+]
+
+const cidades = [
+  { cidade: 'São Paulo — SP', status: 'Em breve' },
+  { cidade: 'Rio de Janeiro — RJ', status: 'Em breve' },
+  { cidade: 'Belo Horizonte — MG', status: 'Em breve' },
+  { cidade: 'Curitiba — PR', status: 'Em breve' },
 ]
 
 const depoimentos = [
   {
     featured: true,
     nome: 'Mariana C.',
-    papel: 'Coach — Rio de Janeiro',
-    texto: 'Eu já tinha feito cursos online de PNL e psicanálise. Mas o IDM pelo Brasil foi diferente de tudo. Ao vivo, com pessoas reais, em 4 dias aconteceu mais do que em 6 meses de conteúdo gravado.',
+    papel: 'Coach · Rio de Janeiro',
+    texto: 'Já tinha feito cursos online de PNL e psicanálise. O IDM pelo Brasil foi diferente de tudo. Em 4 dias ao vivo aconteceu mais do que em 6 meses de conteúdo gravado.',
   },
   {
     nome: 'Thiago R.',
-    papel: 'Terapeuta — Curitiba',
-    texto: 'A sessão de constelação familiar ao vivo foi transformadora. Não tem como substituir a experiência presencial.',
+    papel: 'Terapeuta · Curitiba',
+    texto: 'A constelação familiar ao vivo foi transformadora. Não tem como substituir a experiência presencial.',
   },
   {
     nome: 'Andressa M.',
-    papel: 'Facilitadora — Porto Alegre',
-    texto: 'Finalmente o IDM chegou aqui. Valeu muito cada centavo do investimento e cada hora dos 4 dias.',
+    papel: 'Facilitadora · Porto Alegre',
+    texto: 'Finalmente o IDM chegou aqui. Valeu cada centavo e cada hora dos 4 dias.',
   },
   {
     nome: 'Fábio L.',
-    papel: 'Psicólogo — Belo Horizonte',
-    texto: 'O rigor do método IDM aplicado ao presencial superou minhas expectativas. Saí com um plano claro de aplicação.',
+    papel: 'Psicólogo · Belo Horizonte',
+    texto: 'O rigor do método IDM no presencial superou minhas expectativas. Saí com um plano claro de aplicação.',
   },
 ]
 
 const faqItems = [
   {
     q: 'Quando serão as próximas edições?',
-    a: 'As próximas datas estão sendo definidas. Entre na lista de espera pelo WhatsApp ou acompanhe nossa plataforma — você será notificado quando as inscrições abrirem para sua cidade.',
+    a: 'As próximas datas estão sendo definidas. Entre na lista de espera pelo WhatsApp — você será notificado quando as inscrições abrirem para sua cidade.',
   },
   {
     q: 'Em quais cidades vocês estarão?',
-    a: 'O IDM pelo Brasil já passou por São Paulo, Rio de Janeiro, Belo Horizonte, Curitiba, Porto Alegre e Recife. Estamos sempre expandindo. Se sua cidade não está na lista, entre em contato — a demanda determina o calendário.',
+    a: 'O IDM pelo Brasil já passou por São Paulo, Rio de Janeiro, Belo Horizonte, Curitiba, Porto Alegre e Recife. Se sua cidade não está na lista, entre em contato — a demanda determina o calendário.',
   },
   {
     q: 'O certificado é o mesmo da formação online?',
-    a: 'O workshop presencial emite um certificado de conclusão do IDM pelo Brasil. É um certificado diferente da Formação completa em Psicanálise Integrativa, que exige o percurso completo (teoria, análise pessoal e supervisão). O workshop pode ser aproveitado como módulo prático dentro da formação completa.',
+    a: 'O workshop emite um certificado de conclusão do IDM pelo Brasil. É diferente da Formação completa em Psicanálise Integrativa, que exige o percurso completo. O workshop pode ser aproveitado como módulo prático dentro da formação.',
   },
   {
     q: 'Quanto custa? Tem parcelamento?',
-    a: 'O investimento é apresentado na inscrição. Parcelamos em até 6x no cartão de crédito. Pagamento via Pix tem desconto à vista. Entre em contato pelo WhatsApp para saber o valor atual da sua cidade.',
+    a: 'O investimento varia por cidade e data. Parcelamos em até 6x no cartão. Pix tem desconto à vista. Entre em contato pelo WhatsApp para saber o valor atual da sua região.',
   },
   {
     q: 'Posso levar acompanhante?',
-    a: 'O workshop é individual. Mas muitos alunos vêm com parceiros, amigos ou colegas de profissão — cada um faz a inscrição individualmente.',
-  },
-  {
-    q: 'O que está incluído no investimento?',
-    a: '4 dias de imersão presencial, materiais físicos, supervisão em grupo, acesso à plataforma IDM Membros por 30 dias e certificado de conclusão. Coffee breaks incluídos. Hospedagem e transporte por conta do participante.',
-  },
-  {
-    q: 'Como funciona a supervisão pós-evento?',
-    a: 'Você tem acesso à plataforma IDM Membros por 30 dias após o workshop. Nesse período, há lives de integração e um grupo de estudos supervisionado para consolidar o que foi aprendido.',
+    a: 'O workshop é individual. Mas é comum alunos virem com parceiros ou colegas — cada um com inscrição individual.',
   },
   {
     q: 'Há desconto para alunos já matriculados no IDM?',
-    a: 'Sim. Alunos ativos da plataforma IDM Membros têm desconto no workshop presencial. O código é enviado diretamente na plataforma.',
+    a: 'Sim. Alunos ativos da plataforma IDM Membros têm desconto no workshop. O código é enviado diretamente na plataforma.',
   },
   {
     q: 'Qual é a política de cancelamento?',
-    a: 'Cancelamento até 15 dias antes: reembolso integral. Entre 15 e 7 dias: crédito para outra edição. Menos de 7 dias: sem reembolso (mas você pode transferir para outra pessoa).',
-  },
-  {
-    q: 'Como me inscrevo?',
-    a: 'Entre em contato pelo WhatsApp ou acesse a plataforma IDM Membros. As inscrições abrem para alunos da plataforma antes do público geral.',
+    a: 'Cancelamento até 15 dias antes: reembolso integral. Entre 15 e 7 dias: crédito para outra edição. Menos de 7 dias: sem reembolso (mas você pode transferir a vaga para outra pessoa).',
   },
 ]
 
@@ -170,30 +135,22 @@ export interface ProductData {
   checkout_url: string | null
 }
 
-// ─────────────────────────────────────────────
-// ANIMATION HELPER
-// ─────────────────────────────────────────────
-
-function RevealSection({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+function Reveal({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' as `${number}px` })
-  const shouldReduce = useReducedMotion()
+  const inView = useInView(ref, { once: true, margin: '-80px' as `${number}px` })
+  const reduce = useReducedMotion()
   return (
     <motion.div
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y: shouldReduce ? 0 : 24 }}
+      initial={{ opacity: 0, y: reduce ? 0 : 18 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
   )
 }
-
-// ─────────────────────────────────────────────
-// MAIN
-// ─────────────────────────────────────────────
 
 export function IdmBrasilContent({ product }: { product: ProductData | null }) {
   const featuredDepo = depoimentos.find(d => d.featured) ?? depoimentos[0]
@@ -202,370 +159,311 @@ export function IdmBrasilContent({ product }: { product: ProductData | null }) {
   return (
     <>
       {/* ── HERO ─────────────────────────────────── */}
-      <section className="relative min-h-[90vh] flex items-center pt-16 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[700px] h-[500px] rounded-full bg-[#c79a3b]/3 blur-[180px]" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#0a1a2a]/60 blur-[120px]" />
-        </div>
+      <section
+        className="relative min-h-screen flex flex-col justify-end pb-20 pt-32 overflow-hidden"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0)',
+          backgroundSize: '48px 48px',
+        }}
+      >
+        <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] rounded-full bg-[#c79a3b]/4 blur-[250px] pointer-events-none" />
 
-        <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-10 py-24 space-y-8">
+        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full space-y-10">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="space-y-3"
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+            className="space-y-7"
           >
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#505050]">Workshop presencial · Tour nacional</p>
+            <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#404040]">
+              Instituto Despertamente · Workshop presencial
+            </p>
             <h1
               style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.04] text-[#f0f0f0]"
+              className="text-[64px] sm:text-[80px] lg:text-[100px] font-bold leading-[0.97] text-[#f0f0f0] tracking-tight"
             >
-              O IDM chega<br />até a sua cidade.
+              IDM pelo<br />Brasil.
             </h1>
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-2xl sm:text-3xl font-bold text-[#c79a3b] italic leading-tight mt-3"
-            >
-              Imersão presencial.<br />4 dias. Transformação real.
-            </h2>
+            <div className="w-full max-w-3xl h-px bg-white/6" />
           </motion.div>
 
-          <motion.p
-            className="text-lg text-[#606060] leading-relaxed max-w-2xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-          >
-            Workshops intensivos de Psicanálise Integrativa e PNL aplicado em cidades do Brasil. Aprenda ao vivo, com supervisão clínica e certificação incluída.
-          </motion.p>
-
           <motion.div
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.6 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="grid sm:grid-cols-[1fr_auto] gap-8 items-end max-w-3xl"
           >
-            <a
-              href="#cidades"
-              className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-8 py-4 text-base font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
-              style={{ boxShadow: '0 8px 32px rgba(199,154,59,0.28)' }}
-            >
-              Ver datas e cidades
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </a>
-            <a
-              href={WA_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-[#505050] hover:text-[#a0a0a0] transition-colors"
-            >
-              → Falar com a equipe
-            </a>
+            <p className="text-base text-[#4a4a4a] leading-relaxed max-w-md">
+              Imersão presencial de Psicanálise Integrativa e PNL em cidades do Brasil. Aprenda ao vivo, com supervisão e certificação incluída.
+            </p>
+            <div className="flex flex-col items-start sm:items-end gap-3">
+              <a
+                href="#cidades"
+                className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-7 py-3.5 text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors whitespace-nowrap"
+              >
+                Ver datas e cidades
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </a>
+              <p className="text-[11px] font-mono text-[#303030]">4 dias · Tour nacional · Vagas limitadas</p>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── PARA QUEM É ────────────────────────── */}
-      <RevealSection>
-        <section className="border-y border-white/5 bg-[#0d0d0d]">
-          <div className="max-w-4xl mx-auto px-6 sm:px-10 py-16">
-            <div className="divide-y divide-white/6">
-              {painPoints.map((p, i) => (
-                <div key={i} className="py-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <p className="text-lg sm:text-xl font-light text-[#f0f0f0]/55 italic leading-snug max-w-xl">
-                    &ldquo;{p.problema}&rdquo;
-                  </p>
-                  <span className="text-xs font-bold uppercase tracking-widest text-[#c79a3b] shrink-0 sm:text-right">{p.solucao}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </RevealSection>
+      {/* ── MANIFESTO ────────────────────────────── */}
+      <section className="bg-[#0d0d0d] border-y border-white/5">
+        <Reveal className="max-w-2xl mx-auto px-6 sm:px-10 py-20">
+          <p
+            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+            className="text-2xl sm:text-3xl font-light leading-relaxed text-[#888888]"
+          >
+            Conteúdo online transforma. Mas{' '}
+            <span className="text-[#c8c8c8]">
+              a transformação mais profunda acontece ao vivo, com pessoas, com o corpo presente.
+            </span>{' '}
+            O IDM pelo Brasil foi criado para quem quer mais do que assistir aulas —{' '}
+            quer viver o processo. Quatro dias intensivos. Uma cidade de cada vez.
+          </p>
+        </Reveal>
+      </section>
 
-      {/* ── PROGRAMA DOS 4 DIAS ───────────────── */}
-      <RevealSection>
-        <section className="max-w-4xl mx-auto px-6 sm:px-10 py-20 space-y-10">
-          <div className="space-y-2">
+      {/* ── OS 4 DIAS ────────────────────────────── */}
+      <Reveal>
+        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-20">
+          <div className="grid sm:grid-cols-[1fr_auto] items-end gap-4 mb-10">
             <h2
               style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-3xl sm:text-4xl font-bold text-[#f0f0f0]"
+              className="text-4xl sm:text-5xl font-bold text-[#f0f0f0]"
             >
-              4 dias que mudam a direção.
+              Os 4 dias.
             </h2>
-            <p className="text-[#606060] text-sm max-w-lg">
-              Cada dia tem uma função no processo. Não é um curso dividido em blocos — é uma jornada progressiva.
-            </p>
+            <p className="text-xs font-mono text-[#383838] pb-1">Jornada progressiva</p>
           </div>
 
-          <Accordion type="single" collapsible defaultValue="01" className="space-y-2">
-            {diasPrograma.map((d) => (
-              <AccordionItem
-                key={d.numero}
-                value={d.numero}
-                className="border border-[#1a1a1a] rounded-xl bg-[#0a0a0a] px-5 data-[state=open]:border-[#2a2a2a] transition-colors"
-              >
-                <AccordionTrigger className="hover:no-underline py-5 text-left group">
-                  <div className="flex items-center gap-4">
-                    <span
-                      style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                      className="text-3xl font-black text-[#c79a3b]/12 select-none shrink-0 w-10"
-                    >
-                      {d.numero}
-                    </span>
-                    <div>
-                      <p className="font-semibold text-[#d0d0d0] text-sm group-hover:text-[#f0f0f0] transition-colors">{d.titulo}</p>
-                      <p className="text-[11px] text-[#404040] mt-0.5">{d.subtitulo}</p>
+          <Accordion type="single" collapsible defaultValue="01">
+            <div className="divide-y divide-white/5">
+              {diasPrograma.map((d) => (
+                <AccordionItem key={d.numero} value={d.numero} className="border-0">
+                  <AccordionTrigger className="hover:no-underline py-5 text-left group w-full">
+                    <div className="flex items-center gap-5 w-full pr-4">
+                      <span className="text-xs font-mono text-[#383838] w-5 shrink-0">{d.numero}</span>
+                      <span className="text-sm font-medium text-[#c0c0c0] group-hover:text-[#f0f0f0] transition-colors flex-1">
+                        {d.titulo}
+                      </span>
                     </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pb-5 pl-14">
-                  <ul className="space-y-2">
-                    {d.conteudo.map((c) => (
-                      <li key={c} className="flex items-start gap-2.5 text-sm text-[#606060]">
-                        <Check className="h-3.5 w-3.5 text-[#c79a3b]/60 shrink-0 mt-0.5" />
-                        {c}
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </section>
-      </RevealSection>
-
-      {/* ── O QUE ESTÁ INCLUÍDO ───────────────── */}
-      <RevealSection>
-        <section className="bg-[#0d0d0d] border-y border-white/5">
-          <div className="max-w-4xl mx-auto px-6 sm:px-10 py-20">
-            <div className="grid sm:grid-cols-2 gap-10 sm:gap-16 items-start">
-              <div className="space-y-4">
-                <h2
-                  style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                  className="text-3xl sm:text-4xl font-bold text-[#f0f0f0] leading-tight"
-                >
-                  O que está<br />incluído.
-                </h2>
-                <p className="text-[#606060] text-sm leading-relaxed">
-                  Não é só o workshop. O IDM pelo Brasil foi desenhado para ser completo — da chegada ao pós-evento.
-                </p>
-              </div>
-              <ul className="space-y-4">
-                {incluso.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-[#707070] leading-relaxed">
-                    <Check className="h-4 w-4 text-[#c79a3b] shrink-0 mt-0.5" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-      </RevealSection>
-
-      {/* ── PRÓXIMAS EDIÇÕES ─────────────────────── */}
-      <RevealSection>
-        <section id="cidades" className="max-w-4xl mx-auto px-6 sm:px-10 py-20 space-y-10">
-          <div className="space-y-2">
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-3xl sm:text-4xl font-bold text-[#f0f0f0]"
-            >
-              Próximas edições.
-            </h2>
-            <p className="text-[#606060] text-sm">
-              Datas sendo confirmadas. Entre na lista de espera para ser o primeiro a saber.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-4">
-            {proximasEditions.map((e) => (
-              <div key={e.cidade} className="rounded-xl border border-[#1a1a1a] bg-[#0d0d0d] p-5 flex items-center gap-4">
-                <MapPin className="h-4 w-4 text-[#c79a3b]/60 shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-[#d0d0d0] text-sm">{e.cidade}</p>
-                  <div className="flex items-center gap-3 mt-0.5">
-                    <span className="flex items-center gap-1 text-[11px] text-[#404040]">
-                      <Calendar className="h-3 w-3" />{e.data}
-                    </span>
-                    <span className="text-[11px] text-[#c79a3b]/60">{e.vagas}</span>
-                  </div>
-                </div>
-                <a
-                  href={WA_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[11px] font-bold text-[#c79a3b] hover:text-[#e8b84b] transition-colors shrink-0"
-                >
-                  Entrar na lista
-                </a>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-3">
-            <a
-              href={WA_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-[#25D366]/25 text-sm font-bold text-[#25D366] hover:bg-[#25D366]/8 transition-colors"
-            >
-              <MessageCircle className="h-4 w-4" />
-              Quero saber quando chega na minha cidade
-            </a>
-          </div>
-        </section>
-      </RevealSection>
-
-      {/* ── DEPOIMENTOS ──────────────────────────── */}
-      <RevealSection>
-        <section className="bg-[#0d0d0d] border-y border-white/5">
-          <div className="max-w-4xl mx-auto px-6 sm:px-10 py-20 space-y-12">
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-3xl sm:text-4xl font-bold text-[#f0f0f0]"
-            >
-              Quem já esteve lá.
-            </h2>
-
-            <div className="max-w-2xl">
-              <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="block text-8xl leading-none text-[#c79a3b]/10 select-none">
-                &ldquo;
-              </span>
-              <p className="text-lg sm:text-xl italic text-[#d0d0d0]/70 leading-relaxed -mt-6">
-                {featuredDepo.texto}
-              </p>
-              <p className="text-sm text-[#c79a3b] mt-5">{featuredDepo.nome}</p>
-              <p className="text-xs text-[#404040] mt-0.5">{featuredDepo.papel}</p>
-            </div>
-
-            <div className="grid sm:grid-cols-3 gap-4">
-              {otherDepos.map((d, i) => (
-                <div key={i} className="border border-white/5 rounded-xl p-5 space-y-4">
-                  <p className="text-sm italic text-[#505050] leading-relaxed">&ldquo;{d.texto}&rdquo;</p>
-                  <div className="pt-3 border-t border-white/5">
-                    <p className="text-xs font-semibold text-[#909090]">{d.nome}</p>
-                    <p className="text-[11px] text-[#404040] mt-0.5">{d.papel}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </RevealSection>
-
-      {/* ── INVESTIMENTO ─────────────────────────── */}
-      <RevealSection>
-        <section className="max-w-4xl mx-auto px-6 sm:px-10 py-20 space-y-8">
-          <div className="space-y-2">
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-3xl sm:text-4xl font-bold text-[#f0f0f0]"
-            >
-              Investimento.
-            </h2>
-            <p className="text-[#606060] text-sm max-w-lg">
-              O valor varia conforme a cidade e a data. Entre em contato pelo WhatsApp para saber o investimento da próxima edição na sua região.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-white/8 bg-[#0d0d0d] p-8 space-y-5 max-w-md">
-            <p className="text-[#c0c0c0] text-sm leading-relaxed">
-              Inclui todos os 4 dias, materiais, supervisão, certificado e acesso à plataforma por 30 dias.
-            </p>
-            <ul className="space-y-2">
-              {['Pix com desconto à vista', 'Parcelamento em até 6x', 'Desconto para alunos IDM'].map(i => (
-                <li key={i} className="flex items-center gap-2.5 text-sm text-[#606060]">
-                  <Check className="h-3.5 w-3.5 text-[#c79a3b]/60 shrink-0" />
-                  {i}
-                </li>
-              ))}
-            </ul>
-            <a
-              href={WA_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#c79a3b] text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
-            >
-              <MessageCircle className="h-4 w-4" />
-              Saber o valor da minha cidade
-            </a>
-          </div>
-
-          <p className="text-xs text-[#404040]">Garantia total de 7 dias. Política de cancelamento detalhada no FAQ abaixo.</p>
-        </section>
-      </RevealSection>
-
-      {/* ── FAQ ──────────────────────────────────── */}
-      <RevealSection>
-        <section className="bg-[#0d0d0d] border-y border-white/5">
-          <div className="max-w-3xl mx-auto px-6 sm:px-10 py-20 space-y-10">
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-3xl sm:text-4xl font-bold text-[#f0f0f0]"
-            >
-              Perguntas frequentes.
-            </h2>
-            <Accordion type="single" collapsible className="space-y-1.5">
-              {faqItems.map((item, i) => (
-                <AccordionItem
-                  key={i}
-                  value={`item-${i}`}
-                  className="border border-[#1a1a1a] rounded-xl bg-[#0a0a0a] px-5 data-[state=open]:border-[#252525] transition-colors"
-                >
-                  <AccordionTrigger className="text-[#c0c0c0] font-medium text-sm hover:no-underline hover:text-[#f0f0f0] py-4 text-left">
-                    {item.q}
                   </AccordionTrigger>
-                  <AccordionContent className="text-[#606060] text-sm leading-relaxed pb-4">
-                    {item.a}
+                  <AccordionContent className="pb-5 pl-10">
+                    <ul className="space-y-2">
+                      {d.conteudo.map((c) => (
+                        <li key={c} className="text-sm text-[#505050] leading-relaxed">{c}</li>
+                      ))}
+                    </ul>
                   </AccordionContent>
                 </AccordionItem>
               ))}
+            </div>
+          </Accordion>
+        </section>
+      </Reveal>
+
+      {/* ── O QUE ESTÁ INCLUÍDO ───────────────────── */}
+      <Reveal>
+        <section className="bg-[#0d0d0d] border-y border-white/5">
+          <div className="max-w-5xl mx-auto px-6 sm:px-10 py-20 grid sm:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <h2
+              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+              className="text-4xl sm:text-5xl font-bold text-[#f0f0f0] leading-tight"
+            >
+              O que está<br />incluído.
+            </h2>
+            <ul className="divide-y divide-white/5">
+              {incluso.map((item) => (
+                <li key={item} className="py-4 text-sm text-[#505050] first:pt-0">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── PRÓXIMAS CIDADES ─────────────────────── */}
+      <Reveal>
+        <section id="cidades" className="max-w-5xl mx-auto px-6 sm:px-10 py-20">
+          <div className="grid sm:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <div className="space-y-4">
+              <h2
+                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                className="text-4xl sm:text-5xl font-bold text-[#f0f0f0]"
+              >
+                Próximas<br />edições.
+              </h2>
+              <p className="text-sm text-[#484848] leading-relaxed">
+                Datas sendo confirmadas. Entre na lista de espera para ter prioridade nas inscrições.
+              </p>
+              <a
+                href={WA_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-[#505050] hover:text-[#808080] transition-colors"
+              >
+                <MessageCircle className="h-3.5 w-3.5" />
+                Entrar na lista de espera
+              </a>
+            </div>
+            <div className="divide-y divide-white/5">
+              {cidades.map((c) => (
+                <div key={c.cidade} className="py-5 flex items-center justify-between first:pt-0">
+                  <div className="flex items-center gap-3">
+                    <MapPin className="h-3.5 w-3.5 text-[#383838] shrink-0" />
+                    <p className="text-sm text-[#c0c0c0]">{c.cidade}</p>
+                  </div>
+                  <span className="text-xs font-mono text-[#383838]">{c.status}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── DEPOIMENTOS ──────────────────────────── */}
+      <Reveal>
+        <section className="bg-[#0d0d0d] border-y border-white/5">
+          <div className="max-w-5xl mx-auto px-6 sm:px-10 py-20">
+            <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
+              <div className="space-y-6">
+                <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="block text-[80px] leading-none text-[#c79a3b]/8 select-none -mb-6">
+                  "
+                </span>
+                <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-xl sm:text-2xl text-[#888888] leading-relaxed font-light italic">
+                  {featuredDepo.texto}
+                </p>
+                <div>
+                  <p className="text-sm font-semibold text-[#d0d0d0]">{featuredDepo.nome}</p>
+                  <p className="text-xs text-[#404040] mt-0.5">{featuredDepo.papel}</p>
+                </div>
+              </div>
+
+              <div className="divide-y divide-white/5">
+                {otherDepos.map((d, i) => (
+                  <div key={i} className="py-6 space-y-3 first:pt-0">
+                    <p className="text-sm text-[#484848] leading-relaxed italic">"{d.texto}"</p>
+                    <div>
+                      <p className="text-xs font-semibold text-[#808080]">{d.nome}</p>
+                      <p className="text-[11px] text-[#383838] mt-0.5">{d.papel}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── INVESTIMENTO ─────────────────────────── */}
+      <Reveal>
+        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-20">
+          <div className="grid sm:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <div className="space-y-4">
+              <h2
+                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                className="text-4xl sm:text-5xl font-bold text-[#f0f0f0]"
+              >
+                Investimento.
+              </h2>
+              <p className="text-sm text-[#484848] leading-relaxed">
+                O valor varia por cidade e data. Entre em contato para saber o valor da próxima edição na sua região.
+              </p>
+              <p className="text-xs text-[#383838]">Pix com desconto · Parcelamento em até 6x · Desconto para alunos IDM</p>
+            </div>
+            <div className="space-y-5 pt-2">
+              <a
+                href={WA_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2.5 py-4 rounded-xl bg-[#c79a3b] text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Saber o valor da minha cidade
+              </a>
+              <p className="text-xs text-[#383838] text-center">Garantia de 7 dias · Política de cancelamento no FAQ abaixo</p>
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── FAQ ──────────────────────────────────── */}
+      <Reveal>
+        <section className="bg-[#0d0d0d] border-y border-white/5">
+          <div className="max-w-3xl mx-auto px-6 sm:px-10 py-20">
+            <h2
+              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+              className="text-4xl sm:text-5xl font-bold text-[#f0f0f0] mb-10"
+            >
+              Dúvidas.
+            </h2>
+            <Accordion type="single" collapsible>
+              <div className="divide-y divide-white/5">
+                {faqItems.map((item, i) => (
+                  <AccordionItem key={i} value={`faq-${i}`} className="border-0">
+                    <AccordionTrigger className="hover:no-underline py-5 text-left text-sm font-medium text-[#b0b0b0] hover:text-[#f0f0f0] transition-colors">
+                      {item.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-[#505050] leading-relaxed pb-5">
+                      {item.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </div>
             </Accordion>
-            <p className="text-sm text-[#404040]">
+            <p className="text-xs text-[#383838] mt-8">
               Outras dúvidas?{' '}
-              <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="text-[#c79a3b] hover:underline">
+              <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="text-[#555555] hover:text-[#888888] transition-colors underline underline-offset-2">
                 Fale diretamente com a equipe.
               </a>
             </p>
           </div>
         </section>
-      </RevealSection>
+      </Reveal>
 
       {/* ── CTA FINAL ─────────────────────────────── */}
-      <RevealSection>
-        <section className="relative overflow-hidden py-24">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-[#c79a3b]/5 blur-[120px] pointer-events-none" />
-          <div className="relative max-w-2xl mx-auto px-6 sm:px-10 text-center space-y-7">
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-4xl sm:text-5xl font-bold text-[#f0f0f0] leading-tight"
+      <section
+        className="relative overflow-hidden py-32"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0)',
+          backgroundSize: '48px 48px',
+        }}
+      >
+        <Reveal className="relative max-w-3xl mx-auto px-6 sm:px-10 space-y-10">
+          <h2
+            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#f0f0f0] leading-[1.0]"
+          >
+            O IDM está<br />chegando até você.
+          </h2>
+          <div className="flex flex-col sm:flex-row items-start gap-4">
+            <a
+              href={WA_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-8 py-4 text-base font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
+              style={{ boxShadow: '0 8px 32px rgba(199,154,59,0.22)' }}
             >
-              O IDM está<br />
-              <span className="text-[#c79a3b] italic">chegando até você.</span>
-            </h2>
-            <p className="text-[#606060] max-w-sm mx-auto text-sm">
-              Entre na lista de espera e garanta prioridade nas inscrições da sua cidade.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href={WA_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2.5 rounded-2xl bg-[#c79a3b] px-10 py-4 text-base font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
-                style={{ boxShadow: '0 12px 40px rgba(199,154,59,0.3)' }}
-              >
-                <MessageCircle className="h-4 w-4" />
-                Entrar na lista de espera
-              </a>
-              <Link href="/programas/psicanalise-integrativa" className="text-sm text-[#505050] hover:text-[#a0a0a0] transition-colors">
-                → Ver formação online
-              </Link>
-            </div>
+              <MessageCircle className="h-4 w-4" />
+              Entrar na lista de espera
+            </a>
+            <Link
+              href="/programas/psicanalise-integrativa"
+              className="inline-flex items-center py-4 text-sm text-[#444444] hover:text-[#707070] transition-colors"
+            >
+              → Ver formação online
+            </Link>
           </div>
-        </section>
-      </RevealSection>
+          <p className="text-xs font-mono text-[#303030]">
+            Vagas limitadas por cidade · Prioridade para lista de espera
+          </p>
+        </Reveal>
+      </section>
     </>
   )
 }

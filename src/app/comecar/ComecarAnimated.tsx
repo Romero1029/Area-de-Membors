@@ -188,72 +188,55 @@ export function ComecarAnimated({ depos, programas }: Props) {
   return (
     <>
       {/* ── 1. HERO ─────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center pt-16 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full bg-[#c79a3b]/4 blur-[160px]" />
-        </div>
+      <section
+        className="relative min-h-screen flex flex-col justify-end pb-20 pt-32 overflow-hidden"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0)',
+          backgroundSize: '48px 48px',
+        }}
+      >
+        <div className="absolute top-1/3 left-1/4 w-[700px] h-[700px] rounded-full bg-[#c79a3b]/4 blur-[260px] pointer-events-none" />
 
-        <div className="relative w-full max-w-3xl mx-auto px-6 sm:px-10 py-24 space-y-8">
-          <motion.h1
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.04] text-[#f0f0f0]"
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            Você não falta<br />força de vontade.
-            <br />
-            <motion.span
-              className="text-[#c79a3b] italic"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-            >
-              Falta entender o<br />que está por baixo.
-            </motion.span>
-          </motion.h1>
-
-          <motion.p
-            className="text-lg sm:text-xl text-[#606060] leading-relaxed max-w-xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25, duration: 0.6 }}
-          >
-            O Instituto Despertamente usa neurociência, psicanálise e PNL para que você entenda — de verdade — por que repete os mesmos padrões. E como parar.
-          </motion.p>
-
+        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full space-y-10">
           <motion.div
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+            className="space-y-7"
           >
-            <Link
-              href="/register"
-              className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-8 py-4 text-base font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
-              style={{ boxShadow: '0 8px 32px rgba(199,154,59,0.28)' }}
+            <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#404040]">
+              Instituto Despertamente
+            </p>
+            <h1
+              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+              className="text-[60px] sm:text-[76px] lg:text-[96px] font-bold leading-[0.97] text-[#f0f0f0] tracking-tight max-w-3xl"
             >
-              Começar agora — é grátis
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <a
-              href={WA_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-[#505050] hover:text-[#a0a0a0] transition-colors"
-            >
-              → Falar com a equipe pelo WhatsApp
-            </a>
+              Você não falta<br />força de vontade.
+            </h1>
+            <div className="w-full max-w-3xl h-px bg-white/6" />
           </motion.div>
 
-          <motion.p
-            className="text-xs text-[#3a3a3a]"
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="grid sm:grid-cols-[1fr_auto] gap-8 items-end max-w-3xl"
           >
-            2.400+ pessoas já passaram por aqui.
-          </motion.p>
+            <p className="text-base text-[#4a4a4a] leading-relaxed max-w-md">
+              Falta entender o que está por baixo. O IDM usa neurociência, psicanálise e PNL para que você entenda — de verdade — por que repete os mesmos padrões. E como parar.
+            </p>
+            <div className="flex flex-col items-start sm:items-end gap-3">
+              <Link
+                href="/register"
+                className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-7 py-3.5 text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors whitespace-nowrap"
+                style={{ boxShadow: '0 8px 32px rgba(199,154,59,0.22)' }}
+              >
+                Começar agora — é grátis
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <p className="text-[11px] font-mono text-[#303030]">2.400+ pessoas · cadastro gratuito</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -283,24 +266,24 @@ export function ComecarAnimated({ depos, programas }: Props) {
         </section>
       </RevealSection>
 
-      {/* ── 4. PARA QUEM É — divide-y, sem cards ── */}
+      {/* ── 4. PARA QUEM É ──────────────────────── */}
       <RevealSection>
-        <section className="max-w-4xl mx-auto px-6 sm:px-10 py-20">
-          <h2
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-3xl sm:text-4xl font-bold text-[#f0f0f0] mb-10"
-          >
-            Você se reconhece aqui?
-          </h2>
-          <div className="divide-y divide-white/6">
-            {dores.map((d, i) => (
-              <div key={i} className="py-8 grid sm:grid-cols-2 gap-5 sm:gap-12 items-start">
-                <p className="text-xl font-light text-[#f0f0f0]/55 italic leading-snug">
-                  &ldquo;{d.problema}&rdquo;
-                </p>
-                <p className="text-sm text-[#606060] leading-relaxed">{d.solucao}</p>
-              </div>
-            ))}
+        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-20">
+          <div className="grid sm:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <h2
+              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+              className="text-4xl sm:text-5xl font-bold text-[#f0f0f0] leading-tight"
+            >
+              Você se<br />reconhece aqui?
+            </h2>
+            <div className="divide-y divide-white/6">
+              {dores.map((d, i) => (
+                <div key={i} className="py-6 first:pt-0 space-y-2">
+                  <p className="text-sm text-[#707070] leading-relaxed">{d.problema}</p>
+                  <p className="text-xs text-[#484848] leading-relaxed">{d.solucao}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       </RevealSection>
@@ -311,10 +294,9 @@ export function ComecarAnimated({ depos, programas }: Props) {
           <div className="max-w-4xl mx-auto px-6 sm:px-10 py-20 space-y-12">
             <h2
               style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-3xl sm:text-4xl font-bold text-[#f0f0f0]"
+              className="text-4xl sm:text-5xl font-bold text-[#f0f0f0]"
             >
-              Por que o método IDM funciona<br />
-              <span className="text-[#c79a3b] italic">quando os outros não funcionaram.</span>
+              Por que o<br />método IDM<br />funciona.
             </h2>
             <div className="space-y-10">
               {pilares.map((p) => (
@@ -443,7 +425,7 @@ export function ComecarAnimated({ depos, programas }: Props) {
                 <h2 style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-2xl sm:text-3xl font-bold text-[#f0f0f0]">
                   {FUNDADOR_DATA.nome}
                 </h2>
-                <p className="text-sm text-[#c79a3b] mt-1">{FUNDADOR_DATA.cargo}</p>
+                <p className="text-xs font-mono text-[#c79a3b]/70 mt-1.5 tracking-wider uppercase">{FUNDADOR_DATA.cargo}</p>
               </div>
               {FUNDADOR_DATA.bio.map((paragraph, i) => (
                 <p key={i} className="text-[#606060] leading-relaxed text-sm">{paragraph}</p>
@@ -565,71 +547,76 @@ export function ComecarAnimated({ depos, programas }: Props) {
         </section>
       </RevealSection>
 
-      {/* ── 12. FAQ — sem número prefixo ─────────── */}
+      {/* ── 12. FAQ ──────────────────────────────── */}
       <RevealSection>
-        <section id="faq" className="max-w-3xl mx-auto px-6 sm:px-10 py-20 space-y-10">
+        <section id="faq" className="max-w-3xl mx-auto px-6 sm:px-10 py-20">
           <h2
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-3xl sm:text-4xl font-bold text-[#f0f0f0]"
+            className="text-4xl sm:text-5xl font-bold text-[#f0f0f0] mb-10"
           >
-            Perguntas frequentes.
+            Dúvidas.
           </h2>
-          <Accordion type="single" collapsible className="space-y-1.5">
-            {faqItems.map((item, i) => (
-              <AccordionItem
-                key={i}
-                value={`item-${i}`}
-                className="border border-[#1a1a1a] rounded-xl bg-[#0d0d0d] px-5 data-[state=open]:border-[#252525] transition-colors"
-              >
-                <AccordionTrigger className="text-[#c0c0c0] font-medium text-sm hover:no-underline hover:text-[#f0f0f0] py-4 text-left">
-                  {item.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-[#606060] text-sm leading-relaxed pb-4">
-                  {item.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
+          <Accordion type="single" collapsible>
+            <div className="divide-y divide-white/5">
+              {faqItems.map((item, i) => (
+                <AccordionItem key={i} value={`item-${i}`} className="border-0">
+                  <AccordionTrigger className="hover:no-underline py-5 text-left text-sm font-medium text-[#b0b0b0] hover:text-[#f0f0f0] transition-colors">
+                    {item.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-sm text-[#505050] leading-relaxed pb-5">
+                    {item.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </div>
           </Accordion>
-          <p className="text-sm text-[#404040]">
+          <p className="text-xs text-[#383838] mt-8">
             Mais dúvidas?{' '}
-            <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="text-[#c79a3b] hover:underline">
+            <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="text-[#555555] hover:text-[#888888] transition-colors underline underline-offset-2">
               Fale com a equipe pelo WhatsApp.
             </a>
           </p>
         </section>
       </RevealSection>
 
-      {/* ── 13. CTA FINAL — sem 3 bullet points ─── */}
-      <RevealSection>
-        <section className="relative overflow-hidden py-24 border-t border-white/5">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-[#c79a3b]/5 blur-[120px] pointer-events-none" />
-          <div className="relative max-w-2xl mx-auto px-6 sm:px-10 text-center space-y-7">
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-4xl sm:text-5xl font-bold text-[#f0f0f0] leading-tight"
+      {/* ── 13. CTA FINAL ───────────────────────── */}
+      <section
+        className="relative overflow-hidden py-32"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0)',
+          backgroundSize: '48px 48px',
+        }}
+      >
+        <RevealSection className="relative max-w-3xl mx-auto px-6 sm:px-10 space-y-10">
+          <h2
+            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#f0f0f0] leading-[1.0]"
+          >
+            Sua conta é gratuita.<br />Começa agora.
+          </h2>
+          <div className="flex flex-col sm:flex-row items-start gap-4">
+            <Link
+              href="/register"
+              className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-8 py-4 text-base font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
+              style={{ boxShadow: '0 8px 32px rgba(199,154,59,0.22)' }}
             >
-              Sua conta é gratuita.<br />
-              <span className="text-[#c79a3b] italic">Começa agora.</span>
-            </h2>
-            <p className="text-[#606060] max-w-sm mx-auto text-sm">
-              Mais de 2.400 pessoas já tomaram essa decisão. A próxima é você.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/register"
-                className="group inline-flex items-center gap-2.5 rounded-2xl bg-[#c79a3b] px-10 py-4 text-base font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
-                style={{ boxShadow: '0 12px 40px rgba(199,154,59,0.3)' }}
-              >
-                Criar minha conta gratuita
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-[#505050] hover:text-[#a0a0a0] transition-colors">
-                → WhatsApp
-              </a>
-            </div>
+              Criar minha conta gratuita
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <a
+              href={WA_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center py-4 text-sm text-[#444444] hover:text-[#707070] transition-colors"
+            >
+              → WhatsApp
+            </a>
           </div>
-        </section>
-      </RevealSection>
+          <p className="text-xs font-mono text-[#303030]">
+            2.400+ pessoas · cadastro gratuito · garantia de 7 dias
+          </p>
+        </RevealSection>
+      </section>
     </>
   )
 }
