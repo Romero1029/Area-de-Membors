@@ -64,7 +64,7 @@ function PsicanaliseSection() {
       {/* ── Texto central ── */}
       <FadeIn direction="none" className="text-center space-y-4 mb-8">
         <span
-          className="inline-block rounded-full bg-[#FFB800] px-6 py-2 text-[11px] font-black uppercase tracking-[0.13em] text-[#0B0F1A]"
+          className="inline-block rounded-full bg-[#FFB800] px-6 py-2 text-[11px] font-black uppercase tracking-[0.13em] text-[#0D1638]"
           style={{ boxShadow: '0 0 0 5px rgba(255,184,0,0.12), 0 4px 18px rgba(255,184,0,0.28)' }}
         >
           Formação Certificada · Parceria Universitária
@@ -87,7 +87,7 @@ function PsicanaliseSection() {
         <div className="pt-1">
           <Link
             href="/turma38"
-            className="inline-flex rounded-full bg-[#FFB800] px-8 py-3 text-sm font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
+            className="inline-flex rounded-full bg-[#FFB800] px-8 py-3 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
             style={{ boxShadow: '0 4px 28px rgba(255,184,0,0.35)' }}
           >
             Criar Minha Conta
@@ -121,13 +121,98 @@ function PsicanaliseSection() {
             className="grid grid-cols-2 grid-rows-2 gap-2.5"
             style={{ height: 'clamp(360px, 46vw, 500px)' }}
           >
-            <div className="row-span-2 rounded-2xl bg-[#0F1523] border border-white/7" />
-            <div className="rounded-2xl bg-[#0F1523] border border-white/7" />
-            <div className="rounded-2xl bg-[#0F1523] border border-white/7" />
+            <div className="row-span-2 rounded-2xl bg-[#111D48] border border-white/7" />
+            <div className="rounded-2xl bg-[#111D48] border border-white/7" />
+            <div className="rounded-2xl bg-[#111D48] border border-white/7" />
           </div>
 
         </div>
       </FadeIn>
+    </section>
+  )
+}
+
+// ─────────────────────────────────────────────
+// SEÇÃO — SOBRE O INSTITUTO
+// ─────────────────────────────────────────────
+const VALORES = ['Integratividade', 'Consciência', 'Transformação', 'Presença']
+
+function SobreCarousel() {
+  const [idx, setIdx] = useState(0)
+  const total = VALORES.length
+  const prev  = () => setIdx(i => (i === 0 ? total - 1 : i - 1))
+  const next  = () => setIdx(i => (i === total - 1 ? 0 : i + 1))
+
+  return (
+    <div className="space-y-4">
+      <p
+        style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+        className="text-center text-xl font-bold text-white tracking-wide"
+      >
+        {VALORES[idx]}
+      </p>
+      <div className="flex items-center gap-3 sm:gap-5">
+        <button
+          onClick={prev}
+          type="button"
+          className="w-10 h-10 shrink-0 rounded-full border border-white/15 bg-white/4 flex items-center justify-center text-white/60 hover:text-white hover:border-[#FFB800]/35 hover:bg-[#FFB800]/8 transition-all"
+          aria-label="Anterior"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <div className="flex-1 aspect-square rounded-2xl bg-[#111D48] border border-white/7" />
+        <button
+          onClick={next}
+          type="button"
+          className="w-10 h-10 shrink-0 rounded-full border border-white/15 bg-white/4 flex items-center justify-center text-white/60 hover:text-white hover:border-[#FFB800]/35 hover:bg-[#FFB800]/8 transition-all"
+          aria-label="Próximo"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
+      <div className="flex justify-center gap-2">
+        {VALORES.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => setIdx(i)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === idx ? 'w-6 bg-[#FFB800]' : 'w-1.5 bg-white/20 hover:bg-white/40'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function SobreSection() {
+  return (
+    <section className="max-w-5xl mx-auto px-6 sm:px-10 pt-14 pb-10">
+
+      {/* Pill outlined */}
+      <FadeIn direction="none" className="flex justify-center mb-10">
+        <span className="inline-block rounded-full border border-white/35 px-6 py-2 text-sm font-semibold text-white/80 tracking-wide">
+          Sobre o Instituto Despertamente
+        </span>
+      </FadeIn>
+
+      {/* Mosaico 3 + 2 */}
+      <FadeIn>
+        <div className="grid grid-cols-6 gap-2 sm:gap-3">
+          <div className="col-span-2 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
+          <div className="col-span-2 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
+          <div className="col-span-2 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
+          <div className="col-span-3 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
+          <div className="col-span-3 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
+        </div>
+      </FadeIn>
+
+      {/* Carousel de valores */}
+      <FadeIn delay={80} className="mt-10 max-w-xs mx-auto sm:max-w-sm">
+        <SobreCarousel />
+      </FadeIn>
+
     </section>
   )
 }
@@ -234,7 +319,7 @@ function VideoCard({
             >
               <Play
                 className={`h-5 w-5 ml-0.5 ${
-                  video_id ? 'fill-[#0B0F1A] text-[#0B0F1A]' : 'text-white/20'
+                  video_id ? 'fill-[#0D1638] text-[#0D1638]' : 'text-white/20'
                 }`}
               />
             </div>
@@ -344,7 +429,7 @@ export function ComecarAnimated({
   programas: Programa[]
 }) {
   return (
-    <main className="bg-[#0B0F1A] text-white overflow-x-hidden">
+    <main className="bg-[#0D1638] text-white overflow-x-hidden">
 
       {/* ══════════════════════════════════
           1 — HERO
@@ -364,7 +449,12 @@ export function ComecarAnimated({
       <PsicanaliseSection />
 
       {/* ══════════════════════════════════
-          3 — DIVISOR AMARELO (lead fino)
+          3 — SOBRE O INSTITUTO
+      ══════════════════════════════════ */}
+      <SobreSection />
+
+      {/* ══════════════════════════════════
+          4 — DIVISOR AMARELO (lead fino)
       ══════════════════════════════════ */}
       <div
         id="projetos"
@@ -504,7 +594,7 @@ export function ComecarAnimated({
           <FadeIn className="text-center">
             <Link
               href="/programas/psicanalise-integrativa"
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#FFB800] px-7 py-4 text-sm font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center gap-2 rounded-2xl bg-[#FFB800] px-7 py-4 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
             >
               Ver a formação completa <ArrowRight className="h-4 w-4" />
             </Link>
@@ -583,7 +673,7 @@ export function ComecarAnimated({
               },
             ].map((card, i) => (
               <FadeIn key={card.titulo} delay={i * 120}>
-                <div className="rounded-2xl border border-white/6 bg-[#0B0F1A] overflow-hidden h-full flex flex-col">
+                <div className="rounded-2xl border border-white/6 bg-[#0D1638] overflow-hidden h-full flex flex-col">
                   <ImgPlaceholder aspect="aspect-video" label={card.label} />
                   <div className="px-5 pb-5 pt-4 space-y-3 flex-1 flex flex-col">
                     <h3 className="text-lg font-semibold text-white">{card.titulo}</h3>
@@ -591,7 +681,7 @@ export function ComecarAnimated({
                     <div>
                       <Link
                         href="/programas/idm-pelo-brasil"
-                        className="inline-flex items-center gap-2 rounded-xl bg-[#FFB800] px-5 py-2.5 text-xs font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
+                        className="inline-flex items-center gap-2 rounded-xl bg-[#FFB800] px-5 py-2.5 text-xs font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
                       >
                         Ver datas <ArrowRight className="h-3.5 w-3.5" />
                       </Link>
@@ -635,7 +725,7 @@ export function ComecarAnimated({
       ══════════════════════════════════ */}
       <section
         className="relative py-28 sm:py-36 px-5 sm:px-10 text-center overflow-hidden"
-        style={{ ...DOT_GRID, background: '#0B0F1A' }}
+        style={{ ...DOT_GRID, background: '#0D1638' }}
       >
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-[500px] h-[300px] rounded-full bg-[#FFB800]/5 blur-[110px]" />
@@ -656,7 +746,7 @@ export function ComecarAnimated({
           <div>
             <Link
               href="/turma38"
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#FFB800] px-9 py-5 text-base font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center gap-2 rounded-2xl bg-[#FFB800] px-9 py-5 text-base font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
               style={{ boxShadow: '0 8px 52px rgba(255,184,0,0.28)' }}
             >
               Começar agora — é grátis <ArrowRight className="h-4 w-4" />

@@ -52,7 +52,7 @@ export default async function ComecarPage() {
   }))
 
   return (
-    <div className="min-h-screen bg-[#0B0F1A] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#0D1638] text-white overflow-x-hidden">
 
       {/* Navbar */}
       <NavbarComecar />
@@ -70,7 +70,7 @@ export default async function ComecarPage() {
       <ComecarAnimated depos={depos} programas={programas} />
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-white/8 bg-[#070B14]">
+      <footer className="border-t border-white/8 bg-[#09122C]">
         <div className="max-w-5xl mx-auto px-6 sm:px-10 py-14">
 
           {/* 4-column grid */}

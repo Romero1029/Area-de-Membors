@@ -84,7 +84,7 @@ html { scroll-behavior: smooth; }
   --color-border:            var(--border);
   --color-input:             var(--input);
   --color-ring:              var(--ring);
-  --font-sans:               var(--font-manrope, 'Manrope', system-ui, sans-serif);
+  --font-sans:               var(--font-poppins, 'Poppins', system-ui, sans-serif);
   --font-display:            var(--font-fraunces, 'Fraunces', Georgia, serif);
 }
 
@@ -102,7 +102,7 @@ html {
 body {
   background: var(--bg-base);
   color: var(--text-primary);
-  font-family: var(--font-manrope, 'Manrope'), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-poppins, 'Poppins'), system-ui, -apple-system, sans-serif;
   font-size: 15px;
   line-height: 1.6;
   letter-spacing: 0.015em;

@@ -32,7 +32,7 @@ export function NavbarComecar() {
       <nav
         className={`fixed top-0 inset-x-0 z-50 flex items-center justify-between px-5 sm:px-8 h-16 transition-all duration-300 ${
           scrolled || open
-            ? 'bg-[#0B0F1A]/96 backdrop-blur-xl border-b border-white/6 shadow-lg'
+            ? 'bg-[#0D1638]/96 backdrop-blur-xl border-b border-white/6 shadow-lg'
             : 'bg-transparent'
         }`}
       >
@@ -60,7 +60,7 @@ export function NavbarComecar() {
             Já tenho conta
           </Link>
           <Link href="/turma38"
-            className="text-sm font-bold px-4 py-2 rounded-xl bg-[#FFB800] text-[#0B0F1A] hover:bg-[#FFC933] transition-colors">
+            className="text-sm font-bold px-4 py-2 rounded-xl bg-[#FFB800] text-[#0D1638] hover:bg-[#FFC933] transition-colors">
             Começar grátis
           </Link>
         </div>
@@ -81,7 +81,7 @@ export function NavbarComecar() {
         <div className="fixed inset-0 z-40 md:hidden" onClick={() => setOpen(false)}>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
           <div
-            className="absolute top-16 left-0 right-0 bg-[#0B0F1A] border-b border-white/8 px-5 py-4 space-y-1"
+            className="absolute top-16 left-0 right-0 bg-[#0D1638] border-b border-white/8 px-5 py-4 space-y-1"
             onClick={e => e.stopPropagation()}
           >
             {navLinks.map(l => (
@@ -93,7 +93,7 @@ export function NavbarComecar() {
             ))}
             <div className="pt-3 mt-1 space-y-2 border-t border-white/8">
               <Link href="/turma38"
-                className="flex items-center justify-center py-3.5 rounded-xl text-[15px] font-bold bg-[#FFB800] text-[#0B0F1A] hover:bg-[#FFC933] transition-colors"
+                className="flex items-center justify-center py-3.5 rounded-xl text-[15px] font-bold bg-[#FFB800] text-[#0D1638] hover:bg-[#FFC933] transition-colors"
                 onClick={() => setOpen(false)}>
                 Começar grátis
               </Link>
