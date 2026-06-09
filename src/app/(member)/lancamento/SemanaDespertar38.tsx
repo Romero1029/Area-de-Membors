@@ -17,11 +17,32 @@ const INTRO_VIDEO_ID = ''
 const EBOOK_URL = '#'
 
 const OFERTA = {
-  nome: 'Em breve',
-  descricao: 'O produto especial será revelado durante a Semana do Despertar.',
-  preco: 'A confirmar',
-  url: '#',
-  ativo: false,
+  ativo: false,                           // mude para true ao lançar o produto
+
+  // ── A · ATENÇÃO ──────────────────────────
+  // Headline que para. Pode ser uma pergunta ou uma afirmação ousada.
+  atencao: 'Você acabou de provar que é diferente.',
+
+  // ── I · INTERESSE ────────────────────────
+  // 1-2 frases conectando a jornada atual ao produto. Fale da dor ou do próximo passo.
+  interesse: 'A maioria das pessoas para na teoria. Você foi até aqui — e isso muda tudo. Agora existe um caminho mais rápido para ir além.',
+
+  // ── D · DESEJO ───────────────────────────
+  nome: 'Nome do produto aqui',           // ex: 'Método IDM Acelerado'
+  descricao: 'Uma frase de impacto sobre a transformação que o produto entrega.',
+  beneficios: [                           // 3-4 resultados concretos (não features)
+    'O que a pessoa vai conseguir fazer',
+    'Resultado específico em X tempo',
+    'O que ela vai parar de sofrer',
+    'Bônus ou acesso exclusivo',
+  ],
+
+  // ── A · AÇÃO ─────────────────────────────
+  preco_original: 'R$ 297',              // riscado (âncora de preço)
+  preco: 'R$ 47',                        // oferta real
+  parcelamento: 'ou 3× de R$ 16,90',    // deixe '' para não mostrar
+  urgencia: 'Disponível só durante a Semana do Despertar.',
+  url: '#',                              // link do checkout
 }
 
 const AULAS: Aula[] = [
@@ -136,7 +157,7 @@ function openCalendar(aula: Aula) {
 }
 
 // ─────────────────────────────────────────────
-// OFERTA MODAL — "sorteio"
+// OFERTA MODAL — low ticket reveal
 // ─────────────────────────────────────────────
 
 function OfertaModal({
@@ -148,7 +169,6 @@ function OfertaModal({
   onAceitar: () => void
   onFechar: () => void
 }) {
-  // lock body scroll while open
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
@@ -156,127 +176,157 @@ function OfertaModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-5"
-      style={{ background: 'rgba(0,0,0,0.82)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:px-5"
+      style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}
       onClick={onFechar}
     >
-      {/* Floating particles */}
+      {/* Particles */}
       {[
-        { top: '18%', left: '12%', d: '0s',   dur: '2.4s' },
-        { top: '72%', left: '18%', d: '0.4s', dur: '2.0s' },
-        { top: '25%', left: '80%', d: '0.7s', dur: '2.6s' },
-        { top: '68%', left: '78%', d: '0.2s', dur: '1.8s' },
-        { top: '50%', left: '6%',  d: '0.9s', dur: '2.2s' },
-        { top: '50%', left: '92%', d: '0.5s', dur: '2.8s' },
+        { top: '15%', left: '10%', d: '0s',   dur: '2.4s' },
+        { top: '75%', left: '15%', d: '0.5s', dur: '2.0s' },
+        { top: '20%', left: '82%', d: '0.8s', dur: '2.6s' },
+        { top: '70%', left: '80%', d: '0.3s', dur: '1.9s' },
       ].map((p, i) => (
-        <span
-          key={i}
-          className="absolute w-1 h-1 rounded-full bg-[#c79a3b]/50 animate-ping pointer-events-none"
-          style={{ top: p.top, left: p.left, animationDelay: p.d, animationDuration: p.dur }}
-        />
+        <span key={i} className="absolute w-1 h-1 rounded-full bg-[#c79a3b]/40 animate-ping pointer-events-none"
+          style={{ top: p.top, left: p.left, animationDelay: p.d, animationDuration: p.dur }} />
       ))}
 
-      {/* Card */}
+      {/* Card — bottom sheet on mobile, centered on desktop */}
       <div
-        className="relative w-full max-w-sm rounded-3xl overflow-hidden"
+        className="relative w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #141408 0%, #0d0d0d 60%, #0a0a0a 100%)',
-          border: '1px solid rgba(199,154,59,0.25)',
-          boxShadow: '0 0 80px rgba(199,154,59,0.12), 0 24px 64px rgba(0,0,0,0.6)',
+          background: 'linear-gradient(170deg, #131208 0%, #0d0d0d 50%, #0a0a0a 100%)',
+          border: '1px solid rgba(199,154,59,0.22)',
+          boxShadow: '0 0 100px rgba(199,154,59,0.10), 0 32px 80px rgba(0,0,0,0.7)',
         }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Top shimmer line */}
+        {/* Shimmer top */}
         <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, #c79a3b, #e8b84b, #c79a3b, transparent)' }} />
 
+        {/* Drag handle (mobile) */}
+        <div className="flex justify-center pt-3 sm:hidden">
+          <div className="w-9 h-1 rounded-full bg-white/10" />
+        </div>
+
         {/* Close */}
-        <button
-          onClick={onFechar}
-          className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-[#484848] hover:text-[#a0a0a0] transition-colors"
-        >
+        <button onClick={onFechar}
+          className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-[#484848] hover:text-[#a0a0a0] transition-colors">
           <X className="h-3.5 w-3.5" />
         </button>
 
-        <div className="px-7 pt-8 pb-8 space-y-6">
-          {/* Icon cluster */}
-          <div className="flex items-center gap-1.5">
-            <div className="w-10 h-10 rounded-2xl bg-[#c79a3b]/12 border border-[#c79a3b]/20 flex items-center justify-center">
-              <Sparkles className="h-5 w-5 text-[#c79a3b]" />
-            </div>
-            <div className="flex gap-1">
-              {[0, 1, 2].map(i => (
-                <span
-                  key={i}
-                  className="w-1.5 h-1.5 rounded-full bg-[#c79a3b]/40 animate-pulse"
-                  style={{ animationDelay: `${i * 0.2}s` }}
-                />
-              ))}
-            </div>
+        <div className="px-6 sm:px-7 pt-5 pb-7 space-y-5">
+
+          {/* Hook badge */}
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-[#c79a3b]/25 bg-[#c79a3b]/8 px-3 py-1">
+            <Sparkles className="h-3 w-3 text-[#c79a3b]" />
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#c79a3b]">
+              {firstName}, você foi selecionada
+            </span>
           </div>
 
-          {/* Headline */}
-          <div className="space-y-2">
-            <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#c79a3b]/70">
-              Condição exclusiva
-            </p>
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-[28px] font-bold leading-[1.1] text-[#f0f0f0]"
-            >
-              {firstName}, você foi<br />selecionada.
-            </h2>
-            <p className="text-sm text-[#505050] leading-relaxed">
-              O seu perfil foi identificado e uma condição especial foi liberada exclusivamente para você nesta semana.
-            </p>
-          </div>
-
-          {/* Divider */}
-          <div className="h-px" style={{ background: 'linear-gradient(90deg, #c79a3b22, #c79a3b55, #c79a3b22)' }} />
-
-          {/* Oferta */}
           {OFERTA.ativo ? (
-            <div className="space-y-3">
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-0.5">
-                  <p className="text-xs font-mono uppercase tracking-widest text-[#c79a3b]/60">Produto</p>
-                  <p className="text-base font-semibold text-[#e0e0e0]">{OFERTA.nome}</p>
-                  <p className="text-xs text-[#484848] leading-relaxed">{OFERTA.descricao}</p>
+            <>
+              {/* ── A · ATENÇÃO ── headline que para */}
+              <h2 style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                className="text-2xl sm:text-[26px] font-bold leading-[1.1] text-[#f0f0f0]">
+                {OFERTA.atencao}
+              </h2>
+
+              {/* ── I · INTERESSE ── bridge para o produto */}
+              <p className="text-sm text-[#565656] leading-relaxed">{OFERTA.interesse}</p>
+
+              {/* ── D · DESEJO ── produto + benefícios */}
+              <div className="rounded-2xl border border-white/6 bg-[#080808] p-4 space-y-3">
+                <div>
+                  <p className="text-[11px] font-mono uppercase tracking-widest text-[#c79a3b]/60 mb-1">
+                    Oferta exclusiva
+                  </p>
+                  <p className="text-base font-semibold text-[#e0e0e0] leading-snug">{OFERTA.nome}</p>
+                  <p className="text-xs text-[#484848] mt-1 leading-relaxed">{OFERTA.descricao}</p>
                 </div>
-                <p className="text-2xl font-bold text-[#c79a3b] shrink-0 tabular-nums">{OFERTA.preco}</p>
+                <div className="h-px bg-white/5" />
+                <ul className="space-y-2">
+                  {OFERTA.beneficios.map((b, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
+                      <span className="w-4 h-4 rounded-full bg-[#c79a3b]/15 border border-[#c79a3b]/25 flex items-center justify-center shrink-0 mt-0.5">
+                        <Check className="h-2.5 w-2.5 text-[#c79a3b]" />
+                      </span>
+                      <span className="text-sm text-[#808080]">{b}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+
+              {/* ── A · AÇÃO ── preço + urgência + CTA */}
+              <div className="space-y-3">
+                <div className="flex items-end justify-between gap-3">
+                  <div>
+                    <p className="text-xs text-[#383838] line-through tabular-nums">{OFERTA.preco_original}</p>
+                    <p className="text-4xl font-black text-[#c79a3b] tabular-nums leading-none">{OFERTA.preco}</p>
+                    {OFERTA.parcelamento && (
+                      <p className="text-[11px] text-[#484848] mt-1">{OFERTA.parcelamento}</p>
+                    )}
+                  </div>
+                  {OFERTA.urgencia && (
+                    <p className="text-[11px] text-[#383838] leading-snug text-right max-w-[120px]">
+                      {OFERTA.urgencia}
+                    </p>
+                  )}
+                </div>
+                <a
+                  href={OFERTA.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onAceitar}
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold text-[#080808] transition-all active:scale-[0.98]"
+                  style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', boxShadow: '0 8px 32px rgba(199,154,59,0.30)' }}
+                >
+                  <ShoppingBag className="h-4 w-4" />
+                  Quero aproveitar essa condição
+                </a>
+                <button onClick={onFechar}
+                  className="w-full py-2 text-xs text-[#363636] hover:text-[#606060] transition-colors">
+                  Não, obrigada
+                </button>
+              </div>
+            </>
           ) : (
-            <div className="rounded-xl border border-[#c79a3b]/12 bg-[#c79a3b]/4 px-4 py-3">
-              <p className="text-xs text-[#c79a3b]/70 leading-relaxed">
-                A oferta será revelada durante a Semana do Despertar. Sua condição exclusiva já está reservada.
+            /* Produto ainda não definido — AIDA com placeholder */
+            <>
+              {/* A */}
+              <h2 style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                className="text-2xl font-bold leading-[1.1] text-[#f0f0f0]">
+                Você acabou de provar<br />que é diferente.
+              </h2>
+              {/* I */}
+              <p className="text-sm text-[#565656] leading-relaxed">
+                A maioria das pessoas desiste antes da aula introdutória. Você foi até aqui — e por isso uma condição especial foi reservada para o seu perfil.
               </p>
-            </div>
+              {/* D */}
+              <div className="rounded-xl border border-[#c79a3b]/12 bg-[#c79a3b]/4 px-4 py-3 space-y-1">
+                <p className="text-xs font-semibold text-[#c79a3b]/70">Oferta exclusiva em breve</p>
+                <p className="text-xs text-[#505050] leading-relaxed">
+                  Os detalhes do produto serão revelados durante a Semana do Despertar. Você já está na fila de acesso prioritário.
+                </p>
+              </div>
+              {/* A */}
+              <div className="space-y-2.5">
+                <button
+                  onClick={onAceitar}
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold text-[#080808] transition-all"
+                  style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', boxShadow: '0 8px 32px rgba(199,154,59,0.25)' }}
+                >
+                  Garantir minha condição exclusiva
+                </button>
+                <button onClick={onFechar}
+                  className="w-full py-2 text-xs text-[#363636] hover:text-[#606060] transition-colors">
+                  Ver depois
+                </button>
+              </div>
+            </>
           )}
-
-          {/* CTAs */}
-          <div className="space-y-2.5">
-            <a
-              href={OFERTA.ativo ? OFERTA.url : '#'}
-              target={OFERTA.ativo ? '_blank' : undefined}
-              rel="noopener noreferrer"
-              onClick={onAceitar}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold text-[#080808] transition-all hover:brightness-110"
-              style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', boxShadow: '0 8px 32px rgba(199,154,59,0.28)' }}
-            >
-              <ShoppingBag className="h-4 w-4" />
-              {OFERTA.ativo ? 'Quero aproveitar' : 'Entendi, reservar minha condição'}
-            </a>
-            <button
-              onClick={onFechar}
-              className="w-full py-2 text-xs text-[#383838] hover:text-[#606060] transition-colors"
-            >
-              Ver depois
-            </button>
-          </div>
         </div>
-
-        {/* Bottom shimmer line */}
-        <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, #c79a3b33, transparent)' }} />
       </div>
     </div>
   )
