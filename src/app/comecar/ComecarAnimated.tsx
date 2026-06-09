@@ -51,7 +51,7 @@ const DOT_GRID = {
 // CURSOR LOGO — troque o src por /logo-cursor.png
 // quando subir o logo 3D na pasta /public
 // ─────────────────────────────────────────────
-const CURSOR_LOGO_SRC = '/despertamente-simbolo.png' // ← troque quando tiver o 3D
+const CURSOR_LOGO_SRC = '/logo-cursor.png'
 
 function CursorLogo() {
   const ref = useRef<HTMLDivElement>(null)
