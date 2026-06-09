@@ -58,86 +58,68 @@ const CURSOR_LOGO_SRC = '/logo-cursor.png'
 // suavemente (parallax)
 // ─────────────────────────────────────────────
 function PsicanaliseSection() {
-
   return (
-    <section className="max-w-5xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
+    <section className="max-w-5xl mx-auto px-6 sm:px-10 pt-14 pb-10">
 
       {/* ── Texto central ── */}
-      <div className="text-center mb-16 space-y-6">
+      <FadeIn direction="none" className="text-center space-y-4 mb-8">
+        <span
+          className="inline-block rounded-full bg-[#FFB800] px-6 py-2 text-[11px] font-black uppercase tracking-[0.13em] text-[#0B0F1A]"
+          style={{ boxShadow: '0 0 0 5px rgba(255,184,0,0.12), 0 4px 18px rgba(255,184,0,0.28)' }}
+        >
+          Formação Certificada · Parceria Universitária
+        </span>
 
-        <FadeIn direction="none">
-          <span
-            className="inline-block rounded-full bg-[#FFB800] px-7 py-2.5 text-[11px] font-black uppercase tracking-[0.13em] text-[#0B0F1A]"
-            style={{ boxShadow: '0 0 0 6px rgba(255,184,0,0.12), 0 4px 20px rgba(255,184,0,0.3)' }}
-          >
-            Formação Certificada · Parceria Universitária
-          </span>
-        </FadeIn>
+        <h2
+          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+          className="text-5xl sm:text-6xl lg:text-[5.5rem] font-bold text-white leading-[1.0]"
+        >
+          Psicanálise Integrativa
+        </h2>
 
-        <FadeIn delay={70}>
-          <h2
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.0]"
-          >
-            Psicanálise Integrativa
-          </h2>
-        </FadeIn>
+        <p className="text-white/48 text-base sm:text-lg max-w-sm mx-auto leading-snug">
+          Parceria com a{' '}
+          <strong className="text-white/85 font-semibold">Universidade Anhanguera</strong>.
+          {' '}Certificado nas diretrizes do{' '}
+          <strong className="text-white/85 font-semibold">MEC</strong> com PPC aprovado.
+        </p>
 
-        <FadeIn delay={140}>
-          <p className="text-white/48 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
-            Parceria com a{' '}
-            <strong className="text-white/85 font-semibold">Universidade Anhanguera</strong>.
-            {' '}Certificado seguindo as diretrizes do{' '}
-            <strong className="text-white/85 font-semibold">MEC</strong> com PPC aprovado.
-          </p>
-        </FadeIn>
-
-        <FadeIn delay={200}>
+        <div className="pt-1">
           <Link
             href="/turma38"
-            className="inline-flex rounded-full bg-[#FFB800] px-9 py-3.5 text-[15px] font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
-            style={{ boxShadow: '0 4px 32px rgba(255,184,0,0.35)' }}
+            className="inline-flex rounded-full bg-[#FFB800] px-8 py-3 text-sm font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
+            style={{ boxShadow: '0 4px 28px rgba(255,184,0,0.35)' }}
           >
             Criar Minha Conta
           </Link>
-        </FadeIn>
-      </div>
+        </div>
+      </FadeIn>
 
       {/* ── Logo + Grid ── */}
       <FadeIn delay={60}>
         <div className="relative">
 
-          {/* Logo flutuando — parallax segue cursor */}
-          <div
-            className="flex justify-center"
-            style={{ marginBottom: '-44px', position: 'relative', zIndex: 10 }}
-          >
-            <div className="relative inline-flex items-center justify-center">
+          {/* Logo centralizado, exatamente em cima do grid */}
+          <div className="flex justify-center" style={{ marginBottom: '-48px', position: 'relative', zIndex: 10 }}>
+            <div className="relative">
               <div
-                className="absolute rounded-full blur-3xl pointer-events-none"
-                style={{
-                  width: '180px', height: '180px',
-                  background: 'rgba(255,184,0,0.18)',
-                  transform: 'translate(-50%,-50%)',
-                  top: '50%', left: '50%',
-                }}
+                className="absolute inset-0 rounded-full blur-3xl pointer-events-none scale-[3]"
+                style={{ background: 'rgba(255,184,0,0.2)' }}
               />
               <img
                 src={CURSOR_LOGO_SRC}
                 alt=""
                 draggable={false}
-                className="w-24 h-24 object-contain select-none relative"
-                style={{
-                  filter: 'drop-shadow(0 0 22px rgba(255,184,0,1)) drop-shadow(0 0 55px rgba(255,184,0,0.45))',
-                }}
+                className="w-[96px] h-[96px] object-contain select-none relative"
+                style={{ filter: 'drop-shadow(0 0 20px rgba(255,184,0,1)) drop-shadow(0 0 50px rgba(255,184,0,0.4))' }}
               />
             </div>
           </div>
 
-          {/* Grid assimétrico: esquerda alta | direita 2 empilhadas */}
+          {/* Grid: esquerda alta | direita 2 empilhadas */}
           <div
-            className="grid grid-cols-2 grid-rows-2 gap-3"
-            style={{ height: 'clamp(400px, 50vw, 560px)' }}
+            className="grid grid-cols-2 grid-rows-2 gap-2.5"
+            style={{ height: 'clamp(360px, 46vw, 500px)' }}
           >
             <div className="row-span-2 rounded-2xl bg-[#0F1523] border border-white/7" />
             <div className="rounded-2xl bg-[#0F1523] border border-white/7" />
