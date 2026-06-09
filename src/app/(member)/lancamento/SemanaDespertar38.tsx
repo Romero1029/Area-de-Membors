@@ -219,6 +219,16 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
     <div className="min-h-screen w-full bg-[#0f0f0f]">
       <div className="w-full max-w-2xl mx-auto px-5 sm:px-8 py-10 pb-24 space-y-4">
 
+        {/* ── BANNER DE BOAS-VINDAS ── 672 × 220 px ── */}
+        {/* Substitua este bloco pelo seu banner. Dimensão: 672px × 220px (proporção ~3:1) */}
+        <div
+          className="w-full rounded-2xl overflow-hidden border border-dashed border-white/10 bg-[#0d0d0d] flex flex-col items-center justify-center gap-2"
+          style={{ height: 220 }}
+        >
+          <p className="text-xs font-mono text-[#303030] tracking-widest uppercase">Banner de Boas-Vindas</p>
+          <p className="text-[11px] text-[#252525]">672 × 220 px</p>
+        </div>
+
         {/* Header */}
         <div className="space-y-1 mb-8">
           <p className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#404040]">
