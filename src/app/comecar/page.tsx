@@ -52,7 +52,7 @@ export default async function ComecarPage() {
   }))
 
   return (
-    <div className="min-h-screen bg-[#080808] text-[#f0f0f0] overflow-x-hidden">
+    <div className="min-h-screen bg-[#0B0F1A] text-white overflow-x-hidden">
 
       {/* Navbar */}
       <NavbarComecar />
@@ -70,7 +70,7 @@ export default async function ComecarPage() {
       <ComecarAnimated depos={depos} programas={programas} />
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-white/5 bg-[#050505]">
+      <footer className="border-t border-white/8 bg-[#070B14]">
         <div className="max-w-5xl mx-auto px-6 sm:px-10 py-14">
 
           {/* 4-column grid */}
@@ -81,7 +81,7 @@ export default async function ComecarPage() {
               <div className="flex items-center gap-2.5">
                 <Image src="/despertamente-simbolo-branco.png" alt="IDM" width={26} height={26} className="object-contain opacity-90" />
                 <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-sm font-bold text-[#f0f0f0]">
-                  Instituto <span className="text-[#c79a3b]">Despertamente</span>
+                  Instituto <span className="text-[#FFB800]">Despertamente</span>
                 </span>
               </div>
               <p className="text-xs text-[#505050] leading-relaxed max-w-[200px]">
@@ -116,7 +116,7 @@ export default async function ComecarPage() {
 
             {/* Col 2 — Plataforma */}
             <div className="space-y-4">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#404040]">Plataforma</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-white/25">Plataforma</p>
               <ul className="space-y-2.5">
                 {[
                   { href: '/login', label: 'Login' },
@@ -125,7 +125,7 @@ export default async function ComecarPage() {
                   { href: '/loja', label: 'Programas' },
                 ].map(({ href, label }) => (
                   <li key={href}>
-                    <Link href={href} className="text-xs text-[#505050] hover:text-[#a0a0a0] transition-colors">
+                    <Link href={href} className="text-xs text-white/35 hover:text-white/70 transition-colors">
                       {label}
                     </Link>
                   </li>
@@ -135,7 +135,7 @@ export default async function ComecarPage() {
 
             {/* Col 3 — Conteúdo */}
             <div className="space-y-4">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#404040]">Conteúdo</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-white/25">Conteúdo</p>
               <ul className="space-y-2.5">
                 {[
                   { href: '#metodologia', label: 'Nossa metodologia' },
@@ -144,7 +144,7 @@ export default async function ComecarPage() {
                   { href: '#depoimentos', label: 'Depoimentos' },
                 ].map(({ href, label }) => (
                   <li key={href}>
-                    <a href={href} className="text-xs text-[#505050] hover:text-[#a0a0a0] transition-colors">
+                    <a href={href} className="text-xs text-white/35 hover:text-white/70 transition-colors">
                       {label}
                     </a>
                   </li>
@@ -154,7 +154,7 @@ export default async function ComecarPage() {
 
             {/* Col 4 — Legal */}
             <div className="space-y-4">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#404040]">Legal</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-white/25">Legal</p>
               <ul className="space-y-2.5">
                 {[
                   { href: '/privacidade', label: 'Política de Privacidade' },
@@ -167,7 +167,7 @@ export default async function ComecarPage() {
                       href={href}
                       target={href.startsWith('http') ? '_blank' : undefined}
                       rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className="text-xs text-[#505050] hover:text-[#a0a0a0] transition-colors"
+                      className="text-xs text-white/35 hover:text-white/70 transition-colors"
                     >
                       {label}
                     </a>
@@ -179,10 +179,10 @@ export default async function ComecarPage() {
 
           {/* Bottom bar */}
           <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-[11px] text-[#383838]">
+            <p className="text-[11px] text-white/20">
               © {new Date().getFullYear()} Instituto Despertamente · Todos os direitos reservados
             </p>
-            <p className="text-[11px] text-[#383838]">
+            <p className="text-[11px] text-white/20">
               Feito no Brasil 🇧🇷 · LGPD compliant
             </p>
           </div>
