@@ -2,18 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight, ArrowRight, Play } from 'lucide-react'
-
-// ─────────────────────────────────────────────
-// CONFIG — adicione o ID do YouTube em video_id
-// Exemplo: video_id: 'dQw4w9WgXcQ'
-// ─────────────────────────────────────────────
-const VIDEO_DEPOS: { nome: string; papel: string; video_id: string }[] = [
-  { nome: 'Nome do aluno', papel: 'Psicanálise Integrativa', video_id: '' },
-  { nome: 'Nome do aluno', papel: 'NPA 2.0',                 video_id: '' },
-  { nome: 'Nome do aluno', papel: 'Practitioner PNL',        video_id: '' },
-  { nome: 'Nome do aluno', papel: 'IDM pelo Brasil',         video_id: '' },
-]
+import { ArrowRight } from 'lucide-react'
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -26,165 +15,6 @@ export type Programa = {
   thumbnail_url: string | null
 }
 type Depo = { nome: string; papel: string; texto: string; estrelas: number }
-
-// ─────────────────────────────────────────────
-// HELPERS
-// ─────────────────────────────────────────────
-function ImgPlaceholder({ aspect = 'aspect-video', label = '' }: { aspect?: string; label?: string }) {
-  return (
-    <div className={`w-full ${aspect} rounded-2xl border border-dashed border-white/10 bg-white/[0.03] flex items-center justify-center`}>
-      {label && (
-        <p className="text-[10px] font-mono text-white/15 tracking-widest uppercase px-4 text-center leading-relaxed">
-          {label}
-        </p>
-      )}
-    </div>
-  )
-}
-
-// ─────────────────────────────────────────────
-// LOGO PATH
-// ─────────────────────────────────────────────
-const CURSOR_LOGO_SRC = '/logo-cursor.png'
-
-// ─────────────────────────────────────────────
-// SEÇÃO — PSICANÁLISE INTEGRATIVA
-// Logo flutua acima do grid e segue o cursor
-// suavemente (parallax)
-// ─────────────────────────────────────────────
-function PsicanaliseSection() {
-  return (
-    <section className="max-w-5xl mx-auto px-6 sm:px-10 pt-14 pb-10">
-
-      {/* ── Texto central ── */}
-      <FadeIn direction="none" className="text-center space-y-5 mb-10">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">
-          Formação Certificada · Parceria Universitária
-        </p>
-
-        <h2
-          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-          className="text-5xl sm:text-6xl lg:text-[5.5rem] font-bold text-white leading-[1.0]"
-        >
-          Psicanálise Integrativa
-        </h2>
-
-        <p className="text-white/50 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
-          Parceria com a{' '}
-          <span className="text-white/80 font-medium">Universidade Anhanguera</span>.
-          {' '}Certificado nas diretrizes do{' '}
-          <span className="text-white/80 font-medium">MEC</span> com PPC aprovado.
-        </p>
-
-        <div className="pt-2">
-          <Link
-            href="/turma38"
-            className="inline-flex rounded-xl bg-[#FFB800] px-8 py-3.5 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
-          >
-            Criar Minha Conta
-          </Link>
-        </div>
-      </FadeIn>
-
-      {/* ── Logo + Grid ── */}
-      <FadeIn delay={60}>
-        <div className="relative">
-
-          {/* Logo centralizado, exatamente em cima do grid */}
-          <div className="flex justify-center" style={{ marginBottom: '-48px', position: 'relative', zIndex: 10 }}>
-            <div className="relative">
-              <div
-                className="absolute inset-0 rounded-full blur-3xl pointer-events-none scale-[3]"
-                style={{ background: 'rgba(255,184,0,0.2)' }}
-              />
-              <img
-                src={CURSOR_LOGO_SRC}
-                alt=""
-                draggable={false}
-                className="w-[96px] h-[96px] object-contain select-none relative"
-                style={{ filter: 'drop-shadow(0 0 20px rgba(255,184,0,1)) drop-shadow(0 0 50px rgba(255,184,0,0.4))' }}
-              />
-            </div>
-          </div>
-
-          {/* Grid: esquerda alta | direita 2 empilhadas */}
-          <div
-            className="grid grid-cols-2 grid-rows-2 gap-2.5"
-            style={{ height: 'clamp(360px, 46vw, 500px)' }}
-          >
-            <div className="row-span-2 rounded-2xl bg-[#111D48] border border-white/7" />
-            <div className="rounded-2xl bg-[#111D48] border border-white/7" />
-            <div className="rounded-2xl bg-[#111D48] border border-white/7" />
-          </div>
-
-        </div>
-      </FadeIn>
-    </section>
-  )
-}
-
-// ─────────────────────────────────────────────
-// SEÇÃO — SOBRE O INSTITUTO
-// ─────────────────────────────────────────────
-function SobreSection() {
-  return (
-    <section className="max-w-5xl mx-auto px-6 sm:px-10 pt-20 pb-16">
-
-      {/* Overline + headline + descrição */}
-      <FadeIn direction="none" className="mb-12">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium mb-4">
-          Sobre o Instituto
-        </p>
-        <div className="grid lg:grid-cols-2 gap-8 items-end">
-          <h2
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-4xl sm:text-5xl font-bold leading-[1.08] text-white"
-          >
-            Uma instituição<br />construída para<br />transformar vidas.
-          </h2>
-          <p className="text-[#8B9DC3] leading-relaxed text-base">
-            O Instituto Despertamente foi fundado para democratizar o acesso ao conhecimento
-            em psicanálise, neurociência e desenvolvimento humano — com rigor acadêmico,
-            metodologia integrativa e impacto real.
-          </p>
-        </div>
-      </FadeIn>
-
-      {/* Mosaico 3 + 2 */}
-      <FadeIn>
-        <div className="grid grid-cols-6 gap-2 sm:gap-3">
-          <div className="col-span-2 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
-          <div className="col-span-2 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
-          <div className="col-span-2 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
-          <div className="col-span-3 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
-          <div className="col-span-3 aspect-[4/3] rounded-xl bg-[#111D48] border border-white/7" />
-        </div>
-      </FadeIn>
-
-      {/* Números institucionais */}
-      <FadeIn delay={80}>
-        <div className="mt-12 grid grid-cols-3 border-t border-white/8 pt-10 gap-8">
-          {[
-            { n: '12.000+', label: 'alunos formados' },
-            { n: '38',      label: 'turmas realizadas' },
-            { n: '9 anos',  label: 'de metodologia' },
-          ].map(({ n, label }) => (
-            <div key={label} className="space-y-1">
-              <p
-                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                className="text-3xl sm:text-4xl font-bold text-white"
-              >
-                {n}
-              </p>
-              <p className="text-xs text-white/35 uppercase tracking-[0.15em]">{label}</p>
-            </div>
-          ))}
-        </div>
-      </FadeIn>
-
-    </section>
-  )
-}
 
 // ─────────────────────────────────────────────
 // SCROLL ANIMATION
@@ -215,17 +45,17 @@ function FadeIn({
           obs.disconnect()
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.08 }
     )
     obs.observe(el)
     return () => obs.disconnect()
   }, [])
 
   const hiddenClass =
-    direction === 'left'  ? '-translate-x-10 opacity-0' :
-    direction === 'right' ? 'translate-x-10 opacity-0'  :
+    direction === 'left'  ? '-translate-x-8 opacity-0' :
+    direction === 'right' ? 'translate-x-8 opacity-0'  :
     direction === 'none'  ? 'opacity-0'                  :
-                            'translate-y-8 opacity-0'
+                            'translate-y-6 opacity-0'
 
   return (
     <div
@@ -241,145 +71,366 @@ function FadeIn({
 }
 
 // ─────────────────────────────────────────────
-// VIDEO CARD
+// SEÇÃO 2 — MANIFESTO
+// Headline grande à esquerda + grid de imagens
+// Ref: Nielsen Norman F-pattern, Whitespace (Fadeyev)
 // ─────────────────────────────────────────────
-function VideoCard({
-  nome,
-  papel,
-  video_id,
-  active = false,
-}: {
-  nome: string
-  papel: string
-  video_id: string
-  active?: boolean
-}) {
-  const [playing, setPlaying] = useState(false)
-
+function ManifestoSection() {
   return (
-    <div
-      className="rounded-2xl overflow-hidden border border-white/7 transition-all duration-500"
-    >
-      <div className="relative aspect-video bg-[#0A0D17]">
-        {video_id && playing ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${video_id}?autoplay=1&rel=0`}
-            className="absolute inset-0 w-full h-full"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          />
-        ) : (
-          <button
-            className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-[#0F1420] group cursor-pointer"
-            onClick={() => video_id && setPlaying(true)}
-            disabled={!video_id}
-            type="button"
-          >
-            <div
-              className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-transform duration-300 ${
-                video_id
-                  ? 'bg-[#FFB800] shadow-[0_0_32px_rgba(255,184,0,0.38)] group-hover:scale-110'
-                  : 'bg-white/5 border border-dashed border-white/12'
-              }`}
+    <section className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-28 sm:py-40">
+      <div className="grid lg:grid-cols-[55%_1fr] gap-12 lg:gap-20 items-center">
+
+        {/* Texto — alinhado à esquerda */}
+        <FadeIn direction="none">
+          <div className="space-y-8">
+            <h2
+              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+              className="text-[clamp(3rem,7vw,6rem)] font-bold text-white leading-[0.92] tracking-tight"
             >
-              <Play
-                className={`h-5 w-5 ml-0.5 ${
-                  video_id ? 'fill-[#0D1638] text-[#0D1638]' : 'text-white/20'
-                }`}
-              />
-            </div>
-            <p
-              className={`text-xs mt-3 ${
-                video_id ? 'text-white/45' : 'text-white/20 font-mono tracking-widest uppercase'
-              }`}
-            >
-              {video_id ? 'Assistir depoimento' : 'Vídeo em breve'}
+              Psicanálise<br />
+              <span className="text-white/40">Integrativa.</span>
+            </h2>
+
+            <p className="text-white/60 text-lg leading-relaxed max-w-lg">
+              Uma formação que une Psicanálise Clássica, Neurociência e PNL.
+              Em parceria com a <span className="text-white/85 font-medium">Universidade Anhanguera</span> —
+              certificado nas diretrizes do <span className="text-white/85 font-medium">MEC</span>, com PPC aprovado.
             </p>
-          </button>
-        )}
+
+            <div className="flex items-center gap-5 pt-2">
+              <Link
+                href="/turma38"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#FFB800] px-7 py-3.5 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
+              >
+                Garantir minha vaga <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="#formacao"
+                className="text-sm font-medium text-white/40 hover:text-white/70 transition-colors"
+              >
+                Conhecer a formação
+              </Link>
+            </div>
+          </div>
+        </FadeIn>
+
+        {/* Grid de imagens — sem dashed border, sem labels */}
+        <FadeIn direction="right" delay={120}>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="aspect-[3/4] rounded-lg bg-[#111D48]" />
+            <div className="aspect-[3/4] rounded-lg bg-[#0F1940] mt-8" />
+            <div className="aspect-[4/3] rounded-lg bg-[#0F1940]" />
+            <div className="aspect-[4/3] rounded-lg bg-[#111D48]" />
+          </div>
+        </FadeIn>
+
       </div>
-      <div className="bg-[#111827] px-4 sm:px-5 py-3.5 flex items-center gap-3">
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-white truncate">{nome}</p>
-          <p className="text-[11px] text-[#8B9DC3] mt-0.5 truncate">{papel}</p>
-        </div>
-        {active && (
-          <div className="w-1.5 h-1.5 rounded-full bg-white/30 shrink-0" />
-        )}
-      </div>
-    </div>
+    </section>
   )
 }
 
 // ─────────────────────────────────────────────
-// VIDEO CAROUSEL
+// SEÇÃO 3 — INSTITUTO
+// Stats + texto institucional
+// Overline usada aqui — único uso no site inteiro
+// Ref: Von Restorff Effect (raridade = impacto)
 // ─────────────────────────────────────────────
-function VideoCarousel() {
-  const [idx, setIdx] = useState(0)
-  const total = VIDEO_DEPOS.length
-  const prev  = () => setIdx(i => (i === 0 ? total - 1 : i - 1))
-  const next  = () => setIdx(i => (i === total - 1 ? 0 : i + 1))
-
-  const offsets = [-1, 0, 1] as const
-
+function InstitutoSection() {
   return (
-    <div className="space-y-8">
-      {/* Mobile — 1 por vez */}
-      <div className="lg:hidden">
-        <VideoCard {...VIDEO_DEPOS[idx]} active />
-      </div>
+    <section className="border-t border-white/8 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-24 pb-20">
 
-      {/* Desktop — 3 visíveis, central em destaque */}
-      <div className="hidden lg:grid grid-cols-3 gap-5 items-center">
-        {offsets.map((offset, i) => {
-          const d = VIDEO_DEPOS[(idx + offset + total) % total]
-          const isCenter = offset === 0
-          return (
-            <div
-              key={i}
-              className={`transition-all duration-500 ${
-                isCenter ? 'scale-100' : 'scale-95 opacity-50'
-              }`}
-            >
-              <VideoCard {...d} active={isCenter} />
+      <FadeIn direction="none">
+        {/* Overline — única no site */}
+        <p className="text-xs uppercase tracking-[0.22em] text-white/30 font-medium mb-8">
+          Sobre o Instituto
+        </p>
+
+        {/* Headline + dois parágrafos em colunas */}
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-start">
+          <h2
+            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+            className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-white leading-[1.05]"
+          >
+            Uma instituição<br />construída para<br />transformar vidas.
+          </h2>
+          <div className="space-y-5 pt-1">
+            <p className="text-white/60 leading-relaxed">
+              Fundado há 9 anos, o Instituto Despertamente democratiza o acesso ao conhecimento
+              em psicanálise, neurociência e desenvolvimento humano — com rigor acadêmico,
+              metodologia integrativa e impacto comprovado em mais de 12 mil vidas.
+            </p>
+            <p className="text-white/45 leading-relaxed text-sm">
+              Nossa abordagem integra diferentes campos do saber porque entendemos que o ser humano
+              não cabe em uma única teoria. Cada formação é desenhada para quem quer ir fundo —
+              não apenas aprender, mas se transformar.
+            </p>
+          </div>
+        </div>
+      </FadeIn>
+
+      {/* Stats — sem cards, só números e labels */}
+      <FadeIn delay={80}>
+        <div className="mt-16 border-t border-white/8 pt-12 grid grid-cols-3 gap-8">
+          {[
+            { n: '12.000+', label: 'alunos formados' },
+            { n: '38',      label: 'turmas realizadas' },
+            { n: '9 anos',  label: 'de metodologia' },
+          ].map(({ n, label }) => (
+            <div key={label}>
+              <p
+                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                className="text-4xl sm:text-5xl font-bold text-white"
+              >
+                {n}
+              </p>
+              <p className="mt-1.5 text-xs text-white/30 uppercase tracking-[0.15em]">{label}</p>
             </div>
-          )
-        })}
-      </div>
-
-      {/* Controles */}
-      <div className="flex items-center justify-center gap-5">
-        <button
-          onClick={prev}
-          type="button"
-          className="w-11 h-11 rounded-full border border-white/12 bg-white/4 flex items-center justify-center text-white/50 hover:text-white hover:border-white/25 transition-all duration-200"
-          aria-label="Anterior"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div className="flex gap-2">
-          {VIDEO_DEPOS.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setIdx(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === idx ? 'w-7 bg-[#FFB800]' : 'w-1.5 bg-white/20 hover:bg-white/40'
-              }`}
-              aria-label={`Depoimento ${i + 1}`}
-            />
           ))}
         </div>
-        <button
-          onClick={next}
-          type="button"
-          className="w-11 h-11 rounded-full border border-white/12 bg-white/4 flex items-center justify-center text-white/50 hover:text-white hover:border-white/25 transition-all duration-200"
-          aria-label="Próximo"
+      </FadeIn>
+
+    </section>
+  )
+}
+
+// ─────────────────────────────────────────────
+// SEÇÃO 4 — PROGRAMAS
+// Lista editorial numerada — sem cards, sem imagens
+// Ref: Hick's Law — menos opções, mais conversão
+// Referência visual: índice de revista, menu Michelin
+// ─────────────────────────────────────────────
+const PROGRAMAS = [
+  {
+    num: '01',
+    titulo: 'Psicanálise Integrativa',
+    desc: 'Formação certificada com parceria universitária. Diretrizes MEC, PPC aprovado.',
+    href: '/programas/psicanalise-integrativa',
+  },
+  {
+    num: '02',
+    titulo: 'IDM pelo Brasil',
+    desc: 'Imersões presenciais intensivas em cidades do Brasil. 4 dias com supervisão ao vivo.',
+    href: '/programas/idm-pelo-brasil',
+  },
+  {
+    num: '03',
+    titulo: 'Livre Formação IDM',
+    desc: 'Acesso à plataforma completa com cursos e programas no seu ritmo.',
+    href: '/loja',
+  },
+]
+
+function ProgramasSection() {
+  return (
+    <section id="projetos" className="border-t border-white/8 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24">
+
+      <FadeIn direction="none" className="mb-12">
+        <h2
+          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+          className="text-2xl sm:text-3xl font-bold text-white"
         >
-          <ChevronRight className="h-5 w-5" />
-        </button>
+          Nossos programas
+        </h2>
+      </FadeIn>
+
+      <div>
+        {PROGRAMAS.map((p, i) => (
+          <FadeIn key={p.titulo} delay={i * 60}>
+            <Link
+              href={p.href}
+              className="group flex items-start sm:items-center justify-between gap-6 border-t border-white/8 py-7 hover:bg-white/[0.015] transition-colors duration-200 -mx-4 px-4 rounded-sm"
+            >
+              <div className="flex items-start sm:items-center gap-6 sm:gap-10 min-w-0">
+                <span className="text-xs text-white/25 font-mono shrink-0 mt-1 sm:mt-0">{p.num}</span>
+                <div className="min-w-0">
+                  <p
+                    style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                    className="text-xl sm:text-2xl font-bold text-white group-hover:text-white/90 transition-colors"
+                  >
+                    {p.titulo}
+                  </p>
+                  <p className="mt-1 text-sm text-white/40 leading-snug">{p.desc}</p>
+                </div>
+              </div>
+              <ArrowRight className="h-5 w-5 text-white/20 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all shrink-0 mt-1 sm:mt-0" />
+            </Link>
+          </FadeIn>
+        ))}
+        <div className="border-t border-white/8" />
       </div>
-    </div>
+
+    </section>
+  )
+}
+
+// ─────────────────────────────────────────────
+// SEÇÃO 5 — FORMAÇÃO
+// Imagem + currículo como universidade
+// Ref: Cognitive fluency (Oppenheimer) — clareza = autoridade
+// ─────────────────────────────────────────────
+const MODULOS = [
+  'Fundamentos da Psicanálise Clássica',
+  'Neurociência Aplicada ao Comportamento',
+  'Análise Pessoal e Supervisão',
+  'Técnicas Integrativas',
+  'PNL na Prática Clínica',
+  'Certificação e Prática Profissional',
+]
+
+function FormacaoSection() {
+  return (
+    <section
+      id="formacao"
+      className="border-t border-white/8 bg-[#0A1232] py-24 sm:py-32"
+    >
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+
+          {/* Imagem — rounded-lg, sem dashed border */}
+          <FadeIn direction="left">
+            <div className="aspect-[3/4] rounded-lg bg-[#111D48] w-full" />
+          </FadeIn>
+
+          {/* Texto institucional */}
+          <FadeIn direction="right" delay={100}>
+            <div className="space-y-8 lg:pt-4">
+
+              <div>
+                <h2
+                  style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                  className="text-4xl sm:text-5xl font-bold text-white leading-[1.05]"
+                >
+                  Psicanálise<br />Integrativa.
+                </h2>
+                <p className="mt-4 text-white/55 leading-relaxed">
+                  Uma formação completa do inconsciente à prática clínica. Teoria,
+                  análise pessoal e supervisão em um único percurso certificado.
+                </p>
+              </div>
+
+              <div className="border-t border-white/8 pt-8">
+                <p className="text-xs uppercase tracking-[0.2em] text-white/30 mb-5">
+                  Conteúdo do curso
+                </p>
+                <ul className="space-y-3.5">
+                  {MODULOS.map((m, i) => (
+                    <li key={m} className="flex items-center gap-4 text-sm text-white/60">
+                      <span className="text-white/20 font-mono text-[11px] shrink-0 w-5 text-right">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      {m}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-t border-white/8 pt-8 flex items-center gap-5">
+                <Link
+                  href="/programas/psicanalise-integrativa"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[#FFB800] px-6 py-3 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
+                >
+                  Ver formação completa <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <div className="text-xs text-white/30 leading-snug">
+                  Parceria<br />Universidade Anhanguera
+                </div>
+              </div>
+
+            </div>
+          </FadeIn>
+
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─────────────────────────────────────────────
+// SEÇÃO 6 — DEPOIMENTOS
+// Texto puro — sem video, sem carousel
+// Ref: BJ Fogg "Promised but unfulfilled" destroys trust
+// Ref: CXL Institute — texto com nome real converte mais
+// ─────────────────────────────────────────────
+function DepoimentosSection({ depos }: { depos: Depo[] }) {
+  const shown = depos.slice(0, 3)
+  if (shown.length === 0) return null
+
+  return (
+    <section
+      id="depoimentos"
+      className="border-t border-white/8 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24"
+    >
+      <FadeIn direction="none" className="mb-14">
+        <h2
+          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+          className="text-3xl sm:text-4xl font-bold text-white"
+        >
+          Quem já passou<br />pelo IDM.
+        </h2>
+      </FadeIn>
+
+      <div className="grid sm:grid-cols-3 gap-10 sm:gap-8 lg:gap-12">
+        {shown.map((d, i) => (
+          <FadeIn key={i} delay={i * 80} direction="up">
+            <div className="space-y-5">
+              <p className="text-white/60 leading-relaxed text-[15px]">
+                &ldquo;{d.texto}&rdquo;
+              </p>
+              <div className="border-t border-white/8 pt-4">
+                <p className="text-sm font-semibold text-white">{d.nome}</p>
+                <p className="text-xs text-white/35 mt-0.5">{d.papel}</p>
+              </div>
+            </div>
+          </FadeIn>
+        ))}
+      </div>
+
+    </section>
+  )
+}
+
+// ─────────────────────────────────────────────
+// SEÇÃO 7 — CTA FINAL
+// Linguagem institucional — não SaaS
+// Ref: Cialdini (autoridade > facilidade), StoryBrand
+// Layout: headline esquerda / botão direita
+// ─────────────────────────────────────────────
+function CTASection() {
+  return (
+    <section className="border-t border-white/8 bg-[#0A1232]">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-32 sm:py-48">
+        <FadeIn direction="none">
+          <div className="grid lg:grid-cols-[1fr_auto] gap-10 items-end">
+
+            <div className="space-y-5">
+              <h2
+                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[0.95]"
+              >
+                Inscreva-se para<br />a Turma 38.
+              </h2>
+              <p className="text-white/45 text-lg max-w-md leading-relaxed">
+                Vagas limitadas. Certificação reconhecida pelo MEC.<br />
+                Parceria com a Universidade Anhanguera.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <Link
+                href="/turma38"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FFB800] px-8 py-4 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
+              >
+                Garantir minha vaga <ArrowRight className="h-4 w-4" />
+              </Link>
+              <p className="text-center text-[11px] text-white/20">
+                Acesso imediato após inscrição
+              </p>
+            </div>
+
+          </div>
+        </FadeIn>
+      </div>
+    </section>
   )
 }
 
@@ -387,7 +438,7 @@ function VideoCarousel() {
 // MAIN
 // ─────────────────────────────────────────────
 export function ComecarAnimated({
-  depos: _depos,
+  depos,
   programas: _programas,
 }: {
   depos: Depo[]
@@ -396,310 +447,32 @@ export function ComecarAnimated({
   return (
     <main className="bg-[#0D1638] text-white overflow-x-hidden">
 
-      {/* ══════════════════════════════════
-          1 — HERO
-      ══════════════════════════════════ */}
+      {/* 1 — HERO */}
       <section className="w-full">
         <img
           src="/hero-banner.png"
           alt="Instituto Despertamente"
           className="w-full block"
-          style={{ display: 'block' }}
         />
       </section>
 
-      {/* ══════════════════════════════════
-          2 — PSICANÁLISE INTEGRATIVA
-      ══════════════════════════════════ */}
-      <PsicanaliseSection />
+      {/* 2 — MANIFESTO */}
+      <ManifestoSection />
 
-      {/* ══════════════════════════════════
-          3 — SOBRE O INSTITUTO
-      ══════════════════════════════════ */}
-      <SobreSection />
+      {/* 3 — INSTITUTO */}
+      <InstitutoSection />
 
-      {/* ══════════════════════════════════
-          4 — GRID 3 PROJETOS
-      ══════════════════════════════════ */}
-      <section id="projetos" className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-24 border-t border-white/6">
-        <div className="grid sm:grid-cols-3 gap-6">
-          {[
-            { titulo: 'Psicanálise Integrativa', href: '/programas/psicanalise-integrativa', label: 'Psicanálise' },
-            { titulo: 'IDM pelo Brasil',         href: '/programas/idm-pelo-brasil',         label: 'IDM pelo Brasil' },
-            { titulo: 'Livre Formação IDM',      href: '/loja',                              label: '3º Projeto' },
-          ].map((p, i) => (
-            <FadeIn key={p.titulo} delay={i * 100}>
-              <Link href={p.href} className="group block space-y-4">
-                <ImgPlaceholder aspect="aspect-square" label={p.label} />
-                <div className="flex items-center justify-between px-1">
-                  <p className="text-base font-semibold text-white group-hover:text-[#FFB800] transition-colors">
-                    {p.titulo}
-                  </p>
-                  <ArrowRight className="h-4 w-4 text-white/22 group-hover:text-[#FFB800] group-hover:translate-x-0.5 transition-all" />
-                </div>
-              </Link>
-            </FadeIn>
-          ))}
-        </div>
-      </section>
+      {/* 4 — PROGRAMAS */}
+      <ProgramasSection />
 
-      {/* ══════════════════════════════════
-          5 — DETALHES DOS PROJETOS (alternado)
-      ══════════════════════════════════ */}
-      <section className="max-w-6xl mx-auto px-5 sm:px-10 space-y-20 sm:space-y-28 pb-20 sm:pb-28">
-        {[
-          {
-            titulo: 'Formação em Psicanálise Integrativa',
-            desc: 'Uma formação certificante que integra Psicanálise Clássica, Neurociência e PNL. Aprenda a investigar o inconsciente — o seu e o dos seus pacientes.',
-            cta: 'Conhecer a formação',
-            href: '/programas/psicanalise-integrativa',
-            label: 'Imagem — Psicanálise',
-            reverse: false,
-          },
-          {
-            titulo: 'IDM pelo Brasil',
-            desc: 'Workshops presenciais intensivos em cidades do Brasil. 4 dias de imersão com supervisão ao vivo, técnicas práticas e certificação incluída.',
-            cta: 'Ver datas e cidades',
-            href: '/programas/idm-pelo-brasil',
-            label: 'Imagem — IDM pelo Brasil',
-            reverse: true,
-          },
-        ].map((p) => (
-          <div
-            key={p.titulo}
-            className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${
-              p.reverse ? 'lg:[&>*:first-child]:order-2' : ''
-            }`}
-          >
-            <FadeIn direction={p.reverse ? 'right' : 'left'}>
-              <ImgPlaceholder aspect="aspect-[4/3]" label={p.label} />
-            </FadeIn>
-            <FadeIn direction={p.reverse ? 'left' : 'right'} delay={120}>
-              <div className="space-y-5">
-                <h3
-                  style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                  className="text-3xl sm:text-4xl font-bold leading-[1.05]"
-                >
-                  {p.titulo}
-                </h3>
-                <p className="text-[#8B9DC3] leading-relaxed">{p.desc}</p>
-                <Link
-                  href={p.href}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#FFB800] hover:gap-3 transition-all duration-200"
-                >
-                  {p.cta} <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </FadeIn>
-          </div>
-        ))}
-      </section>
+      {/* 5 — FORMAÇÃO */}
+      <FormacaoSection />
 
-      {/* ══════════════════════════════════
-          6 — FORMAÇÃO PSICANÁLISE
-      ══════════════════════════════════ */}
-      <section id="formacao" className="bg-[#111827] py-20 sm:py-28 px-5 sm:px-10">
-        <div className="max-w-6xl mx-auto space-y-12">
-          <FadeIn className="text-center space-y-4 max-w-2xl mx-auto">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">
-              Formação completa
-            </p>
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-4xl sm:text-5xl font-bold leading-[1.05]"
-            >
-              Psicanálise Integrativa.
-            </h2>
-            <p className="text-[#8B9DC3] leading-relaxed">
-              Do inconsciente à prática clínica. Teoria, análise pessoal e supervisão em um único percurso.
-            </p>
-          </FadeIn>
+      {/* 6 — DEPOIMENTOS */}
+      <DepoimentosSection depos={depos} />
 
-          <FadeIn>
-            <ImgPlaceholder aspect="aspect-[21/9]" label="Imagem principal — Formação" />
-          </FadeIn>
-
-          <div className="space-y-6">
-            <FadeIn>
-              <h3 className="text-sm font-semibold text-white/50 text-center uppercase tracking-widest">
-                O que você aprende
-              </h3>
-            </FadeIn>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-5">
-              {[
-                'Fundamentos da Psicanálise',
-                'Análise Pessoal',
-                'Técnicas Integrativas',
-                'PNL na Prática Clínica',
-              ].map((m, i) => (
-                <FadeIn key={m} delay={i * 80}>
-                  <div className="space-y-3">
-                    <ImgPlaceholder aspect="aspect-[4/3]" label={m} />
-                    <p className="text-xs text-white/48 text-center leading-snug">{m}</p>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-
-          <FadeIn className="text-center">
-            <Link
-              href="/programas/psicanalise-integrativa"
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#FFB800] px-7 py-4 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
-            >
-              Ver a formação completa <ArrowRight className="h-4 w-4" />
-            </Link>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════
-          7 — CERTIFICADOS
-      ══════════════════════════════════ */}
-      <section id="certificados" className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-28">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <FadeIn direction="left">
-            <ImgPlaceholder aspect="aspect-[4/3]" label="Imagem — Certificado" />
-          </FadeIn>
-          <FadeIn direction="right" delay={120}>
-            <div className="space-y-6">
-              <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">
-                Reconhecimento
-              </p>
-              <h2
-                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                className="text-4xl sm:text-5xl font-bold leading-[1.05]"
-              >
-                Certificados<br />que abrem portas.
-              </h2>
-              <p className="text-[#8B9DC3] leading-relaxed">
-                Ao concluir cada programa você recebe um certificado oficial do Instituto Despertamente — reconhecido, digital e vinculado ao seu perfil.
-              </p>
-              <ul className="space-y-3">
-                {[
-                  'Certificação digital com QR code de validação',
-                  'Vinculado ao seu CPF para verificação',
-                  'Compartilhável no LinkedIn e portfólio',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-white/60">
-                    <span className="text-white/25 shrink-0 select-none">—</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════
-          8 — IDM PELO BRASIL
-      ══════════════════════════════════ */}
-      <section className="bg-[#111827] py-20 sm:py-28 px-5 sm:px-10">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <FadeIn className="text-center space-y-4">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">Presencial</p>
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-4xl sm:text-5xl font-bold leading-[1.05]"
-            >
-              IDM pelo Brasil.
-            </h2>
-            <p className="text-[#8B9DC3] max-w-lg mx-auto leading-relaxed">
-              Imersões presenciais em cidades do Brasil. 4 dias de prática intensa com supervisão ao vivo.
-            </p>
-          </FadeIn>
-
-          <div className="grid sm:grid-cols-2 gap-6">
-            {[
-              {
-                titulo: 'Psicanálise',
-                desc: 'Psicanálise Integrativa aplicada em tempo real, com supervisão individual nas sessões práticas.',
-                label: 'Imagem — Psicanálise',
-              },
-              {
-                titulo: 'PNL',
-                desc: 'Practitioner e Master PNL com certificação internacional. Técnicas avançadas de mudança comportamental.',
-                label: 'Imagem — PNL',
-              },
-            ].map((card, i) => (
-              <FadeIn key={card.titulo} delay={i * 120}>
-                <div className="rounded-2xl border border-white/6 bg-[#0D1638] overflow-hidden h-full flex flex-col">
-                  <ImgPlaceholder aspect="aspect-video" label={card.label} />
-                  <div className="px-5 pb-5 pt-4 space-y-3 flex-1 flex flex-col">
-                    <h3 className="text-lg font-semibold text-white">{card.titulo}</h3>
-                    <p className="text-sm text-[#8B9DC3] leading-relaxed flex-1">{card.desc}</p>
-                    <div>
-                      <Link
-                        href="/programas/idm-pelo-brasil"
-                        className="inline-flex items-center gap-2 rounded-xl bg-[#FFB800] px-5 py-2.5 text-xs font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
-                      >
-                        Ver datas <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-
-          <FadeIn>
-            <p className="text-center text-[#8B9DC3] leading-relaxed max-w-lg mx-auto text-sm">
-              Ao final da imersão você recebe o certificado IDM pelo Brasil com carga horária e validação digital. Metodologia ao vivo, transformação real.
-            </p>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════
-          9 — DEPOIMENTOS (vídeos)
-      ══════════════════════════════════ */}
-      <section id="depoimentos" className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-28">
-        <FadeIn className="text-center space-y-3 mb-12">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-white/35 font-medium">
-            Quem já passou pelo IDM
-          </p>
-          <h2
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-4xl sm:text-5xl font-bold"
-          >
-            Depoimentos.
-          </h2>
-        </FadeIn>
-        <FadeIn>
-          <VideoCarousel />
-        </FadeIn>
-      </section>
-
-      {/* ══════════════════════════════════
-          10 — CTA FINAL
-      ══════════════════════════════════ */}
-      <section className="border-t border-white/6 py-28 sm:py-36 px-5 sm:px-10 text-center bg-[#0D1638]">
-        <FadeIn className="max-w-2xl mx-auto space-y-6">
-          <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#FFB800]/50">
-            Livre formação
-          </p>
-          <h2
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-5xl sm:text-6xl font-bold leading-[1.0]"
-          >
-            Livre formação<br />com IDM.
-          </h2>
-          <p className="text-[#8B9DC3] leading-relaxed max-w-md mx-auto">
-            Comece hoje, no seu ritmo. Acesso gratuito para criar sua conta e explorar a plataforma.
-          </p>
-          <div>
-            <Link
-              href="/turma38"
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#FFB800] px-9 py-5 text-base font-bold text-[#0D1638] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
-              style={{ boxShadow: '0 8px 52px rgba(255,184,0,0.28)' }}
-            >
-              Começar agora — é grátis <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <p className="text-xs text-white/18">Sem cartão de crédito · Acesso imediato</p>
-        </FadeIn>
-      </section>
+      {/* 7 — CTA FINAL */}
+      <CTASection />
 
     </main>
   )
