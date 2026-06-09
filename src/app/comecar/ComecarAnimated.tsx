@@ -48,56 +48,105 @@ const DOT_GRID = {
 }
 
 // ─────────────────────────────────────────────
-// CURSOR LOGO — troque o src por /logo-cursor.png
-// quando subir o logo 3D na pasta /public
+// LOGO PATH
 // ─────────────────────────────────────────────
 const CURSOR_LOGO_SRC = '/logo-cursor.png'
 
-function CursorLogo() {
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    let tx = -300, ty = -300
-    let cx = -300, cy = -300
-    let raf: number
-
-    const onMove = (e: MouseEvent) => {
-      tx = e.clientX
-      ty = e.clientY
-    }
-    window.addEventListener('mousemove', onMove, { passive: true })
-
-    const loop = () => {
-      cx += (tx - cx) * 0.1
-      cy += (ty - cy) * 0.1
-      if (ref.current) {
-        ref.current.style.left = cx + 'px'
-        ref.current.style.top  = cy + 'px'
-      }
-      raf = requestAnimationFrame(loop)
-    }
-    raf = requestAnimationFrame(loop)
-
-    return () => {
-      window.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(raf)
-    }
-  }, [])
+// ─────────────────────────────────────────────
+// SEÇÃO — PSICANÁLISE INTEGRATIVA
+// Logo flutua acima do grid e segue o cursor
+// suavemente (parallax)
+// ─────────────────────────────────────────────
+function PsicanaliseSection() {
 
   return (
-    <div
-      ref={ref}
-      className="fixed z-[9999] pointer-events-none -translate-x-1/2 -translate-y-1/2 hidden md:block"
-      style={{ top: -300, left: -300, willChange: 'left, top' }}
-    >
-      <img
-        src={CURSOR_LOGO_SRC}
-        alt=""
-        className="w-14 h-14 object-contain select-none"
-        style={{ filter: 'drop-shadow(0 0 10px rgba(255,184,0,0.9)) drop-shadow(0 0 24px rgba(255,184,0,0.4))' }}
-        draggable={false}
-      />
-    </div>
+    <section className="max-w-5xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
+
+      {/* ── Texto central ── */}
+      <div className="text-center mb-16 space-y-6">
+
+        <FadeIn direction="none">
+          <span
+            className="inline-block rounded-full bg-[#FFB800] px-7 py-2.5 text-[11px] font-black uppercase tracking-[0.13em] text-[#0B0F1A]"
+            style={{ boxShadow: '0 0 0 6px rgba(255,184,0,0.12), 0 4px 20px rgba(255,184,0,0.3)' }}
+          >
+            Formação Certificada · Parceria Universitária
+          </span>
+        </FadeIn>
+
+        <FadeIn delay={70}>
+          <h2
+            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.0]"
+          >
+            Psicanálise Integrativa
+          </h2>
+        </FadeIn>
+
+        <FadeIn delay={140}>
+          <p className="text-white/48 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
+            Parceria com a{' '}
+            <strong className="text-white/85 font-semibold">Universidade Anhanguera</strong>.
+            {' '}Certificado seguindo as diretrizes do{' '}
+            <strong className="text-white/85 font-semibold">MEC</strong> com PPC aprovado.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={200}>
+          <Link
+            href="/turma38"
+            className="inline-flex rounded-full bg-[#FFB800] px-9 py-3.5 text-[15px] font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
+            style={{ boxShadow: '0 4px 32px rgba(255,184,0,0.35)' }}
+          >
+            Criar Minha Conta
+          </Link>
+        </FadeIn>
+      </div>
+
+      {/* ── Logo + Grid ── */}
+      <FadeIn delay={60}>
+        <div className="relative">
+
+          {/* Logo flutuando — parallax segue cursor */}
+          <div
+            className="flex justify-center"
+            style={{ marginBottom: '-44px', position: 'relative', zIndex: 10 }}
+          >
+            <div className="relative inline-flex items-center justify-center">
+              <div
+                className="absolute rounded-full blur-3xl pointer-events-none"
+                style={{
+                  width: '180px', height: '180px',
+                  background: 'rgba(255,184,0,0.18)',
+                  transform: 'translate(-50%,-50%)',
+                  top: '50%', left: '50%',
+                }}
+              />
+              <img
+                src={CURSOR_LOGO_SRC}
+                alt=""
+                draggable={false}
+                className="w-24 h-24 object-contain select-none relative"
+                style={{
+                  filter: 'drop-shadow(0 0 22px rgba(255,184,0,1)) drop-shadow(0 0 55px rgba(255,184,0,0.45))',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Grid assimétrico: esquerda alta | direita 2 empilhadas */}
+          <div
+            className="grid grid-cols-2 grid-rows-2 gap-3"
+            style={{ height: 'clamp(400px, 50vw, 560px)' }}
+          >
+            <div className="row-span-2 rounded-2xl bg-[#0F1523] border border-white/7" />
+            <div className="rounded-2xl bg-[#0F1523] border border-white/7" />
+            <div className="rounded-2xl bg-[#0F1523] border border-white/7" />
+          </div>
+
+        </div>
+      </FadeIn>
+    </section>
   )
 }
 
@@ -315,9 +364,6 @@ export function ComecarAnimated({
   return (
     <main className="bg-[#0B0F1A] text-white overflow-x-hidden">
 
-      {/* Logo que segue o cursor (desktop) */}
-      <CursorLogo />
-
       {/* ══════════════════════════════════
           1 — HERO
       ══════════════════════════════════ */}
@@ -333,105 +379,7 @@ export function ComecarAnimated({
       {/* ══════════════════════════════════
           2 — PSICANÁLISE INTEGRATIVA
       ══════════════════════════════════ */}
-      <section className="max-w-6xl mx-auto px-5 sm:px-10 py-20 sm:py-28 text-center">
-
-        {/* Pill badge */}
-        <FadeIn direction="none">
-          <div className="flex justify-center mb-8">
-            <span
-              className="inline-block rounded-full bg-[#FFB800] px-8 py-2.5 text-xs font-extrabold uppercase tracking-widest text-[#0B0F1A]"
-              style={{ boxShadow: '0 4px 24px rgba(255,184,0,0.35)' }}
-            >
-              Formação Certificada · Parceria Universitária
-            </span>
-          </div>
-        </FadeIn>
-
-        {/* Headline */}
-        <FadeIn delay={80}>
-          <h2
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.04] mb-4"
-          >
-            Psicanálise Integrativa
-          </h2>
-        </FadeIn>
-
-        {/* Subheadline */}
-        <FadeIn delay={160}>
-          <p className="text-[#8B9DC3] text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-3">
-            Em parceria com a{' '}
-            <span className="text-white font-semibold">Universidade Anhanguera</span>,
-            nossa formação em Psicanálise Integrativa segue as{' '}
-            <span className="text-white font-semibold">diretrizes do MEC</span>{' '}
-            e possui{' '}
-            <span className="text-white font-semibold">PPC aprovado</span> —
-            garantindo que seu certificado tenha validade e reconhecimento real.
-          </p>
-        </FadeIn>
-
-        {/* CTA */}
-        <FadeIn delay={220}>
-          <div className="flex justify-center mt-7 mb-12">
-            <Link
-              href="/turma38"
-              className="inline-flex items-center gap-2 rounded-full bg-[#FFB800] px-8 py-3.5 text-sm font-bold text-[#0B0F1A] hover:bg-[#FFC933] active:scale-[0.98] transition-all duration-200"
-              style={{ boxShadow: '0 6px 32px rgba(255,184,0,0.3)' }}
-            >
-              Criar Minha Conta
-            </Link>
-          </div>
-        </FadeIn>
-
-        {/* Logo + Image grid */}
-        <FadeIn direction="up" delay={100}>
-          <div className="relative">
-            {/* IDM logo flutuando acima do grid */}
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
-              <img
-                src={CURSOR_LOGO_SRC}
-                alt="IDM"
-                className="w-16 h-16 object-contain mx-auto"
-                style={{
-                  filter: 'drop-shadow(0 0 16px rgba(255,184,0,1)) drop-shadow(0 0 40px rgba(255,184,0,0.5))',
-                }}
-              />
-              {/* Glow halo atrás */}
-              <div
-                className="absolute inset-0 -z-10 rounded-full blur-2xl"
-                style={{ background: 'rgba(255,184,0,0.25)', transform: 'scale(2.5)' }}
-              />
-            </div>
-
-            {/* Grid assimétrico — esquerda alta + direita 2 empilhadas */}
-            <div
-              className="grid grid-cols-2 gap-2 sm:gap-3 pt-8"
-              style={{ height: 'clamp(320px, 50vw, 520px)' }}
-            >
-              {/* Esquerda — tall */}
-              <div className="h-full rounded-2xl border border-dashed border-white/10 bg-white/[0.03] flex items-center justify-center">
-                <p className="text-[10px] font-mono text-white/15 tracking-widest uppercase text-center px-4">
-                  Imagem 1
-                </p>
-              </div>
-
-              {/* Direita — 2 empilhadas */}
-              <div className="flex flex-col gap-2 sm:gap-3 h-full">
-                <div className="flex-1 rounded-2xl border border-dashed border-white/10 bg-white/[0.03] flex items-center justify-center">
-                  <p className="text-[10px] font-mono text-white/15 tracking-widest uppercase text-center px-4">
-                    Imagem 2
-                  </p>
-                </div>
-                <div className="flex-1 rounded-2xl border border-dashed border-white/10 bg-white/[0.03] flex items-center justify-center">
-                  <p className="text-[10px] font-mono text-white/15 tracking-widest uppercase text-center px-4">
-                    Imagem 3
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-      </section>
+      <PsicanaliseSection />
 
       {/* ══════════════════════════════════
           3 — DIVISOR AMARELO (lead fino)
