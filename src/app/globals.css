@@ -225,9 +225,9 @@ body {
   transition: background 0.3s ease, backdrop-filter 0.3s ease;
 }
 .navbar-scrolled {
-  background: rgba(15,15,15,0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(10,18,50,0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 /* ============================================================

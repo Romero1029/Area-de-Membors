@@ -53,7 +53,7 @@ export function TopNavbar({ profile }: TopNavbarProps) {
       <header
         className={cn(
           'fixed top-0 left-0 right-0 z-40 h-14 flex items-center transition-all duration-300',
-          scrolled ? 'navbar-scrolled border-b border-[#2a2a2a]' : 'navbar-transparent'
+          scrolled ? 'navbar-scrolled border-b border-white/[0.08]' : 'navbar-transparent'
         )}
       >
         <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 flex items-center gap-6">
@@ -72,10 +72,10 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                 className={cn(
                   'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150',
                   isActive(href)
-                    ? 'text-[#c79a3b] bg-[rgba(199,154,59,0.1)]'
+                    ? 'text-[#FFB800] bg-[rgba(255,184,0,0.12)]'
                     : highlight
-                    ? 'text-[#c79a3b] hover:bg-[rgba(199,154,59,0.08)]'
-                    : 'text-[#a0a0a0] hover:text-[#f0f0f0] hover:bg-[#242424]'
+                    ? 'text-[#FFB800] hover:bg-[rgba(255,184,0,0.08)]'
+                    : 'text-white/50 hover:text-white hover:bg-white/[0.07]'
                 )}
               >
                 {label}
@@ -88,7 +88,7 @@ export function TopNavbar({ profile }: TopNavbarProps) {
 
             {/* Notificações */}
             <button
-              className="p-2 rounded-lg text-[#a0a0a0] hover:text-[#f0f0f0] hover:bg-[#242424] transition-colors relative"
+              className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.07] transition-colors relative"
               aria-label="Notificações"
             >
               <Bell className="h-4 w-4" />
@@ -97,36 +97,36 @@ export function TopNavbar({ profile }: TopNavbarProps) {
             {/* Avatar + dropdown — desktop */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="hidden md:flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-[#242424] transition-colors">
-                  <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#c79a3b] to-[#e8b84b] flex items-center justify-center text-[11px] font-bold text-[#0f0f0f] flex-shrink-0">
+                <button className="hidden md:flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-white/[0.07] transition-colors">
+                  <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#FFB800] to-[#FFC933] flex items-center justify-center text-[11px] font-bold text-[#0D1638] flex-shrink-0">
                     {initials}
                   </div>
-                  <span className="text-xs text-[#a0a0a0] max-w-[80px] truncate hidden lg:block">
+                  <span className="text-xs text-white/50 max-w-[80px] truncate hidden lg:block">
                     {profile.full_name?.split(' ')[0] ?? 'Aluno'}
                   </span>
-                  <ChevronDown className="h-3 w-3 text-[#606060]" />
+                  <ChevronDown className="h-3 w-3 text-white/30" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-48 bg-[#1a1a1a] border-[#2a2a2a] text-[#f0f0f0]"
+                className="w-48 bg-[#0A1232] border-white/[0.10] text-white"
               >
-                <DropdownMenuLabel className="text-[#a0a0a0] font-normal text-xs">
+                <DropdownMenuLabel className="text-white/40 font-normal text-xs">
                   {profile.full_name ?? 'Aluno'}
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-[#2a2a2a]" />
-                <DropdownMenuItem asChild className="cursor-pointer hover:bg-[#242424] focus:bg-[#242424]">
+                <DropdownMenuSeparator className="bg-white/[0.08]" />
+                <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/[0.07] focus:bg-white/[0.07]">
                   <Link href="/perfil" className="flex items-center gap-2">
                     <User className="h-3.5 w-3.5" /> Meu Perfil
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild className="cursor-pointer hover:bg-[#242424] focus:bg-[#242424]">
+                <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/[0.07] focus:bg-white/[0.07]">
                   <Link href="/certificados" className="flex items-center gap-2">
                     <Award className="h-3.5 w-3.5" /> Certificados
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-[#2a2a2a]" />
-                <DropdownMenuItem className="cursor-pointer text-red-400 hover:bg-[#242424] focus:bg-[#242424]" asChild>
+                <DropdownMenuSeparator className="bg-white/[0.08]" />
+                <DropdownMenuItem className="cursor-pointer text-red-400 hover:bg-white/[0.07] focus:bg-white/[0.07]" asChild>
                   <form action={signOut}>
                     <button type="submit" className="flex items-center gap-2 w-full">
                       <LogOut className="h-3.5 w-3.5" /> Sair
@@ -139,28 +139,28 @@ export function TopNavbar({ profile }: TopNavbarProps) {
             {/* Hamburger — mobile */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <button className="md:hidden p-2 rounded-lg text-[#a0a0a0] hover:text-[#f0f0f0] hover:bg-[#242424] transition-colors">
+                <button className="md:hidden p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.07] transition-colors">
                   <Menu className="h-5 w-5" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-64 bg-[#0f0f0f] border-r border-[#2a2a2a] p-0">
+              <SheetContent side="left" className="w-64 bg-[#0A1232] border-r border-white/[0.08] p-0">
                 <div className="flex flex-col h-full">
                   {/* Header do Sheet */}
-                  <div className="flex items-center justify-between px-5 h-14 border-b border-[#2a2a2a]">
+                  <div className="flex items-center justify-between px-5 h-14 border-b border-white/[0.08]">
                     <IdmWordmark size="sm" variant="white" />
-                    <button onClick={() => setMobileOpen(false)} className="text-[#606060] hover:text-[#f0f0f0]">
+                    <button onClick={() => setMobileOpen(false)} className="text-white/30 hover:text-white">
                       <X className="h-4 w-4" />
                     </button>
                   </div>
 
                   {/* Perfil mobile */}
-                  <div className="flex items-center gap-3 px-5 py-4 border-b border-[#2a2a2a]">
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#c79a3b] to-[#e8b84b] flex items-center justify-center text-sm font-bold text-[#0f0f0f]">
+                  <div className="flex items-center gap-3 px-5 py-4 border-b border-white/[0.08]">
+                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#FFB800] to-[#FFC933] flex items-center justify-center text-sm font-bold text-[#0D1638]">
                       {initials}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold text-[#f0f0f0] truncate">{profile.full_name ?? 'Aluno'}</p>
-                      <p className="text-xs text-[#606060]">{profile.role === 'admin' ? 'Admin' : 'Aluno'}</p>
+                      <p className="text-sm font-semibold text-white truncate">{profile.full_name ?? 'Aluno'}</p>
+                      <p className="text-xs text-white/35">{profile.role === 'admin' ? 'Admin' : 'Aluno'}</p>
                     </div>
                   </div>
 
@@ -174,8 +174,8 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                         className={cn(
                           'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors',
                           isActive(href)
-                            ? 'bg-[rgba(199,154,59,0.1)] text-[#c79a3b]'
-                            : 'text-[#a0a0a0] hover:text-[#f0f0f0] hover:bg-[#1a1a1a]'
+                            ? 'bg-[rgba(255,184,0,0.12)] text-[#FFB800]'
+                            : 'text-white/50 hover:text-white hover:bg-white/[0.07]'
                         )}
                       >
                         <Icon className="h-4 w-4 flex-shrink-0" />
@@ -185,7 +185,7 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                   </nav>
 
                   {/* Sair mobile */}
-                  <div className="px-3 pb-6 border-t border-[#2a2a2a] pt-3">
+                  <div className="px-3 pb-6 border-t border-white/[0.08] pt-3">
                     <form action={signOut}>
                       <button type="submit" className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-950/30 transition-colors">
                         <LogOut className="h-4 w-4" /> Sair da conta

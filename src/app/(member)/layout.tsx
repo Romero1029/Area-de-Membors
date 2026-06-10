@@ -16,7 +16,7 @@ export default async function MemberLayout({ children }: { children: React.React
   if (!profile) redirect('/login')
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f]">
+    <div className="min-h-screen bg-[#0D1638]">
       <TopNavbar profile={profile as Profile} />
       <main className="pb-20 md:pb-8">
         {children}
