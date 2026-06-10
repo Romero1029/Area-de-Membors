@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { SemanaDespertar38 } from '@/app/(member)/lancamento/SemanaDespertar38'
+import { MetaPixelEvent } from '@/components/MetaPixelEvent'
 
 export default async function SemanaDespertar38Page({
   params,
@@ -27,5 +28,10 @@ export default async function SemanaDespertar38Page({
     (user.user_metadata?.full_name as string | undefined)?.split(' ')[0] ||
     ''
 
-  return <SemanaDespertar38 firstName={firstName} />
+  return (
+    <>
+      <MetaPixelEvent event="CompleteRegistration" />
+      <SemanaDespertar38 firstName={firstName} />
+    </>
+  )
 }
