@@ -40,30 +40,86 @@ function FadeIn({ children, delay = 0, direction = 'up' as Dir, className = '' }
 }
 
 // ─── Editorial image panel ──────────────────────────────────────────────────
-// Gradiente radial + micro-textura — intencional, não wireframe
-// Ref: Fogg Stanford (2003) — elementos incompletos visíveis destroem credibilidade
-function EditorialImg({ className = '' }: { className?: string }) {
+// Fotografia real com overlay de fusão — Paivio (1971) Dual Coding Theory
+// Reber et al. (2004) Processing Fluency — imagem contextual = afeto positivo
+function EditorialPhoto({ src, alt = '', side = 'right', className = '' }: {
+  src: string; alt?: string; side?: 'left' | 'right'; className?: string
+}) {
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      <div className="absolute inset-0"
-        style={{ background: 'radial-gradient(ellipse at 48% 38%, #111D48 0%, #0A1232 55%, #091028 100%)' }} />
-      <div className="absolute inset-0"
-        style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 25%, rgba(9,16,40,0.55) 100%)' }} />
-      <div className="absolute inset-0"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='0.8' fill='%23ffffff' fill-opacity='0.04'/%3E%3C/svg%3E")`,
-          backgroundSize: '24px 24px',
-        }} />
+      <img
+        src={src} alt={alt} loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover object-center"
+      />
+      <div className="absolute inset-0" style={{
+        background: side === 'right'
+          ? 'linear-gradient(to right, rgba(13,22,56,0.30) 0%, transparent 45%)'
+          : 'linear-gradient(to left, rgba(10,18,50,0.30) 0%, transparent 45%)'
+      }} />
     </div>
+  )
+}
+
+// ─── Programa Card ───────────────────────────────────────────────────────────
+// MasterClass / The School of Life: full-bleed editorial cards
+// Kurosu & Kashimura (CHI 1995) — aesthetic-usability effect
+// Ebbinghaus (1885) + Murdock (1962) — primacy effect: featured card top
+type ProgramaCard = {
+  num: string; titulo: string; desc: string
+  href: string; img: string; featured?: boolean
+}
+
+const PROGRAMAS_CARDS: ProgramaCard[] = [
+  { num: '01', titulo: 'Psicanálise Integrativa', featured: true,
+    desc: 'Formação certificada em teoria, análise pessoal e supervisão clínica.',
+    href: '/programas/psicanalise-integrativa',
+    img: 'https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=1400&q=85' },
+  { num: '02', titulo: 'IDM Pelo Brasil',
+    desc: 'Experiências presenciais de desenvolvimento humano em todo o país.',
+    href: '/programas/idm-pelo-brasil',
+    img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&q=82' },
+  { num: '03', titulo: 'Live Formação IDM',
+    desc: 'Conteúdos e encontros para quem deseja continuar evoluindo.',
+    href: '/loja',
+    img: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=900&q=82' },
+]
+
+function ProgramaCardItem({ card }: { card: ProgramaCard }) {
+  const aspectClass = card.featured
+    ? 'aspect-[16/9] sm:aspect-[21/9] lg:aspect-[16/7]'
+    : 'aspect-[16/9] sm:aspect-[4/3]'
+  const titleSize = card.featured
+    ? 'text-3xl sm:text-4xl lg:text-5xl'
+    : 'text-xl sm:text-2xl'
+  return (
+    <Link href={card.href} className="group relative overflow-hidden block rounded-xl">
+      <div className={`relative overflow-hidden ${aspectClass}`}>
+        <img
+          src={card.img} alt={card.titulo} loading={card.featured ? 'eager' : 'lazy'}
+          className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+        />
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to top, rgba(9,16,40,0.95) 0%, rgba(9,16,40,0.35) 45%, transparent 75%)'
+        }} />
+        <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10">
+          <p className="text-[11px] font-mono text-white/35 uppercase tracking-[0.2em] mb-3">{card.num}</p>
+          <h3 className={`font-display font-bold text-white leading-tight mb-2 ${titleSize}`}>
+            {card.titulo}
+          </h3>
+          <p className="text-white/55 text-sm leading-relaxed max-w-md">{card.desc}</p>
+        </div>
+        <div className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300">
+          <ArrowRight className="h-4 w-4 text-white" />
+        </div>
+      </div>
+    </Link>
   )
 }
 
 // ═══════════════════════════════════════════════════════════════════
 // SEÇÃO 1 — BANNER PROMOCIONAL
 // Imagem intacta — sem sobreposição de texto
-// Ref: Okonkwo (2007) Luxury Brand Management — não competir com o
-// próprio ativo visual da campanha. A imagem já comunica urgência
-// ("50% / INSCRIÇÕES ABERTAS") — sobrepor texto cria caos semiótico.
+// Ref: Okonkwo (2007) — não competir com o ativo visual da campanha
 // ═══════════════════════════════════════════════════════════════════
 function BannerSection() {
   return (
@@ -81,13 +137,8 @@ function BannerSection() {
 
 // ═══════════════════════════════════════════════════════════════════
 // SEÇÃO 2 — HERO TIPOGRÁFICO
-// Headline separado da imagem — espaço tipográfico puro
 // Ref: Müller-Brockmann (1981) Grid Systems — hierarquia tipográfica
-// como linguagem editorial. Lupton (2010) Thinking with Type —
-// contraste de escala (clamp 2.5→5.5rem) direciona o olhar antes
-// de qualquer outro elemento. Dois CTAs: primário (gold) e
-// secundário (texto puro) — Fitts Law: diferença visual clara
-// reduz hesitação de clique.
+// Ref: Lupton (2010) Thinking with Type — contraste de escala
 // ═══════════════════════════════════════════════════════════════════
 function HeroSection() {
   return (
@@ -120,19 +171,15 @@ function HeroSection() {
 
 // ═══════════════════════════════════════════════════════════════════
 // SEÇÃO 3 — MANIFESTO
-// Grande quote + corpo em 2 colunas — âncora de crença
-// Ref: Cialdini (2001) Commitment — crenças compartilhadas antes da
-// oferta aumentam adesão subsequente em ~34% (Freedman & Fraser, 1966).
-// Ref: Kahneman (2011) Sistema 1 — âncora emocional precede e
-// enquadra decisão racional. Corpo em 2 colunas: quebra visual que
-// cria "respiração" sem reduzir conteúdo (Fadeyev 2009 whitespace).
-// py-36/56: silence communicates premium — Okonkwo (2007).
+// Ref: Cialdini (2001) Commitment — crenças compartilhadas antes da oferta
+// Ref: Bringhurst (1992) — linha ornamental como caesura tipográfica
 // ═══════════════════════════════════════════════════════════════════
 function ManifestoSection() {
   return (
     <section className="border-t border-white/[0.06] bg-[#0D1638] py-36 sm:py-56">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
         <FadeIn direction="none">
+          <div className="w-14 h-px bg-white/20 mb-10" />
           <h2 className="font-display text-[clamp(3rem,7.5vw,6.5rem)] font-bold text-white leading-[0.92] tracking-tight max-w-4xl">
             Nem toda mudança começa do lado de fora.
           </h2>
@@ -156,13 +203,8 @@ function ManifestoSection() {
 
 // ═══════════════════════════════════════════════════════════════════
 // SEÇÃO 4 — SOBRE O INSTITUTO  [texto esq + imagem dir]
-// Início do padrão Z — texto à esquerda ancora varredura natural
-// Ref: Paivio (1971) Dual Coding Theory — imagem + texto codificados
-// simultaneamente em canais verbal e visual = retenção 65% maior.
-// Ref: Liu (2010) Z-Pattern in Web Reading — texto-esq inicia
-// varredura; imagem-dir fecha ciclo Z antes do scroll.
-// Imagem full-height sem padding: Okonkwo (2007) editorial
-// photography como sinal primário de premium em marcas educacionais.
+// Ref: Paivio (1971) Dual Coding Theory — imagem + texto = retenção 65% maior
+// Ref: Liu (2010) Z-Pattern — texto-esq inicia varredura; imagem-dir fecha ciclo
 // ═══════════════════════════════════════════════════════════════════
 function SobreSection() {
   return (
@@ -193,7 +235,7 @@ function SobreSection() {
                 { n: 'Brasil',  l: 'Alunos em todo o país' },
               ].map(({ n, l }) => (
                 <div key={l}>
-                  <p className="font-display text-3xl sm:text-4xl font-bold text-white">{n}</p>
+                  <p className="font-display text-5xl sm:text-6xl font-bold text-white">{n}</p>
                   <p className="mt-1.5 text-[10px] text-white/25 uppercase tracking-wide leading-snug">{l}</p>
                 </div>
               ))}
@@ -201,9 +243,14 @@ function SobreSection() {
           </FadeIn>
         </div>
 
-        {/* Imagem editorial — full height */}
+        {/* Imagem editorial — Trinity College Library — herança acadêmica */}
         <div className="hidden lg:block relative border-l border-white/[0.05]">
-          <EditorialImg className="absolute inset-0" />
+          <EditorialPhoto
+            src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=900&q=82"
+            alt="Biblioteca acadêmica — herança intelectual"
+            side="right"
+            className="absolute inset-0"
+          />
         </div>
 
       </div>
@@ -213,14 +260,8 @@ function SobreSection() {
 
 // ═══════════════════════════════════════════════════════════════════
 // SEÇÃO 5 — METODOLOGIA  [imagem esq + texto dir]
-// Inverte o padrão Z da seção 4 — zig-zag editorial
-// Ref: Wertheimer (1923) Gestalt Prägnanz — padrão previsível-mas-
-// variado mantém atenção sem produzir monotonia. Quando o lado da
-// imagem alterna, o cérebro interpreta como "capítulo novo" — sinal
-// de estrutura editorial sofisticada, não de conteúdo pesado.
-// Ref: Kaplan (1989) Attention Restoration Theory — estímulos visuais
-// intercalados restauram atenção dirigida (prefrontal fatigue),
-// permitindo leitura sustentada em páginas longas.
+// Ref: Wertheimer (1923) Gestalt Prägnanz — padrão variado mantém atenção
+// Ref: Kaplan (1989) Attention Restoration Theory — estímulos intercalados
 // ═══════════════════════════════════════════════════════════════════
 const PILARES = [
   { n: '01', t: 'Teoria',             d: 'Base sólida para compreender comportamento, emoções e processos psíquicos.' },
@@ -233,9 +274,14 @@ function MetodologiaSection() {
     <section className="border-t border-white/[0.06] bg-[#0A1232] overflow-hidden">
       <div className="max-w-7xl mx-auto lg:grid lg:grid-cols-[38%_1fr] lg:min-h-[560px]">
 
-        {/* Imagem — esquerda */}
+        {/* Imagem — padrões geracionais / registros */}
         <div className="hidden lg:block relative border-r border-white/[0.05]">
-          <EditorialImg className="absolute inset-0" />
+          <EditorialPhoto
+            src="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=900&q=82"
+            alt="Padrões e história — metodologia psicanalítica"
+            side="left"
+            className="absolute inset-0"
+          />
         </div>
 
         {/* Texto */}
@@ -268,12 +314,8 @@ function MetodologiaSection() {
 
 // ═══════════════════════════════════════════════════════════════════
 // SEÇÃO 6 — PARA QUEM É  [texto esq + imagem dir]
-// Retoma texto-esq: padrão Z completo (zig-zag seções 4→5→6)
-// Ref: Miller (StoryBrand, 2017) — posicionar o cliente como herói
-// antes da oferta produz identificação que antecede conversão.
-// Ref: Fogg, Stanford Web Credibility (2003) — especificidade de
-// audiência é critério de credibilidade percebida. 5 qualificadores
-// comunicam curadoria intencional, não produto genérico.
+// Ref: Miller (StoryBrand, 2017) — posicionar cliente como herói
+// Ref: Fogg, Stanford (2003) — especificidade de audiência = credibilidade
 // ═══════════════════════════════════════════════════════════════════
 const PARA_QUEM = [
   'Para quem busca autoconhecimento profundo.',
@@ -307,9 +349,14 @@ function ParaQuemSection() {
           </FadeIn>
         </div>
 
-        {/* Imagem — direita */}
+        {/* Imagem — meditação / autoconhecimento */}
         <div className="hidden lg:block relative border-l border-white/[0.05]">
-          <EditorialImg className="absolute inset-0" />
+          <EditorialPhoto
+            src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=900&q=82"
+            alt="Autoconhecimento e prática interior"
+            side="right"
+            className="absolute inset-0"
+          />
         </div>
 
       </div>
@@ -318,47 +365,28 @@ function ParaQuemSection() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// SEÇÃO 7 — PROGRAMAS  [lista editorial]
-// Sem cards — índice de revista premium
-// Ref: Hick & Hyman (1952) — tempo de decisão cresce
-// logaritmicamente com nº de opções. 3 programas = clareza máxima.
-// Hover sutil (-mx-4 px-4): Fitts Law (1954) — área de clique maior
-// sem elemento visual pesado que "grite" sobre o conteúdo.
+// SEÇÃO 7 — PROGRAMAS  [magazine grid]
+// Ref: Kurosu & Kashimura (CHI 1995) Aesthetic-Usability Effect
+// Ref: Wertheimer (1923) Größengesetz — tamanho hierarquiza
+// Ref: Ebbinghaus (1885) Primacy Effect — card featured = topo
 // ═══════════════════════════════════════════════════════════════════
-const PROGRAMAS_DATA = [
-  { num: '01', titulo: 'Psicanálise Integrativa',    desc: 'Formação certificada — teoria, análise pessoal e supervisão clínica.', href: '/programas/psicanalise-integrativa' },
-  { num: '02', titulo: 'IDM Pelo Brasil',             desc: 'Experiências presenciais de desenvolvimento humano em todo o país.',   href: '/programas/idm-pelo-brasil' },
-  { num: '03', titulo: 'Live Formação IDM',           desc: 'Conteúdos e encontros para quem deseja continuar evoluindo.',          href: '/loja' },
-]
-
 function ProgramasSection() {
   return (
-    <section className="border-t border-white/[0.06] bg-[#0A1232]">
+    <section id="formacao" className="border-t border-white/[0.06] bg-[#0A1232]">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24">
-        <FadeIn direction="none" className="mb-12">
+        <FadeIn direction="none" className="mb-8 sm:mb-12">
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-white leading-[1.0]">
             Caminhos diferentes.<br />O mesmo propósito.
           </h2>
         </FadeIn>
-        <div>
-          {PROGRAMAS_DATA.map((p, i) => (
-            <FadeIn key={p.titulo} delay={i * 60}>
-              <Link
-                href={p.href}
-                className="group flex items-start sm:items-center justify-between gap-6 border-t border-white/[0.07] py-7 -mx-4 px-4 hover:bg-white/[0.015] transition-colors rounded-sm">
-                <div className="flex items-start sm:items-center gap-6 sm:gap-10 min-w-0">
-                  <span className="text-[11px] text-white/20 font-mono shrink-0 mt-1 sm:mt-0">{p.num}</span>
-                  <div>
-                    <p className="font-display text-xl sm:text-2xl font-bold text-white group-hover:text-white/90 transition-colors">{p.titulo}</p>
-                    <p className="mt-0.5 text-sm text-white/35 leading-snug">{p.desc}</p>
-                  </div>
-                </div>
-                <ArrowRight className="h-5 w-5 text-white/20 group-hover:text-white/50 group-hover:translate-x-0.5 transition-all shrink-0 mt-1 sm:mt-0" />
-              </Link>
-            </FadeIn>
-          ))}
-          <div className="border-t border-white/[0.07]" />
-        </div>
+        <FadeIn direction="up" className="space-y-3 sm:space-y-4">
+          <ProgramaCardItem card={PROGRAMAS_CARDS[0]} />
+          <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+            {PROGRAMAS_CARDS.slice(1).map(c => (
+              <ProgramaCardItem key={c.num} card={c} />
+            ))}
+          </div>
+        </FadeIn>
       </div>
     </section>
   )
@@ -366,13 +394,8 @@ function ProgramasSection() {
 
 // ═══════════════════════════════════════════════════════════════════
 // SEÇÃO 8 — DEPOIMENTOS
-// Texto puro — 3 colunas, sem cards, sem vídeos
-// Ref: Fogg, Stanford Web Credibility (2003) — nome real + cargo +
-// resultado específico = máxima credibilidade percebida.
-// Depoimentos com vídeo "ausente" destroem confiança mais do que
-// texto simples (Trusov et al., 2009 word-of-mouth study).
-// Posição antes do CTA: Cialdini (2001) liking principle —
-// aprovação de pares reduz resistência ao compromisso final.
+// Ref: Fogg, Stanford (2003) — nome real + cargo + resultado = credibilidade
+// Ref: Bringhurst (1992) — aspas decorativas como ornamento editorial
 // ═══════════════════════════════════════════════════════════════════
 function DepoimentosSection({ depos }: { depos: Depo[] }) {
   if (!depos.length) return null
@@ -394,6 +417,7 @@ function DepoimentosSection({ depos }: { depos: Depo[] }) {
           {depos.slice(0, 3).map((d, i) => (
             <FadeIn key={i} delay={i * 70}>
               <div className="space-y-5">
+                <p className="font-display text-7xl leading-none text-white/[0.06] -mb-4 select-none">&ldquo;</p>
                 <p className="text-white/55 leading-relaxed text-sm">&ldquo;{d.texto}&rdquo;</p>
                 <div className="border-t border-white/[0.06] pt-4">
                   <p className="text-sm font-semibold text-white">{d.nome}</p>
@@ -411,15 +435,8 @@ function DepoimentosSection({ depos }: { depos: Depo[] }) {
 
 // ═══════════════════════════════════════════════════════════════════
 // SEÇÃO 9 — CTA FINAL
-// Tipografia dominante + whitespace máximo
-// Ref: Fadeyev (2009) — espaço extenso antes do CTA sinaliza
-// confiança; marcas que "precisam preencher" cada pixel demonstram
-// ansiedade, não autoridade.
-// Ref: Cialdini (2001) autoridade — linguagem institucional
-// ("O despertar começa com uma decisão") supera linguagem de
-// facilidade. Leads high-ticket respondem a seriedade, não conveniência.
-// Layout assimétrico (headline esq / botão dir): tensão editorial
-// que evita estética de landing page genérica.
+// Ref: Fadeyev (2009) — whitespace antes do CTA sinaliza confiança
+// Ref: Cialdini (2001) — linguagem institucional supera linguagem de facilidade
 // ═══════════════════════════════════════════════════════════════════
 function CTASection() {
   return (
@@ -459,10 +476,8 @@ function CTASection() {
 
 // ═══════════════════════════════════════════════════════════════════
 // EXPORT PRINCIPAL
-// Ritmo visual: Banner → Tipo → Quote → [T+I] → [I+T] → [T+I]
-//               → Lista → Quotes → CTA
-// O padrão Z completo nas seções 4→5→6 cria leitura dinâmica sem
-// adicionar conteúdo — só estrutura editorial.
+// Ritmo: Banner → Tipo → Quote+ornamento → [T+Foto] → [Foto+T] → [T+Foto]
+//        → Magazine Grid → Quotes+aspas → CTA
 // ═══════════════════════════════════════════════════════════════════
 export function ComecarAnimated({
   depos,
@@ -472,7 +487,7 @@ export function ComecarAnimated({
   programas: Programa[]
 }) {
   return (
-    <main className="bg-[#0D1638] text-white overflow-x-hidden" id="formacao">
+    <main className="bg-[#0D1638] text-white overflow-x-hidden">
       <BannerSection />
       <HeroSection />
       <ManifestoSection />
