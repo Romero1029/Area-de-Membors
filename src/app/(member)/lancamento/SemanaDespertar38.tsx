@@ -43,6 +43,7 @@ const AULAS: Aula[] = [
     data: '16/06 · Terça-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/VvmEH5LlC_0',
+    imageUrl: 'https://img.youtube.com/vi/VvmEH5LlC_0/maxresdefault.jpg',
     gcal: { titulo: 'SDW #38 — Aula 1', inicio: '20260616T230000Z', fim: '20260617T010000Z', desc: 'Aula 1 da Semana do Despertar #38 · IDM' },
   },
   {
@@ -51,6 +52,7 @@ const AULAS: Aula[] = [
     data: '17/06 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/NxnyXcM7WXE',
+    imageUrl: 'https://img.youtube.com/vi/NxnyXcM7WXE/maxresdefault.jpg',
     gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20260617T230000Z', fim: '20260618T010000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM' },
   },
   {
@@ -59,6 +61,7 @@ const AULAS: Aula[] = [
     data: '18/06 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/hiBJtMBPgu0',
+    imageUrl: 'https://img.youtube.com/vi/hiBJtMBPgu0/maxresdefault.jpg',
     gcal: { titulo: 'SDW #38 — Aula 3', inicio: '20260618T230000Z', fim: '20260619T010000Z', desc: 'Aula 3 da Semana do Despertar #38 · IDM' },
   },
 ]
@@ -71,7 +74,7 @@ const STORAGE_KEY  = 'sdw38_progress'
 // TYPES
 // ─────────────────────────────────────────────
 interface Aula {
-  id: number; titulo: string; data: string; horario: string; youtubeUrl: string
+  id: number; titulo: string; data: string; horario: string; youtubeUrl: string; imageUrl: string
   gcal: { titulo: string; inicio: string; fim: string; desc: string }
 }
 interface Progress {
@@ -420,11 +423,32 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                       const aulaFeita = progress[aulaKey]
                       return (
                         <div key={aula.id}
-                          className="rounded-xl border p-4 space-y-3 transition-all duration-300"
+                          className="rounded-xl border overflow-hidden transition-all duration-300"
                           style={{
                             borderColor: aulaFeita ? 'rgba(34,197,94,0.20)' : 'rgba(255,255,255,0.08)',
                             background: aulaFeita ? 'rgba(34,197,94,0.04)' : '#091028',
                           }}>
+                          {/* Thumbnail */}
+                          <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+                            <img
+                              src={aula.imageUrl}
+                              alt={aula.titulo}
+                              className="w-full h-full object-cover block"
+                              onError={(e) => {
+                                (e.currentTarget.parentElement as HTMLElement).style.display = 'none'
+                              }}
+                            />
+                            {aulaFeita && (
+                              <div className="absolute inset-0 flex items-center justify-center"
+                                style={{ background: 'rgba(0,0,0,0.45)' }}>
+                                <div className="w-11 h-11 rounded-full bg-[#22c55e] flex items-center justify-center shadow-lg">
+                                  <Check className="h-5 w-5 text-white" />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          {/* Conteúdo */}
+                          <div className="p-4 space-y-3">
                           <div className="flex items-start justify-between gap-3">
                             <div>
                               <p className="text-[11px] font-mono text-white/25">Aula {aula.id}</p>
@@ -448,6 +472,7 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                               <Calendar className="h-3.5 w-3.5" /> Agendar
                             </button>
                           </div>
+                          </div>{/* fim p-4 */}
                         </div>
                       )
                     })}
