@@ -19,9 +19,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 const navLinks = [
-  { href: '/lancamento',   label: 'Semana do Despertar', icon: CalendarDays, highlight: true },
-  { href: '/certificados', label: 'Certificados',         icon: Award },
-  { href: '/loja',         label: 'Loja',                 icon: ShoppingBag },
+  { href: '/lancamento', label: 'Semana do Despertar', icon: CalendarDays, highlight: true },
 ]
 
 interface TopNavbarProps {
