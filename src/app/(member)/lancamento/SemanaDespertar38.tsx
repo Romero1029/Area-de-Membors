@@ -3,16 +3,16 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import {
-  Check, Lock, MessageCircle, ChevronRight,
+  Check, Lock,
   Play, Download, Video, Calendar, Bell,
-  Award, ExternalLink, ShoppingBag, Sparkles, X, Zap,
+  Award, ExternalLink, Zap, MessageCircle,
 } from 'lucide-react'
 
 // ─────────────────────────────────────────────
 // CONFIG — edite aqui sem tocar no restante
 // ─────────────────────────────────────────────
 
-const WA_GROUP_URL   = 'https://chat.whatsapp.com/XXXXXXXXXX'
+const WA_GROUP_URL   = 'https://chat.whatsapp.com/EzebszSzZyUDdtrQ35YwMY'
 const INTRO_VIDEO_ID = ''
 const EBOOK_URL      = '#'
 const BANNER_URL     = ''  // ex: '/banner-sdw38.png'
@@ -40,48 +40,52 @@ const AULAS: Aula[] = [
   {
     id: 1,
     titulo: 'Aula 1 — A Raiz dos Seus Padrões',
-    data: 'A confirmar',
+    data: '16/06 · Terça-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/@institutodespertamente',
-    gcal: { titulo: 'SDW #38 — Aula 1', inicio: '20250110T230000Z', fim: '20250111T010000Z', desc: 'Aula 1 da Semana do Despertar #38 · IDM' },
+    youtubeUrl: 'https://youtube.com/live/VvmEH5LlC_0',
+    imageUrl: 'https://img.youtube.com/vi/VvmEH5LlC_0/maxresdefault.jpg',
+    gcal: { titulo: 'SDW #38 — Aula 1', inicio: '20260616T230000Z', fim: '20260617T010000Z', desc: 'Aula 1 da Semana do Despertar #38 · IDM' },
   },
   {
     id: 2,
     titulo: 'Aula 2 — Reprogramando o Inconsciente',
-    data: 'A confirmar',
+    data: '17/06 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/@institutodespertamente',
-    gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20250112T230000Z', fim: '20250113T010000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM' },
+    youtubeUrl: 'https://youtube.com/live/NxnyXcM7WXE',
+    imageUrl: 'https://img.youtube.com/vi/NxnyXcM7WXE/maxresdefault.jpg',
+    gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20260617T230000Z', fim: '20260618T010000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM' },
   },
   {
     id: 3,
     titulo: 'Aula 3 — Transformação em Ação',
-    data: 'A confirmar',
+    data: '18/06 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/@institutodespertamente',
-    gcal: { titulo: 'SDW #38 — Aula 3', inicio: '20250114T230000Z', fim: '20250115T010000Z', desc: 'Aula 3 da Semana do Despertar #38 · IDM' },
+    youtubeUrl: 'https://youtube.com/live/hiBJtMBPgu0',
+    imageUrl: 'https://img.youtube.com/vi/hiBJtMBPgu0/maxresdefault.jpg',
+    gcal: { titulo: 'SDW #38 — Aula 3', inicio: '20260618T230000Z', fim: '20260619T010000Z', desc: 'Aula 3 da Semana do Despertar #38 · IDM' },
   },
 ]
 
 const XP_PER_STEP = 200
-const TOTAL_STEPS  = 5
+const TOTAL_STEPS  = 3
 const STORAGE_KEY  = 'sdw38_progress'
+
+// 22h Horário de Brasília em 18/06/2026 = 01h UTC do dia 19/06/2026
+const CERT_UNLOCK = new Date('2026-06-19T01:00:00Z')
 
 // ─────────────────────────────────────────────
 // TYPES
 // ─────────────────────────────────────────────
 interface Aula {
-  id: number; titulo: string; data: string; horario: string; youtubeUrl: string
+  id: number; titulo: string; data: string; horario: string; youtubeUrl: string; imageUrl: string
   gcal: { titulo: string; inicio: string; fim: string; desc: string }
 }
 interface Progress {
-  step1_vip: boolean; step2_intro: boolean
-  step3_modal_visto: boolean; step3_oferta: boolean
+  step1_vip: boolean
   step4_aula1: boolean; step4_aula2: boolean; step4_aula3: boolean
 }
 const EMPTY: Progress = {
-  step1_vip: false, step2_intro: false,
-  step3_modal_visto: false, step3_oferta: false,
+  step1_vip: false,
   step4_aula1: false, step4_aula2: false, step4_aula3: false,
 }
 type StepStatus = 'locked' | 'available' | 'done'
@@ -142,7 +146,7 @@ function ProgressTracker({ done, total, xp }: { done: number; total: number; xp:
 // ─────────────────────────────────────────────
 // STEP BADGE
 // ─────────────────────────────────────────────
-function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
+function StepBadge({ numero, status, showNum }: { numero: number; status: StepStatus; showNum?: boolean }) {
   if (status === 'done') {
     return (
       <div className="w-10 h-10 rounded-full bg-[#22c55e]/15 border-2 border-[#22c55e]/40 flex items-center justify-center shrink-0">
@@ -150,10 +154,17 @@ function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
       </div>
     )
   }
-  if (status === 'locked') {
+  if (status === 'locked' && !showNum) {
     return (
       <div className="w-10 h-10 rounded-full bg-white/[0.04] border-2 border-white/10 flex items-center justify-center shrink-0">
         <Lock className="h-3.5 w-3.5 text-white/20" />
+      </div>
+    )
+  }
+  if (status === 'locked' && showNum) {
+    return (
+      <div className="w-10 h-10 rounded-full bg-[#FFB800]/[0.06] border-2 border-[#FFB800]/20 flex items-center justify-center shrink-0">
+        <span className="text-sm font-bold text-[#FFB800]/40">{numero}</span>
       </div>
     )
   }
@@ -169,25 +180,27 @@ function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
 // STEP CARD
 // ─────────────────────────────────────────────
 function StepCard({
-  numero, titulo, status, subtitle, badge, children,
+  numero, titulo, status, subtitle, badge, children, forceContent,
 }: {
   numero: number; titulo: string; status: StepStatus
   subtitle?: string; badge?: React.ReactNode; children?: React.ReactNode
+  forceContent?: boolean
 }) {
   const border =
-    status === 'done'      ? 'border-[#22c55e]/15' :
-    status === 'available' ? 'border-[#FFB800]/25'  :
-                             'border-white/[0.08]'
+    status === 'done'        ? 'border-[#22c55e]/15' :
+    status === 'available'   ? 'border-[#FFB800]/25'  :
+    forceContent             ? 'border-[#FFB800]/12'  :
+                               'border-white/[0.08]'
 
-  const bg = status === 'available' ? 'bg-[#0F1940]' : 'bg-[#0A1232]'
+  const bg = (status === 'available' || forceContent) ? 'bg-[#0F1940]' : 'bg-[#0A1232]'
 
   return (
-    <div className={`rounded-2xl border ${border} ${bg} overflow-hidden transition-all duration-300 ${status === 'locked' ? 'opacity-40' : ''}`}>
+    <div className={`rounded-2xl border ${border} ${bg} overflow-hidden transition-all duration-300 ${status === 'locked' && !forceContent ? 'opacity-40' : ''}`}>
       <div className="flex items-start gap-4 px-5 py-5">
-        <StepBadge numero={numero} status={status} />
+        <StepBadge numero={numero} status={status} showNum={forceContent} />
         <div className="flex-1 min-w-0 pt-0.5">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className={`text-base font-semibold leading-snug ${status === 'locked' ? 'text-white/25' : 'text-white/90'}`}>
+            <p className={`text-base font-semibold leading-snug ${status === 'locked' && !forceContent ? 'text-white/25' : 'text-white/90'}`}>
               {titulo}
             </p>
             {badge}
@@ -195,15 +208,15 @@ function StepCard({
           {status === 'done' && !subtitle && (
             <p className="text-xs text-[#22c55e]/60 mt-0.5">Concluído ✓</p>
           )}
-          {status === 'locked' && (
+          {status === 'locked' && !forceContent && (
             <p className="text-xs text-white/20 mt-0.5">Complete a etapa anterior para desbloquear.</p>
           )}
-          {subtitle && status !== 'locked' && (
+          {subtitle && (status !== 'locked' || forceContent) && (
             <p className="text-xs text-white/35 mt-0.5">{subtitle}</p>
           )}
         </div>
       </div>
-      {status !== 'locked' && children && (
+      {(status !== 'locked' || forceContent) && children && (
         <div className="border-t border-white/[0.08] px-5 pb-5 pt-4">
           {children}
         </div>
@@ -213,123 +226,92 @@ function StepCard({
 }
 
 // ─────────────────────────────────────────────
-// OFERTA MODAL
+// CERT RESGATE FORM
 // ─────────────────────────────────────────────
-function OfertaModal({ firstName, onAceitar, onFechar }: {
-  firstName: string; onAceitar: () => void; onFechar: () => void
-}) {
-  useEffect(() => {
-    document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = '' }
-  }, [])
+function CertResgateForm() {
+  const [palavras, setPalavras] = useState(['', '', ''])
+  const [estado, setEstado] = useState<'idle' | 'enviando' | 'sucesso' | 'erro'>('idle')
+  const [erroMsg, setErroMsg] = useState('')
+
+  const handleSubmit = async () => {
+    if (palavras.some(p => !p.trim())) return
+    setEstado('enviando')
+    setErroMsg('')
+    try {
+      const res = await fetch('/api/certificado/resgatar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ palavra1: palavras[0], palavra2: palavras[1], palavra3: palavras[2] }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setEstado('sucesso')
+      } else {
+        setEstado('erro')
+        setErroMsg(data.error ?? 'Erro ao resgatar. Tente novamente.')
+      }
+    } catch {
+      setEstado('erro')
+      setErroMsg('Erro de conexão. Tente novamente.')
+    }
+  }
+
+  if (estado === 'sucesso') {
+    return (
+      <div className="text-center space-y-4 py-2">
+        <div className="w-14 h-14 rounded-full bg-[#22c55e]/15 border-2 border-[#22c55e]/30 flex items-center justify-center mx-auto">
+          <Check className="h-6 w-6 text-[#22c55e]" />
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-white/90">Certificado emitido!</p>
+          <p className="text-xs text-white/35 mt-0.5">Parabéns por concluir a Semana do Despertar #38.</p>
+        </div>
+        <Link href="/certificados?celebrar=true"
+          className="inline-flex items-center gap-2 rounded-xl py-3 px-6 text-sm font-bold text-[#0D1638] transition-all"
+          style={{ background: '#FFB800', boxShadow: '0 6px 20px rgba(255,184,0,0.30)' }}>
+          <Award className="h-4 w-4" /> Ver meu certificado
+        </Link>
+      </div>
+    )
+  }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:px-5"
-      style={{ background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
-      onClick={onFechar}
-    >
-      {[{ top:'15%',left:'10%',d:'0s',dur:'2.4s' },{ top:'75%',left:'15%',d:'0.5s',dur:'2.0s' },
-        { top:'20%',left:'82%',d:'0.8s',dur:'2.6s' },{ top:'70%',left:'80%',d:'0.3s',dur:'1.9s' }]
-        .map((p, i) => (
-          <span key={i} className="absolute w-1 h-1 rounded-full bg-[#FFB800]/40 animate-ping pointer-events-none"
-            style={{ top:p.top, left:p.left, animationDelay:p.d, animationDuration:p.dur }} />
-        ))}
-
-      <div
-        className="relative w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden"
-        style={{ background:'linear-gradient(170deg,#111D48 0%,#0D1638 50%,#0A1232 100%)',
-                 border:'1px solid rgba(255,184,0,0.22)', boxShadow:'0 0 100px rgba(255,184,0,0.10),0 32px 80px rgba(0,0,0,0.7)' }}
-        onClick={e => e.stopPropagation()}
+    <div className="space-y-3">
+      <p className="text-xs text-white/35">Insira as 3 palavras-chave reveladas nas aulas ao vivo:</p>
+      {[0, 1, 2].map(i => (
+        <div key={i}>
+          <label className="text-[10px] text-white/25 mb-1 block">Palavra {i + 1}</label>
+          <input
+            type="text"
+            value={palavras[i]}
+            onChange={e => {
+              const next = [...palavras]
+              next[i] = e.target.value
+              setPalavras(next)
+            }}
+            placeholder={`Palavra ${i + 1}`}
+            disabled={estado === 'enviando'}
+            className="w-full rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/15 outline-none transition-colors"
+            style={{
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.10)',
+            }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,184,0,0.35)' }}
+            onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.10)' }}
+          />
+        </div>
+      ))}
+      {estado === 'erro' && erroMsg && (
+        <p className="text-xs text-red-400 leading-relaxed">{erroMsg}</p>
+      )}
+      <button
+        onClick={handleSubmit}
+        disabled={estado === 'enviando' || palavras.some(p => !p.trim())}
+        className="w-full rounded-xl py-3.5 text-sm font-bold text-[#0D1638] disabled:opacity-40 transition-all active:scale-[0.98]"
+        style={{ background: '#FFB800', boxShadow: palavras.every(p => p.trim()) ? '0 6px 20px rgba(255,184,0,0.25)' : 'none' }}
       >
-        <div className="h-px w-full" style={{ background:'linear-gradient(90deg,transparent,#FFB800,#FFC933,#FFB800,transparent)' }} />
-        <div className="flex justify-center pt-3 sm:hidden">
-          <div className="w-9 h-1 rounded-full bg-white/10" />
-        </div>
-        <button onClick={onFechar}
-          className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/60 transition-colors">
-          <X className="h-3.5 w-3.5" />
-        </button>
-
-        <div className="px-6 sm:px-7 pt-5 pb-7 space-y-5">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-[#FFB800]/25 bg-[#FFB800]/[0.08] px-3 py-1">
-            <Sparkles className="h-3 w-3 text-[#FFB800]" />
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#FFB800]">
-              {firstName}, você foi selecionado
-            </span>
-          </div>
-
-          {OFERTA.ativo ? (
-            <>
-              <h2 className="font-display text-2xl sm:text-[26px] font-bold leading-[1.1] text-white">
-                {OFERTA.atencao}
-              </h2>
-              <p className="text-sm text-white/50 leading-relaxed">{OFERTA.interesse}</p>
-              <div className="rounded-2xl border border-white/[0.08] bg-[#0A1232] p-4 space-y-3">
-                <div>
-                  <p className="text-[11px] font-mono uppercase tracking-widest text-[#FFB800]/60 mb-1">Oferta exclusiva</p>
-                  <p className="text-base font-semibold text-white/90 leading-snug">{OFERTA.nome}</p>
-                  <p className="text-xs text-white/40 mt-1 leading-relaxed">{OFERTA.descricao}</p>
-                </div>
-                <div className="h-px bg-white/[0.08]" />
-                <ul className="space-y-2">
-                  {OFERTA.beneficios.map((b, i) => (
-                    <li key={i} className="flex items-start gap-2.5">
-                      <span className="w-4 h-4 rounded-full bg-[#FFB800]/15 border border-[#FFB800]/25 flex items-center justify-center shrink-0 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-[#FFB800]" />
-                      </span>
-                      <span className="text-sm text-white/60">{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-end justify-between gap-3">
-                  <div>
-                    <p className="text-xs text-white/25 line-through tabular-nums">{OFERTA.preco_original}</p>
-                    <p className="text-4xl font-black text-[#FFB800] tabular-nums leading-none">{OFERTA.preco}</p>
-                    {OFERTA.parcelamento && <p className="text-[11px] text-white/35 mt-1">{OFERTA.parcelamento}</p>}
-                  </div>
-                  {OFERTA.urgencia && <p className="text-[11px] text-white/30 leading-snug text-right max-w-[120px]">{OFERTA.urgencia}</p>}
-                </div>
-                <a href={OFERTA.url} target="_blank" rel="noopener noreferrer" onClick={onAceitar}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold text-[#0D1638] transition-all active:scale-[0.98] hover:bg-[#FFC933]"
-                  style={{ background:'#FFB800', boxShadow:'0 8px 32px rgba(255,184,0,0.30)' }}>
-                  <ShoppingBag className="h-4 w-4" /> Quero aproveitar essa condição
-                </a>
-                <button onClick={onFechar} className="w-full py-2 text-xs text-white/20 hover:text-white/45 transition-colors">
-                  Não, obrigado
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <h2 className="font-display text-2xl font-bold leading-[1.1] text-white">
-                Você acabou de provar<br />que é diferente.
-              </h2>
-              <p className="text-sm text-white/50 leading-relaxed">
-                A maioria das pessoas desiste antes da aula introdutória. Você foi até aqui — e por isso uma condição especial foi reservada para o seu perfil.
-              </p>
-              <div className="rounded-xl border border-[#FFB800]/12 bg-[#FFB800]/[0.04] px-4 py-3 space-y-1">
-                <p className="text-xs font-semibold text-[#FFB800]/70">Oferta exclusiva em breve</p>
-                <p className="text-xs text-white/40 leading-relaxed">
-                  Os detalhes do produto serão revelados durante a Semana do Despertar. Você já está na fila de acesso prioritário.
-                </p>
-              </div>
-              <div className="space-y-2.5">
-                <button onClick={onAceitar}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold text-[#0D1638] transition-all hover:bg-[#FFC933]"
-                  style={{ background:'#FFB800', boxShadow:'0 8px 32px rgba(255,184,0,0.25)' }}>
-                  Garantir minha condição exclusiva
-                </button>
-                <button onClick={onFechar} className="w-full py-2 text-xs text-white/20 hover:text-white/45 transition-colors">
-                  Ver depois
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+        {estado === 'enviando' ? 'Verificando...' : 'Resgatar meu Certificado'}
+      </button>
     </div>
   )
 }
@@ -338,7 +320,7 @@ function OfertaModal({ firstName, onAceitar, onFechar }: {
 // MINI TIMELINE — jornada dos 5 passos
 // ─────────────────────────────────────────────
 function MiniTimeline({ currentStep }: { currentStep: number }) {
-  const steps = ['VIP', 'Intro', 'Acesso', 'Aulas', 'Cert.']
+  const steps = ['VIP', 'Aulas', 'Cert.']
   return (
     <div className="flex items-center">
       {steps.map((label, i) => {
@@ -375,7 +357,7 @@ function MiniTimeline({ currentStep }: { currentStep: number }) {
 export function SemanaDespertar38({ firstName }: { firstName: string }) {
   const [progress, setProgress] = useState<Progress>(EMPTY)
   const [hydrated, setHydrated] = useState(false)
-  const [showModal, setShowModal] = useState(false)
+  const [now, setNow] = useState<Date>(() => new Date())
 
   useEffect(() => {
     try {
@@ -386,12 +368,10 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
   }, [])
 
   useEffect(() => {
-    if (!hydrated) return
-    if (progress.step2_intro && !progress.step3_modal_visto) {
-      const t = setTimeout(() => setShowModal(true), 600)
-      return () => clearTimeout(t)
-    }
-  }, [hydrated, progress.step2_intro, progress.step3_modal_visto])
+    if (now >= CERT_UNLOCK) return
+    const id = setInterval(() => setNow(new Date()), 60_000)
+    return () => clearInterval(id)
+  }, [now])
 
   const mark = useCallback((key: keyof Progress) => {
     setProgress(prev => {
@@ -403,30 +383,27 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
   if (!hydrated) return null
 
-  const { step1_vip, step2_intro, step3_modal_visto, step3_oferta, step4_aula1, step4_aula2, step4_aula3 } = progress
+  const { step1_vip, step4_aula1, step4_aula2, step4_aula3 } = progress
   const todasAulasFeitas = step4_aula1 && step4_aula2 && step4_aula3
+  const certUnlocked = now >= CERT_UNLOCK
 
-  const s1: StepStatus = step1_vip       ? 'done'      : 'available'
-  const s2: StepStatus = !step1_vip      ? 'locked'    : step2_intro   ? 'done' : 'available'
-  const s3: StepStatus = !step2_intro    ? 'locked'    : step3_oferta  ? 'done' : 'available'
-  const s4: StepStatus = !step3_oferta   ? 'locked'    : todasAulasFeitas ? 'done' : 'available'
-  const s5: StepStatus = !todasAulasFeitas ? 'locked'  : 'available'
+  const certDiff = CERT_UNLOCK.getTime() - now.getTime()
+  const timeLeft = certDiff > 0 ? {
+    days:  Math.floor(certDiff / 86_400_000),
+    hours: Math.floor((certDiff % 86_400_000) / 3_600_000),
+    mins:  Math.floor((certDiff % 3_600_000) / 60_000),
+  } : null
 
-  const stepsCompleted = [step1_vip, step2_intro, step3_oferta, todasAulasFeitas, false].filter(Boolean).length
+  const s1: StepStatus = step1_vip         ? 'done'   : 'available'
+  const s2: StepStatus = !step1_vip        ? 'locked' : todasAulasFeitas ? 'done' : 'available'
+  const s3: StepStatus = !step1_vip        ? 'locked' : (todasAulasFeitas && certUnlocked) ? 'available' : 'locked'
+
+  const stepsCompleted = [step1_vip, todasAulasFeitas, todasAulasFeitas && certUnlocked].filter(Boolean).length
   const xp = stepsCompleted * XP_PER_STEP
   const currentStep = stepsCompleted + 1
 
   return (
-    <>
-      {showModal && (
-        <OfertaModal
-          firstName={firstName}
-          onAceitar={() => { mark('step3_modal_visto'); mark('step3_oferta'); setShowModal(false) }}
-          onFechar={() => { mark('step3_modal_visto'); setShowModal(false) }}
-        />
-      )}
-
-      <div className="min-h-screen w-full bg-[#0D1638]">
+    <div className="min-h-screen w-full bg-[#0D1638]">
         <div className="w-full max-w-2xl mx-auto px-5 sm:px-8 pt-10 pb-24">
 
           {/* ── BANNER OPCIONAL ─────────────────────────── */}
@@ -456,9 +433,11 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
             {/* Headline */}
             <h1
               className="font-display text-[2.6rem] sm:text-[3.4rem] font-bold text-white mb-5"
-              style={{ lineHeight: 0.93 }}
+              style={{ lineHeight: 0.97 }}
             >
-              Sua vaga<br />está<br />confirmada.
+              🎉 Parabéns{firstName ? `, ${firstName}` : ''}
+              <br />
+              <span style={{ color: '#c79a3b' }}>pelo seu cadastro!</span>
             </h1>
 
             {/* Separador */}
@@ -466,8 +445,10 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
             {/* Copy */}
             <p className="text-sm text-white/60 leading-relaxed mb-7">
-              Acesse os materiais exclusivos e as aulas ao vivo seguindo as etapas abaixo.
-              Cada etapa desbloqueada é um avanço real na sua formação.
+              Você garantiu sua vaga no <span className="text-white/80 font-semibold">Curso Gratuito!</span> O evento será nos dias{' '}
+              <span className="text-white/80 font-semibold">16, 17 e 18 de Junho.</span>
+              <br />
+              Siga as etapas abaixo para garantir seu acesso completo.
             </p>
 
             {/* Mini timeline */}
@@ -522,7 +503,7 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
               {/* Próximos passos como chips bloqueados */}
               <div className="flex flex-wrap gap-2">
-                {['Aula Introdutória', 'Acesso Especial', 'Aulas ao Vivo', 'Certificado'].map(label => (
+                {['Aulas ao Vivo', 'Certificado'].map(label => (
                   <span
                     key={label}
                     className="text-[10px] text-white/20 border border-white/[0.08] rounded-md px-2.5 py-1"
@@ -547,114 +528,11 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                 {/* ETAPA 1 — done */}
                 <StepCard numero={1} titulo="Grupo VIP" status={s1} />
 
-                {/* ETAPA 2 — AULA INTRODUTÓRIA */}
+                {/* ETAPA 2 — 3 AULAS AO VIVO */}
                 <StepCard
                   numero={2}
-                  titulo="Assista a Aula Introdutória"
-                  status={s2}
-                  subtitle="Prepare sua mente para a semana que começa."
-                >
-                  {INTRO_VIDEO_ID ? (
-                    <div className="rounded-xl overflow-hidden bg-black aspect-video mb-4">
-                      <iframe
-                        src={`https://www.youtube.com/embed/${INTRO_VIDEO_ID}`}
-                        title="Aula Introdutória"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen className="w-full h-full"
-                      />
-                    </div>
-                  ) : (
-                    <div className="rounded-xl border border-white/[0.08] bg-[#091028] aspect-video flex flex-col items-center justify-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-white/[0.05] border border-white/[0.10] flex items-center justify-center">
-                        <Play className="h-5 w-5 text-white/25 ml-0.5" />
-                      </div>
-                      <p className="text-xs text-white/25">Aula disponível em breve</p>
-                    </div>
-                  )}
-
-                  <a href={EBOOK_URL} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-[#091028] p-4 mb-4 group transition-colors hover:border-white/[0.15]">
-                    <div className="w-9 h-9 rounded-lg bg-[#FFB800]/[0.10] flex items-center justify-center shrink-0">
-                      <Download className="h-4 w-4 text-[#FFB800]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors">Material de Apoio — E-book</p>
-                      <p className="text-xs text-white/35 mt-0.5">Baixe o material complementar da aula.</p>
-                    </div>
-                    <ExternalLink className="h-3.5 w-3.5 text-white/25 shrink-0" />
-                  </a>
-
-                  {!step2_intro && (
-                    <button onClick={() => mark('step2_intro')}
-                      className="w-full rounded-xl border border-[#FFB800]/20 bg-[#FFB800]/[0.05] py-3.5 text-sm font-semibold text-[#FFB800] transition-colors hover:bg-[#FFB800]/[0.10]">
-                      ✓ Concluí a aula introdutória — próxima etapa
-                    </button>
-                  )}
-                </StepCard>
-
-                {/* ETAPA 3 — ACESSO ESPECIAL */}
-                <StepCard
-                  numero={3}
-                  titulo="Acesso Especial"
-                  status={s3}
-                  subtitle="Uma condição exclusiva foi reservada para você."
-                  badge={
-                    step3_modal_visto && s3 !== 'locked' ? (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-[#FFB800]/25 bg-[#FFB800]/[0.08] px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-[#FFB800]">
-                        <Sparkles className="h-2.5 w-2.5" /> selecionado
-                      </span>
-                    ) : undefined
-                  }
-                >
-                  {step3_oferta ? (
-                    <div className="flex items-center gap-3 rounded-xl border border-[#22c55e]/15 bg-[#22c55e]/[0.04] p-4">
-                      <div className="w-9 h-9 rounded-xl bg-[#22c55e]/10 border border-[#22c55e]/20 flex items-center justify-center shrink-0">
-                        <Check className="h-4 w-4 text-[#22c55e]" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white/85">Condição reservada ✓</p>
-                        <p className="text-xs text-white/35 mt-0.5">Sua condição exclusiva está garantida para este evento.</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="rounded-xl border border-[#FFB800]/15 bg-[#FFB800]/[0.04] px-4 py-3 flex items-start gap-3">
-                        <Sparkles className="h-4 w-4 text-[#FFB800]/60 shrink-0 mt-0.5" />
-                        <div className="space-y-0.5">
-                          <p className="text-xs font-semibold text-white/75">Condição exclusiva reservada</p>
-                          <p className="text-xs text-white/40 leading-relaxed">
-                            {OFERTA.ativo ? OFERTA.descricao : 'Sua condição especial está reservada. Ela será revelada durante a Semana do Despertar.'}
-                          </p>
-                        </div>
-                      </div>
-                      {OFERTA.ativo ? (
-                        <div className="flex items-center justify-between gap-4">
-                          <p className="text-2xl font-bold text-[#FFB800]">{OFERTA.preco}</p>
-                          <a href={OFERTA.url} target="_blank" rel="noopener noreferrer"
-                            onClick={() => mark('step3_oferta')}
-                            className="flex items-center gap-2 rounded-xl bg-[#FFB800] px-5 py-3 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors">
-                            <ShoppingBag className="h-4 w-4" /> Garantir
-                          </a>
-                        </div>
-                      ) : (
-                        <button onClick={() => mark('step3_oferta')}
-                          className="w-full rounded-xl border border-[#FFB800]/20 bg-[#FFB800]/[0.05] py-3.5 text-sm font-semibold text-[#FFB800] transition-colors hover:bg-[#FFB800]/[0.10]">
-                          ✓ Entendi — continuar para as aulas
-                        </button>
-                      )}
-                      <button onClick={() => setShowModal(true)}
-                        className="w-full text-[11px] text-white/20 hover:text-white/40 transition-colors py-1">
-                        Ver detalhes da condição →
-                      </button>
-                    </div>
-                  )}
-                </StepCard>
-
-                {/* ETAPA 4 — 3 AULAS AO VIVO */}
-                <StepCard
-                  numero={4}
                   titulo="Assista às 3 Aulas ao Vivo"
-                  status={s4}
+                  status={s2}
                   subtitle={`${[step4_aula1, step4_aula2, step4_aula3].filter(Boolean).length}/3 aulas assistidas`}
                 >
                   <div className="space-y-3">
@@ -663,64 +541,138 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                       const aulaFeita = progress[aulaKey]
                       return (
                         <div key={aula.id}
-                          className="rounded-xl border p-4 space-y-3 transition-all duration-300"
+                          className="rounded-xl border overflow-hidden transition-all duration-300"
                           style={{
                             borderColor: aulaFeita ? 'rgba(34,197,94,0.20)' : 'rgba(255,255,255,0.08)',
                             background: aulaFeita ? 'rgba(34,197,94,0.04)' : '#091028',
                           }}>
-                          <div className="flex items-start justify-between gap-3">
-                            <div>
-                              <p className="text-[11px] font-mono text-white/25">Aula {aula.id}</p>
-                              <p className="text-sm font-semibold text-white/85 leading-snug mt-0.5">{aula.titulo}</p>
-                              <p className="text-xs text-white/35 mt-1">{aula.data} · {aula.horario}</p>
-                            </div>
-                            {aulaFeita && (
-                              <div className="w-7 h-7 rounded-full bg-[#22c55e]/15 border border-[#22c55e]/25 flex items-center justify-center shrink-0">
-                                <Check className="h-3.5 w-3.5 text-[#22c55e]" />
+                          {/* Thumbnail clicável */}
+                          <a href={aula.youtubeUrl} target="_blank" rel="noopener noreferrer"
+                            onClick={() => mark(aulaKey)}
+                            className="block relative w-full" style={{ aspectRatio: '16/9' }}>
+                            <img
+                              src={aula.imageUrl}
+                              alt={aula.titulo}
+                              className="w-full h-full object-cover block"
+                              onError={(e) => {
+                                (e.currentTarget.parentElement as HTMLElement).style.display = 'none'
+                              }}
+                            />
+                            {aulaFeita ? (
+                              <div className="absolute inset-0 flex items-center justify-center"
+                                style={{ background: 'rgba(0,0,0,0.45)' }}>
+                                <div className="w-11 h-11 rounded-full bg-[#22c55e] flex items-center justify-center shadow-lg">
+                                  <Check className="h-5 w-5 text-white" />
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center"
+                                style={{ background: 'rgba(0,0,0,0.25)' }}>
+                                <div className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl"
+                                  style={{ background: 'rgba(255,0,0,0.85)', backdropFilter: 'blur(4px)' }}>
+                                  <Play className="h-6 w-6 text-white" fill="white" style={{ marginLeft: 3 }} />
+                                </div>
                               </div>
                             )}
-                          </div>
-                          <div className="flex items-center gap-2 flex-wrap">
+                          </a>
+                          {/* Conteúdo */}
+                          <div className="p-4 space-y-3">
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <p className="text-[11px] font-mono text-white/25">Aula {aula.id}</p>
+                                <p className="text-sm font-semibold text-white/85 leading-snug mt-0.5">{aula.titulo}</p>
+                                <p className="text-xs text-white/35 mt-1">{aula.data} · {aula.horario}</p>
+                              </div>
+                              {aulaFeita && (
+                                <div className="w-7 h-7 rounded-full bg-[#22c55e]/15 border border-[#22c55e]/25 flex items-center justify-center shrink-0">
+                                  <Check className="h-3.5 w-3.5 text-[#22c55e]" />
+                                </div>
+                              )}
+                            </div>
+                            {/* Botão grande YouTube */}
                             <a href={aula.youtubeUrl} target="_blank" rel="noopener noreferrer"
                               onClick={() => mark(aulaKey)}
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-[#FF0000]/10 border border-[#FF0000]/20 px-3 py-1.5 text-[11px] font-semibold text-[#FF6666] hover:bg-[#FF0000]/15 transition-colors">
-                              <Video className="h-3.5 w-3.5" /> Ativar lembrete <Bell className="h-3 w-3" />
+                              className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold text-white transition-all active:scale-[0.98]"
+                              style={{ background: '#FF0000', boxShadow: '0 6px 20px rgba(255,0,0,0.25)' }}>
+                              <Play className="h-4 w-4" fill="white" />
+                              Assistir ao Vivo no YouTube
+                              <ExternalLink className="h-3.5 w-3.5 opacity-70" />
                             </a>
-                            <button onClick={() => openCalendar(aula)}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.10] bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold text-white/55 hover:border-white/20 hover:text-white/75 transition-colors">
-                              <Calendar className="h-3.5 w-3.5" /> Agendar
-                            </button>
+                            {/* Aviso lembrete — só texto, não botão */}
+                            <p className="text-[10px] text-white/20 text-center leading-relaxed">
+                              🔔 Ative o lembrete e o like no YouTube para não perder nada
+                            </p>
                           </div>
                         </div>
                       )
                     })}
                   </div>
-                  <p className="text-[11px] text-white/20 mt-3 leading-relaxed">
-                    Clique em "Ativar lembrete" para ser notificado quando a aula começar.
-                  </p>
                 </StepCard>
 
-                {/* ETAPA 5 — CERTIFICADO */}
+                {/* ETAPA 3 — CERTIFICADO */}
                 <StepCard
-                  numero={5}
+                  numero={3}
                   titulo="Resgate seu Certificado"
-                  status={s5}
-                  subtitle="Disponível após concluir as 3 aulas ao vivo."
+                  status={s3}
+                  forceContent={true}
+                  subtitle={
+                    certUnlocked
+                      ? (todasAulasFeitas ? 'Disponível para resgate!' : 'Complete as 3 aulas para resgatar.')
+                      : 'Libera às 22h · 18/06 · após a última aula'
+                  }
                 >
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                    <div className="w-14 h-14 rounded-2xl bg-[#FFB800]/[0.10] border border-[#FFB800]/20 flex items-center justify-center shrink-0">
-                      <Award className="h-7 w-7 text-[#FFB800]" />
+                  <div className="space-y-4">
+                    {/* Prévia do certificado */}
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-[#FFB800]/[0.08] border border-[#FFB800]/15 flex items-center justify-center shrink-0">
+                        <Award className="h-6 w-6 text-[#FFB800]/50" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-white/75">Certificado da Semana do Despertar #38</p>
+                        <p className="text-xs text-white/30 leading-relaxed mt-0.5">
+                          Ao final do curso, você retorna aqui e insere as 3 palavras-chave reveladas nas aulas para resgatar seu certificado.
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-semibold text-white/90">Certificado da Semana do Despertar #38</p>
-                      <p className="text-xs text-white/40 leading-relaxed">
-                        Resgate com as palavras-chave reveladas ao vivo durante as aulas.
-                      </p>
-                    </div>
-                    <Link href="/certificados"
-                      className="flex items-center gap-2 rounded-xl bg-[#FFB800] px-5 py-3 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors shrink-0">
-                      <Award className="h-4 w-4" /> Resgatar
-                    </Link>
+
+                    {!certUnlocked ? (
+                      /* ── COUNTDOWN até 22h/18-06 ── */
+                      <div className="rounded-xl border border-[#FFB800]/12 p-4"
+                        style={{ background: 'rgba(255,184,0,0.03)' }}>
+                        <p className="text-[10px] uppercase tracking-[0.18em] text-[#FFB800]/40 mb-3">Libera em</p>
+                        <div className="flex items-end gap-3 mb-3">
+                          {timeLeft && timeLeft.days > 0 && (
+                            <>
+                              <div className="text-center">
+                                <p className="text-2xl font-bold tabular-nums" style={{ color: 'rgba(255,184,0,0.55)' }}>{timeLeft.days}</p>
+                                <p className="text-[9px] text-white/20 mt-0.5">dias</p>
+                              </div>
+                              <span className="text-[#FFB800]/20 text-lg font-light mb-4">:</span>
+                            </>
+                          )}
+                          <div className="text-center">
+                            <p className="text-2xl font-bold tabular-nums" style={{ color: 'rgba(255,184,0,0.55)' }}>{String(timeLeft?.hours ?? 0).padStart(2, '0')}</p>
+                            <p className="text-[9px] text-white/20 mt-0.5">horas</p>
+                          </div>
+                          <span className="text-[#FFB800]/20 text-lg font-light mb-4">:</span>
+                          <div className="text-center">
+                            <p className="text-2xl font-bold tabular-nums" style={{ color: 'rgba(255,184,0,0.55)' }}>{String(timeLeft?.mins ?? 0).padStart(2, '0')}</p>
+                            <p className="text-[9px] text-white/20 mt-0.5">min</p>
+                          </div>
+                        </div>
+                        <p className="text-[11px] text-white/25 leading-relaxed">
+                          📅 18/06 às 22h (Horário de Brasília) — ao final da 3ª aula ao vivo
+                        </p>
+                      </div>
+                    ) : todasAulasFeitas ? (
+                      /* ── LIBERADO + AULAS CONCLUÍDAS — form inline ── */
+                      <CertResgateForm />
+                    ) : (
+                      /* ── LIBERADO MAS AULAS PENDENTES ── */
+                      <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 text-center">
+                        <p className="text-xs text-white/30">Assista às 3 aulas ao vivo para liberar o resgate.</p>
+                      </div>
+                    )}
                   </div>
                 </StepCard>
 
@@ -729,6 +681,5 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
           )}
         </div>
       </div>
-    </>
   )
 }

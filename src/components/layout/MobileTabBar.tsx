@@ -5,9 +5,7 @@ import { usePathname } from 'next/navigation'
 import { CalendarDays, ShoppingBag, Award } from 'lucide-react'
 
 const tabs = [
-  { href: '/lancamento',   label: 'Semana',  icon: CalendarDays },
-  { href: '/certificados', label: 'Certific', icon: Award },
-  { href: '/loja',         label: 'Loja',     icon: ShoppingBag },
+  { href: '/lancamento', label: 'Semana', icon: CalendarDays },
 ]
 
 export function MobileTabBar() {
