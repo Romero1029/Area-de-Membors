@@ -128,22 +128,22 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
     <div className="mt-6 space-y-6">
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 border-b border-[#2a2a2a] overflow-x-auto">
+      <div className="flex items-center gap-1 border-b border-white/[0.08] overflow-x-auto">
         {tabs.map(t => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
               tab === t.id
-                ? 'border-[#c79a3b] text-[#c79a3b]'
-                : 'border-transparent text-[#606060] hover:text-[#a0a0a0]'
+                ? 'border-[#FFB800] text-[#FFB800]'
+                : 'border-transparent text-white/30 hover:text-white/60'
             }`}
           >
             {t.icon}
             {t.label}
             {t.count !== undefined && t.count > 0 && (
               <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none ${
-                tab === t.id ? 'bg-[#c79a3b]/20 text-[#c79a3b]' : 'bg-[#2a2a2a] text-[#606060]'
+                tab === t.id ? 'bg-[#FFB800]/20 text-[#FFB800]' : 'bg-[#0F1940] text-white/30'
               }`}>{t.count}</span>
             )}
           </button>
@@ -159,10 +159,10 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
             const isExpanded = expanded.has(mod.id)
 
             return (
-              <div key={mod.id} className="rounded-2xl border border-[#2a2a2a] bg-[#111111] overflow-hidden">
+              <div key={mod.id} className="rounded-2xl border border-white/[0.08] bg-[#0A1232] overflow-hidden">
                 {/* Header do módulo */}
                 <div
-                  className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-[#1a1a1a] transition-colors"
+                  className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-[#0F1940] transition-colors"
                   onClick={() => toggleExpanded(mod.id)}
                 >
                   <div className="flex-1 min-w-0">
@@ -173,61 +173,61 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
                           value={editingModuleTitle}
                           onChange={e => setEditingModuleTitle(e.target.value)}
                           onKeyDown={e => { if (e.key === 'Enter') handleUpdateModule(mod.id); if (e.key === 'Escape') setEditingModuleId(null) }}
-                          className="flex-1 rounded-lg bg-[#2a2a2a] border border-[#333] px-3 py-1.5 text-sm text-[#f0f0f0] outline-none focus:border-[#c79a3b]"
+                          className="flex-1 rounded-lg bg-[#0F1940] border border-white/[0.08] px-3 py-1.5 text-sm text-white outline-none focus:border-[#FFB800]"
                         />
-                        <button onClick={() => handleUpdateModule(mod.id)} className="text-[#c79a3b] hover:text-[#e8b84b]"><Check className="h-4 w-4" /></button>
-                        <button onClick={() => setEditingModuleId(null)} className="text-[#606060] hover:text-[#f0f0f0]"><X className="h-4 w-4" /></button>
+                        <button onClick={() => handleUpdateModule(mod.id)} className="text-[#FFB800] hover:text-[#FFC933]"><Check className="h-4 w-4" /></button>
+                        <button onClick={() => setEditingModuleId(null)} className="text-white/30 hover:text-white"><X className="h-4 w-4" /></button>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-[#f0f0f0] text-sm truncate">{mod.title}</h3>
+                        <h3 className="font-semibold text-white text-sm truncate">{mod.title}</h3>
                         {isAdmin && (
                           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100" onClick={e => e.stopPropagation()}>
-                            <button onClick={() => { setEditingModuleId(mod.id); setEditingModuleTitle(mod.title) }} className="p-1 text-[#606060] hover:text-[#c79a3b]"><Pencil className="h-3.5 w-3.5" /></button>
-                            <button onClick={() => handleDeleteModule(mod.id)} className="p-1 text-[#606060] hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                            <button onClick={() => { setEditingModuleId(mod.id); setEditingModuleTitle(mod.title) }} className="p-1 text-white/30 hover:text-[#FFB800]"><Pencil className="h-3.5 w-3.5" /></button>
+                            <button onClick={() => handleDeleteModule(mod.id)} className="p-1 text-white/30 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                           </div>
                         )}
                       </div>
                     )}
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
-                    <span className="text-xs text-[#606060]">{modCompleted}/{lessons.length}</span>
-                    <div className="w-20 h-1.5 rounded-full bg-[#2a2a2a] overflow-hidden">
-                      <div className="h-full rounded-full bg-[#c79a3b]" style={{ width: `${lessons.length > 0 ? (modCompleted / lessons.length) * 100 : 0}%` }} />
+                    <span className="text-xs text-white/30">{modCompleted}/{lessons.length}</span>
+                    <div className="w-20 h-1.5 rounded-full bg-[#0F1940] overflow-hidden">
+                      <div className="h-full rounded-full bg-[#FFB800]" style={{ width: `${lessons.length > 0 ? (modCompleted / lessons.length) * 100 : 0}%` }} />
                     </div>
-                    {isExpanded ? <ChevronUp className="h-4 w-4 text-[#606060]" /> : <ChevronDown className="h-4 w-4 text-[#606060]" />}
+                    {isExpanded ? <ChevronUp className="h-4 w-4 text-white/30" /> : <ChevronDown className="h-4 w-4 text-white/30" />}
                   </div>
                 </div>
 
                 {/* Aulas */}
                 {isExpanded && (
-                  <div className="border-t border-[#2a2a2a] divide-y divide-[#1e1e1e]">
+                  <div className="border-t border-white/[0.08] divide-y divide-white/[0.06]">
                     {lessons.map((lesson, idx) => {
                       const done = !!progressMap[lesson.id]?.completed
                       return (
-                        <div key={lesson.id} className="group flex items-center gap-3 px-5 py-3 hover:bg-[#161616] transition-colors">
+                        <div key={lesson.id} className="group flex items-center gap-3 px-5 py-3 hover:bg-[#0F1940] transition-colors">
                           {done
                             ? <CheckCircle className="h-4 w-4 flex-shrink-0 text-[#22c55e]" />
-                            : <Circle className="h-4 w-4 flex-shrink-0 text-[#333]" />
+                            : <Circle className="h-4 w-4 flex-shrink-0 text-white/[0.15]" />
                           }
-                          <span className="text-xs text-[#444] w-5 flex-shrink-0">{idx + 1}</span>
+                          <span className="text-xs text-white/25 w-5 flex-shrink-0">{idx + 1}</span>
                           {isEnrolled ? (
                             <Link href={`/cursos/${slug}/aulas/${lesson.id}`}
-                              className={`flex-1 text-sm truncate hover:text-[#c79a3b] transition-colors ${done ? 'text-[#555]' : 'text-[#f0f0f0]'}`}
+                              className={`flex-1 text-sm truncate hover:text-[#FFB800] transition-colors ${done ? 'text-white/35' : 'text-white'}`}
                             >
                               {lesson.title}
                             </Link>
                           ) : (
-                            <span className="flex-1 text-sm truncate text-[#555]">{lesson.title}</span>
+                            <span className="flex-1 text-sm truncate text-white/35">{lesson.title}</span>
                           )}
                           {lesson.video_duration && (
-                            <span className="text-xs flex items-center gap-1 text-[#444] flex-shrink-0">
+                            <span className="text-xs flex items-center gap-1 text-white/25 flex-shrink-0">
                               <Clock className="h-3 w-3" />{formatDuration(lesson.video_duration)}
                             </span>
                           )}
                           {isAdmin && (
                             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 flex-shrink-0">
-                              <button onClick={() => handleDeleteLesson(lesson.id)} className="p-1 text-[#606060] hover:text-red-400">
+                              <button onClick={() => handleDeleteLesson(lesson.id)} className="p-1 text-white/30 hover:text-red-400">
                                 <Trash2 className="h-3.5 w-3.5" />
                               </button>
                             </div>
@@ -240,27 +240,27 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
                     {isAdmin && (
                       <>
                         {addingLessonToModule === mod.id ? (
-                          <div className="px-5 py-3 space-y-2 bg-[#0f0f0f]">
+                          <div className="px-5 py-3 space-y-2 bg-[#091028]">
                             <input autoFocus placeholder="Título da aula" value={newLessonTitle} onChange={e => setNewLessonTitle(e.target.value)}
-                              className="w-full rounded-lg bg-[#1a1a1a] border border-[#333] px-3 py-2 text-sm text-[#f0f0f0] outline-none focus:border-[#c79a3b] placeholder-[#444]"
+                              className="w-full rounded-lg bg-[#0A1232] border border-white/[0.08] px-3 py-2 text-sm text-white outline-none focus:border-[#FFB800] placeholder-white/25"
                             />
                             <input placeholder="URL do YouTube (opcional)" value={newLessonUrl} onChange={e => setNewLessonUrl(e.target.value)}
-                              className="w-full rounded-lg bg-[#1a1a1a] border border-[#333] px-3 py-2 text-sm text-[#f0f0f0] outline-none focus:border-[#c79a3b] placeholder-[#444]"
+                              className="w-full rounded-lg bg-[#0A1232] border border-white/[0.08] px-3 py-2 text-sm text-white outline-none focus:border-[#FFB800] placeholder-white/25"
                             />
                             <div className="flex gap-2">
                               <button onClick={() => handleAddLesson(mod.id)} disabled={isPending || !newLessonTitle.trim()}
-                                className="flex items-center gap-1.5 rounded-lg bg-[#c79a3b] px-4 py-2 text-xs font-bold text-[#0f0f0f] disabled:opacity-50"
+                                className="flex items-center gap-1.5 rounded-lg bg-[#FFB800] px-4 py-2 text-xs font-bold text-[#0D1638] disabled:opacity-50"
                               >
                                 {isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />} Adicionar
                               </button>
-                              <button onClick={() => setAddingLessonToModule(null)} className="rounded-lg border border-[#2a2a2a] px-4 py-2 text-xs text-[#606060] hover:text-[#f0f0f0]">
+                              <button onClick={() => setAddingLessonToModule(null)} className="rounded-lg border border-white/[0.08] px-4 py-2 text-xs text-white/30 hover:text-white">
                                 Cancelar
                               </button>
                             </div>
                           </div>
                         ) : (
                           <button onClick={() => setAddingLessonToModule(mod.id)}
-                            className="flex w-full items-center gap-2 px-5 py-2.5 text-xs font-medium text-[#444] hover:text-[#c79a3b] hover:bg-[#161616] transition-colors"
+                            className="flex w-full items-center gap-2 px-5 py-2.5 text-xs font-medium text-white/25 hover:text-[#FFB800] hover:bg-[#0F1940] transition-colors"
                           >
                             <Plus className="h-3.5 w-3.5" /> Adicionar aula
                           </button>
@@ -275,27 +275,27 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
 
           {/* Adicionar módulo (admin) */}
           {isAdmin && (
-            <div className="rounded-2xl border border-dashed border-[#2a2a2a] overflow-hidden">
+            <div className="rounded-2xl border border-dashed border-white/[0.08] overflow-hidden">
               {addingModule ? (
                 <div className="p-5 space-y-3">
                   <input autoFocus placeholder="Nome do módulo" value={newModuleTitle} onChange={e => setNewModuleTitle(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter') handleAddModule(); if (e.key === 'Escape') setAddingModule(false) }}
-                    className="w-full rounded-lg bg-[#1a1a1a] border border-[#333] px-4 py-2.5 text-sm text-[#f0f0f0] outline-none focus:border-[#c79a3b] placeholder-[#444]"
+                    className="w-full rounded-lg bg-[#0A1232] border border-white/[0.08] px-4 py-2.5 text-sm text-white outline-none focus:border-[#FFB800] placeholder-white/25"
                   />
                   <div className="flex gap-2">
                     <button onClick={handleAddModule} disabled={isPending || !newModuleTitle.trim()}
-                      className="flex items-center gap-1.5 rounded-lg bg-[#c79a3b] px-5 py-2 text-sm font-bold text-[#0f0f0f] disabled:opacity-50"
+                      className="flex items-center gap-1.5 rounded-lg bg-[#FFB800] px-5 py-2 text-sm font-bold text-[#0D1638] disabled:opacity-50"
                     >
                       {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />} Criar módulo
                     </button>
-                    <button onClick={() => setAddingModule(false)} className="rounded-lg border border-[#2a2a2a] px-4 py-2 text-sm text-[#606060] hover:text-[#f0f0f0]">
+                    <button onClick={() => setAddingModule(false)} className="rounded-lg border border-white/[0.08] px-4 py-2 text-sm text-white/30 hover:text-white">
                       Cancelar
                     </button>
                   </div>
                 </div>
               ) : (
                 <button onClick={() => setAddingModule(true)}
-                  className="flex w-full items-center justify-center gap-2 px-5 py-4 text-sm font-medium text-[#444] hover:text-[#c79a3b] hover:bg-[#111111] transition-colors"
+                  className="flex w-full items-center justify-center gap-2 px-5 py-4 text-sm font-medium text-white/25 hover:text-[#FFB800] hover:bg-[#0A1232] transition-colors"
                 >
                   <Plus className="h-4 w-4" /> Adicionar novo módulo
                 </button>
@@ -309,25 +309,25 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
       {tab === 'tarefas' && (
         <div className="space-y-4">
           {tasks.length === 0 && !isAdmin && (
-            <div className="rounded-2xl border border-dashed border-[#2a2a2a] p-12 text-center">
-              <ClipboardList className="h-10 w-10 text-[#2a2a2a] mx-auto mb-3" />
-              <p className="text-[#606060] text-sm">Nenhuma tarefa disponível ainda.</p>
+            <div className="rounded-2xl border border-dashed border-white/[0.08] p-12 text-center">
+              <ClipboardList className="h-10 w-10 text-white/10 mx-auto mb-3" />
+              <p className="text-white/30 text-sm">Nenhuma tarefa disponível ainda.</p>
             </div>
           )}
 
           {tasks.map((task: { id: string; title: string; description?: string; task_type: string }) => (
-            <div key={task.id} className="rounded-2xl border border-[#2a2a2a] bg-[#111111] p-5 space-y-3">
+            <div key={task.id} className="rounded-2xl border border-white/[0.08] bg-[#0A1232] p-5 space-y-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1">
-                  <h3 className="font-semibold text-[#f0f0f0]">{task.title}</h3>
-                  {task.description && <p className="text-sm text-[#606060]">{task.description}</p>}
+                  <h3 className="font-semibold text-white">{task.title}</h3>
+                  {task.description && <p className="text-sm text-white/30">{task.description}</p>}
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className="rounded-full bg-[#c79a3b]/10 border border-[#c79a3b]/20 px-2.5 py-0.5 text-[10px] font-bold uppercase text-[#c79a3b]">
+                  <span className="rounded-full bg-[#FFB800]/10 border border-[#FFB800]/20 px-2.5 py-0.5 text-[10px] font-bold uppercase text-[#FFB800]">
                     {task.task_type}
                   </span>
                   {isAdmin && (
-                    <button onClick={() => deleteTask(task.id).then(() => window.location.reload())} className="text-[#606060] hover:text-red-400">
+                    <button onClick={() => deleteTask(task.id).then(() => window.location.reload())} className="text-white/30 hover:text-red-400">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   )}
@@ -335,11 +335,11 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
               </div>
               {isEnrolled && (
                 <textarea rows={3} placeholder="Escreva sua resposta aqui..."
-                  className="w-full rounded-xl bg-[#1a1a1a] border border-[#2a2a2a] px-4 py-3 text-sm text-[#f0f0f0] outline-none focus:border-[#c79a3b] placeholder-[#444] resize-none"
+                  className="w-full rounded-xl bg-[#0A1232] border border-white/[0.08] px-4 py-3 text-sm text-white outline-none focus:border-[#FFB800] placeholder-white/25 resize-none"
                 />
               )}
               {isEnrolled && (
-                <button className="flex items-center gap-2 rounded-xl bg-[#c79a3b]/10 border border-[#c79a3b]/20 px-4 py-2 text-sm font-semibold text-[#c79a3b] hover:bg-[#c79a3b]/20 transition-colors">
+                <button className="flex items-center gap-2 rounded-xl bg-[#FFB800]/10 border border-[#FFB800]/20 px-4 py-2 text-sm font-semibold text-[#FFB800] hover:bg-[#FFB800]/20 transition-colors">
                   <Check className="h-3.5 w-3.5" /> Enviar resposta
                 </button>
               )}
@@ -347,27 +347,27 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
           ))}
 
           {isAdmin && (
-            <div className="rounded-2xl border border-dashed border-[#2a2a2a] overflow-hidden">
+            <div className="rounded-2xl border border-dashed border-white/[0.08] overflow-hidden">
               {addingTask ? (
                 <div className="p-5 space-y-3">
                   <input autoFocus placeholder="Título da tarefa" value={newTaskTitle} onChange={e => setNewTaskTitle(e.target.value)}
-                    className="w-full rounded-lg bg-[#1a1a1a] border border-[#333] px-4 py-2.5 text-sm text-[#f0f0f0] outline-none focus:border-[#c79a3b] placeholder-[#444]"
+                    className="w-full rounded-lg bg-[#0A1232] border border-white/[0.08] px-4 py-2.5 text-sm text-white outline-none focus:border-[#FFB800] placeholder-white/25"
                   />
                   <textarea rows={2} placeholder="Descrição (opcional)" value={newTaskDesc} onChange={e => setNewTaskDesc(e.target.value)}
-                    className="w-full rounded-lg bg-[#1a1a1a] border border-[#333] px-4 py-2.5 text-sm text-[#f0f0f0] outline-none focus:border-[#c79a3b] placeholder-[#444] resize-none"
+                    className="w-full rounded-lg bg-[#0A1232] border border-white/[0.08] px-4 py-2.5 text-sm text-white outline-none focus:border-[#FFB800] placeholder-white/25 resize-none"
                   />
                   <div className="flex gap-2">
                     <button onClick={handleAddTask} disabled={isPending || !newTaskTitle.trim()}
-                      className="flex items-center gap-1.5 rounded-lg bg-[#c79a3b] px-5 py-2 text-sm font-bold text-[#0f0f0f] disabled:opacity-50"
+                      className="flex items-center gap-1.5 rounded-lg bg-[#FFB800] px-5 py-2 text-sm font-bold text-[#0D1638] disabled:opacity-50"
                     >
                       {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />} Criar tarefa
                     </button>
-                    <button onClick={() => setAddingTask(false)} className="rounded-lg border border-[#2a2a2a] px-4 py-2 text-sm text-[#606060] hover:text-[#f0f0f0]">Cancelar</button>
+                    <button onClick={() => setAddingTask(false)} className="rounded-lg border border-white/[0.08] px-4 py-2 text-sm text-white/30 hover:text-white">Cancelar</button>
                   </div>
                 </div>
               ) : (
                 <button onClick={() => setAddingTask(true)}
-                  className="flex w-full items-center justify-center gap-2 px-5 py-4 text-sm font-medium text-[#444] hover:text-[#c79a3b] hover:bg-[#111111] transition-colors"
+                  className="flex w-full items-center justify-center gap-2 px-5 py-4 text-sm font-medium text-white/25 hover:text-[#FFB800] hover:bg-[#0A1232] transition-colors"
                 >
                   <Plus className="h-4 w-4" /> Adicionar tarefa
                 </button>
@@ -381,21 +381,21 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
       {tab === 'materiais' && (
         <div className="space-y-3">
           {materials.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-[#2a2a2a] p-12 text-center">
-              <FileText className="h-10 w-10 text-[#2a2a2a] mx-auto mb-3" />
-              <p className="text-[#606060] text-sm">Nenhum material disponível ainda.</p>
+            <div className="rounded-2xl border border-dashed border-white/[0.08] p-12 text-center">
+              <FileText className="h-10 w-10 text-white/10 mx-auto mb-3" />
+              <p className="text-white/30 text-sm">Nenhum material disponível ainda.</p>
             </div>
           ) : (
             materials.map((m: { id: string; title: string; type: string; url: string }) => (
               <a key={m.id} href={m.url} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-4 rounded-2xl border border-[#2a2a2a] bg-[#111111] px-5 py-4 hover:border-[#c79a3b]/30 transition-colors group"
+                className="flex items-center gap-4 rounded-2xl border border-white/[0.08] bg-[#0A1232] px-5 py-4 hover:border-[#FFB800]/30 transition-colors group"
               >
-                <div className="h-10 w-10 rounded-xl bg-[#c79a3b]/10 flex items-center justify-center flex-shrink-0">
-                  {m.type === 'link' ? <LinkIcon className="h-5 w-5 text-[#c79a3b]" /> : <FileText className="h-5 w-5 text-[#c79a3b]" />}
+                <div className="h-10 w-10 rounded-xl bg-[#FFB800]/10 flex items-center justify-center flex-shrink-0">
+                  {m.type === 'link' ? <LinkIcon className="h-5 w-5 text-[#FFB800]" /> : <FileText className="h-5 w-5 text-[#FFB800]" />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-[#f0f0f0] group-hover:text-[#c79a3b] transition-colors truncate">{m.title}</p>
-                  <p className="text-xs text-[#606060] uppercase">{m.type}</p>
+                  <p className="font-medium text-white group-hover:text-[#FFB800] transition-colors truncate">{m.title}</p>
+                  <p className="text-xs text-white/30 uppercase">{m.type}</p>
                 </div>
               </a>
             ))
@@ -405,20 +405,20 @@ export function CourseTabsClient({ slug, product, modules: initialModules, progr
 
       {/* ── TAB: SOBRE ── */}
       {tab === 'sobre' && (
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#111111] p-6 space-y-4">
-          <h3 className="font-bold text-[#f0f0f0] text-lg">Sobre este curso</h3>
+        <div className="rounded-2xl border border-white/[0.08] bg-[#0A1232] p-6 space-y-4">
+          <h3 className="font-bold text-white text-lg">Sobre este curso</h3>
           {product.description ? (
-            <p className="text-[#a0a0a0] leading-relaxed text-sm">{product.description}</p>
+            <p className="text-white/60 leading-relaxed text-sm">{product.description}</p>
           ) : (
-            <p className="text-[#606060] text-sm">Descrição não disponível.</p>
+            <p className="text-white/30 text-sm">Descrição não disponível.</p>
           )}
           {product.highlights && product.highlights.length > 0 && (
             <div className="space-y-2 pt-2">
-              <h4 className="text-sm font-semibold text-[#f0f0f0]">O que você vai aprender:</h4>
+              <h4 className="text-sm font-semibold text-white">O que você vai aprender:</h4>
               <ul className="space-y-2">
                 {product.highlights.map((h, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-[#a0a0a0]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#c79a3b] mt-1.5 flex-shrink-0" />
+                  <li key={i} className="flex items-start gap-2 text-sm text-white/60">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#FFB800] mt-1.5 flex-shrink-0" />
                     {h}
                   </li>
                 ))}

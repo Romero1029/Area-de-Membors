@@ -18,7 +18,7 @@ export default function PrivacidadePage() {
           <Link href="/comecar" className="flex items-center gap-2.5">
             <Image src="/despertamente-simbolo-branco.png" alt="IDM" width={24} height={24} className="object-contain" />
             <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-sm font-bold text-[#f0f0f0]">
-              Instituto <span className="text-[#c79a3b]">Despertamente</span>
+              Instituto <span className="text-[#FFB800]">Despertamente</span>
             </span>
           </Link>
           <Link href="/comecar" className="text-xs text-[#606060] hover:text-[#a0a0a0] transition-colors">
@@ -30,7 +30,7 @@ export default function PrivacidadePage() {
       <main className="max-w-3xl mx-auto px-6 sm:px-10 py-16 space-y-10">
 
         <div className="space-y-3">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#c79a3b]">Legal</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Legal</p>
           <h1 style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-3xl sm:text-4xl font-bold">
             Política de Privacidade
           </h1>
@@ -123,7 +123,7 @@ export default function PrivacidadePage() {
             </ul>
             <p>
               Para exercer seus direitos, entre em contato pelo e-mail:{' '}
-              <a href="mailto:privacidade@institutodespertamente.com.br" className="text-[#c79a3b] hover:underline">
+              <a href="mailto:privacidade@institutodespertamente.com.br" className="text-[#FFB800] hover:underline">
                 privacidade@institutodespertamente.com.br
               </a>
             </p>
@@ -144,7 +144,7 @@ export default function PrivacidadePage() {
             </p>
             <ul>
               <li><strong className="text-[#f0f0f0]">E-mail:</strong>{' '}
-                <a href="mailto:privacidade@institutodespertamente.com.br" className="text-[#c79a3b] hover:underline">
+                <a href="mailto:privacidade@institutodespertamente.com.br" className="text-[#FFB800] hover:underline">
                   privacidade@institutodespertamente.com.br
                 </a>
               </li>

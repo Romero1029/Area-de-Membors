@@ -8,7 +8,7 @@ export const HeroCarousel = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="w-full bg-[#0f0f0f]"
+        className="w-full bg-[#0D1638]"
         style={{ height: 'clamp(340px, 60vw, 600px)' }}
         aria-hidden="true"
       />

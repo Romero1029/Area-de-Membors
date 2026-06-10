@@ -76,18 +76,18 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const nextLesson = allLessons.find(l => !progressMap[l.id]?.completed)
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f]">
+    <div className="min-h-screen bg-[#0D1638]">
 
       {/* ── HERO ── */}
       <div className="relative w-full overflow-hidden" style={{ minHeight: 320 }}>
         {product.thumbnail_url ? (
           <>
             <Image src={product.thumbnail_url} alt={product.title} fill priority className="object-cover opacity-40" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f0f]/40 via-[#0f0f0f]/60 to-[#0f0f0f]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f0f]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0D1638]/40 via-[#0D1638]/60 to-[#0D1638]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0D1638]/80 to-transparent" />
           </>
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0f2233] to-[#0f0f0f]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0A1232] to-[#0D1638]" />
         )}
 
         <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 pt-10 pb-8 flex flex-col gap-5">
@@ -103,7 +103,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           <div className="grid lg:grid-cols-[1fr_280px] gap-8 items-end">
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-[#c79a3b]/15 border border-[#c79a3b]/25 px-3 py-0.5 text-xs font-bold uppercase tracking-wider text-[#c79a3b]">
+                <span className="rounded-full bg-[#FFB800]/15 border border-[#FFB800]/25 px-3 py-0.5 text-xs font-bold uppercase tracking-wider text-[#FFB800]">
                   {product.product_type === 'course' ? 'Curso' : product.product_type}
                 </span>
                 {isAdmin && (
@@ -121,36 +121,36 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
                 <p className="text-[#a0a0a0] leading-relaxed max-w-xl">{product.short_description}</p>
               )}
 
-              <div className="flex flex-wrap items-center gap-4 text-sm text-[#606060]">
-                <span className="flex items-center gap-1.5"><PlayCircle className="h-4 w-4 text-[#c79a3b]" />{totalLessons} aulas</span>
-                <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4 text-[#c79a3b]" />{completedLessons} concluídas</span>
-                {tasks.length > 0 && <span className="flex items-center gap-1.5"><ClipboardList className="h-4 w-4 text-[#c79a3b]" />{tasks.length} tarefas</span>}
+              <div className="flex flex-wrap items-center gap-4 text-sm text-white/50">
+                <span className="flex items-center gap-1.5"><PlayCircle className="h-4 w-4 text-[#FFB800]" />{totalLessons} aulas</span>
+                <span className="flex items-center gap-1.5"><CheckCircle className="h-4 w-4 text-[#FFB800]" />{completedLessons} concluídas</span>
+                {tasks.length > 0 && <span className="flex items-center gap-1.5"><ClipboardList className="h-4 w-4 text-[#FFB800]" />{tasks.length} tarefas</span>}
               </div>
             </div>
 
             {/* Card de CTA */}
-            <div className="rounded-2xl border border-[#2a2a2a] bg-[#1a1a1a] p-5 space-y-4">
+            <div className="rounded-2xl border border-white/[0.08] bg-[#0A1232] p-5 space-y-4">
               {isEnrolled && totalLessons > 0 && (
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-[#606060]">Seu progresso</span>
-                    <span className="font-bold" style={{ color: percent === 100 ? '#22c55e' : '#c79a3b' }}>{percent}%</span>
+                    <span className="text-white/40">Seu progresso</span>
+                    <span className="font-bold" style={{ color: percent === 100 ? '#22c55e' : '#FFB800' }}>{percent}%</span>
                   </div>
-                  <div className="h-2 rounded-full bg-[#2a2a2a] overflow-hidden">
+                  <div className="h-2 rounded-full bg-white/[0.08] overflow-hidden">
                     <div className="h-full rounded-full transition-all duration-700" style={{
                       width: `${percent}%`,
-                      background: percent === 100 ? '#22c55e' : 'linear-gradient(90deg, #c79a3b, #e8b84b)'
+                      background: percent === 100 ? '#22c55e' : 'linear-gradient(90deg, #FFB800, #FFC933)'
                     }} />
                   </div>
-                  <p className="text-xs text-[#606060]">{completedLessons} de {totalLessons} aulas</p>
+                  <p className="text-xs text-white/40">{completedLessons} de {totalLessons} aulas</p>
                 </div>
               )}
 
               {isEnrolled ? (
                 nextLesson ? (
                   <Link href={`/cursos/${slug}/aulas/${nextLesson.id}`}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-[#0f0f0f] transition-all hover:brightness-110"
-                    style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-[#0D1638] transition-all hover:brightness-110"
+                    style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)' }}
                   >
                     <PlayCircle className="h-4 w-4" />
                     {completedLessons === 0 ? 'Começar curso' : 'Continuar de onde parei'}
@@ -162,7 +162,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
                 )
               ) : (
                 <Link href="/loja"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-[#0f0f0f] bg-[#c79a3b] hover:bg-[#e8b84b] transition-colors"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-[#0D1638] bg-[#FFB800] hover:bg-[#FFC933] transition-colors"
                 >
                   <Lock className="h-4 w-4" /> Garantir acesso
                 </Link>

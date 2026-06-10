@@ -31,7 +31,7 @@ type EnrollmentItem = {
 function SectionDivider() {
   return (
     <div className="px-4 sm:px-6 lg:px-10">
-      <div className="h-px w-full" style={{ background: 'linear-gradient(to right, transparent, rgba(199,154,59,0.12), transparent)' }} />
+      <div className="h-px w-full" style={{ background: 'linear-gradient(to right, transparent, rgba(255,184,0,0.12), transparent)' }} />
     </div>
   )
 }
@@ -139,7 +139,7 @@ export default async function DashboardPage() {
   const hasContent = enrolled.length > 0
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f]">
+    <div className="min-h-screen bg-[#0D1638]">
 
       {/* Hero Carousel */}
       {finalHeroSlides.length > 0 && (
@@ -149,8 +149,8 @@ export default async function DashboardPage() {
       {/* Saudação rápida logo após o hero */}
       {hasContent && (
         <div className="px-4 sm:px-6 lg:px-10 pt-8 pb-2">
-          <p className="text-[#505050] text-sm">
-            {greeting}, <span className="text-[#c79a3b] font-semibold">{firstName}</span>
+          <p className="text-white/40 text-sm">
+            {greeting}, <span className="text-[#FFB800] font-semibold">{firstName}</span>
           </p>
         </div>
       )}
@@ -249,13 +249,13 @@ export default async function DashboardPage() {
           <div className="px-4 sm:px-6 lg:px-10 py-24 text-center space-y-6">
             <div
               className="w-20 h-20 rounded-3xl mx-auto flex items-center justify-center"
-              style={{ background: 'rgba(199,154,59,0.08)', border: '1px solid rgba(199,154,59,0.15)' }}
+              style={{ background: 'rgba(255,184,0,0.08)', border: '1px solid rgba(255,184,0,0.15)' }}
             >
               <span className="text-3xl">🎓</span>
             </div>
             <div className="space-y-2">
-              <p className="text-[#f0f0f0] font-semibold text-xl">Comece sua jornada</p>
-              <p className="text-[#606060] text-sm max-w-xs mx-auto">
+              <p className="text-white font-semibold text-xl">Comece sua jornada</p>
+              <p className="text-white/50 text-sm max-w-xs mx-auto">
                 Explore nossa biblioteca de cursos e encontre o próximo passo na sua transformação.
               </p>
             </div>
@@ -263,9 +263,9 @@ export default async function DashboardPage() {
               href="/loja"
               className="inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-sm font-bold transition-all hover:opacity-90 hover:-translate-y-0.5 active:scale-[0.97]"
               style={{
-                background: 'linear-gradient(135deg, #c79a3b, #e8b84b)',
-                color: '#0a0a0a',
-                boxShadow: '0 8px 28px rgba(199,154,59,0.25)',
+                background: 'linear-gradient(135deg, #FFB800, #FFC933)',
+                color: '#0D1638',
+                boxShadow: '0 8px 28px rgba(255,184,0,0.25)',
               }}
             >
               Explorar cursos

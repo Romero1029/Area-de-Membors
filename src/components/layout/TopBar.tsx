@@ -30,7 +30,7 @@ export function TopBar({ profile }: { profile: Profile }) {
         <div className="flex items-center gap-2.5">
           <div
             className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white"
-            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}
+            style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)' }}
           >
             {profile.full_name?.charAt(0)?.toUpperCase() ?? 'U'}
           </div>

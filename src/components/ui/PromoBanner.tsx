@@ -67,7 +67,7 @@ function SinglePromo({ slide }: { slide: BannerSlide }) {
             className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div className="absolute inset-0" style={{ background: slide.gradient ?? 'linear-gradient(135deg, #1a1a1a, #0f0f0f)' }} />
+          <div className="absolute inset-0" style={{ background: slide.gradient ?? 'linear-gradient(135deg, #0A1232, #0D1638)' }} />
         )}
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -76,7 +76,7 @@ function SinglePromo({ slide }: { slide: BannerSlide }) {
           {slide.badge_label && (
             <span
               className="text-xs font-bold uppercase tracking-wider mb-2 inline-flex w-fit rounded-full px-3 py-1"
-              style={{ background: 'rgba(199,154,59,0.2)', color: '#e8b84b', border: '1px solid rgba(199,154,59,0.3)' }}
+              style={{ background: 'rgba(255,184,0,0.15)', color: '#FFC933', border: '1px solid rgba(255,184,0,0.25)' }}
             >
               {slide.badge_label}
             </span>
@@ -91,7 +91,7 @@ function SinglePromo({ slide }: { slide: BannerSlide }) {
             <p className="text-sm text-white/70 mb-4 max-w-lg">{slide.subtitle}</p>
           )}
           {slide.cta_label && (
-            <div className="flex items-center gap-2 text-sm font-bold text-[#e8b84b] group-hover:gap-3 transition-all">
+            <div className="flex items-center gap-2 text-sm font-bold text-[#FFC933] group-hover:gap-3 transition-all">
               {slide.cta_label}
               {slide.open_in_new ? <ExternalLink className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
             </div>
@@ -113,7 +113,7 @@ function SmallPromo({ slide }: { slide: BannerSlide }) {
           className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
         />
       ) : (
-        <div className="absolute inset-0" style={{ background: slide.gradient ?? 'linear-gradient(135deg, #1a1a1a, #0f0f0f)' }} />
+        <div className="absolute inset-0" style={{ background: slide.gradient ?? 'linear-gradient(135deg, #0A1232, #0D1638)' }} />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
@@ -121,7 +121,7 @@ function SmallPromo({ slide }: { slide: BannerSlide }) {
         {slide.badge_label && (
           <span
             className="text-[11px] font-bold uppercase tracking-wider mb-1.5 inline-flex w-fit rounded-full px-2.5 py-0.5"
-            style={{ background: 'rgba(199,154,59,0.2)', color: '#e8b84b', border: '1px solid rgba(199,154,59,0.3)' }}
+            style={{ background: 'rgba(255,184,0,0.15)', color: '#FFC933', border: '1px solid rgba(255,184,0,0.25)' }}
           >
             {slide.badge_label}
           </span>
@@ -136,7 +136,7 @@ function SmallPromo({ slide }: { slide: BannerSlide }) {
           <p className="text-xs text-white/60 line-clamp-2 mb-3">{slide.subtitle}</p>
         )}
         {slide.cta_label && (
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#e8b84b] group-hover:gap-2.5 transition-all">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#FFC933] group-hover:gap-2.5 transition-all">
             {slide.cta_label}
             <ArrowRight className="h-3.5 w-3.5" />
           </div>

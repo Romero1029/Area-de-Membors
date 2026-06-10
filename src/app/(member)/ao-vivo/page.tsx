@@ -7,7 +7,7 @@ export const metadata = { title: 'Aulas ao Vivo — Instituto Despertamente' }
 
 const STATUS_CONFIG = {
   live:      { label: 'Ao Vivo',   bg: 'bg-red-500/10',      text: 'text-red-400',      border: 'border-red-500/20',    dot: true },
-  scheduled: { label: 'Agendado',  bg: 'bg-[#c79a3b]/10',   text: 'text-[#c79a3b]',    border: 'border-[#c79a3b]/20',  dot: false },
+  scheduled: { label: 'Agendado',  bg: 'bg-[#FFB800]/10',   text: 'text-[#FFB800]',    border: 'border-[#FFB800]/20',  dot: false },
   ended:     { label: 'Encerrada', bg: 'bg-white/5',         text: 'text-white/40',     border: 'border-white/10',      dot: false },
   cancelled: { label: 'Cancelada', bg: 'bg-red-500/5',       text: 'text-red-400/60',   border: 'border-red-500/10',    dot: false },
 }
@@ -20,10 +20,10 @@ function LiveCard({ live, featured = false }: { live: Live; featured?: boolean }
     return (
       <div
         className="relative overflow-hidden rounded-3xl p-6 sm:p-8"
-        style={{ background: 'linear-gradient(135deg, #0f2233 0%, #172432 60%, #1a2430 100%)', border: '1px solid rgba(199,154,59,0.2)' }}
+        style={{ background: 'linear-gradient(135deg, #0A1232 0%, #0F1940 60%, #111D48 100%)', border: '1px solid rgba(255,184,0,0.20)' }}
       >
-        <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #c79a3b, transparent)' }} />
-        <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full opacity-[0.04]" style={{ background: 'radial-gradient(circle, #c79a3b, transparent)' }} />
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #FFB800, transparent)' }} />
+        <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full opacity-[0.04]" style={{ background: 'radial-gradient(circle, #FFB800, transparent)' }} />
 
         <div className="relative space-y-4">
           <div className="flex items-center gap-2">
@@ -34,8 +34,8 @@ function LiveCard({ live, featured = false }: { live: Live; featured?: boolean }
               </>
             ) : (
               <>
-                <span className="w-2 h-2 rounded-full bg-[#c79a3b] animate-pulse" />
-                <span className="text-xs font-bold uppercase tracking-widest text-[#c79a3b]">Próxima aula</span>
+                <span className="w-2 h-2 rounded-full bg-[#FFB800] animate-pulse" />
+                <span className="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Próxima aula</span>
               </>
             )}
           </div>
@@ -44,8 +44,8 @@ function LiveCard({ live, featured = false }: { live: Live; featured?: boolean }
           </h2>
           {live.description && <p className="text-sm text-white/60 max-w-lg">{live.description}</p>}
           <div className="flex flex-wrap gap-4 text-sm text-white/60">
-            <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-[#c79a3b]" /> {live.date_label} · {live.time_label}</span>
-            <span className="flex items-center gap-2"><Users className="w-4 h-4 text-[#c79a3b]" /> {live.audience}</span>
+            <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-[#FFB800]" /> {live.date_label} · {live.time_label}</span>
+            <span className="flex items-center gap-2"><Users className="w-4 h-4 text-[#FFB800]" /> {live.audience}</span>
           </div>
           <div className="flex flex-wrap gap-3 pt-1">
             {live.join_url ? (
@@ -54,7 +54,7 @@ function LiveCard({ live, featured = false }: { live: Live; featured?: boolean }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 hover:-translate-y-0.5"
-                style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(199,154,59,0.25)' }}
+                style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)', color: '#0D1638', boxShadow: '0 8px 24px rgba(255,184,0,0.25)' }}
               >
                 <Video className="w-4 h-4" /> {live.status === 'live' ? 'Entrar agora' : 'Entrar na sala'}
               </Link>
@@ -62,7 +62,7 @@ function LiveCard({ live, featured = false }: { live: Live; featured?: boolean }
               <button
                 disabled
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold opacity-40 cursor-not-allowed"
-                style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a' }}
+                style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)', color: '#0D1638' }}
                 title="Link disponível em breve"
               >
                 <Video className="w-4 h-4" /> Entrar na sala
@@ -86,17 +86,17 @@ function LiveCard({ live, featured = false }: { live: Live; featured?: boolean }
 
   return (
     <div
-      className={`rounded-2xl p-5 flex items-start gap-4 transition-all border ${isEnded ? 'opacity-50' : 'hover:border-[#c79a3b]/30'}`}
-      style={{ background: '#111111', borderColor: '#1e1e1e' }}
+      className={`rounded-2xl p-5 flex items-start gap-4 transition-all border ${isEnded ? 'opacity-50' : 'hover:border-[#FFB800]/30'}`}
+      style={{ background: '#0A1232', borderColor: 'rgba(255,255,255,0.08)' }}
     >
       <div
         className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
         style={{
-          background: isEnded ? 'rgba(255,255,255,0.03)' : 'rgba(199,154,59,0.1)',
-          border: isEnded ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(199,154,59,0.2)',
+          background: isEnded ? 'rgba(255,255,255,0.03)' : 'rgba(255,184,0,0.10)',
+          border: isEnded ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(255,184,0,0.20)',
         }}
       >
-        <Video className={`w-4 h-4 ${isEnded ? 'text-white/20' : 'text-[#c79a3b]'}`} />
+        <Video className={`w-4 h-4 ${isEnded ? 'text-white/20' : 'text-[#FFB800]'}`} />
       </div>
 
       <div className="flex-1 min-w-0 space-y-1.5">
@@ -114,7 +114,7 @@ function LiveCard({ live, featured = false }: { live: Live; featured?: boolean }
         </div>
         {live.join_url && !isEnded && (
           <Link href={live.join_url} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-[11px] text-[#c79a3b] hover:underline mt-0.5">
+            className="inline-flex items-center gap-1 text-[11px] text-[#FFB800] hover:underline mt-0.5">
             <Video className="w-3 h-3" /> Acessar sala
           </Link>
         )}
@@ -135,29 +135,29 @@ export default async function AoVivoPage() {
       {/* Header */}
       <div className="space-y-1">
         <div className="flex items-center gap-2">
-          <Radio className="w-5 h-5 text-[#c79a3b]" />
-          <h1 className="text-2xl font-bold text-[#f0f0f0]" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
+          <Radio className="w-5 h-5 text-[#FFB800]" />
+          <h1 className="text-2xl font-display font-bold text-white">
             Aulas ao Vivo
           </h1>
         </div>
-        <p className="text-sm text-[#606060]">Encontros exclusivos com o time do Instituto Despertamente.</p>
+        <p className="text-sm text-white/50">Encontros exclusivos com o time do Instituto Despertamente.</p>
       </div>
 
       {/* Próxima / Ao vivo agora */}
       {nextLive ? (
         <LiveCard live={nextLive} featured />
       ) : (
-        <div className="rounded-2xl border border-dashed border-[#2a2a2a] p-10 text-center space-y-2">
-          <Radio className="w-8 h-8 text-[#c79a3b]/40 mx-auto" />
-          <p className="text-[#606060] text-sm">Nenhuma live agendada no momento.</p>
-          <p className="text-[#505050] text-xs">Fique de olho — novos encontros são anunciados em breve.</p>
+        <div className="rounded-2xl border border-dashed border-white/[0.08] p-10 text-center space-y-2">
+          <Radio className="w-8 h-8 text-[#FFB800]/40 mx-auto" />
+          <p className="text-white/50 text-sm">Nenhuma live agendada no momento.</p>
+          <p className="text-white/35 text-xs">Fique de olho — novos encontros são anunciados em breve.</p>
         </div>
       )}
 
       {/* Agenda */}
       {otherLives.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-xs font-bold uppercase tracking-widest text-[#505050]">Agenda completa</h2>
+          <h2 className="text-xs font-bold uppercase tracking-widest text-white/30">Agenda completa</h2>
           {otherLives.map(live => (
             <LiveCard key={live.id} live={live} />
           ))}
@@ -165,13 +165,13 @@ export default async function AoVivoPage() {
       )}
 
       {/* Info sobre funcionamento */}
-      <div className="rounded-2xl p-5 flex items-start gap-4" style={{ background: 'rgba(199,154,59,0.05)', border: '1px solid rgba(199,154,59,0.1)' }}>
-        <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(199,154,59,0.1)' }}>
-          <Radio className="w-4 h-4 text-[#c79a3b]" />
+      <div className="rounded-2xl p-5 flex items-start gap-4" style={{ background: 'rgba(255,184,0,0.05)', border: '1px solid rgba(255,184,0,0.10)' }}>
+        <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,184,0,0.10)' }}>
+          <Radio className="w-4 h-4 text-[#FFB800]" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-[#f0f0f0]">Como funcionam as aulas ao vivo?</p>
-          <p className="text-xs text-[#606060] mt-1 leading-relaxed">
+          <p className="text-sm font-semibold text-white">Como funcionam as aulas ao vivo?</p>
+          <p className="text-xs text-white/50 mt-1 leading-relaxed">
             As aulas acontecem via Zoom ou YouTube Live. O link de acesso é enviado por e-mail 30 minutos antes. Gravações ficam disponíveis na plataforma em até 24h após o término.
           </p>
         </div>

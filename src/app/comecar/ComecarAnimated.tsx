@@ -1,18 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, ChevronLeft, ChevronRight, Play } from 'lucide-react'
-
-// ─────────────────────────────────────────────
-// CONFIG — adicione os IDs do YouTube aqui
-// ─────────────────────────────────────────────
-const VIDEO_DEPOS: { nome: string; papel: string; video_id: string }[] = [
-  { nome: 'Nome do aluno', papel: 'Psicanálise Integrativa', video_id: '' },
-  { nome: 'Nome do aluno', papel: 'NPA 2.0',                 video_id: '' },
-  { nome: 'Nome do aluno', papel: 'Practitioner PNL',        video_id: '' },
-  { nome: 'Nome do aluno', papel: 'IDM pelo Brasil',         video_id: '' },
-]
+import { ArrowRight } from 'lucide-react'
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -93,10 +83,7 @@ function ManifestoSection() {
         {/* Texto — alinhado à esquerda */}
         <FadeIn direction="none">
           <div className="space-y-8">
-            <h2
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-[clamp(3rem,7vw,6rem)] font-bold text-white leading-[0.92] tracking-tight"
-            >
+            <h2 className="font-display text-[clamp(3rem,7vw,6rem)] font-bold text-white leading-[0.92] tracking-tight">
               Psicanálise<br />
               <span className="text-white/40">Integrativa.</span>
             </h2>
@@ -157,10 +144,7 @@ function InstitutoSection() {
 
         {/* Headline + dois parágrafos em colunas */}
         <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-start">
-          <h2
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-white leading-[1.05]"
-          >
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-white leading-[1.05]">
             Uma instituição<br />construída para<br />transformar vidas.
           </h2>
           <div className="space-y-5 pt-1">
@@ -187,10 +171,7 @@ function InstitutoSection() {
             { n: '9 anos',  label: 'de metodologia' },
           ].map(({ n, label }) => (
             <div key={label}>
-              <p
-                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                className="text-4xl sm:text-5xl font-bold text-white"
-              >
+              <p className="font-display text-4xl sm:text-5xl font-bold text-white">
                 {n}
               </p>
               <p className="mt-1.5 text-xs text-white/30 uppercase tracking-[0.15em]">{label}</p>
@@ -235,10 +216,7 @@ function ProgramasSection() {
     <section id="projetos" className="border-t border-white/8 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24">
 
       <FadeIn direction="none" className="mb-12">
-        <h2
-          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-          className="text-2xl sm:text-3xl font-bold text-white"
-        >
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
           Nossos programas
         </h2>
       </FadeIn>
@@ -253,10 +231,7 @@ function ProgramasSection() {
               <div className="flex items-start sm:items-center gap-6 sm:gap-10 min-w-0">
                 <span className="text-xs text-white/25 font-mono shrink-0 mt-1 sm:mt-0">{p.num}</span>
                 <div className="min-w-0">
-                  <p
-                    style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                    className="text-xl sm:text-2xl font-bold text-white group-hover:text-white/90 transition-colors"
-                  >
+                  <p className="font-display text-xl sm:text-2xl font-bold text-white group-hover:text-white/90 transition-colors">
                     {p.titulo}
                   </p>
                   <p className="mt-1 text-sm text-white/40 leading-snug">{p.desc}</p>
@@ -306,10 +281,7 @@ function FormacaoSection() {
             <div className="space-y-8 lg:pt-4">
 
               <div>
-                <h2
-                  style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                  className="text-4xl sm:text-5xl font-bold text-white leading-[1.05]"
-                >
+                <h2 className="font-display text-4xl sm:text-5xl font-bold text-white leading-[1.05]">
                   Psicanálise<br />Integrativa.
                 </h2>
                 <p className="mt-4 text-white/55 leading-relaxed">
@@ -356,110 +328,6 @@ function FormacaoSection() {
 }
 
 // ─────────────────────────────────────────────
-// VIDEO CARD
-// ─────────────────────────────────────────────
-function VideoCard({
-  nome, papel, video_id,
-}: {
-  nome: string; papel: string; video_id: string
-}) {
-  const [playing, setPlaying] = useState(false)
-  const hasVideo = !!video_id
-
-  return (
-    <div className="rounded-lg overflow-hidden border border-white/8 bg-[#0A1232]">
-      <div className="relative aspect-video bg-[#080E24]">
-        {hasVideo && playing ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${video_id}?autoplay=1&rel=0`}
-            className="absolute inset-0 w-full h-full"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          />
-        ) : (
-          <button
-            className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-[#080E24] group cursor-pointer disabled:cursor-default"
-            onClick={() => hasVideo && setPlaying(true)}
-            disabled={!hasVideo}
-            type="button"
-          >
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center transition-transform duration-300 ${
-              hasVideo
-                ? 'bg-[#FFB800] group-hover:scale-110'
-                : 'bg-white/5 border border-white/10'
-            }`}>
-              <Play className={`h-5 w-5 ml-0.5 ${hasVideo ? 'fill-[#0D1638] text-[#0D1638]' : 'text-white/20'}`} />
-            </div>
-          </button>
-        )}
-      </div>
-      <div className="px-4 py-3.5 flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-white/8 flex items-center justify-center shrink-0">
-          <span className="text-xs font-bold text-white/40">{nome.charAt(0)}</span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-white truncate">{nome}</p>
-          <p className="text-[11px] text-white/35 mt-0.5 truncate">{papel}</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─────────────────────────────────────────────
-// VIDEO CAROUSEL
-// ─────────────────────────────────────────────
-function VideoCarousel() {
-  const [idx, setIdx] = useState(0)
-  const total = VIDEO_DEPOS.length
-  const prev  = () => setIdx(i => (i === 0 ? total - 1 : i - 1))
-  const next  = () => setIdx(i => (i === total - 1 ? 0 : i + 1))
-
-  return (
-    <div className="space-y-6">
-      {/* Mobile — 1 por vez */}
-      <div className="lg:hidden">
-        <VideoCard {...VIDEO_DEPOS[idx]} />
-      </div>
-
-      {/* Desktop — 3 visíveis */}
-      <div className="hidden lg:grid grid-cols-3 gap-5 items-center">
-        {([-1, 0, 1] as const).map((offset, i) => {
-          const d = VIDEO_DEPOS[(idx + offset + total) % total]
-          const isCenter = offset === 0
-          return (
-            <div key={i} className={`transition-all duration-500 ${isCenter ? 'scale-100' : 'scale-[0.96] opacity-50'}`}>
-              <VideoCard {...d} />
-            </div>
-          )
-        })}
-      </div>
-
-      {/* Controles */}
-      <div className="flex items-center justify-start gap-4">
-        <button onClick={prev} type="button"
-          className="w-10 h-10 rounded-full border border-white/12 bg-white/4 flex items-center justify-center text-white/40 hover:text-white hover:border-white/25 transition-all"
-          aria-label="Anterior">
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div className="flex gap-1.5">
-          {VIDEO_DEPOS.map((_, i) => (
-            <button key={i} type="button" onClick={() => setIdx(i)}
-              className={`h-1 rounded-full transition-all duration-300 ${i === idx ? 'w-6 bg-white/50' : 'w-1.5 bg-white/15 hover:bg-white/30'}`}
-              aria-label={`Depoimento ${i + 1}`} />
-          ))}
-        </div>
-        <button onClick={next} type="button"
-          className="w-10 h-10 rounded-full border border-white/12 bg-white/4 flex items-center justify-center text-white/40 hover:text-white hover:border-white/25 transition-all"
-          aria-label="Próximo">
-          <ChevronRight className="h-5 w-5" />
-        </button>
-      </div>
-    </div>
-  )
-}
-
-// ─────────────────────────────────────────────
 // SEÇÃO 6 — DEPOIMENTOS
 // ─────────────────────────────────────────────
 function DepoimentosSection({ depos }: { depos: Depo[] }) {
@@ -469,17 +337,28 @@ function DepoimentosSection({ depos }: { depos: Depo[] }) {
       className="border-t border-white/8 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24"
     >
       <FadeIn direction="none" className="mb-12">
-        <h2
-          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-          className="text-3xl sm:text-4xl font-bold text-white"
-        >
+        <h2 className="font-display text-3xl sm:text-4xl font-bold text-white">
           Quem já passou<br />pelo IDM.
         </h2>
       </FadeIn>
 
-      <FadeIn>
-        <VideoCarousel />
-      </FadeIn>
+      {depos.length > 0 ? (
+        <FadeIn>
+          <div className="grid sm:grid-cols-3 gap-10 sm:gap-12">
+            {depos.slice(0, 3).map((d, i) => (
+              <div key={i} className="space-y-4">
+                <p className="text-white/60 leading-relaxed text-sm">
+                  &ldquo;{d.texto}&rdquo;
+                </p>
+                <div className="border-t border-white/[0.06] pt-4">
+                  <p className="text-sm font-semibold text-white">{d.nome}</p>
+                  <p className="text-xs text-white/35 mt-0.5">{d.papel}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
+      ) : null}
 
     </section>
   )
@@ -499,10 +378,7 @@ function CTASection() {
           <div className="grid lg:grid-cols-[1fr_auto] gap-10 items-end">
 
             <div className="space-y-5">
-              <h2
-                style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[0.95]"
-              >
+              <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[0.95]">
                 Inscreva-se para<br />a Turma 38.
               </h2>
               <p className="text-white/45 text-lg max-w-md leading-relaxed">

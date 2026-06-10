@@ -166,7 +166,7 @@ export function IdmBrasilContent({ product }: { product: ProductData | null }) {
           backgroundSize: '48px 48px',
         }}
       >
-        <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] rounded-full bg-[#c79a3b]/4 blur-[250px] pointer-events-none" />
+        <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] rounded-full bg-[#FFB800]/4 blur-[250px] pointer-events-none" />
 
         <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full space-y-10">
           <motion.div
@@ -199,7 +199,7 @@ export function IdmBrasilContent({ product }: { product: ProductData | null }) {
             <div className="flex flex-col items-start sm:items-end gap-3">
               <a
                 href="#cidades"
-                className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-7 py-3.5 text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors whitespace-nowrap"
+                className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-7 py-3.5 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors whitespace-nowrap"
               >
                 Ver datas e cidades
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
@@ -332,7 +332,7 @@ export function IdmBrasilContent({ product }: { product: ProductData | null }) {
           <div className="max-w-5xl mx-auto px-6 sm:px-10 py-20">
             <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
               <div className="space-y-6">
-                <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="block text-[80px] leading-none text-[#c79a3b]/8 select-none -mb-6">
+                <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="block text-[80px] leading-none text-[#FFB800]/8 select-none -mb-6">
                   "
                 </span>
                 <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-xl sm:text-2xl text-[#888888] leading-relaxed font-light italic">
@@ -381,7 +381,7 @@ export function IdmBrasilContent({ product }: { product: ProductData | null }) {
                 href={WA_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 py-4 rounded-xl bg-[#c79a3b] text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
+                className="flex items-center justify-center gap-2.5 py-4 rounded-xl bg-[#FFB800] text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
               >
                 <MessageCircle className="h-4 w-4" />
                 Saber o valor da minha cidade
@@ -446,8 +446,8 @@ export function IdmBrasilContent({ product }: { product: ProductData | null }) {
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-8 py-4 text-base font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
-              style={{ boxShadow: '0 8px 32px rgba(199,154,59,0.22)' }}
+              className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-8 py-4 text-base font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
+              style={{ boxShadow: '0 8px 32px rgba(255,184,0,0.22)' }}
             >
               <MessageCircle className="h-4 w-4" />
               Entrar na lista de espera

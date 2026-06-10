@@ -58,13 +58,13 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
 
   // Lista de módulos para o CinemaModeWrapper
   const moduleListEl = (
-    <div className="divide-y divide-[#1a1a1a]">
+    <div className="divide-y divide-white/[0.06]">
       {modules.map((mod) => {
         const modLessons = [...mod.lessons].sort((a, b) => a.sort_order - b.sort_order)
         return (
           <div key={mod.id}>
-            <div className="px-4 py-2.5 bg-[#0a0a0a]">
-              <p className="text-xs font-semibold text-[#606060]">{mod.title}</p>
+            <div className="px-4 py-2.5 bg-[#091028]">
+              <p className="text-xs font-semibold text-white/40">{mod.title}</p>
             </div>
             {modLessons.map((l) => {
               const done   = !!progressMap[l.id]?.completed
@@ -73,22 +73,22 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
                 <Link
                   key={l.id}
                   href={`/cursos/${slug}/aulas/${l.id}`}
-                  className="flex items-start gap-2.5 px-4 py-2.5 transition-colors hover:bg-[#1a1a1a]"
+                  className="flex items-start gap-2.5 px-4 py-2.5 transition-colors hover:bg-white/[0.04]"
                   style={{
-                    borderLeft: active ? '2px solid #c79a3b' : '2px solid transparent',
-                    background: active ? 'rgba(199,154,59,0.06)' : undefined,
+                    borderLeft: active ? '2px solid #FFB800' : '2px solid transparent',
+                    background: active ? 'rgba(255,184,0,0.06)' : undefined,
                   }}
                 >
                   {done
                     ? <CheckCircle className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#22c55e]" />
-                    : <Circle className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: active ? '#c79a3b' : '#333' }} />
+                    : <Circle className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: active ? '#FFB800' : 'rgba(255,255,255,0.20)' }} />
                   }
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs leading-snug" style={{ color: active ? '#c79a3b' : done ? '#555' : '#ccc' }}>
+                    <p className="text-xs leading-snug" style={{ color: active ? '#FFB800' : done ? 'rgba(255,255,255,0.30)' : 'rgba(255,255,255,0.70)' }}>
                       {l.title}
                     </p>
                     {l.video_duration && (
-                      <p className="text-[10px] mt-0.5 flex items-center gap-1 text-[#444]">
+                      <p className="text-[10px] mt-0.5 flex items-center gap-1 text-white/25">
                         <Clock className="w-2.5 h-2.5" />{formatDuration(l.video_duration)}
                       </p>
                     )}
@@ -103,7 +103,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   )
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] px-4 sm:px-6 lg:px-10 py-6">
+    <div className="min-h-screen bg-[#0D1638] px-4 sm:px-6 lg:px-10 py-6">
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-[#606060] mb-5">
@@ -136,8 +136,8 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
                 initialCompleted={currentProgress?.completed}
               />
             ) : (
-              <div className="aspect-video rounded-xl flex items-center justify-center bg-[#1a1a1a] border border-[#2a2a2a]">
-                <p className="text-sm text-[#606060]">Sem vídeo para esta aula.</p>
+              <div className="aspect-video rounded-xl flex items-center justify-center bg-[#0A1232] border border-white/[0.08]">
+                <p className="text-sm text-white/40">Sem vídeo para esta aula.</p>
               </div>
             )}
           </CinemaModeWrapper>
@@ -155,14 +155,14 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
             {prevLesson ? (
               <Link
                 href={`/cursos/${slug}/aulas/${prevLesson.id}`}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[#1a1a1a] text-[#a0a0a0] border border-[#2a2a2a] hover:bg-[#242424] hover:text-[#f0f0f0] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[#0A1232] text-white/50 border border-white/[0.08] hover:bg-[#0F1940] hover:text-white transition-colors"
               >
                 <ChevronLeft className="h-4 w-4" /> Anterior
               </Link>
             ) : (
               <Link
                 href={`/cursos/${slug}`}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[#1a1a1a] text-[#a0a0a0] border border-[#2a2a2a] hover:bg-[#242424] hover:text-[#f0f0f0] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[#0A1232] text-white/50 border border-white/[0.08] hover:bg-[#0F1940] hover:text-white transition-colors"
               >
                 <ArrowLeft className="h-4 w-4" /> Visão geral
               </Link>
@@ -170,7 +170,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
             {nextLesson && (
               <Link
                 href={`/cursos/${slug}/aulas/${nextLesson.id}`}
-                className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold bg-[#c79a3b] text-[#0f0f0f] hover:bg-[#e8b84b] transition-colors"
+                className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold bg-[#FFB800] text-[#0D1638] hover:bg-[#FFC933] transition-colors"
               >
                 Próxima <ChevronRight className="h-4 w-4" />
               </Link>
@@ -179,9 +179,9 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         </div>
 
         {/* Sidebar de aulas — desktop */}
-        <div className="hidden lg:block rounded-xl bg-[#111111] border border-[#1a1a1a] h-fit max-h-[80vh] overflow-hidden">
-          <div className="px-4 py-3 border-b border-[#1a1a1a]">
-            <p className="text-xs font-semibold text-[#f0f0f0]">Conteúdo do curso</p>
+        <div className="hidden lg:block rounded-xl bg-[#0A1232] border border-white/[0.08] h-fit max-h-[80vh] overflow-hidden">
+          <div className="px-4 py-3 border-b border-white/[0.06]">
+            <p className="text-xs font-semibold text-white/70">Conteúdo do curso</p>
           </div>
           <div className="overflow-y-auto max-h-[calc(80vh-44px)]">
             {moduleListEl}

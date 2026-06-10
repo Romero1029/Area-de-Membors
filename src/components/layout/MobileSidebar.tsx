@@ -54,7 +54,7 @@ export function MobileSidebar({ profile }: { profile: Profile }) {
         <div className="absolute bottom-0 left-0 right-0 px-3 pb-5 space-y-1" style={{ borderTop: '1px solid rgba(23,36,50,0.07)', paddingTop: '12px' }}>
           <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl" style={{ background: 'rgba(23,36,50,0.03)' }}>
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black text-white shrink-0"
-              style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}>
+              style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)' }}>
               {profile.full_name?.charAt(0)?.toUpperCase() ?? 'U'}
             </div>
             <p className="text-sm font-bold text-[#1a2430] truncate">{profile.full_name ?? 'Usuário'}</p>

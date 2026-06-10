@@ -65,17 +65,17 @@ export function CertificadoForm({ existingCert }: { existingCert?: Certificate |
         {/* Certificado visual */}
         <div
           className="relative rounded-3xl overflow-hidden p-8 text-center space-y-4"
-          style={{ background: 'linear-gradient(135deg, #0f2233 0%, #172432 100%)', border: '1px solid rgba(199,154,59,0.3)' }}
+          style={{ background: 'linear-gradient(135deg, #0A1232 0%, #0F1940 100%)', border: '1px solid rgba(255,184,0,0.3)' }}
         >
           {/* Ornamento */}
-          <div className="absolute top-0 left-0 right-0 h-1 rounded-t-3xl" style={{ background: 'linear-gradient(90deg, #c79a3b, #e8b84b, #c79a3b)' }} />
+          <div className="absolute top-0 left-0 right-0 h-1 rounded-t-3xl" style={{ background: 'linear-gradient(90deg, #FFB800, #FFC933, #FFB800)' }} />
 
-          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto" style={{ background: 'rgba(199,154,59,0.15)', border: '2px solid rgba(199,154,59,0.4)' }}>
-            <Award className="w-8 h-8" style={{ color: '#c79a3b' }} />
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto" style={{ background: 'rgba(255,184,0,0.15)', border: '2px solid rgba(255,184,0,0.4)' }}>
+            <Award className="w-8 h-8" style={{ color: '#FFB800' }} />
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#c79a3b' }}>Certificado de Participação</p>
+            <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#FFB800' }}>Certificado de Participação</p>
             <p className="text-xl font-bold text-white" style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
               {cert.full_name}
             </p>
@@ -86,10 +86,10 @@ export function CertificadoForm({ existingCert }: { existingCert?: Certificate |
           </div>
 
           <div className="flex items-center justify-center gap-2 pt-2">
-            <code className="text-sm font-bold px-3 py-1.5 rounded-lg" style={{ background: 'rgba(199,154,59,0.15)', color: '#e8b84b', letterSpacing: '0.05em' }}>
+            <code className="text-sm font-bold px-3 py-1.5 rounded-lg" style={{ background: 'rgba(255,184,0,0.15)', color: '#FFC933', letterSpacing: '0.05em' }}>
               {cert.certificate_code}
             </code>
-            <button onClick={copyCode} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ background: 'rgba(199,154,59,0.1)', color: '#c79a3b' }}>
+            <button onClick={copyCode} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ background: 'rgba(255,184,0,0.1)', color: '#FFB800' }}>
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             </button>
           </div>
@@ -104,7 +104,7 @@ export function CertificadoForm({ existingCert }: { existingCert?: Certificate |
           onClick={downloadPDF}
           disabled={downloading}
           className="w-full h-12 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 transition-all hover:opacity-90 disabled:opacity-60"
-          style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(199,154,59,0.3)' }}
+          style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)', color: '#0D1638', boxShadow: '0 8px 24px rgba(255,184,0,0.3)' }}
         >
           {downloading
             ? <><Loader2 className="w-4 h-4 animate-spin" /> Gerando PDF...</>
@@ -152,7 +152,7 @@ export function CertificadoForm({ existingCert }: { existingCert?: Certificate |
 
       <button type="submit" disabled={loading}
         className="w-full h-12 rounded-2xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:opacity-90"
-        style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', boxShadow: '0 8px 24px rgba(199,154,59,0.3)' }}>
+        style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)', boxShadow: '0 8px 24px rgba(255,184,0,0.3)' }}>
         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Award className="w-4 h-4" /> Resgatar meu Certificado</>}
       </button>
     </form>

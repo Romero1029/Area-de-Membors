@@ -8,14 +8,14 @@ interface TestimonialCardProps {
 
 export function TestimonialCard({ testimonial }: TestimonialCardProps) {
   return (
-    <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-[#1a2430] p-5 shadow-sm">
+    <div className="flex flex-col gap-4 rounded-2xl border border-white/[0.08] bg-[#0A1232] p-5 shadow-sm">
       {/* Estrelas */}
       {testimonial.rating && (
         <div className="flex gap-0.5">
           {Array.from({ length: 5 }).map((_, i) => (
             <Star
               key={i}
-              className={`h-4 w-4 ${i < testimonial.rating! ? 'fill-[#c79a3b] text-[#c79a3b]' : 'text-white/20'}`}
+              className={`h-4 w-4 ${i < testimonial.rating! ? 'fill-[#FFB800] text-[#FFB800]' : 'text-white/20'}`}
             />
           ))}
         </div>
@@ -37,7 +37,7 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
             className="rounded-full object-cover"
           />
         ) : (
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#c79a3b]/20 text-sm font-bold text-[#c79a3b]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFB800]/20 text-sm font-bold text-[#FFB800]">
             {testimonial.author_name.charAt(0).toUpperCase()}
           </div>
         )}

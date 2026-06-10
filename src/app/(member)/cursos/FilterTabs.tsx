@@ -40,15 +40,15 @@ export function FilterTabs({ filtro, counts, busca }: FilterTabsProps) {
             className={cn(
               'flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-all duration-150',
               active
-                ? 'bg-[#c79a3b] text-[#0f0f0f]'
-                : 'bg-[#1a1a1a] text-[#a0a0a0] hover:bg-[#242424] hover:text-[#f0f0f0]'
+                ? 'bg-[#FFB800] text-[#0D1638]'
+                : 'bg-[#0A1232] text-white/50 hover:bg-[#0F1940] hover:text-white'
             )}
           >
             {label}
             <span
               className={cn(
                 'rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none',
-                active ? 'bg-[#0f0f0f]/20 text-[#0f0f0f]' : 'bg-[#242424] text-[#606060]'
+                active ? 'bg-[#0D1638]/20 text-[#0D1638]' : 'bg-[#0F1940] text-white/30'
               )}
             >
               {count}

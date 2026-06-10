@@ -209,7 +209,7 @@ function PriceBlock({ product }: { product: ProductData | null }) {
   return (
     <div className="space-y-8">
       <div className="grid sm:grid-cols-2 gap-3 max-w-lg">
-        <div className="rounded-2xl border border-white/8 bg-[#0a0a0a] p-6 space-y-3">
+        <div className="rounded-2xl border border-white/8 bg-[#0A1232] p-6 space-y-3">
           <p className="text-[11px] font-mono uppercase tracking-widest text-[#404040]">Pix · à vista</p>
           {product.original_price && (
             <p className="text-xs text-[#383838] line-through">R$ {product.original_price.toLocaleString('pt-BR')}</p>
@@ -220,12 +220,12 @@ function PriceBlock({ product }: { product: ProductData | null }) {
           <p className="text-[11px] text-[#404040]">10% de desconto</p>
           <a
             href={checkoutUrl}
-            className="mt-2 flex items-center justify-center py-3 rounded-xl bg-[#c79a3b] text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
+            className="mt-2 flex items-center justify-center py-3 rounded-xl bg-[#FFB800] text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
           >
             Pagar com Pix
           </a>
         </div>
-        <div className="rounded-2xl border border-white/5 bg-[#0a0a0a] p-6 space-y-3">
+        <div className="rounded-2xl border border-white/5 bg-[#0A1232] p-6 space-y-3">
           <p className="text-[11px] font-mono uppercase tracking-widest text-[#404040]">Cartão · parcelado</p>
           <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-4xl font-bold text-[#f0f0f0] leading-none">
             12×
@@ -259,7 +259,7 @@ export function PsicanaliseContent({ product }: { product: ProductData | null })
           backgroundSize: '48px 48px',
         }}
       >
-        <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] rounded-full bg-[#c79a3b]/4 blur-[250px] pointer-events-none" />
+        <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] rounded-full bg-[#FFB800]/4 blur-[250px] pointer-events-none" />
 
         <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full space-y-10">
           <motion.div
@@ -292,7 +292,7 @@ export function PsicanaliseContent({ product }: { product: ProductData | null })
             <div className="flex flex-col items-start sm:items-end gap-3">
               <a
                 href={checkoutHref}
-                className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-7 py-3.5 text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors whitespace-nowrap"
+                className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-7 py-3.5 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors whitespace-nowrap"
               >
                 Garantir minha vaga
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
@@ -373,8 +373,8 @@ export function PsicanaliseContent({ product }: { product: ProductData | null })
             <div className="relative pl-8 space-y-8 border-l border-white/8">
               {passos.map((p, i) => (
                 <div key={i} className="relative">
-                  <span className="absolute -left-[33px] top-0.5 w-4 h-4 rounded-full border border-[#c79a3b]/20 bg-[#0d0d0d] flex items-center justify-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#c79a3b]/40" />
+                  <span className="absolute -left-[33px] top-0.5 w-4 h-4 rounded-full border border-[#FFB800]/20 bg-[#0d0d0d] flex items-center justify-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FFB800]/40" />
                   </span>
                   <p className="text-sm font-semibold text-[#d0d0d0]">{p.titulo}</p>
                   <p className="text-xs text-[#484848] mt-1 leading-relaxed">{p.desc}</p>
@@ -392,7 +392,7 @@ export function PsicanaliseContent({ product }: { product: ProductData | null })
             <div>
               <div
                 className="w-full aspect-square rounded-2xl bg-[#0d0d0d] flex items-center justify-center"
-                style={{ border: '1px solid rgba(199,154,59,0.12)' }}
+                style={{ border: '1px solid rgba(255,184,0,0.12)' }}
               >
                 <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-7xl font-black text-[#1c1c1c]">
                   F
@@ -404,7 +404,7 @@ export function PsicanaliseContent({ product }: { product: ProductData | null })
                 <h2 style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-3xl font-bold text-[#f0f0f0]">
                   Nome do Fundador
                 </h2>
-                <p className="text-xs font-mono text-[#c79a3b]/70 mt-1.5 tracking-wider">
+                <p className="text-xs font-mono text-[#FFB800]/70 mt-1.5 tracking-wider">
                   FUNDADOR · PSICANALISTA INTEGRATIVO · MASTER PNL
                 </p>
               </div>
@@ -420,7 +420,7 @@ export function PsicanaliseContent({ product }: { product: ProductData | null })
               </p>
               <blockquote
                 style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-                className="border-l border-[#c79a3b]/20 pl-6 text-lg sm:text-xl italic text-[#707070] leading-relaxed"
+                className="border-l border-[#FFB800]/20 pl-6 text-lg sm:text-xl italic text-[#707070] leading-relaxed"
               >
                 "Um psicanalista que não se analisou não pode analisar. Um formador que não se formou não
                 pode formar. Essa formação exige que você vá fundo — em você mesmo."
@@ -437,7 +437,7 @@ export function PsicanaliseContent({ product }: { product: ProductData | null })
             <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
               {/* Featured */}
               <div className="space-y-6">
-                <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="block text-[80px] leading-none text-[#c79a3b]/8 select-none -mb-6">
+                <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="block text-[80px] leading-none text-[#FFB800]/8 select-none -mb-6">
                   "
                 </span>
                 <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-xl sm:text-2xl text-[#888888] leading-relaxed font-light italic">
@@ -547,8 +547,8 @@ export function PsicanaliseContent({ product }: { product: ProductData | null })
           <div className="flex flex-col sm:flex-row items-start gap-4">
             <a
               href={checkoutHref}
-              className="group inline-flex items-center gap-2.5 rounded-xl bg-[#c79a3b] px-8 py-4 text-base font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
-              style={{ boxShadow: '0 8px 32px rgba(199,154,59,0.22)' }}
+              className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-8 py-4 text-base font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
+              style={{ boxShadow: '0 8px 32px rgba(255,184,0,0.22)' }}
             >
               Garantir minha vaga
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

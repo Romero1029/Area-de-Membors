@@ -81,25 +81,25 @@ export default async function CoursesPage({
   const totalCount       = counts.todos
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#0D1638] pb-24 md:pb-12">
 
       {/* Header premium */}
       <div
         className="relative overflow-hidden px-4 sm:px-6 lg:px-10 pt-10 pb-8 md:pt-14 md:pb-10"
-        style={{ background: 'linear-gradient(to bottom, rgba(199,154,59,0.04) 0%, transparent 100%)' }}
+        style={{ background: 'linear-gradient(to bottom, rgba(255,184,0,0.04) 0%, transparent 100%)' }}
       >
         {/* Linha dourada superior */}
         <div
           className="absolute top-0 left-0 right-0 h-[2px]"
-          style={{ background: 'linear-gradient(to right, transparent, rgba(199,154,59,0.4), transparent)' }}
+          style={{ background: 'linear-gradient(to right, transparent, rgba(255,184,0,0.35), transparent)' }}
         />
 
         <div className="space-y-5">
           <div className="space-y-1">
-            <p className="text-[#c79a3b] text-xs font-bold uppercase tracking-widest">Instituto Despertamente</p>
+            <p className="text-[#FFB800] text-xs font-bold uppercase tracking-widest">Instituto Despertamente</p>
             <h1
-              className="font-bold text-[#f0f0f0] leading-tight"
-              style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontFamily: 'var(--font-fraunces, Georgia, serif)' }}
+              className="font-display font-bold text-white leading-tight"
+              style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)' }}
             >
               Meus Cursos
             </h1>
@@ -108,7 +108,7 @@ export default async function CoursesPage({
           {/* Stats */}
           {totalCount > 0 && (
             <div className="flex flex-wrap gap-2">
-              <StatBadge value={totalCount} label="matriculados" color="#c79a3b" />
+              <StatBadge value={totalCount} label="matriculados" color="#FFB800" />
               {inProgressCount > 0 && <StatBadge value={inProgressCount} label="em andamento" color="#60a5fa" />}
               {completedCount > 0 && <StatBadge value={completedCount} label="concluídos" color="#4ade80" />}
             </div>
@@ -121,9 +121,9 @@ export default async function CoursesPage({
         <FilterTabs filtro={filtro} counts={counts} busca={busca} />
 
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#242424] py-20 text-center space-y-3">
+          <div className="rounded-2xl border border-dashed border-white/[0.08] py-20 text-center space-y-3">
             <p className="text-2xl">🔍</p>
-            <p className="text-[#a0a0a0] text-sm">
+            <p className="text-white/50 text-sm">
               {busca
                 ? `Nenhum curso encontrado para "${busca}"`
                 : filtro === 'em-andamento'  ? 'Comece qualquer curso para ver aqui.'

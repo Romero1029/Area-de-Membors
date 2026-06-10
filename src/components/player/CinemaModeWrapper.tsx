@@ -120,7 +120,7 @@ export function CinemaModeWrapper({
               {nextHref && (
                 <Link
                   href={nextHref}
-                  className="flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-bold bg-[#c79a3b] text-[#0f0f0f] hover:bg-[#e8b84b] transition-colors"
+                  className="flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-bold bg-[#FFB800] text-[#0f0f0f] hover:bg-[#FFC933] transition-colors"
                 >
                   Próxima <ChevronRight className="h-3.5 w-3.5" />
                 </Link>

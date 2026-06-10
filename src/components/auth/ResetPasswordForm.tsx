@@ -80,7 +80,7 @@ export function ResetPasswordForm() {
 
         <button type="submit" disabled={loading}
           className="w-full h-12 rounded-2xl text-[15px] font-bold transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2"
-          style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(199,154,59,0.25)' }}>
+          style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)', color: '#0a0a0a', boxShadow: '0 8px 24px rgba(255,184,0,0.25)' }}>
           {loading ? <Loader2 className="w-5 h-5 animate-spin text-[#0a0a0a]" /> : 'Redefinir senha'}
         </button>
       </form>

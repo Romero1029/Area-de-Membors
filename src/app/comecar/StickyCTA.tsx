@@ -39,7 +39,7 @@ export function StickyCTA() {
       </a>
       <Link
         href="/register"
-        className="flex flex-1 items-center justify-center py-3 rounded-xl bg-[#c79a3b] text-sm font-bold text-[#080808] hover:bg-[#e8b84b] transition-colors"
+        className="flex flex-1 items-center justify-center py-3 rounded-xl bg-[#FFB800] text-sm font-bold text-[#080808] hover:bg-[#FFC933] transition-colors"
       >
         Começar grátis
       </Link>

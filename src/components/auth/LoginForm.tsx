@@ -55,7 +55,7 @@ export function LoginForm() {
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
             <label htmlFor="password" className="text-sm font-bold text-[#1a2430] block">Senha</label>
-            <Link href="/forgot-password" className="text-sm font-semibold hover:underline" style={{ color: '#c79a3b' }}>
+            <Link href="/forgot-password" className="text-sm font-semibold hover:underline" style={{ color: '#FFB800' }}>
               Esqueceu?
             </Link>
           </div>
@@ -90,7 +90,7 @@ export function LoginForm() {
 
       <p className="text-center text-base text-[#5f6b78]">
         Não tem conta?{' '}
-        <Link href="/register" className="font-bold hover:underline" style={{ color: '#c79a3b' }}>
+        <Link href="/register" className="font-bold hover:underline" style={{ color: '#FFB800' }}>
           Criar conta gratuita
         </Link>
       </p>

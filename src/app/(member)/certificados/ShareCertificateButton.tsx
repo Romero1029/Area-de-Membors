@@ -44,14 +44,14 @@ export function ShareCertificateButton({ userName, certType, issuedAt }: ShareCe
       onClick={handleShare}
       className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all"
       style={{
-        background: 'rgba(199,154,59,0.12)',
-        color: shared ? '#c79a3b' : 'rgba(255,255,255,0.6)',
-        border: '1px solid rgba(199,154,59,0.2)',
+        background: 'rgba(255,184,0,0.12)',
+        color: shared ? '#FFB800' : 'rgba(255,255,255,0.6)',
+        border: '1px solid rgba(255,184,0,0.20)',
       }}
     >
       {shared ? (
         <>
-          <Check className="h-3.5 w-3.5 text-[#c79a3b]" />
+          <Check className="h-3.5 w-3.5 text-[#FFB800]" />
           {usedNativeShare ? 'Compartilhado!' : 'Texto copiado!'}
         </>
       ) : (

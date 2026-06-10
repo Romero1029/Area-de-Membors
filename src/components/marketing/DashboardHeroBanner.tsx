@@ -13,7 +13,7 @@ function formatPrice(price: number) {
 
 export function DashboardHeroBanner({ product }: DashboardHeroBannerProps) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#c79a3b]/30 bg-gradient-to-br from-[#1a2430] via-[#0f2233] to-[#1a2430] shadow-lg">
+    <div className="relative overflow-hidden rounded-2xl border border-[#FFB800]/30 bg-gradient-to-br from-[#0A1232] via-[#0F1940] to-[#0A1232] shadow-lg">
       {/* Imagem de fundo */}
       {product.thumbnail_url && (
         <div className="absolute inset-0 opacity-15">
@@ -23,19 +23,19 @@ export function DashboardHeroBanner({ product }: DashboardHeroBannerProps) {
             fill
             className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0f2233] via-[#0f2233]/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0A1232] via-[#0A1232]/70 to-transparent" />
         </div>
       )}
 
       {/* Decoração dourada */}
-      <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-[#c79a3b]/10 blur-3xl" />
-      <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-[#c79a3b]/5 blur-2xl" />
+      <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-[#FFB800]/10 blur-3xl" />
+      <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-[#FFB800]/5 blur-2xl" />
 
       <div className="relative flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-3 max-w-lg">
           {/* Badge exclusivo */}
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1.5 rounded-full border border-[#c79a3b]/40 bg-[#c79a3b]/10 px-3 py-1 text-xs font-semibold text-[#c79a3b]">
+            <span className="flex items-center gap-1.5 rounded-full border border-[#FFB800]/40 bg-[#FFB800]/10 px-3 py-1 text-xs font-semibold text-[#FFB800]">
               <Sparkles className="h-3 w-3" />
               Oferta exclusiva para alunos
             </span>
@@ -61,7 +61,7 @@ export function DashboardHeroBanner({ product }: DashboardHeroBannerProps) {
                   {formatPrice(product.original_price)}
                 </span>
               )}
-              <span className="text-2xl font-bold text-[#c79a3b]">
+              <span className="text-2xl font-bold text-[#FFB800]">
                 {formatPrice(product.price)}
               </span>
             </div>

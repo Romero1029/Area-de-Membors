@@ -21,10 +21,10 @@ export function MobileTabBar() {
     <nav
       className="fixed bottom-0 left-0 right-0 z-40 md:hidden"
       style={{
-        background: 'rgba(10,10,10,0.92)',
+        background: 'rgba(10,18,50,0.92)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderTop: '1px solid rgba(255,255,255,0.06)',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
         paddingBottom: 'max(env(safe-area-inset-bottom), 6px)',
       }}
     >
@@ -42,21 +42,21 @@ export function MobileTabBar() {
               {active && (
                 <span
                   className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full"
-                  style={{ background: 'linear-gradient(90deg, #c79a3b, #e8b84b)' }}
+                  style={{ background: 'linear-gradient(90deg, #FFB800, #FFC933)' }}
                 />
               )}
 
               <div
                 className="flex items-center justify-center w-9 h-7 rounded-xl transition-all duration-200"
                 style={{
-                  background: active ? 'rgba(199,154,59,0.12)' : 'transparent',
+                  background: active ? 'rgba(255,184,0,0.12)' : 'transparent',
                 }}
               >
                 <Icon
                   style={{
                     width: '1.125rem',
                     height: '1.125rem',
-                    color: active ? '#c79a3b' : '#505050',
+                    color: active ? '#FFB800' : 'rgba(255,255,255,0.30)',
                     strokeWidth: active ? 2.5 : 1.8,
                     transition: 'color 0.2s, stroke-width 0.2s',
                   }}
@@ -64,7 +64,7 @@ export function MobileTabBar() {
               </div>
               <span
                 className="text-[9.5px] font-semibold leading-none transition-colors duration-200 truncate max-w-full"
-                style={{ color: active ? '#c79a3b' : '#505050' }}
+                style={{ color: active ? '#FFB800' : 'rgba(255,255,255,0.30)' }}
               >
                 {label}
               </span>

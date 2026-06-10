@@ -55,7 +55,7 @@ export function CourseCarousel({ title, subtitle, items, showAllHref, emptyMessa
     return (
       <section className="space-y-4 px-4 sm:px-6 lg:px-10">
         <SectionHeader title={title} subtitle={subtitle} showAllHref={showAllHref} showArrows={false} canPrev={false} canNext={false} onPrev={scrollPrev} onNext={scrollNext} />
-        <p className="text-sm text-[#505050]">{emptyMessage}</p>
+        <p className="text-sm text-white/30">{emptyMessage}</p>
       </section>
     )
   }
@@ -83,12 +83,12 @@ export function CourseCarousel({ title, subtitle, items, showAllHref, emptyMessa
         {/* Fade esquerda */}
         {canPrev && (
           <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none hidden md:block"
-            style={{ background: 'linear-gradient(to right, #0f0f0f, transparent)' }} />
+            style={{ background: 'linear-gradient(to right, #0D1638, transparent)' }} />
         )}
         {/* Fade direita */}
         {canNext && (
           <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none hidden md:block"
-            style={{ background: 'linear-gradient(to left, #0f0f0f, transparent)' }} />
+            style={{ background: 'linear-gradient(to left, #0D1638, transparent)' }} />
         )}
 
         {/* Seta esquerda */}
@@ -151,11 +151,11 @@ function SectionHeader({
   return (
     <div className="flex items-end justify-between gap-4">
       <div>
-        <h2 className="text-[#f0f0f0] font-bold leading-tight" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
+        <h2 className="text-white font-bold leading-tight" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
           {title}
         </h2>
         {subtitle && (
-          <p className="text-[#505050] text-sm mt-0.5">{subtitle}</p>
+          <p className="text-white/30 text-sm mt-0.5">{subtitle}</p>
         )}
       </div>
 
@@ -165,16 +165,16 @@ function SectionHeader({
             <button
               onClick={onPrev}
               disabled={!canPrev}
-              className="hidden md:flex h-8 w-8 rounded-full bg-[#1e1e1e] border border-[#2a2a2a] items-center justify-center disabled:opacity-20 hover:bg-[#2a2a2a] transition-colors"
+              className="hidden md:flex h-8 w-8 rounded-full bg-[#0A1232] border border-white/[0.08] items-center justify-center disabled:opacity-20 hover:bg-[#0F1940] transition-colors"
             >
-              <ChevronLeft className="h-4 w-4 text-[#f0f0f0]" />
+              <ChevronLeft className="h-4 w-4 text-white" />
             </button>
             <button
               onClick={onNext}
               disabled={!canNext}
-              className="hidden md:flex h-8 w-8 rounded-full bg-[#1e1e1e] border border-[#2a2a2a] items-center justify-center disabled:opacity-20 hover:bg-[#2a2a2a] transition-colors"
+              className="hidden md:flex h-8 w-8 rounded-full bg-[#0A1232] border border-white/[0.08] items-center justify-center disabled:opacity-20 hover:bg-[#0F1940] transition-colors"
             >
-              <ChevronRight className="h-4 w-4 text-[#f0f0f0]" />
+              <ChevronRight className="h-4 w-4 text-white" />
             </button>
           </>
         )}
@@ -182,7 +182,7 @@ function SectionHeader({
           <Link
             href={showAllHref}
             className="flex items-center gap-1 text-xs font-semibold transition-colors"
-            style={{ color: '#c79a3b' }}
+            style={{ color: '#FFB800' }}
           >
             Ver todos <ArrowRight className="h-3.5 w-3.5" />
           </Link>

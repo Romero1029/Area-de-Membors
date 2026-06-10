@@ -58,7 +58,7 @@ const S = StyleSheet.create({
     gap: 4,
   },
   codeLabel: { fontSize: 7.5, fontFamily: 'Helvetica',      color: '#888888' },
-  codeValue: { fontSize: 7.5, fontFamily: 'Helvetica-Bold', color: '#c79a3b' },
+  codeValue: { fontSize: 7.5, fontFamily: 'Helvetica-Bold', color: '#FFB800' },
 })
 
 // ─── Props ────────────────────────────────────────────────────────────────────

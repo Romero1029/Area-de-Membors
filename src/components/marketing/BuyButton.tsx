@@ -64,9 +64,9 @@ export function BuyButton({
 
   const variants = {
     solid:
-      'bg-[#c79a3b] hover:bg-[#e8b84b] text-[#1a2430] shadow-md hover:shadow-lg hover:-translate-y-0.5',
+      'bg-[#FFB800] hover:bg-[#FFC933] text-[#0D1638] shadow-md hover:shadow-lg hover:-translate-y-0.5',
     outline:
-      'border-2 border-[#c79a3b] text-[#c79a3b] hover:bg-[#c79a3b]/10 hover:-translate-y-0.5',
+      'border-2 border-[#FFB800] text-[#FFB800] hover:bg-[#FFB800]/10 hover:-translate-y-0.5',
   }
 
   return (

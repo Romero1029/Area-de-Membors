@@ -98,7 +98,7 @@ export function HeroCarousel({ slides: rawSlides, autoPlayInterval = 7000 }: Her
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-[#0f0f0f]"
+      className="relative w-full overflow-hidden bg-[#0D1638]"
       style={{ height: 'clamp(340px, 60vw, 600px)' }}
       aria-roledescription="carrossel"
       aria-label="Destaques"
@@ -125,11 +125,11 @@ export function HeroCarousel({ slides: rawSlides, autoPlayInterval = 7000 }: Her
           ) : bgGradient ? (
             <div className="absolute inset-0" style={{ background: bgGradient }} />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0f2233] to-[#1a2430]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0A1232] to-[#0F1940]" />
           )}
           {/* Gradientes de leitura */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f0f] via-[#0f0f0f]/55 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/20 to-transparent" style={{ backgroundImage: 'linear-gradient(to top, #0f0f0f 0%, rgba(15,15,15,0.4) 40%, transparent 70%)' }} />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0D1638] via-[#0D1638]/55 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0D1638] via-[#0D1638]/20 to-transparent" style={{ backgroundImage: 'linear-gradient(to top, #0D1638 0%, rgba(13,22,56,0.4) 40%, transparent 70%)' }} />
         </motion.div>
       </AnimatePresence>
 
@@ -186,7 +186,7 @@ export function HeroCarousel({ slides: rawSlides, autoPlayInterval = 7000 }: Her
               style={{
                 width: i === current ? '24px' : '6px',
                 height: '6px',
-                background: i === current ? '#c79a3b' : 'rgba(255,255,255,0.3)',
+                background: i === current ? '#FFB800' : 'rgba(255,255,255,0.3)',
               }}
             />
           ))}
@@ -199,7 +199,7 @@ export function HeroCarousel({ slides: rawSlides, autoPlayInterval = 7000 }: Her
           <motion.div
             key={`progress-${current}`}
             className="h-full"
-            style={{ background: 'linear-gradient(90deg, #c79a3b, #e8b84b)' }}
+            style={{ background: 'linear-gradient(90deg, #FFB800, #FFC933)' }}
             initial={{ width: '0%' }}
             animate={{ width: '100%' }}
             transition={{ duration: autoPlayInterval / 1000, ease: 'linear' }}
@@ -215,9 +215,9 @@ function BannerContent({ slide }: { slide: BannerSlide }) {
     <>
       {slide.badge_label && (
         <div className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-widest">
-          <span className="text-[#c79a3b] opacity-70">✦</span>
-          <span className="rounded-full px-3 py-1 font-bold text-[#0f0f0f]"
-            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}>
+          <span className="text-[#FFB800] opacity-70">✦</span>
+          <span className="rounded-full px-3 py-1 font-bold text-[#0D1638]"
+            style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)' }}>
             {slide.badge_label}
           </span>
         </div>
@@ -229,7 +229,7 @@ function BannerContent({ slide }: { slide: BannerSlide }) {
         {slide.title}
       </h1>
       {slide.subtitle && (
-        <p className="text-[#b0b0b0] leading-relaxed max-w-md" style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.05rem)' }}>
+        <p className="text-white/60 leading-relaxed max-w-md" style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.05rem)' }}>
           {slide.subtitle}
         </p>
       )}
@@ -240,7 +240,7 @@ function BannerContent({ slide }: { slide: BannerSlide }) {
             target={slide.open_in_new ? '_blank' : undefined}
             rel={slide.open_in_new ? 'noopener noreferrer' : undefined}
             className="inline-flex items-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-bold transition-all hover:scale-[1.03] active:scale-[0.98]"
-            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 28px rgba(199,154,59,0.4)' }}
+            style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)', color: '#0D1638', boxShadow: '0 8px 28px rgba(255,184,0,0.35)' }}
           >
             {slide.cta_label ?? 'Saiba mais'}
             {slide.open_in_new && <ExternalLink className="h-3.5 w-3.5" />}
@@ -256,13 +256,13 @@ function ProductContent({ slide }: { slide: ProductHeroSlide }) {
   return (
     <>
       <div className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-widest">
-        <span className="text-[#c79a3b] opacity-70">✦</span>
-        <span className="text-[#c79a3b]">{TYPE_LABEL[product.product_type] ?? 'Curso'}</span>
+        <span className="text-[#FFB800] opacity-70">✦</span>
+        <span className="text-[#FFB800]">{TYPE_LABEL[product.product_type] ?? 'Curso'}</span>
         {product.badge_label && (
           <>
             <span className="opacity-30 text-white">·</span>
-            <span className="rounded-full px-3 py-1 font-bold text-[#0f0f0f]"
-              style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}>
+            <span className="rounded-full px-3 py-1 font-bold text-[#0D1638]"
+              style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)' }}>
               {product.badge_label}
             </span>
           </>
@@ -275,7 +275,7 @@ function ProductContent({ slide }: { slide: ProductHeroSlide }) {
         {product.title}
       </h1>
       {(product.short_description || product.description) && (
-        <p className="text-[#b0b0b0] leading-relaxed line-clamp-2 max-w-md" style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.05rem)' }}>
+        <p className="text-white/60 leading-relaxed line-clamp-2 max-w-md" style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.05rem)' }}>
           {product.short_description ?? product.description}
         </p>
       )}
@@ -284,7 +284,7 @@ function ProductContent({ slide }: { slide: ProductHeroSlide }) {
           <Link
             href={lastLessonHref ?? `/cursos/${product.slug}`}
             className="inline-flex items-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-bold transition-all hover:scale-[1.03] active:scale-[0.98]"
-            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 8px 28px rgba(199,154,59,0.4)' }}
+            style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)', color: '#0D1638', boxShadow: '0 8px 28px rgba(255,184,0,0.35)' }}
           >
             <Play className="h-4 w-4 fill-current" />
             {(progress?.percent_complete ?? 0) > 0 ? 'Continuar' : 'Começar agora'}

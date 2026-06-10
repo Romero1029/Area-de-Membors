@@ -15,7 +15,7 @@ export default function CertificadoPage() {
       {/* Glow decorativo */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] opacity-10 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at top, #c79a3b 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(ellipse at top, #FFB800 0%, transparent 70%)' }}
       />
 
       <div className="relative w-full max-w-md space-y-8">
@@ -23,13 +23,13 @@ export default function CertificadoPage() {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(199,154,59,0.12)', border: '1px solid rgba(199,154,59,0.25)' }}>
-              <Sparkles className="w-7 h-7" style={{ color: '#c79a3b' }} />
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(255,184,0,0.12)', border: '1px solid rgba(255,184,0,0.25)' }}>
+              <Sparkles className="w-7 h-7" style={{ color: '#FFB800' }} />
             </div>
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#c79a3b' }}>
+            <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#FFB800' }}>
               Instituto Despertamente
             </p>
             <h1 className="text-3xl font-bold text-white leading-tight">
@@ -59,7 +59,7 @@ export default function CertificadoPage() {
           className="rounded-3xl p-7"
           style={{
             background: 'linear-gradient(135deg, #111111 0%, #0f1a24 100%)',
-            border: '1px solid rgba(199,154,59,0.15)',
+            border: '1px solid rgba(255,184,0,0.15)',
             boxShadow: '0 24px 80px rgba(0,0,0,0.5)',
           }}
         >
@@ -69,7 +69,7 @@ export default function CertificadoPage() {
         {/* Footer */}
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2">
-            <Award className="w-3.5 h-3.5" style={{ color: 'rgba(199,154,59,0.5)' }} />
+            <Award className="w-3.5 h-3.5" style={{ color: 'rgba(255,184,0,0.5)' }} />
             <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>
               Instituto Despertamente · Certificado digital
             </p>

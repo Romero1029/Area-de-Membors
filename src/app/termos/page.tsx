@@ -18,7 +18,7 @@ export default function TermosPage() {
           <Link href="/comecar" className="flex items-center gap-2.5">
             <Image src="/despertamente-simbolo-branco.png" alt="IDM" width={24} height={24} className="object-contain" />
             <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-sm font-bold text-[#f0f0f0]">
-              Instituto <span className="text-[#c79a3b]">Despertamente</span>
+              Instituto <span className="text-[#FFB800]">Despertamente</span>
             </span>
           </Link>
           <Link href="/comecar" className="text-xs text-[#606060] hover:text-[#a0a0a0] transition-colors">
@@ -30,7 +30,7 @@ export default function TermosPage() {
       <main className="max-w-3xl mx-auto px-6 sm:px-10 py-16 space-y-10">
 
         <div className="space-y-3">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#c79a3b]">Legal</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Legal</p>
           <h1 style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-3xl sm:text-4xl font-bold">
             Termos de Uso
           </h1>
@@ -55,7 +55,7 @@ export default function TermosPage() {
             <p>
               Ao criar uma conta ou acessar a plataforma, você declara que leu, compreendeu e concorda com estes
               Termos de Uso e com nossa{' '}
-              <Link href="/privacidade" className="text-[#c79a3b] hover:underline">Política de Privacidade</Link>.
+              <Link href="/privacidade" className="text-[#FFB800] hover:underline">Política de Privacidade</Link>.
               Caso não concorde, não utilize a plataforma.
             </p>
           </Section>
@@ -114,7 +114,7 @@ export default function TermosPage() {
             <p>
               Se por qualquer motivo você não estiver satisfeito, basta solicitar o reembolso no prazo de 7 dias
               pelo e-mail{' '}
-              <a href="mailto:suporte@institutodespertamente.com.br" className="text-[#c79a3b] hover:underline">
+              <a href="mailto:suporte@institutodespertamente.com.br" className="text-[#FFB800] hover:underline">
                 suporte@institutodespertamente.com.br
               </a>{' '}
               ou via WhatsApp. O reembolso será processado em até 10 dias úteis para cartão de crédito ou 3 dias
@@ -176,7 +176,7 @@ export default function TermosPage() {
           <Section title="13. Contato">
             <p>
               Em caso de dúvidas sobre estes Termos:{' '}
-              <a href="mailto:suporte@institutodespertamente.com.br" className="text-[#c79a3b] hover:underline">
+              <a href="mailto:suporte@institutodespertamente.com.br" className="text-[#FFB800] hover:underline">
                 suporte@institutodespertamente.com.br
               </a>
             </p>

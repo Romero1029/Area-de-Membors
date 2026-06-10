@@ -18,7 +18,7 @@ function applyPhoneMask(value: string) {
 type Status = 'idle' | 'loading' | 'success' | 'error' | 'blocked'
 
 const inputCls =
-  'w-full h-12 px-4 rounded-2xl text-sm outline-none transition-colors bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:border-[#c79a3b]/60 focus:bg-white/8'
+  'w-full h-12 px-4 rounded-2xl text-sm outline-none transition-colors bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:border-[#FFB800]/60 focus:bg-white/8'
 
 export function CertificadoForm() {
   const [status, setStatus] = useState<Status>('idle')
@@ -94,11 +94,11 @@ export function CertificadoForm() {
   if (status === 'success') {
     return (
       <div className="space-y-5 text-center">
-        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ background: 'rgba(199,154,59,0.15)', border: '2px solid rgba(199,154,59,0.4)' }}>
-          <Award className="w-9 h-9" style={{ color: '#c79a3b' }} />
+        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ background: 'rgba(255,184,0,0.15)', border: '2px solid rgba(255,184,0,0.4)' }}>
+          <Award className="w-9 h-9" style={{ color: '#FFB800' }} />
         </div>
         <div className="space-y-2">
-          <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#c79a3b' }}>
+          <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#FFB800' }}>
             Parabéns!
           </p>
           <h2 className="text-2xl font-bold text-white">
@@ -210,7 +210,7 @@ export function CertificadoForm() {
                 placeholder={label}
                 required
                 disabled={status === 'loading'}
-                className="w-full h-12 px-3 rounded-2xl text-sm text-center font-semibold outline-none transition-colors bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:border-[#c79a3b]/60"
+                className="w-full h-12 px-3 rounded-2xl text-sm text-center font-semibold outline-none transition-colors bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:border-[#FFB800]/60"
               />
             </div>
           ))}
@@ -242,8 +242,8 @@ export function CertificadoForm() {
         style={{
           background: status === 'error'
             ? '#374151'
-            : 'linear-gradient(135deg, #c79a3b, #e8b84b)',
-          boxShadow: status === 'error' ? 'none' : '0 8px 24px rgba(199,154,59,0.3)',
+            : 'linear-gradient(135deg, #FFB800, #FFC933)',
+          boxShadow: status === 'error' ? 'none' : '0 8px 24px rgba(255,184,0,0.3)',
           height: 52,
         }}
       >

@@ -49,7 +49,7 @@ export function ProfileForm({ profile, userEmail }: { profile: Profile; userEmai
         <div className="relative">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold overflow-hidden"
-            style={{ background: 'rgba(255,169,2,0.15)', color: '#c79a3b', border: '2px solid rgba(255,169,2,0.3)' }}
+            style={{ background: 'rgba(255,184,0,0.15)', color: '#FFB800', border: '2px solid rgba(255,184,0,0.30)' }}
           >
             {avatarUrl ? (
               <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
@@ -59,7 +59,7 @@ export function ProfileForm({ profile, userEmail }: { profile: Profile; userEmai
             type="button"
             onClick={() => fileRef.current?.click()}
             className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center transition-colors"
-            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a' }}
+            style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)', color: '#0D1638' }}
           >
             {avatarLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Camera className="w-3 h-3" />}
           </button>
@@ -67,7 +67,7 @@ export function ProfileForm({ profile, userEmail }: { profile: Profile; userEmai
         </div>
         <div>
           <p className="font-semibold text-white">{profile.full_name ?? 'Usuário'}</p>
-          <p className="text-xs" style={{ color: '#555555' }}>{userEmail}</p>
+          <p className="text-xs text-white/40">{userEmail}</p>
         </div>
       </div>
 
@@ -84,24 +84,24 @@ export function ProfileForm({ profile, userEmail }: { profile: Profile; userEmai
         </div>
 
         <div className="space-y-1.5">
-          <Label className="text-sm font-medium" style={{ color: '#555555' }}>E-mail</Label>
+          <Label className="text-sm font-medium text-white/40">E-mail</Label>
           <Input
             value={userEmail}
             disabled
-            className="h-11 border-border"
-            style={{ background: '#0a0a0a', color: '#555555' }}
+            className="h-11 border-border text-white/40"
+            style={{ background: '#091028' }}
           />
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="bio" className="text-sm font-medium text-white">Bio <span style={{ color: '#444444' }}>(opcional)</span></Label>
+          <Label htmlFor="bio" className="text-sm font-medium text-white">Bio <span className="text-white/30">(opcional)</span></Label>
           <textarea
             id="bio"
             name="bio"
             defaultValue={profile.bio ?? ''}
             rows={3}
             className="w-full px-3 py-2.5 rounded-lg text-sm text-white resize-none outline-none transition-colors focus:ring-2 focus:ring-primary"
-            style={{ background: '#1a1a1a', border: '1px solid #222222', color: '#f0f0f0' }}
+            style={{ background: '#0A1232', border: '1px solid rgba(255,255,255,0.08)', color: '#ffffff' }}
             placeholder="Conte um pouco sobre você..."
           />
         </div>
@@ -121,7 +121,7 @@ export function ProfileForm({ profile, userEmail }: { profile: Profile; userEmai
           type="submit"
           disabled={loading}
           className="h-11 px-6 text-sm font-semibold"
-          style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)', color: '#0a0a0a', boxShadow: '0 4px 12px rgba(199,154,59,0.2)' }}
+          style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)', color: '#0D1638', boxShadow: '0 4px 12px rgba(255,184,0,0.20)' }}
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Salvar alterações'}
         </Button>

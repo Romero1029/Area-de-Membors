@@ -29,10 +29,10 @@ export function CourseCardNetflix({ product, progress, href, priority = false }:
   return (
     <Link
       href={href}
-      className="block group focus-visible:outline-2 focus-visible:outline-[#c79a3b] focus-visible:outline-offset-2 rounded-xl"
+      className="block group focus-visible:outline-2 focus-visible:outline-[#FFB800] focus-visible:outline-offset-2 rounded-xl"
     >
       {/* Thumbnail */}
-      <div className="relative overflow-hidden rounded-xl bg-[#1a1a1a]" style={{ aspectRatio: '2/3' }}>
+      <div className="relative overflow-hidden rounded-xl bg-[#0A1232]" style={{ aspectRatio: '2/3' }}>
         {product.thumbnail_url ? (
           <Image
             src={product.thumbnail_url}
@@ -43,8 +43,8 @@ export function CourseCardNetflix({ product, progress, href, priority = false }:
             priority={priority}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1a2430] to-[#0f2233] flex items-center justify-center">
-            <span className="text-3xl font-bold text-[#c79a3b]/30"
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0A1232] to-[#0F1940] flex items-center justify-center">
+            <span className="text-3xl font-bold text-[#FFB800]/30"
               style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}>
               IDM
             </span>
@@ -56,8 +56,8 @@ export function CourseCardNetflix({ product, progress, href, priority = false }:
 
         {/* Badge produto */}
         {product.badge_label && (
-          <span className="absolute top-2 left-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#0f0f0f]"
-            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}>
+          <span className="absolute top-2 left-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#0D1638]"
+            style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)' }}>
             {product.badge_label}
           </span>
         )}
@@ -72,8 +72,8 @@ export function CourseCardNetflix({ product, progress, href, priority = false }:
         {/* Play button — hover */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="h-12 w-12 rounded-full flex items-center justify-center shadow-2xl"
-            style={{ background: 'linear-gradient(135deg, #c79a3b, #e8b84b)' }}>
-            <Play className="h-5 w-5 text-[#0a0a0a] fill-[#0a0a0a] ml-0.5" />
+            style={{ background: 'linear-gradient(135deg, #FFB800, #FFC933)' }}>
+            <Play className="h-5 w-5 text-[#0D1638] fill-[#0D1638] ml-0.5" />
           </div>
         </div>
 
@@ -84,7 +84,7 @@ export function CourseCardNetflix({ product, progress, href, priority = false }:
               className="h-full"
               style={{
                 width: `${percent}%`,
-                background: isDone ? '#22c55e' : 'linear-gradient(90deg, #c79a3b, #e8b84b)',
+                background: isDone ? '#22c55e' : 'linear-gradient(90deg, #FFB800, #FFC933)',
               }}
             />
           </div>
@@ -93,14 +93,14 @@ export function CourseCardNetflix({ product, progress, href, priority = false }:
 
       {/* Texto */}
       <div className="mt-2.5 space-y-1 px-0.5">
-        <h3 className="text-[#e0e0e0] font-semibold text-sm leading-snug line-clamp-2 group-hover:text-[#c79a3b] transition-colors duration-200">
+        <h3 className="text-white font-semibold text-sm leading-snug line-clamp-2 group-hover:text-[#FFB800] transition-colors duration-200">
           {product.title}
         </h3>
-        <div className="flex items-center gap-1.5 text-[#505050] text-xs">
+        <div className="flex items-center gap-1.5 text-white/30 text-xs">
           <span>{TYPE_LABEL[product.product_type] ?? 'Curso'}</span>
           {total > 0 && (
             <>
-              <span className="text-[#333]">·</span>
+              <span className="text-white/15">·</span>
               {notStarted ? (
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" /> Não iniciado
@@ -112,8 +112,8 @@ export function CourseCardNetflix({ product, progress, href, priority = false }:
           )}
           {inProgress && (
             <>
-              <span className="text-[#333]">·</span>
-              <span style={{ color: '#c79a3b' }}>{percent}%</span>
+              <span className="text-white/15">·</span>
+              <span style={{ color: '#FFB800' }}>{percent}%</span>
             </>
           )}
         </div>

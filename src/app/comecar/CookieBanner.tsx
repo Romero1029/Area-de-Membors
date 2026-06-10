@@ -29,7 +29,7 @@ export function CookieBanner() {
       <div className="bg-[#111111] border border-[#2a2a2a] md:rounded-2xl px-5 py-4 shadow-2xl">
         <p className="text-[13px] text-[#a0a0a0] leading-relaxed">
           Utilizamos cookies para melhorar sua experiência e personalizar conteúdo. Leia nossa{' '}
-          <Link href="/privacidade" className="text-[#c79a3b] hover:underline font-medium">
+          <Link href="/privacidade" className="text-[#FFB800] hover:underline font-medium">
             Política de Privacidade
           </Link>
           .
@@ -43,7 +43,7 @@ export function CookieBanner() {
           </button>
           <button
             onClick={accept}
-            className="flex-1 py-2 rounded-xl text-xs font-bold bg-[#c79a3b] text-[#080808] hover:bg-[#e8b84b] transition-colors"
+            className="flex-1 py-2 rounded-xl text-xs font-bold bg-[#FFB800] text-[#080808] hover:bg-[#FFC933] transition-colors"
           >
             Aceitar cookies
           </button>

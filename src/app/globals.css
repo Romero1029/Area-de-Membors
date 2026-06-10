@@ -7,26 +7,26 @@ html { scroll-behavior: smooth; }
    ============================================================ */
 
 :root {
-  /* Background layers */
-  --bg-base:        #0f0f0f;
-  --bg-surface:     #1a1a1a;
-  --bg-elevated:    #242424;
-  --bg-overlay:     #2d2d2d;
+  /* Background layers — navy elevation system */
+  --bg-base:        #0D1638;
+  --bg-surface:     #0A1232;
+  --bg-elevated:    #0F1940;
+  --bg-overlay:     #111D48;
 
   /* Borders */
-  --border-subtle:  #2a2a2a;
-  --border-muted:   #333333;
+  --border-subtle:  rgba(255,255,255,0.08);
+  --border-muted:   rgba(255,255,255,0.12);
 
   /* Gold — marca IDM */
-  --gold:           #c79a3b;
-  --gold-light:     #e8b84b;
-  --gold-dim:       rgba(199,154,59,0.15);
-  --gold-glow:      0 0 24px rgba(199,154,59,0.22);
+  --gold:           #FFB800;
+  --gold-light:     #FFC933;
+  --gold-dim:       rgba(255,184,0,0.12);
+  --gold-glow:      0 0 24px rgba(255,184,0,0.20);
 
   /* Text */
-  --text-primary:   #f0f0f0;
-  --text-secondary: #a0a0a0;
-  --text-muted:     #606060;
+  --text-primary:   #FFFFFF;
+  --text-secondary: rgba(255,255,255,0.60);
+  --text-muted:     rgba(255,255,255,0.30);
 
   /* Semantic */
   --success:        #22c55e;
@@ -48,17 +48,17 @@ html { scroll-behavior: smooth; }
   --popover:        var(--bg-elevated);
   --popover-foreground: var(--text-primary);
   --primary:        var(--gold);
-  --primary-foreground: #0f0f0f;
+  --primary-foreground: #0D1638;
   --secondary:      var(--bg-elevated);
   --secondary-foreground: var(--text-secondary);
   --muted-bg:       var(--bg-surface);
   --muted-foreground: var(--text-muted);
   --accent:         var(--gold);
-  --accent-foreground: #0f0f0f;
+  --accent-foreground: #0D1638;
   --destructive:    #DC2626;
   --destructive-foreground: #fff;
   --border:         var(--border-subtle);
-  --input:          var(--bg-elevated);
+  --input:          var(--bg-surface);
   --ring:           var(--gold);
   --radius:         0.75rem;
 
@@ -66,8 +66,8 @@ html { scroll-behavior: smooth; }
   --bg:             var(--bg-base);
   --ink:            var(--text-primary);
   --muted:          var(--text-muted);
-  --gold-soft:      rgba(199,154,59,0.4);
-  --gold-light-old: rgba(199,154,59,0.08);
+  --gold-soft:      rgba(255,184,0,0.40);
+  --gold-light-old: rgba(255,184,0,0.08);
   --line:           var(--border-subtle);
   --surface-dark:   var(--bg-surface);
 }
@@ -164,7 +164,7 @@ body {
    ============================================================ */
 
 .progress-gold {
-  background: linear-gradient(90deg, #c79a3b 0%, #e8b84b 100%);
+  background: linear-gradient(90deg, #FFB800 0%, #FFC933 100%);
 }
 
 /* ============================================================
@@ -172,14 +172,14 @@ body {
    ============================================================ */
 
 .plyr {
-  --plyr-color-main: #c79a3b;
+  --plyr-color-main: #FFB800;
   --plyr-video-background: #000;
   --plyr-font-family: 'Inter', system-ui, sans-serif;
   --plyr-font-size-base: 13px;
   --plyr-control-icon-size: 18px;
   --plyr-control-spacing: 10px;
-  --plyr-range-fill-background: #c79a3b;
-  --plyr-video-progress-buffered-background: rgba(199,154,59,0.2);
+  --plyr-range-fill-background: #FFB800;
+  --plyr-video-progress-buffered-background: rgba(255,184,0,0.2);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
