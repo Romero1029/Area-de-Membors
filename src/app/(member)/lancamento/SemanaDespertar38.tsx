@@ -12,7 +12,7 @@ import {
 // CONFIG — edite aqui sem tocar no restante
 // ─────────────────────────────────────────────
 
-const WA_GROUP_URL   = 'https://chat.whatsapp.com/XXXXXXXXXX'
+const WA_GROUP_URL   = 'https://chat.whatsapp.com/EzebszSzZyUDdtrQ35YwMY'
 const INTRO_VIDEO_ID = ''
 const EBOOK_URL      = '#'
 const BANNER_URL     = ''  // ex: '/banner-sdw38.png'
@@ -40,26 +40,26 @@ const AULAS: Aula[] = [
   {
     id: 1,
     titulo: 'Aula 1 — A Raiz dos Seus Padrões',
-    data: 'A confirmar',
+    data: '16/06 · Terça-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/@institutodespertamente',
-    gcal: { titulo: 'SDW #38 — Aula 1', inicio: '20250110T230000Z', fim: '20250111T010000Z', desc: 'Aula 1 da Semana do Despertar #38 · IDM' },
+    gcal: { titulo: 'SDW #38 — Aula 1', inicio: '20260616T230000Z', fim: '20260617T010000Z', desc: 'Aula 1 da Semana do Despertar #38 · IDM' },
   },
   {
     id: 2,
     titulo: 'Aula 2 — Reprogramando o Inconsciente',
-    data: 'A confirmar',
+    data: '17/06 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/@institutodespertamente',
-    gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20250112T230000Z', fim: '20250113T010000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM' },
+    gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20260617T230000Z', fim: '20260618T010000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM' },
   },
   {
     id: 3,
     titulo: 'Aula 3 — Transformação em Ação',
-    data: 'A confirmar',
+    data: '18/06 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/@institutodespertamente',
-    gcal: { titulo: 'SDW #38 — Aula 3', inicio: '20250114T230000Z', fim: '20250115T010000Z', desc: 'Aula 3 da Semana do Despertar #38 · IDM' },
+    gcal: { titulo: 'SDW #38 — Aula 3', inicio: '20260618T230000Z', fim: '20260619T010000Z', desc: 'Aula 3 da Semana do Despertar #38 · IDM' },
   },
 ]
 
@@ -456,9 +456,11 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
             {/* Headline */}
             <h1
               className="font-display text-[2.6rem] sm:text-[3.4rem] font-bold text-white mb-5"
-              style={{ lineHeight: 0.93 }}
+              style={{ lineHeight: 0.97 }}
             >
-              Sua vaga<br />está<br />confirmada.
+              🎉 Parabéns{firstName ? `, ${firstName}` : ''}
+              <br />
+              <span style={{ color: '#c79a3b' }}>pelo seu cadastro!</span>
             </h1>
 
             {/* Separador */}
@@ -466,8 +468,10 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
             {/* Copy */}
             <p className="text-sm text-white/60 leading-relaxed mb-7">
-              Acesse os materiais exclusivos e as aulas ao vivo seguindo as etapas abaixo.
-              Cada etapa desbloqueada é um avanço real na sua formação.
+              Você garantiu sua vaga no <span className="text-white/80 font-semibold">Curso Gratuito!</span> O evento será nos dias{' '}
+              <span className="text-white/80 font-semibold">16, 17 e 18 de Junho.</span>
+              <br />
+              Siga as etapas abaixo para garantir seu acesso completo.
             </p>
 
             {/* Mini timeline */}
