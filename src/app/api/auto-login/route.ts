@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { createHmac } from 'crypto'
 
 export async function GET(request: NextRequest) {
@@ -21,9 +21,8 @@ export async function GET(request: NextRequest) {
   const expected = createHmac('sha256', secret).update(`${email}:${ts}`).digest('hex')
   if (sig !== expected) return NextResponse.redirect(loginFallback)
 
-  // Prepara o redirect antes de chamar signIn (para poder setar cookies na response)
-  const nomeParam = nome ? `?nome=${encodeURIComponent(nome)}` : ''
-  const response = NextResponse.redirect(new URL(`/semana38${nomeParam}`, request.url))
+  // Coleta os cookies em vez de fixar o redirect antecipadamente
+  const collectedCookies: { name: string; value: string; options: CookieOptions }[] = []
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -32,20 +31,27 @@ export async function GET(request: NextRequest) {
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (cookiesToSet) => {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            response.cookies.set(name, value, options)
-          })
+          cookiesToSet.forEach(c => collectedCookies.push(c))
         },
       },
     }
   )
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data: authData, error } = await supabase.auth.signInWithPassword({
     email,
     password: 'idm2026',
   })
 
-  if (error) return NextResponse.redirect(loginFallback)
+  if (error || !authData.user) return NextResponse.redirect(loginFallback)
+
+  const userId = authData.user.id
+  const nomeParam = nome ? `?nome=${encodeURIComponent(nome)}` : ''
+  const destination = new URL(`/semanadodespertar-38/${userId}${nomeParam}`, request.url)
+
+  const response = NextResponse.redirect(destination)
+  collectedCookies.forEach(({ name, value, options }) => {
+    response.cookies.set(name, value, options)
+  })
 
   return response
 }

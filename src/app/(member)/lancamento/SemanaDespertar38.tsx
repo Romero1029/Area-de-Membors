@@ -70,6 +70,9 @@ const XP_PER_STEP = 200
 const TOTAL_STEPS  = 3
 const STORAGE_KEY  = 'sdw38_progress'
 
+// 22h Horário de Brasília em 18/06/2026 = 01h UTC do dia 19/06/2026
+const CERT_UNLOCK = new Date('2026-06-19T01:00:00Z')
+
 // ─────────────────────────────────────────────
 // TYPES
 // ─────────────────────────────────────────────
@@ -143,7 +146,7 @@ function ProgressTracker({ done, total, xp }: { done: number; total: number; xp:
 // ─────────────────────────────────────────────
 // STEP BADGE
 // ─────────────────────────────────────────────
-function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
+function StepBadge({ numero, status, showNum }: { numero: number; status: StepStatus; showNum?: boolean }) {
   if (status === 'done') {
     return (
       <div className="w-10 h-10 rounded-full bg-[#22c55e]/15 border-2 border-[#22c55e]/40 flex items-center justify-center shrink-0">
@@ -151,10 +154,17 @@ function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
       </div>
     )
   }
-  if (status === 'locked') {
+  if (status === 'locked' && !showNum) {
     return (
       <div className="w-10 h-10 rounded-full bg-white/[0.04] border-2 border-white/10 flex items-center justify-center shrink-0">
         <Lock className="h-3.5 w-3.5 text-white/20" />
+      </div>
+    )
+  }
+  if (status === 'locked' && showNum) {
+    return (
+      <div className="w-10 h-10 rounded-full bg-[#FFB800]/[0.06] border-2 border-[#FFB800]/20 flex items-center justify-center shrink-0">
+        <span className="text-sm font-bold text-[#FFB800]/40">{numero}</span>
       </div>
     )
   }
@@ -170,25 +180,27 @@ function StepBadge({ numero, status }: { numero: number; status: StepStatus }) {
 // STEP CARD
 // ─────────────────────────────────────────────
 function StepCard({
-  numero, titulo, status, subtitle, badge, children,
+  numero, titulo, status, subtitle, badge, children, forceContent,
 }: {
   numero: number; titulo: string; status: StepStatus
   subtitle?: string; badge?: React.ReactNode; children?: React.ReactNode
+  forceContent?: boolean
 }) {
   const border =
-    status === 'done'      ? 'border-[#22c55e]/15' :
-    status === 'available' ? 'border-[#FFB800]/25'  :
-                             'border-white/[0.08]'
+    status === 'done'        ? 'border-[#22c55e]/15' :
+    status === 'available'   ? 'border-[#FFB800]/25'  :
+    forceContent             ? 'border-[#FFB800]/12'  :
+                               'border-white/[0.08]'
 
-  const bg = status === 'available' ? 'bg-[#0F1940]' : 'bg-[#0A1232]'
+  const bg = (status === 'available' || forceContent) ? 'bg-[#0F1940]' : 'bg-[#0A1232]'
 
   return (
-    <div className={`rounded-2xl border ${border} ${bg} overflow-hidden transition-all duration-300 ${status === 'locked' ? 'opacity-40' : ''}`}>
+    <div className={`rounded-2xl border ${border} ${bg} overflow-hidden transition-all duration-300 ${status === 'locked' && !forceContent ? 'opacity-40' : ''}`}>
       <div className="flex items-start gap-4 px-5 py-5">
-        <StepBadge numero={numero} status={status} />
+        <StepBadge numero={numero} status={status} showNum={forceContent} />
         <div className="flex-1 min-w-0 pt-0.5">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className={`text-base font-semibold leading-snug ${status === 'locked' ? 'text-white/25' : 'text-white/90'}`}>
+            <p className={`text-base font-semibold leading-snug ${status === 'locked' && !forceContent ? 'text-white/25' : 'text-white/90'}`}>
               {titulo}
             </p>
             {badge}
@@ -196,19 +208,110 @@ function StepCard({
           {status === 'done' && !subtitle && (
             <p className="text-xs text-[#22c55e]/60 mt-0.5">Concluído ✓</p>
           )}
-          {status === 'locked' && (
+          {status === 'locked' && !forceContent && (
             <p className="text-xs text-white/20 mt-0.5">Complete a etapa anterior para desbloquear.</p>
           )}
-          {subtitle && status !== 'locked' && (
+          {subtitle && (status !== 'locked' || forceContent) && (
             <p className="text-xs text-white/35 mt-0.5">{subtitle}</p>
           )}
         </div>
       </div>
-      {status !== 'locked' && children && (
+      {(status !== 'locked' || forceContent) && children && (
         <div className="border-t border-white/[0.08] px-5 pb-5 pt-4">
           {children}
         </div>
       )}
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────
+// CERT RESGATE FORM
+// ─────────────────────────────────────────────
+function CertResgateForm() {
+  const [palavras, setPalavras] = useState(['', '', ''])
+  const [estado, setEstado] = useState<'idle' | 'enviando' | 'sucesso' | 'erro'>('idle')
+  const [erroMsg, setErroMsg] = useState('')
+
+  const handleSubmit = async () => {
+    if (palavras.some(p => !p.trim())) return
+    setEstado('enviando')
+    setErroMsg('')
+    try {
+      const res = await fetch('/api/certificado/resgatar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ palavra1: palavras[0], palavra2: palavras[1], palavra3: palavras[2] }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setEstado('sucesso')
+      } else {
+        setEstado('erro')
+        setErroMsg(data.error ?? 'Erro ao resgatar. Tente novamente.')
+      }
+    } catch {
+      setEstado('erro')
+      setErroMsg('Erro de conexão. Tente novamente.')
+    }
+  }
+
+  if (estado === 'sucesso') {
+    return (
+      <div className="text-center space-y-4 py-2">
+        <div className="w-14 h-14 rounded-full bg-[#22c55e]/15 border-2 border-[#22c55e]/30 flex items-center justify-center mx-auto">
+          <Check className="h-6 w-6 text-[#22c55e]" />
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-white/90">Certificado emitido!</p>
+          <p className="text-xs text-white/35 mt-0.5">Parabéns por concluir a Semana do Despertar #38.</p>
+        </div>
+        <Link href="/certificados?celebrar=true"
+          className="inline-flex items-center gap-2 rounded-xl py-3 px-6 text-sm font-bold text-[#0D1638] transition-all"
+          style={{ background: '#FFB800', boxShadow: '0 6px 20px rgba(255,184,0,0.30)' }}>
+          <Award className="h-4 w-4" /> Ver meu certificado
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xs text-white/35">Insira as 3 palavras-chave reveladas nas aulas ao vivo:</p>
+      {[0, 1, 2].map(i => (
+        <div key={i}>
+          <label className="text-[10px] text-white/25 mb-1 block">Palavra {i + 1}</label>
+          <input
+            type="text"
+            value={palavras[i]}
+            onChange={e => {
+              const next = [...palavras]
+              next[i] = e.target.value
+              setPalavras(next)
+            }}
+            placeholder={`Palavra ${i + 1}`}
+            disabled={estado === 'enviando'}
+            className="w-full rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/15 outline-none transition-colors"
+            style={{
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.10)',
+            }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,184,0,0.35)' }}
+            onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.10)' }}
+          />
+        </div>
+      ))}
+      {estado === 'erro' && erroMsg && (
+        <p className="text-xs text-red-400 leading-relaxed">{erroMsg}</p>
+      )}
+      <button
+        onClick={handleSubmit}
+        disabled={estado === 'enviando' || palavras.some(p => !p.trim())}
+        className="w-full rounded-xl py-3.5 text-sm font-bold text-[#0D1638] disabled:opacity-40 transition-all active:scale-[0.98]"
+        style={{ background: '#FFB800', boxShadow: palavras.every(p => p.trim()) ? '0 6px 20px rgba(255,184,0,0.25)' : 'none' }}
+      >
+        {estado === 'enviando' ? 'Verificando...' : 'Resgatar meu Certificado'}
+      </button>
     </div>
   )
 }
@@ -254,6 +357,7 @@ function MiniTimeline({ currentStep }: { currentStep: number }) {
 export function SemanaDespertar38({ firstName }: { firstName: string }) {
   const [progress, setProgress] = useState<Progress>(EMPTY)
   const [hydrated, setHydrated] = useState(false)
+  const [now, setNow] = useState<Date>(() => new Date())
 
   useEffect(() => {
     try {
@@ -262,6 +366,12 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
     } catch {}
     setHydrated(true)
   }, [])
+
+  useEffect(() => {
+    if (now >= CERT_UNLOCK) return
+    const id = setInterval(() => setNow(new Date()), 60_000)
+    return () => clearInterval(id)
+  }, [now])
 
   const mark = useCallback((key: keyof Progress) => {
     setProgress(prev => {
@@ -275,12 +385,20 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
   const { step1_vip, step4_aula1, step4_aula2, step4_aula3 } = progress
   const todasAulasFeitas = step4_aula1 && step4_aula2 && step4_aula3
+  const certUnlocked = now >= CERT_UNLOCK
+
+  const certDiff = CERT_UNLOCK.getTime() - now.getTime()
+  const timeLeft = certDiff > 0 ? {
+    days:  Math.floor(certDiff / 86_400_000),
+    hours: Math.floor((certDiff % 86_400_000) / 3_600_000),
+    mins:  Math.floor((certDiff % 3_600_000) / 60_000),
+  } : null
 
   const s1: StepStatus = step1_vip         ? 'done'   : 'available'
   const s2: StepStatus = !step1_vip        ? 'locked' : todasAulasFeitas ? 'done' : 'available'
-  const s3: StepStatus = !todasAulasFeitas ? 'locked' : 'available'
+  const s3: StepStatus = !step1_vip        ? 'locked' : (todasAulasFeitas && certUnlocked) ? 'available' : 'locked'
 
-  const stepsCompleted = [step1_vip, todasAulasFeitas, false].filter(Boolean).length
+  const stepsCompleted = [step1_vip, todasAulasFeitas, todasAulasFeitas && certUnlocked].filter(Boolean).length
   const xp = stepsCompleted * XP_PER_STEP
   const currentStep = stepsCompleted + 1
 
@@ -428,8 +546,10 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                             borderColor: aulaFeita ? 'rgba(34,197,94,0.20)' : 'rgba(255,255,255,0.08)',
                             background: aulaFeita ? 'rgba(34,197,94,0.04)' : '#091028',
                           }}>
-                          {/* Thumbnail */}
-                          <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+                          {/* Thumbnail clicável */}
+                          <a href={aula.youtubeUrl} target="_blank" rel="noopener noreferrer"
+                            onClick={() => mark(aulaKey)}
+                            className="block relative w-full" style={{ aspectRatio: '16/9' }}>
                             <img
                               src={aula.imageUrl}
                               alt={aula.titulo}
@@ -438,48 +558,55 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                                 (e.currentTarget.parentElement as HTMLElement).style.display = 'none'
                               }}
                             />
-                            {aulaFeita && (
+                            {aulaFeita ? (
                               <div className="absolute inset-0 flex items-center justify-center"
                                 style={{ background: 'rgba(0,0,0,0.45)' }}>
                                 <div className="w-11 h-11 rounded-full bg-[#22c55e] flex items-center justify-center shadow-lg">
                                   <Check className="h-5 w-5 text-white" />
                                 </div>
                               </div>
-                            )}
-                          </div>
-                          {/* Conteúdo */}
-                          <div className="p-4 space-y-3">
-                          <div className="flex items-start justify-between gap-3">
-                            <div>
-                              <p className="text-[11px] font-mono text-white/25">Aula {aula.id}</p>
-                              <p className="text-sm font-semibold text-white/85 leading-snug mt-0.5">{aula.titulo}</p>
-                              <p className="text-xs text-white/35 mt-1">{aula.data} · {aula.horario}</p>
-                            </div>
-                            {aulaFeita && (
-                              <div className="w-7 h-7 rounded-full bg-[#22c55e]/15 border border-[#22c55e]/25 flex items-center justify-center shrink-0">
-                                <Check className="h-3.5 w-3.5 text-[#22c55e]" />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center"
+                                style={{ background: 'rgba(0,0,0,0.25)' }}>
+                                <div className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl"
+                                  style={{ background: 'rgba(255,0,0,0.85)', backdropFilter: 'blur(4px)' }}>
+                                  <Play className="h-6 w-6 text-white" fill="white" style={{ marginLeft: 3 }} />
+                                </div>
                               </div>
                             )}
-                          </div>
-                          <div className="flex items-center gap-2 flex-wrap">
+                          </a>
+                          {/* Conteúdo */}
+                          <div className="p-4 space-y-3">
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <p className="text-[11px] font-mono text-white/25">Aula {aula.id}</p>
+                                <p className="text-sm font-semibold text-white/85 leading-snug mt-0.5">{aula.titulo}</p>
+                                <p className="text-xs text-white/35 mt-1">{aula.data} · {aula.horario}</p>
+                              </div>
+                              {aulaFeita && (
+                                <div className="w-7 h-7 rounded-full bg-[#22c55e]/15 border border-[#22c55e]/25 flex items-center justify-center shrink-0">
+                                  <Check className="h-3.5 w-3.5 text-[#22c55e]" />
+                                </div>
+                              )}
+                            </div>
+                            {/* Botão grande YouTube */}
                             <a href={aula.youtubeUrl} target="_blank" rel="noopener noreferrer"
                               onClick={() => mark(aulaKey)}
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-[#FF0000]/10 border border-[#FF0000]/20 px-3 py-1.5 text-[11px] font-semibold text-[#FF6666] hover:bg-[#FF0000]/15 transition-colors">
-                              <Video className="h-3.5 w-3.5" /> Ativar lembrete <Bell className="h-3 w-3" />
+                              className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold text-white transition-all active:scale-[0.98]"
+                              style={{ background: '#FF0000', boxShadow: '0 6px 20px rgba(255,0,0,0.25)' }}>
+                              <Play className="h-4 w-4" fill="white" />
+                              Assistir ao Vivo no YouTube
+                              <ExternalLink className="h-3.5 w-3.5 opacity-70" />
                             </a>
-                            <button onClick={() => openCalendar(aula)}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.10] bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold text-white/55 hover:border-white/20 hover:text-white/75 transition-colors">
-                              <Calendar className="h-3.5 w-3.5" /> Agendar
-                            </button>
+                            {/* Aviso lembrete — só texto, não botão */}
+                            <p className="text-[10px] text-white/20 text-center leading-relaxed">
+                              🔔 Ative o lembrete e o like no YouTube para não perder nada
+                            </p>
                           </div>
-                          </div>{/* fim p-4 */}
                         </div>
                       )
                     })}
                   </div>
-                  <p className="text-[11px] text-white/20 mt-3 leading-relaxed">
-                    Clique em "Ativar lembrete" para ser notificado quando a aula começar.
-                  </p>
                 </StepCard>
 
                 {/* ETAPA 3 — CERTIFICADO */}
@@ -487,22 +614,65 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                   numero={3}
                   titulo="Resgate seu Certificado"
                   status={s3}
-                  subtitle="Disponível após concluir as 3 aulas ao vivo."
+                  forceContent={true}
+                  subtitle={
+                    certUnlocked
+                      ? (todasAulasFeitas ? 'Disponível para resgate!' : 'Complete as 3 aulas para resgatar.')
+                      : 'Libera às 22h · 18/06 · após a última aula'
+                  }
                 >
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                    <div className="w-14 h-14 rounded-2xl bg-[#FFB800]/[0.10] border border-[#FFB800]/20 flex items-center justify-center shrink-0">
-                      <Award className="h-7 w-7 text-[#FFB800]" />
+                  <div className="space-y-4">
+                    {/* Prévia do certificado */}
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-[#FFB800]/[0.08] border border-[#FFB800]/15 flex items-center justify-center shrink-0">
+                        <Award className="h-6 w-6 text-[#FFB800]/50" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-white/75">Certificado da Semana do Despertar #38</p>
+                        <p className="text-xs text-white/30 leading-relaxed mt-0.5">
+                          Ao final do curso, você retorna aqui e insere as 3 palavras-chave reveladas nas aulas para resgatar seu certificado.
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-semibold text-white/90">Certificado da Semana do Despertar #38</p>
-                      <p className="text-xs text-white/40 leading-relaxed">
-                        Resgate com as palavras-chave reveladas ao vivo durante as aulas.
-                      </p>
-                    </div>
-                    <Link href="/certificados"
-                      className="flex items-center gap-2 rounded-xl bg-[#FFB800] px-5 py-3 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors shrink-0">
-                      <Award className="h-4 w-4" /> Resgatar
-                    </Link>
+
+                    {!certUnlocked ? (
+                      /* ── COUNTDOWN até 22h/18-06 ── */
+                      <div className="rounded-xl border border-[#FFB800]/12 p-4"
+                        style={{ background: 'rgba(255,184,0,0.03)' }}>
+                        <p className="text-[10px] uppercase tracking-[0.18em] text-[#FFB800]/40 mb-3">Libera em</p>
+                        <div className="flex items-end gap-3 mb-3">
+                          {timeLeft && timeLeft.days > 0 && (
+                            <>
+                              <div className="text-center">
+                                <p className="text-2xl font-bold tabular-nums" style={{ color: 'rgba(255,184,0,0.55)' }}>{timeLeft.days}</p>
+                                <p className="text-[9px] text-white/20 mt-0.5">dias</p>
+                              </div>
+                              <span className="text-[#FFB800]/20 text-lg font-light mb-4">:</span>
+                            </>
+                          )}
+                          <div className="text-center">
+                            <p className="text-2xl font-bold tabular-nums" style={{ color: 'rgba(255,184,0,0.55)' }}>{String(timeLeft?.hours ?? 0).padStart(2, '0')}</p>
+                            <p className="text-[9px] text-white/20 mt-0.5">horas</p>
+                          </div>
+                          <span className="text-[#FFB800]/20 text-lg font-light mb-4">:</span>
+                          <div className="text-center">
+                            <p className="text-2xl font-bold tabular-nums" style={{ color: 'rgba(255,184,0,0.55)' }}>{String(timeLeft?.mins ?? 0).padStart(2, '0')}</p>
+                            <p className="text-[9px] text-white/20 mt-0.5">min</p>
+                          </div>
+                        </div>
+                        <p className="text-[11px] text-white/25 leading-relaxed">
+                          📅 18/06 às 22h (Horário de Brasília) — ao final da 3ª aula ao vivo
+                        </p>
+                      </div>
+                    ) : todasAulasFeitas ? (
+                      /* ── LIBERADO + AULAS CONCLUÍDAS — form inline ── */
+                      <CertResgateForm />
+                    ) : (
+                      /* ── LIBERADO MAS AULAS PENDENTES ── */
+                      <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 text-center">
+                        <p className="text-xs text-white/30">Assista às 3 aulas ao vivo para liberar o resgate.</p>
+                      </div>
+                    )}
                   </div>
                 </StepCard>
 

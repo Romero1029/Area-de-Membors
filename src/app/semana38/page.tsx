@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { SemanaDespertar38 } from '@/app/(member)/lancamento/SemanaDespertar38'
 
+// Redireciona para a URL personalizada do lead: /semanadodespertar-38/{userId}
 export default async function Semana38Page({
   searchParams,
 }: {
@@ -12,10 +12,6 @@ export default async function Semana38Page({
   if (!user) redirect('/login')
 
   const params = await searchParams
-  const firstName =
-    (params.nome ?? '').split(' ')[0] ||
-    (user.user_metadata?.full_name as string | undefined)?.split(' ')[0] ||
-    ''
-
-  return <SemanaDespertar38 firstName={firstName} />
+  const nomeParam = params.nome ? `?nome=${encodeURIComponent(params.nome)}` : ''
+  redirect(`/semanadodespertar-38/${user.id}${nomeParam}`)
 }
