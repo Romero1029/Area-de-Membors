@@ -64,7 +64,7 @@ const AULAS: Aula[] = [
 ]
 
 const XP_PER_STEP = 200
-const TOTAL_STEPS  = 5
+const TOTAL_STEPS  = 4
 const STORAGE_KEY  = 'sdw38_progress'
 
 // ─────────────────────────────────────────────
@@ -75,12 +75,12 @@ interface Aula {
   gcal: { titulo: string; inicio: string; fim: string; desc: string }
 }
 interface Progress {
-  step1_vip: boolean; step2_intro: boolean
+  step1_vip: boolean
   step3_modal_visto: boolean; step3_oferta: boolean
   step4_aula1: boolean; step4_aula2: boolean; step4_aula3: boolean
 }
 const EMPTY: Progress = {
-  step1_vip: false, step2_intro: false,
+  step1_vip: false,
   step3_modal_visto: false, step3_oferta: false,
   step4_aula1: false, step4_aula2: false, step4_aula3: false,
 }
@@ -338,7 +338,7 @@ function OfertaModal({ firstName, onAceitar, onFechar }: {
 // MINI TIMELINE — jornada dos 5 passos
 // ─────────────────────────────────────────────
 function MiniTimeline({ currentStep }: { currentStep: number }) {
-  const steps = ['VIP', 'Intro', 'Acesso', 'Aulas', 'Cert.']
+  const steps = ['VIP', 'Acesso', 'Aulas', 'Cert.']
   return (
     <div className="flex items-center">
       {steps.map((label, i) => {
@@ -387,11 +387,11 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
   useEffect(() => {
     if (!hydrated) return
-    if (progress.step2_intro && !progress.step3_modal_visto) {
+    if (progress.step1_vip && !progress.step3_modal_visto) {
       const t = setTimeout(() => setShowModal(true), 600)
       return () => clearTimeout(t)
     }
-  }, [hydrated, progress.step2_intro, progress.step3_modal_visto])
+  }, [hydrated, progress.step1_vip, progress.step3_modal_visto])
 
   const mark = useCallback((key: keyof Progress) => {
     setProgress(prev => {
@@ -403,16 +403,15 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
   if (!hydrated) return null
 
-  const { step1_vip, step2_intro, step3_modal_visto, step3_oferta, step4_aula1, step4_aula2, step4_aula3 } = progress
+  const { step1_vip, step3_modal_visto, step3_oferta, step4_aula1, step4_aula2, step4_aula3 } = progress
   const todasAulasFeitas = step4_aula1 && step4_aula2 && step4_aula3
 
-  const s1: StepStatus = step1_vip       ? 'done'      : 'available'
-  const s2: StepStatus = !step1_vip      ? 'locked'    : step2_intro   ? 'done' : 'available'
-  const s3: StepStatus = !step2_intro    ? 'locked'    : step3_oferta  ? 'done' : 'available'
-  const s4: StepStatus = !step3_oferta   ? 'locked'    : todasAulasFeitas ? 'done' : 'available'
-  const s5: StepStatus = !todasAulasFeitas ? 'locked'  : 'available'
+  const s1: StepStatus = step1_vip        ? 'done'      : 'available'
+  const s2: StepStatus = !step1_vip       ? 'locked'    : step3_oferta     ? 'done' : 'available'
+  const s3: StepStatus = !step3_oferta    ? 'locked'    : todasAulasFeitas ? 'done' : 'available'
+  const s4: StepStatus = !todasAulasFeitas ? 'locked'   : 'available'
 
-  const stepsCompleted = [step1_vip, step2_intro, step3_oferta, todasAulasFeitas, false].filter(Boolean).length
+  const stepsCompleted = [step1_vip, step3_oferta, todasAulasFeitas, false].filter(Boolean).length
   const xp = stepsCompleted * XP_PER_STEP
   const currentStep = stepsCompleted + 1
 
@@ -526,7 +525,7 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
               {/* Próximos passos como chips bloqueados */}
               <div className="flex flex-wrap gap-2">
-                {['Aula Introdutória', 'Acesso Especial', 'Aulas ao Vivo', 'Certificado'].map(label => (
+                {['Acesso Especial', 'Aulas ao Vivo', 'Certificado'].map(label => (
                   <span
                     key={label}
                     className="text-[10px] text-white/20 border border-white/[0.08] rounded-md px-2.5 py-1"
@@ -551,56 +550,11 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                 {/* ETAPA 1 — done */}
                 <StepCard numero={1} titulo="Grupo VIP" status={s1} />
 
-                {/* ETAPA 2 — AULA INTRODUTÓRIA */}
+                {/* ETAPA 2 — ACESSO ESPECIAL */}
                 <StepCard
                   numero={2}
-                  titulo="Assista a Aula Introdutória"
-                  status={s2}
-                  subtitle="Prepare sua mente para a semana que começa."
-                >
-                  {INTRO_VIDEO_ID ? (
-                    <div className="rounded-xl overflow-hidden bg-black aspect-video mb-4">
-                      <iframe
-                        src={`https://www.youtube.com/embed/${INTRO_VIDEO_ID}`}
-                        title="Aula Introdutória"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen className="w-full h-full"
-                      />
-                    </div>
-                  ) : (
-                    <div className="rounded-xl border border-white/[0.08] bg-[#091028] aspect-video flex flex-col items-center justify-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-white/[0.05] border border-white/[0.10] flex items-center justify-center">
-                        <Play className="h-5 w-5 text-white/25 ml-0.5" />
-                      </div>
-                      <p className="text-xs text-white/25">Aula disponível em breve</p>
-                    </div>
-                  )}
-
-                  <a href={EBOOK_URL} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-[#091028] p-4 mb-4 group transition-colors hover:border-white/[0.15]">
-                    <div className="w-9 h-9 rounded-lg bg-[#FFB800]/[0.10] flex items-center justify-center shrink-0">
-                      <Download className="h-4 w-4 text-[#FFB800]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors">Material de Apoio — E-book</p>
-                      <p className="text-xs text-white/35 mt-0.5">Baixe o material complementar da aula.</p>
-                    </div>
-                    <ExternalLink className="h-3.5 w-3.5 text-white/25 shrink-0" />
-                  </a>
-
-                  {!step2_intro && (
-                    <button onClick={() => mark('step2_intro')}
-                      className="w-full rounded-xl border border-[#FFB800]/20 bg-[#FFB800]/[0.05] py-3.5 text-sm font-semibold text-[#FFB800] transition-colors hover:bg-[#FFB800]/[0.10]">
-                      ✓ Concluí a aula introdutória — próxima etapa
-                    </button>
-                  )}
-                </StepCard>
-
-                {/* ETAPA 3 — ACESSO ESPECIAL */}
-                <StepCard
-                  numero={3}
                   titulo="Acesso Especial"
-                  status={s3}
+                  status={s2}
                   subtitle="Uma condição exclusiva foi reservada para você."
                   badge={
                     step3_modal_visto && s3 !== 'locked' ? (
@@ -654,11 +608,11 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                   )}
                 </StepCard>
 
-                {/* ETAPA 4 — 3 AULAS AO VIVO */}
+                {/* ETAPA 3 — 3 AULAS AO VIVO */}
                 <StepCard
-                  numero={4}
+                  numero={3}
                   titulo="Assista às 3 Aulas ao Vivo"
-                  status={s4}
+                  status={s3}
                   subtitle={`${[step4_aula1, step4_aula2, step4_aula3].filter(Boolean).length}/3 aulas assistidas`}
                 >
                   <div className="space-y-3">
@@ -704,11 +658,11 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                   </p>
                 </StepCard>
 
-                {/* ETAPA 5 — CERTIFICADO */}
+                {/* ETAPA 4 — CERTIFICADO */}
                 <StepCard
-                  numero={5}
+                  numero={4}
                   titulo="Resgate seu Certificado"
-                  status={s5}
+                  status={s4}
                   subtitle="Disponível após concluir as 3 aulas ao vivo."
                 >
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
