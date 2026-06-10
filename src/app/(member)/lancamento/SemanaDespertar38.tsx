@@ -3,9 +3,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import {
-  Check, Lock, MessageCircle, ChevronRight,
+  Check, Lock,
   Play, Download, Video, Calendar, Bell,
-  Award, ExternalLink, ShoppingBag, Sparkles, X, Zap,
+  Award, ExternalLink, Zap, MessageCircle,
 } from 'lucide-react'
 
 // ─────────────────────────────────────────────
@@ -42,7 +42,7 @@ const AULAS: Aula[] = [
     titulo: 'Aula 1 — A Raiz dos Seus Padrões',
     data: '16/06 · Terça-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/@institutodespertamente',
+    youtubeUrl: 'https://youtube.com/live/VvmEH5LlC_0',
     gcal: { titulo: 'SDW #38 — Aula 1', inicio: '20260616T230000Z', fim: '20260617T010000Z', desc: 'Aula 1 da Semana do Despertar #38 · IDM' },
   },
   {
@@ -50,7 +50,7 @@ const AULAS: Aula[] = [
     titulo: 'Aula 2 — Reprogramando o Inconsciente',
     data: '17/06 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/@institutodespertamente',
+    youtubeUrl: 'https://youtube.com/live/NxnyXcM7WXE',
     gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20260617T230000Z', fim: '20260618T010000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM' },
   },
   {
@@ -58,13 +58,13 @@ const AULAS: Aula[] = [
     titulo: 'Aula 3 — Transformação em Ação',
     data: '18/06 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/@institutodespertamente',
+    youtubeUrl: 'https://youtube.com/live/hiBJtMBPgu0',
     gcal: { titulo: 'SDW #38 — Aula 3', inicio: '20260618T230000Z', fim: '20260619T010000Z', desc: 'Aula 3 da Semana do Despertar #38 · IDM' },
   },
 ]
 
 const XP_PER_STEP = 200
-const TOTAL_STEPS  = 4
+const TOTAL_STEPS  = 3
 const STORAGE_KEY  = 'sdw38_progress'
 
 // ─────────────────────────────────────────────
@@ -76,12 +76,10 @@ interface Aula {
 }
 interface Progress {
   step1_vip: boolean
-  step3_modal_visto: boolean; step3_oferta: boolean
   step4_aula1: boolean; step4_aula2: boolean; step4_aula3: boolean
 }
 const EMPTY: Progress = {
   step1_vip: false,
-  step3_modal_visto: false, step3_oferta: false,
   step4_aula1: false, step4_aula2: false, step4_aula3: false,
 }
 type StepStatus = 'locked' | 'available' | 'done'
@@ -213,132 +211,10 @@ function StepCard({
 }
 
 // ─────────────────────────────────────────────
-// OFERTA MODAL
-// ─────────────────────────────────────────────
-function OfertaModal({ firstName, onAceitar, onFechar }: {
-  firstName: string; onAceitar: () => void; onFechar: () => void
-}) {
-  useEffect(() => {
-    document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = '' }
-  }, [])
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:px-5"
-      style={{ background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
-      onClick={onFechar}
-    >
-      {[{ top:'15%',left:'10%',d:'0s',dur:'2.4s' },{ top:'75%',left:'15%',d:'0.5s',dur:'2.0s' },
-        { top:'20%',left:'82%',d:'0.8s',dur:'2.6s' },{ top:'70%',left:'80%',d:'0.3s',dur:'1.9s' }]
-        .map((p, i) => (
-          <span key={i} className="absolute w-1 h-1 rounded-full bg-[#FFB800]/40 animate-ping pointer-events-none"
-            style={{ top:p.top, left:p.left, animationDelay:p.d, animationDuration:p.dur }} />
-        ))}
-
-      <div
-        className="relative w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden"
-        style={{ background:'linear-gradient(170deg,#111D48 0%,#0D1638 50%,#0A1232 100%)',
-                 border:'1px solid rgba(255,184,0,0.22)', boxShadow:'0 0 100px rgba(255,184,0,0.10),0 32px 80px rgba(0,0,0,0.7)' }}
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="h-px w-full" style={{ background:'linear-gradient(90deg,transparent,#FFB800,#FFC933,#FFB800,transparent)' }} />
-        <div className="flex justify-center pt-3 sm:hidden">
-          <div className="w-9 h-1 rounded-full bg-white/10" />
-        </div>
-        <button onClick={onFechar}
-          className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/60 transition-colors">
-          <X className="h-3.5 w-3.5" />
-        </button>
-
-        <div className="px-6 sm:px-7 pt-5 pb-7 space-y-5">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-[#FFB800]/25 bg-[#FFB800]/[0.08] px-3 py-1">
-            <Sparkles className="h-3 w-3 text-[#FFB800]" />
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#FFB800]">
-              {firstName}, você foi selecionado
-            </span>
-          </div>
-
-          {OFERTA.ativo ? (
-            <>
-              <h2 className="font-display text-2xl sm:text-[26px] font-bold leading-[1.1] text-white">
-                {OFERTA.atencao}
-              </h2>
-              <p className="text-sm text-white/50 leading-relaxed">{OFERTA.interesse}</p>
-              <div className="rounded-2xl border border-white/[0.08] bg-[#0A1232] p-4 space-y-3">
-                <div>
-                  <p className="text-[11px] font-mono uppercase tracking-widest text-[#FFB800]/60 mb-1">Oferta exclusiva</p>
-                  <p className="text-base font-semibold text-white/90 leading-snug">{OFERTA.nome}</p>
-                  <p className="text-xs text-white/40 mt-1 leading-relaxed">{OFERTA.descricao}</p>
-                </div>
-                <div className="h-px bg-white/[0.08]" />
-                <ul className="space-y-2">
-                  {OFERTA.beneficios.map((b, i) => (
-                    <li key={i} className="flex items-start gap-2.5">
-                      <span className="w-4 h-4 rounded-full bg-[#FFB800]/15 border border-[#FFB800]/25 flex items-center justify-center shrink-0 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-[#FFB800]" />
-                      </span>
-                      <span className="text-sm text-white/60">{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-end justify-between gap-3">
-                  <div>
-                    <p className="text-xs text-white/25 line-through tabular-nums">{OFERTA.preco_original}</p>
-                    <p className="text-4xl font-black text-[#FFB800] tabular-nums leading-none">{OFERTA.preco}</p>
-                    {OFERTA.parcelamento && <p className="text-[11px] text-white/35 mt-1">{OFERTA.parcelamento}</p>}
-                  </div>
-                  {OFERTA.urgencia && <p className="text-[11px] text-white/30 leading-snug text-right max-w-[120px]">{OFERTA.urgencia}</p>}
-                </div>
-                <a href={OFERTA.url} target="_blank" rel="noopener noreferrer" onClick={onAceitar}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold text-[#0D1638] transition-all active:scale-[0.98] hover:bg-[#FFC933]"
-                  style={{ background:'#FFB800', boxShadow:'0 8px 32px rgba(255,184,0,0.30)' }}>
-                  <ShoppingBag className="h-4 w-4" /> Quero aproveitar essa condição
-                </a>
-                <button onClick={onFechar} className="w-full py-2 text-xs text-white/20 hover:text-white/45 transition-colors">
-                  Não, obrigado
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <h2 className="font-display text-2xl font-bold leading-[1.1] text-white">
-                Você acabou de provar<br />que é diferente.
-              </h2>
-              <p className="text-sm text-white/50 leading-relaxed">
-                A maioria das pessoas desiste antes da aula introdutória. Você foi até aqui — e por isso uma condição especial foi reservada para o seu perfil.
-              </p>
-              <div className="rounded-xl border border-[#FFB800]/12 bg-[#FFB800]/[0.04] px-4 py-3 space-y-1">
-                <p className="text-xs font-semibold text-[#FFB800]/70">Oferta exclusiva em breve</p>
-                <p className="text-xs text-white/40 leading-relaxed">
-                  Os detalhes do produto serão revelados durante a Semana do Despertar. Você já está na fila de acesso prioritário.
-                </p>
-              </div>
-              <div className="space-y-2.5">
-                <button onClick={onAceitar}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold text-[#0D1638] transition-all hover:bg-[#FFC933]"
-                  style={{ background:'#FFB800', boxShadow:'0 8px 32px rgba(255,184,0,0.25)' }}>
-                  Garantir minha condição exclusiva
-                </button>
-                <button onClick={onFechar} className="w-full py-2 text-xs text-white/20 hover:text-white/45 transition-colors">
-                  Ver depois
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─────────────────────────────────────────────
 // MINI TIMELINE — jornada dos 5 passos
 // ─────────────────────────────────────────────
 function MiniTimeline({ currentStep }: { currentStep: number }) {
-  const steps = ['VIP', 'Acesso', 'Aulas', 'Cert.']
+  const steps = ['VIP', 'Aulas', 'Cert.']
   return (
     <div className="flex items-center">
       {steps.map((label, i) => {
@@ -375,7 +251,6 @@ function MiniTimeline({ currentStep }: { currentStep: number }) {
 export function SemanaDespertar38({ firstName }: { firstName: string }) {
   const [progress, setProgress] = useState<Progress>(EMPTY)
   const [hydrated, setHydrated] = useState(false)
-  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     try {
@@ -384,14 +259,6 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
     } catch {}
     setHydrated(true)
   }, [])
-
-  useEffect(() => {
-    if (!hydrated) return
-    if (progress.step1_vip && !progress.step3_modal_visto) {
-      const t = setTimeout(() => setShowModal(true), 600)
-      return () => clearTimeout(t)
-    }
-  }, [hydrated, progress.step1_vip, progress.step3_modal_visto])
 
   const mark = useCallback((key: keyof Progress) => {
     setProgress(prev => {
@@ -403,29 +270,19 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
   if (!hydrated) return null
 
-  const { step1_vip, step3_modal_visto, step3_oferta, step4_aula1, step4_aula2, step4_aula3 } = progress
+  const { step1_vip, step4_aula1, step4_aula2, step4_aula3 } = progress
   const todasAulasFeitas = step4_aula1 && step4_aula2 && step4_aula3
 
-  const s1: StepStatus = step1_vip        ? 'done'      : 'available'
-  const s2: StepStatus = !step1_vip       ? 'locked'    : step3_oferta     ? 'done' : 'available'
-  const s3: StepStatus = !step3_oferta    ? 'locked'    : todasAulasFeitas ? 'done' : 'available'
-  const s4: StepStatus = !todasAulasFeitas ? 'locked'   : 'available'
+  const s1: StepStatus = step1_vip         ? 'done'   : 'available'
+  const s2: StepStatus = !step1_vip        ? 'locked' : todasAulasFeitas ? 'done' : 'available'
+  const s3: StepStatus = !todasAulasFeitas ? 'locked' : 'available'
 
-  const stepsCompleted = [step1_vip, step3_oferta, todasAulasFeitas, false].filter(Boolean).length
+  const stepsCompleted = [step1_vip, todasAulasFeitas, false].filter(Boolean).length
   const xp = stepsCompleted * XP_PER_STEP
   const currentStep = stepsCompleted + 1
 
   return (
-    <>
-      {showModal && (
-        <OfertaModal
-          firstName={firstName}
-          onAceitar={() => { mark('step3_modal_visto'); mark('step3_oferta'); setShowModal(false) }}
-          onFechar={() => { mark('step3_modal_visto'); setShowModal(false) }}
-        />
-      )}
-
-      <div className="min-h-screen w-full bg-[#0D1638]">
+    <div className="min-h-screen w-full bg-[#0D1638]">
         <div className="w-full max-w-2xl mx-auto px-5 sm:px-8 pt-10 pb-24">
 
           {/* ── BANNER OPCIONAL ─────────────────────────── */}
@@ -525,7 +382,7 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
               {/* Próximos passos como chips bloqueados */}
               <div className="flex flex-wrap gap-2">
-                {['Acesso Especial', 'Aulas ao Vivo', 'Certificado'].map(label => (
+                {['Aulas ao Vivo', 'Certificado'].map(label => (
                   <span
                     key={label}
                     className="text-[10px] text-white/20 border border-white/[0.08] rounded-md px-2.5 py-1"
@@ -550,69 +407,11 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                 {/* ETAPA 1 — done */}
                 <StepCard numero={1} titulo="Grupo VIP" status={s1} />
 
-                {/* ETAPA 2 — ACESSO ESPECIAL */}
+                {/* ETAPA 2 — 3 AULAS AO VIVO */}
                 <StepCard
                   numero={2}
-                  titulo="Acesso Especial"
-                  status={s2}
-                  subtitle="Uma condição exclusiva foi reservada para você."
-                  badge={
-                    step3_modal_visto && s3 !== 'locked' ? (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-[#FFB800]/25 bg-[#FFB800]/[0.08] px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-[#FFB800]">
-                        <Sparkles className="h-2.5 w-2.5" /> selecionado
-                      </span>
-                    ) : undefined
-                  }
-                >
-                  {step3_oferta ? (
-                    <div className="flex items-center gap-3 rounded-xl border border-[#22c55e]/15 bg-[#22c55e]/[0.04] p-4">
-                      <div className="w-9 h-9 rounded-xl bg-[#22c55e]/10 border border-[#22c55e]/20 flex items-center justify-center shrink-0">
-                        <Check className="h-4 w-4 text-[#22c55e]" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white/85">Condição reservada ✓</p>
-                        <p className="text-xs text-white/35 mt-0.5">Sua condição exclusiva está garantida para este evento.</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="rounded-xl border border-[#FFB800]/15 bg-[#FFB800]/[0.04] px-4 py-3 flex items-start gap-3">
-                        <Sparkles className="h-4 w-4 text-[#FFB800]/60 shrink-0 mt-0.5" />
-                        <div className="space-y-0.5">
-                          <p className="text-xs font-semibold text-white/75">Condição exclusiva reservada</p>
-                          <p className="text-xs text-white/40 leading-relaxed">
-                            {OFERTA.ativo ? OFERTA.descricao : 'Sua condição especial está reservada. Ela será revelada durante a Semana do Despertar.'}
-                          </p>
-                        </div>
-                      </div>
-                      {OFERTA.ativo ? (
-                        <div className="flex items-center justify-between gap-4">
-                          <p className="text-2xl font-bold text-[#FFB800]">{OFERTA.preco}</p>
-                          <a href={OFERTA.url} target="_blank" rel="noopener noreferrer"
-                            onClick={() => mark('step3_oferta')}
-                            className="flex items-center gap-2 rounded-xl bg-[#FFB800] px-5 py-3 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors">
-                            <ShoppingBag className="h-4 w-4" /> Garantir
-                          </a>
-                        </div>
-                      ) : (
-                        <button onClick={() => mark('step3_oferta')}
-                          className="w-full rounded-xl border border-[#FFB800]/20 bg-[#FFB800]/[0.05] py-3.5 text-sm font-semibold text-[#FFB800] transition-colors hover:bg-[#FFB800]/[0.10]">
-                          ✓ Entendi — continuar para as aulas
-                        </button>
-                      )}
-                      <button onClick={() => setShowModal(true)}
-                        className="w-full text-[11px] text-white/20 hover:text-white/40 transition-colors py-1">
-                        Ver detalhes da condição →
-                      </button>
-                    </div>
-                  )}
-                </StepCard>
-
-                {/* ETAPA 3 — 3 AULAS AO VIVO */}
-                <StepCard
-                  numero={3}
                   titulo="Assista às 3 Aulas ao Vivo"
-                  status={s3}
+                  status={s2}
                   subtitle={`${[step4_aula1, step4_aula2, step4_aula3].filter(Boolean).length}/3 aulas assistidas`}
                 >
                   <div className="space-y-3">
@@ -658,11 +457,11 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                   </p>
                 </StepCard>
 
-                {/* ETAPA 4 — CERTIFICADO */}
+                {/* ETAPA 3 — CERTIFICADO */}
                 <StepCard
-                  numero={4}
+                  numero={3}
                   titulo="Resgate seu Certificado"
-                  status={s4}
+                  status={s3}
                   subtitle="Disponível após concluir as 3 aulas ao vivo."
                 >
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
