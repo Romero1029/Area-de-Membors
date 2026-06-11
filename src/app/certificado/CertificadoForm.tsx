@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Award, Loader2, Download, XCircle, AlertTriangle } from 'lucide-react'
+import { Award, Loader2, XCircle, AlertTriangle } from 'lucide-react'
 
 // ─── Phone mask ───────────────────────────────────────────────────────────────
 
