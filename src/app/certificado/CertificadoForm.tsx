@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Award, Loader2, XCircle, AlertTriangle } from 'lucide-react'
+import { Award, Loader2, XCircle, AlertTriangle, Download } from 'lucide-react'
 
 // ─── Phone mask ───────────────────────────────────────────────────────────────
 
@@ -24,6 +24,8 @@ export function CertificadoForm() {
   const [status, setStatus] = useState<Status>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const [nome, setNome] = useState('')
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
+  const [downloadFilename, setDownloadFilename] = useState('')
 
   // Form fields
   const [fullName, setFullName] = useState('')
@@ -35,6 +37,15 @@ export function CertificadoForm() {
 
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
     setTelefone(applyPhoneMask(e.target.value))
+  }
+
+  function triggerDownload(url: string, filename: string) {
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -57,17 +68,14 @@ export function CertificadoForm() {
       })
 
       if (res.ok) {
-        // PDF vem como blob — criar URL e disparar download
         const blob = await res.blob()
         const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `certificado-${fullName.trim().toLowerCase().replace(/\s+/g, '-')}.pdf`
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        URL.revokeObjectURL(url)
+        const filename = `certificado-${fullName.trim().toLowerCase().replace(/\s+/g, '-')}.pdf`
 
+        triggerDownload(url, filename)
+
+        setDownloadUrl(url)
+        setDownloadFilename(filename)
         setNome(fullName.trim())
         setStatus('success')
         return
@@ -76,7 +84,6 @@ export function CertificadoForm() {
       const data = await res.json().catch(() => ({ error: 'Erro desconhecido.' }))
       const msg = data.error ?? 'Erro ao processar sua solicitação.'
 
-      // 403 = bloqueado (já tentou antes), 429 = rate limit
       if (res.status === 403 || res.status === 429) {
         setErrorMsg(msg)
         setStatus('blocked')
@@ -93,10 +100,14 @@ export function CertificadoForm() {
   // ── Sucesso ──────────────────────────────────────────────────────────────────
   if (status === 'success') {
     return (
-      <div className="space-y-5 text-center">
-        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ background: 'rgba(255,184,0,0.15)', border: '2px solid rgba(255,184,0,0.4)' }}>
+      <div className="space-y-6 text-center">
+        <div
+          className="w-20 h-20 rounded-full flex items-center justify-center mx-auto"
+          style={{ background: 'rgba(255,184,0,0.15)', border: '2px solid rgba(255,184,0,0.4)' }}
+        >
           <Award className="w-9 h-9" style={{ color: '#FFB800' }} />
         </div>
+
         <div className="space-y-2">
           <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#FFB800' }}>
             Parabéns!
@@ -108,8 +119,23 @@ export function CertificadoForm() {
             O download do PDF iniciou automaticamente.
           </p>
         </div>
+
+        {downloadUrl && (
+          <button
+            onClick={() => triggerDownload(downloadUrl, downloadFilename)}
+            className="w-full h-[52px] rounded-2xl text-sm font-bold text-[#0D1638] flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-[0.98]"
+            style={{
+              background: 'linear-gradient(135deg, #FFB800, #FFC933)',
+              boxShadow: '0 8px 24px rgba(255,184,0,0.3)',
+            }}
+          >
+            <Download className="w-4 h-4" />
+            Baixar certificado em PDF
+          </button>
+        )}
+
         <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
-          Caso o download não tenha iniciado, recarregue a página e tente novamente.
+          Caso o download não tenha iniciado, clique no botão acima.
         </p>
       </div>
     )
@@ -119,7 +145,10 @@ export function CertificadoForm() {
   if (status === 'blocked') {
     return (
       <div className="space-y-5 text-center">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
+        <div
+          className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
+          style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}
+        >
           <XCircle className="w-8 h-8" style={{ color: '#f87171' }} />
         </div>
         <div className="space-y-2">
@@ -219,7 +248,10 @@ export function CertificadoForm() {
 
       {/* Erro de palavras erradas */}
       {status === 'error' && errorMsg && (
-        <div className="flex items-start gap-3 px-4 py-3 rounded-2xl" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+        <div
+          className="flex items-start gap-3 px-4 py-3 rounded-2xl"
+          style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}
+        >
           <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#f87171' }} />
           <div>
             {errorMsg.split('\n').map((line, i) => (
@@ -238,17 +270,17 @@ export function CertificadoForm() {
       <button
         type="submit"
         disabled={status === 'loading' || status === 'error'}
-        className="w-full h-13 rounded-2xl text-sm font-bold text-[#0a0a0a] flex items-center justify-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full rounded-2xl text-sm font-bold text-[#0D1638] flex items-center justify-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
         style={{
+          height: 52,
           background: status === 'error'
             ? '#374151'
             : 'linear-gradient(135deg, #FFB800, #FFC933)',
           boxShadow: status === 'error' ? 'none' : '0 8px 24px rgba(255,184,0,0.3)',
-          height: 52,
         }}
       >
         {status === 'loading'
-          ? <><Loader2 className="w-4 h-4 animate-spin text-[#0a0a0a]" /> Validando...</>
+          ? <><Loader2 className="w-4 h-4 animate-spin text-[#0D1638]" /> Validando...</>
           : status === 'error'
             ? <><XCircle className="w-4 h-4 text-white" /> <span className="text-white">Tentativa encerrada</span></>
             : <><Award className="w-4 h-4" /> Gerar meu certificado</>

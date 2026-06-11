@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Award } from 'lucide-react'
 import { CertificadoForm } from './CertificadoForm'
 
@@ -22,19 +23,19 @@ export default function CertificadoPage() {
 
         {/* Header */}
         <div className="text-center space-y-4">
+          {/* Logo real IDM */}
           <div className="flex items-center justify-center">
-            <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center"
-              style={{ background: 'rgba(255,184,0,0.12)', border: '1px solid rgba(255,184,0,0.25)' }}
-            >
-              <Award className="w-7 h-7" style={{ color: '#FFB800' }} />
-            </div>
+            <Image
+              src="/logo-despertamente.png"
+              alt="Instituto Despertamente"
+              width={160}
+              height={60}
+              className="object-contain"
+              priority
+            />
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#FFB800' }}>
-              Instituto Despertamente
-            </p>
             <h1
               className="text-3xl font-bold text-white leading-tight"
               style={{ fontFamily: 'var(--font-fraunces, Georgia, serif)' }}
