@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Check, MessageCircle, Video, Award, BookOpen, Zap } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
+import { registrarLead } from './actions'
 
 const BENEFICIOS = [
   { icon: MessageCircle, texto: 'Grupo VIP exclusivo no WhatsApp' },
@@ -14,59 +14,11 @@ const BENEFICIOS = [
   { icon: Award,          texto: 'Certificado de participação' },
 ]
 
-function SuccessState({ email }: { email: string }) {
-  return (
-    <div className="min-h-screen bg-[#0D1638] flex items-center justify-center px-6"
-      style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0)', backgroundSize: '48px 48px' }}
-    >
-      <div className="max-w-md w-full text-center space-y-6">
-        <div className="w-16 h-16 rounded-full bg-[#FFB800]/15 border border-[#FFB800]/30 flex items-center justify-center mx-auto">
-          <Check className="h-7 w-7 text-[#FFB800]" />
-        </div>
-        <div className="space-y-2">
-          <h1 className="font-display text-3xl font-bold text-white">
-            Você está dentro.
-          </h1>
-          <p className="text-sm text-white/40 leading-relaxed">
-            Enviamos um link de acesso para <span className="text-white/70">{email}</span>.<br />
-            Clique no link para acessar a área de membros.
-          </p>
-        </div>
-        <div className="rounded-xl border border-white/[0.08] bg-[#0A1232] p-5 text-left space-y-3">
-          <p className="text-xs font-mono uppercase tracking-widest text-white/25">Próximos passos</p>
-          {[
-            'Abra seu email e clique no link de acesso',
-            'Acesse o Grupo VIP no WhatsApp',
-            'Assista a aula introdutória',
-          ].map((s, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <span className="text-xs font-mono text-[#FFB800]/60 mt-0.5 w-4 shrink-0">{i + 1}.</span>
-              <p className="text-sm text-white/50">{s}</p>
-            </div>
-          ))}
-        </div>
-        <p className="text-xs text-white/20">
-          Não encontrou o email?{' '}
-          <button
-            className="text-white/40 underline underline-offset-2 hover:text-white/70"
-            onClick={() => window.location.reload()}
-          >
-            Tentar novamente.
-          </button>
-        </p>
-      </div>
-    </div>
-  )
-}
-
 export default function Turma38Page() {
-  const [name, setName]     = useState('')
-  const [email, setEmail]   = useState('')
+  const [name, setName]       = useState('')
+  const [email, setEmail]     = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError]   = useState('')
-  const [sent, setSent]     = useState(false)
-
-  const supabase = createClient()
+  const [error, setError]     = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -74,26 +26,14 @@ export default function Turma38Page() {
     setLoading(true)
     setError('')
 
-    const { error: err } = await supabase.auth.signInWithOtp({
-      email: email.trim().toLowerCase(),
-      options: {
-        shouldCreateUser: true,
-        data: { full_name: name.trim() },
-        emailRedirectTo: `${window.location.origin}/lancamento`,
-      },
-    })
-
-    if (err) {
+    try {
+      const loginUrl = await registrarLead(name.trim(), email.trim())
+      window.location.href = loginUrl
+    } catch {
       setError('Ocorreu um erro. Tente novamente.')
       setLoading(false)
-      return
     }
-
-    setSent(true)
-    setLoading(false)
   }
-
-  if (sent) return <SuccessState email={email} />
 
   return (
     <div
@@ -195,15 +135,15 @@ export default function Turma38Page() {
                   className="w-full flex items-center justify-center gap-2.5 rounded-xl bg-[#FFB800] py-4 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
                   style={{ boxShadow: '0 8px 32px rgba(255,184,0,0.22)' }}
                 >
-                  {loading ? 'Enviando...' : (
-                    <>Quero participar <ArrowRight className="h-4 w-4" /></>
-                  )}
+                  {loading
+                    ? <><span className="w-4 h-4 border-2 border-[#0D1638]/30 border-t-[#0D1638] rounded-full animate-spin" /> Entrando...</>
+                    : <><Check className="h-4 w-4" /> Quero participar <ArrowRight className="h-4 w-4" /></>
+                  }
                 </button>
               </form>
 
               <p className="text-[11px] text-white/20 text-center leading-relaxed">
-                Você receberá um link de acesso por email.{' '}
-                Sem spam. Sem cobrança.
+                Gratuito. Acesso imediato ao grupo e às aulas.
               </p>
             </div>
           </div>
