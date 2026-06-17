@@ -50,10 +50,10 @@ const AULAS: Aula[] = [
     id: 2,
     titulo: 'Aula 2 — Reprogramando o Inconsciente',
     data: '24/06 · Quarta-feira',
-    horario: '20h (Horário de Brasília)',
+    horario: '21h (Horário de Brasília) · Jogo da Seleção às 19h',
     youtubeUrl: 'https://youtube.com/live/NxnyXcM7WXE',
     imageUrl: 'https://img.youtube.com/vi/NxnyXcM7WXE/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20260624T230000Z', fim: '20260625T010000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM' },
+    gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20260625T000000Z', fim: '20260625T020000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM — Horário especial: 21h (Jogo da Seleção às 19h)' },
   },
   {
     id: 3,
