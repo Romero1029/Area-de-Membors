@@ -525,8 +525,19 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
               <div className="space-y-3">
 
-                {/* ETAPA 1 — done */}
-                <StepCard numero={1} titulo="Grupo VIP" status={s1} />
+                {/* ETAPA 1 — sempre com botão visível */}
+                <StepCard numero={1} titulo="Grupo VIP" status={s1}>
+                  <a
+                    href={WA_GROUP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all active:scale-[0.98]"
+                    style={{ background: '#25D366', boxShadow: '0 4px 16px rgba(37,211,102,0.20)' }}
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    Acessar Grupo WhatsApp
+                  </a>
+                </StepCard>
 
                 {/* ETAPA 2 — 3 AULAS AO VIVO */}
                 <StepCard
