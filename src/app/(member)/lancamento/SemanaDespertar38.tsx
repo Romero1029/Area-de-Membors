@@ -40,29 +40,29 @@ const AULAS: Aula[] = [
   {
     id: 1,
     titulo: 'Aula 1 — A Raiz dos Seus Padrões',
-    data: '23/06 · Terça-feira',
+    data: '30/06 · Terça-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/VvmEH5LlC_0',
     imageUrl: 'https://img.youtube.com/vi/VvmEH5LlC_0/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #38 — Aula 1', inicio: '20260623T230000Z', fim: '20260624T010000Z', desc: 'Aula 1 da Semana do Despertar #38 · IDM' },
+    gcal: { titulo: 'SDW #38 — Aula 1', inicio: '20260630T230000Z', fim: '20260701T010000Z', desc: 'Aula 1 da Semana do Despertar #38 · IDM' },
   },
   {
     id: 2,
     titulo: 'Aula 2 — Reprogramando o Inconsciente',
-    data: '24/06 · Quarta-feira',
-    horario: '21h (Horário de Brasília) · Jogo da Seleção às 19h',
+    data: '01/07 · Quarta-feira',
+    horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/NxnyXcM7WXE',
     imageUrl: 'https://img.youtube.com/vi/NxnyXcM7WXE/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20260625T000000Z', fim: '20260625T020000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM — Horário especial: 21h (Jogo da Seleção às 19h)' },
+    gcal: { titulo: 'SDW #38 — Aula 2', inicio: '20260701T230000Z', fim: '20260702T010000Z', desc: 'Aula 2 da Semana do Despertar #38 · IDM' },
   },
   {
     id: 3,
     titulo: 'Aula 3 — Transformação em Ação',
-    data: '25/06 · Quinta-feira',
+    data: '02/07 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/hiBJtMBPgu0',
     imageUrl: 'https://img.youtube.com/vi/hiBJtMBPgu0/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #38 — Aula 3', inicio: '20260625T230000Z', fim: '20260626T010000Z', desc: 'Aula 3 da Semana do Despertar #38 · IDM' },
+    gcal: { titulo: 'SDW #38 — Aula 3', inicio: '20260702T230000Z', fim: '20260703T010000Z', desc: 'Aula 3 da Semana do Despertar #38 · IDM' },
   },
 ]
 
@@ -70,8 +70,8 @@ const XP_PER_STEP = 200
 const TOTAL_STEPS  = 3
 const STORAGE_KEY  = 'sdw38_progress'
 
-// 22h Horário de Brasília em 25/06/2026 = 01h UTC do dia 26/06/2026
-const CERT_UNLOCK = new Date('2026-06-26T01:00:00Z')
+// 22h Horário de Brasília em 02/07/2026 = 01h UTC do dia 03/07/2026
+const CERT_UNLOCK = new Date('2026-07-03T01:00:00Z')
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -446,7 +446,7 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
             {/* Copy */}
             <p className="text-sm text-white/60 leading-relaxed mb-7">
               Você garantiu sua vaga no <span className="text-white/80 font-semibold">Curso Gratuito!</span> O evento será nos dias{' '}
-              <span className="text-white/80 font-semibold">23, 24 e 25 de Junho.</span>
+              <span className="text-white/80 font-semibold">30 de Junho, 01 e 02 de Julho.</span>
               <br />
               Siga as etapas abaixo para garantir seu acesso completo.
             </p>
@@ -618,7 +618,7 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                   subtitle={
                     certUnlocked
                       ? (todasAulasFeitas ? 'Disponível para resgate!' : 'Complete as 3 aulas para resgatar.')
-                      : 'Libera às 22h · 25/06 · após a última aula'
+                      : 'Libera às 22h · 02/07 · após a última aula'
                   }
                 >
                   <div className="space-y-4">
@@ -636,7 +636,7 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                     </div>
 
                     {!certUnlocked ? (
-                      /* ── COUNTDOWN até 22h/25-06 ── */
+                      /* ── COUNTDOWN até 22h/02-07 ── */
                       <div className="rounded-xl border border-[#FFB800]/12 p-4"
                         style={{ background: 'rgba(255,184,0,0.03)' }}>
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[#FFB800]/40 mb-3">Libera em</p>
@@ -661,7 +661,7 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
                           </div>
                         </div>
                         <p className="text-[11px] text-white/25 leading-relaxed">
-                          📅 25/06 às 22h (Horário de Brasília) — ao final da 3ª aula ao vivo
+                          📅 02/07 às 22h (Horário de Brasília) — ao final da 3ª aula ao vivo
                         </p>
                       </div>
                     ) : todasAulasFeitas ? (
