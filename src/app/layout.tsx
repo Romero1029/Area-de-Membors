@@ -20,6 +20,10 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Instituto Despertamente — Área de Membros",
   description: "Desperte seu potencial. Psicanálise, Numerologia, PNL e Espiritualidade.",
+  icons: {
+    icon: '/logo-despertamente.png',
+    apple: '/logo-despertamente.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
