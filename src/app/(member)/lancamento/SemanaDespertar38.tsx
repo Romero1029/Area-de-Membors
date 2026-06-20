@@ -525,18 +525,30 @@ export function SemanaDespertar38({ firstName }: { firstName: string }) {
 
               <div className="space-y-3">
 
-                {/* ETAPA 1 — sempre com botão visível */}
+                {/* ETAPA 1 — sempre com botão visível e em destaque */}
                 <StepCard numero={1} titulo="Grupo VIP" status={s1}>
-                  <a
-                    href={WA_GROUP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all active:scale-[0.98]"
-                    style={{ background: '#25D366', boxShadow: '0 4px 16px rgba(37,211,102,0.20)' }}
+                  <div
+                    className="rounded-2xl p-5"
+                    style={{
+                      border: '1px solid rgba(37,211,102,0.28)',
+                      background: 'linear-gradient(160deg, rgba(37,211,102,0.07) 0%, rgba(37,211,102,0.03) 100%)',
+                    }}
                   >
-                    <MessageCircle className="h-4 w-4" />
-                    Acessar Grupo WhatsApp
-                  </a>
+                    <h2 className="font-display text-xl font-bold text-white mb-1">Grupo VIP da Turma</h2>
+                    <p className="text-sm text-white/50 leading-relaxed mb-5">
+                      Links das aulas ao vivo, materiais e comunicados em primeira mão — antes de qualquer outra pessoa.
+                    </p>
+                    <a
+                      href={WA_GROUP_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-3 rounded-xl py-4 text-[15px] font-bold text-white transition-all active:scale-[0.98]"
+                      style={{ background: '#25D366', boxShadow: '0 8px 32px rgba(37,211,102,0.30)' }}
+                    >
+                      <MessageCircle className="h-5 w-5" />
+                      Entrar no Grupo WhatsApp
+                    </a>
+                  </div>
                 </StepCard>
 
                 {/* ETAPA 2 — 3 AULAS AO VIVO */}
