@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
 
   const userId = authData.user.id
   const nomeParam = nome ? `?nome=${encodeURIComponent(nome)}` : ''
-  const destination = new URL(`/semanadodespertar-38/${userId}${nomeParam}`, request.url)
+  const destination = new URL(`/semanadodespertar-39/${userId}${nomeParam}`, request.url)
 
   const response = NextResponse.redirect(destination)
   collectedCookies.forEach(({ name, value, options }) => {
