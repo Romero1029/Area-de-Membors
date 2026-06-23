@@ -39,7 +39,7 @@ const OFERTA = {
 const AULAS: Aula[] = [
   {
     id: 1,
-    titulo: 'Aula 1 — A Raiz dos Seus Padrões',
+    titulo: 'Aula 1 — O Despertar',
     data: '30/06 · Terça-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/VvmEH5LlC_0',
@@ -48,7 +48,7 @@ const AULAS: Aula[] = [
   },
   {
     id: 2,
-    titulo: 'Aula 2 — Reprogramando o Inconsciente',
+    titulo: 'Aula 2 — A Cura',
     data: '01/07 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/NxnyXcM7WXE',
@@ -57,7 +57,7 @@ const AULAS: Aula[] = [
   },
   {
     id: 3,
-    titulo: 'Aula 3 — Transformação em Ação',
+    titulo: 'Aula 3 — A Revelação',
     data: '02/07 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/hiBJtMBPgu0',
