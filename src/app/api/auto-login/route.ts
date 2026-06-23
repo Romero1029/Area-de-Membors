@@ -8,6 +8,9 @@ export async function GET(request: NextRequest) {
   const ts = parseInt(searchParams.get('t') ?? '0', 10)
   const sig = searchParams.get('s') ?? ''
   const nome = Buffer.from(searchParams.get('n') ?? '', 'base64url').toString()
+  const routeRaw = searchParams.get('r') ? Buffer.from(searchParams.get('r')!, 'base64url').toString() : ''
+  const VALID_ROUTES = /^semanadodespertar-\d+$/
+  const targetRoute = VALID_ROUTES.test(routeRaw) ? routeRaw : 'semanadodespertar-38'
 
   const secret = process.env.CRIAR_USUARIO_API_KEY
   const loginFallback = new URL('/login', request.url)
@@ -46,7 +49,7 @@ export async function GET(request: NextRequest) {
 
   const userId = authData.user.id
   const nomeParam = nome ? `?nome=${encodeURIComponent(nome)}` : ''
-  const destination = new URL(`/semanadodespertar-38/${userId}${nomeParam}`, request.url)
+  const destination = new URL(`/${targetRoute}/${userId}${nomeParam}`, request.url)
 
   const response = NextResponse.redirect(destination)
   collectedCookies.forEach(({ name, value, options }) => {
