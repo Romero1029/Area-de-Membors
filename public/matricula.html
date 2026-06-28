@@ -1918,6 +1918,7 @@
 
 /* ── CONFIGURAÇÃO DE PAGAMENTO ───────────────────── */
 const EDGE_GERAR_PIX        = 'https://usqiyekfmwwnvkmkdlej.supabase.co/functions/v1/gerar-pix';
+const EDGE_GERAR_CONTRATO   = 'https://usqiyekfmwwnvkmkdlej.supabase.co/functions/v1/gerar-contrato';
 const LINK_PAGAMENTO_CARTAO = 'https://mpago.la/2j1hJjB';
 
 /* ── CONFIG SUPABASE ─────────────────────────────── */
@@ -2224,6 +2225,28 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
 
     // Registro ok → abrir pagamento
     openPaymentScreen(data);
+
+    // Gerar e enviar contrato via Autentique (em background, não bloqueia o fluxo)
+    fetch(EDGE_GERAR_CONTRATO, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome:              data.nome,
+        email:             data.email,
+        whatsapp:          data.telefone,
+        telefone:          data.telefone,
+        cpf:               data.cpf,
+        rg:                data.rg,
+        sexo:              data.sexo,
+        data_nascimento:   data.data_nascimento,
+        endereco:          data.endereco,
+        cep:               data.cep,
+        cidade_estado:     data.cidade_estado,
+        pais:              data.pais,
+        dia_vencimento:    data.dia_vencimento,
+        tipo_pagamento:    alunoPayload.tipo_pagamento,
+      }),
+    }).catch(e => console.warn('Contrato Autentique (background):', e.message));
 
   } catch (err) {
     console.error(err);
