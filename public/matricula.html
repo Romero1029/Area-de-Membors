@@ -1599,6 +1599,28 @@
             <span class="field-error-msg" id="err-data_nascimento">Informe a data de nascimento.</span>
           </div>
 
+          <div class="field">
+            <label class="field-label" for="rg">RG <span class="field-required">*</span></label>
+            <div class="field-control">
+              <input type="text" id="rg" name="rg" placeholder="00.000.000-0" maxlength="12" inputmode="numeric" />
+            </div>
+            <span class="field-error-msg" id="err-rg">Informe o RG.</span>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="sexo">Sexo <span class="field-required">*</span></label>
+            <div class="field-control">
+              <select id="sexo" name="sexo">
+                <option value="">Selecione</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+                <option value="Prefiro não informar">Prefiro não informar</option>
+              </select>
+            </div>
+            <span class="field-error-msg" id="err-sexo">Selecione o sexo.</span>
+          </div>
+
         </div>
       </section>
 
@@ -1908,6 +1930,14 @@ const obsAOS = new IntersectionObserver(
 document.querySelectorAll('.aos').forEach(el => obsAOS.observe(el));
 
 /* ── MASKS ───────────────────────────────────────── */
+document.getElementById('rg').addEventListener('input', function () {
+  let v = this.value.replace(/\D/g, '').slice(0, 9);
+  if (v.length > 8)      v = v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4');
+  else if (v.length > 5) v = v.replace(/(\d{2})(\d{3})(\d{0,3})/, '$1.$2.$3');
+  else if (v.length > 2) v = v.replace(/(\d{2})(\d{0,3})/, '$1.$2');
+  this.value = v;
+});
+
 document.getElementById('cpf').addEventListener('input', function () {
   let v = this.value.replace(/\D/g, '').slice(0, 11);
   if (v.length > 9)      v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
@@ -2016,6 +2046,8 @@ function validate(d) {
   if (!d.telefone || d.telefone.replace(/\D/g,'').length < 10) { fieldError('err-telefone','telefone'); ok = false; }
   if (!validarCPF(d.cpf)) { fieldError('err-cpf','cpf'); ok = false; }
   if (!d.data_nascimento) { fieldError('err-data_nascimento','data_nascimento'); ok = false; }
+  if (!d.rg || d.rg.replace(/\D/g,'').length < 7) { fieldError('err-rg','rg'); ok = false; }
+  if (!d.sexo) { fieldError('err-sexo','sexo'); ok = false; }
   if (!d.pais) { fieldError('err-pais','pais'); ok = false; }
   if (!d.cep || d.cep.replace(/\D/g,'').length < 8) { fieldError('err-cep','cep'); ok = false; }
   if (!d.endereco) { fieldError('err-endereco','endereco'); ok = false; }
@@ -2041,6 +2073,8 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
     email:           document.getElementById('email').value.trim().toLowerCase(),
     telefone:        document.getElementById('telefone').value.trim(),
     cpf:             document.getElementById('cpf').value.trim(),
+    rg:              document.getElementById('rg').value.trim(),
+    sexo:            document.getElementById('sexo').value,
     data_nascimento: document.getElementById('data_nascimento').value,
     pais:            document.getElementById('pais').value.trim(),
     cep:             document.getElementById('cep').value.trim(),
@@ -2106,6 +2140,8 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       email:                 data.email,
       whatsapp:              data.telefone,
       cpf:                   data.cpf,
+      rg:                    data.rg,
+      sexo:                  data.sexo,
       data_nascimento:       data.data_nascimento,
       pais:                  data.pais,
       cep:                   data.cep,
