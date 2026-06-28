@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [{ source: '/matricula', destination: '/matricula.html' }];
+  },
   // @react-pdf/renderer usa módulos Node.js nativos — não pode ser bundlado pelo webpack
   serverExternalPackages: ['@react-pdf/renderer'],
   images: {
