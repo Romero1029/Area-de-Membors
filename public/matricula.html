@@ -878,6 +878,42 @@
     .global-error.show { display: block; }
 
     /* ── FOOTER ───────────────────────────────────── */
+    /* ── ANHANGUERA BADGE ─────────────────────────── */
+    .anhanguera-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+      background: rgba(184,150,12,0.1);
+      border: 1px solid rgba(184,150,12,0.3);
+      border-radius: 12px;
+      padding: var(--space-3) var(--space-5);
+      max-width: 420px;
+    }
+    .anhanguera-icon { font-size: 28px; flex-shrink: 0; }
+    .anhanguera-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      gap: 2px;
+    }
+    .anhanguera-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+    }
+    .anhanguera-name {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .anhanguera-desc {
+      font-size: 0.8rem;
+      color: rgba(245,240,228,0.55);
+    }
+
     .site-footer {
       background: var(--navy-deeper);
       padding: var(--space-8) var(--space-6);
@@ -1339,9 +1375,13 @@
             </div>
 
             <div class="pix-info-list">
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Pague a entrada via PIX para confirmar sua vaga</span></div>
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>As 14 parcelas restantes serão enviadas por boleto mensalmente</span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span><strong>1º pagamento:</strong> entrada via PIX no QR Code acima para confirmar sua vaga</span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span><strong>Demais parcelas:</strong> os 14 boletos mensais serão enviados por e-mail pela plataforma <strong>Voomp</strong>, nossa parceira e da Faculdade Anhanguera</span></div>
               <div class="pix-info-item"><div class="pix-info-dot"></div><span>QR Code válido por 30 minutos</span></div>
+            </div>
+
+            <div style="background:rgba(184,150,12,0.08);border:1px solid rgba(184,150,12,0.25);border-radius:10px;padding:12px 16px;margin-top:8px;font-size:0.82rem;color:rgba(245,240,228,0.7);line-height:1.5;">
+              📌 <strong style="color:var(--gold-light);">Importante:</strong> após o pagamento do PIX, você receberá os boletos mensalmente no e-mail informado neste formulário, enviados pela plataforma <strong>Voomp</strong>.
             </div>
 
             <div class="integration-notice" id="mp-boleto-notice">
@@ -1481,7 +1521,8 @@
     </div>
 
     <div class="header-seal">
-      <span class="header-seal-letters">IDM</span>
+      <img src="/logo-idm.png" alt="Logo IDM" style="width:72px;height:72px;object-fit:contain;border-radius:50%;background:rgba(255,255,255,0.08);padding:6px;" onerror="this.style.display='none';document.getElementById('header-seal-fallback').style.display='flex';" />
+      <span class="header-seal-letters" id="header-seal-fallback" style="display:none;">IDM</span>
     </div>
 
     <p class="header-kicker">Formações de Psicanálise</p>
@@ -1496,6 +1537,15 @@
       <span class="meta-item"><span class="meta-dot"></span>Documento oficial</span>
       <span class="meta-item"><span class="meta-dot"></span>Dados protegidos</span>
       <span class="meta-item"><span class="meta-dot"></span>Preenchimento obrigatório</span>
+    </div>
+
+    <div class="anhanguera-badge">
+      <span class="anhanguera-icon">🎓</span>
+      <div class="anhanguera-text">
+        <span class="anhanguera-label">Parceria oficial</span>
+        <span class="anhanguera-name">Faculdade Anhanguera</span>
+        <span class="anhanguera-desc">Formação com Extensão Universitária reconhecida</span>
+      </div>
     </div>
 
   </div>
