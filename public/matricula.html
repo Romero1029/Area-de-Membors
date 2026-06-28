@@ -311,18 +311,8 @@
     }
 
     .header-seal {
-      width: 72px; height: 72px;
-      border: 1px solid rgba(184,150,12,0.35);
-      border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       margin: 0 auto var(--space-6);
-      position: relative;
-    }
-    .header-seal::before {
-      content: '';
-      position: absolute; inset: 5px;
-      border: 1px solid rgba(184,150,12,0.15);
-      border-radius: 50%;
     }
     .header-seal-letters {
       font-family: var(--font-heading);
@@ -1521,7 +1511,7 @@
     </div>
 
     <div class="header-seal">
-      <img src="/logo-idm.png" alt="Logo IDM" style="width:72px;height:72px;object-fit:contain;border-radius:50%;background:rgba(255,255,255,0.08);padding:6px;" onerror="this.style.display='none';document.getElementById('header-seal-fallback').style.display='flex';" />
+      <img src="/logo-idm.png" alt="Logo IDM" style="width:80px;height:80px;object-fit:contain;" onerror="this.style.display='none';document.getElementById('header-seal-fallback').style.display='flex';" />
       <span class="header-seal-letters" id="header-seal-fallback" style="display:none;">IDM</span>
     </div>
 
