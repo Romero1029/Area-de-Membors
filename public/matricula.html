@@ -870,38 +870,50 @@
     /* ── FOOTER ───────────────────────────────────── */
     /* ── ANHANGUERA BADGE ─────────────────────────── */
     .anhanguera-badge {
+      margin-top: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .anhanguera-rule {
       display: flex;
       align-items: center;
       gap: var(--space-3);
-      margin-top: var(--space-6);
-      background: rgba(184,150,12,0.1);
-      border: 1px solid rgba(184,150,12,0.3);
-      border-radius: 12px;
-      padding: var(--space-3) var(--space-5);
-      max-width: 420px;
+      width: 100%;
+      max-width: 360px;
     }
-    .anhanguera-icon { font-size: 28px; flex-shrink: 0; }
-    .anhanguera-text {
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-      gap: 2px;
+    .anhanguera-rule::before,
+    .anhanguera-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(184,150,12,0.25);
     }
     .anhanguera-label {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 600;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--gold-light);
+      color: var(--gold);
+      white-space: nowrap;
+    }
+    .anhanguera-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
     }
     .anhanguera-name {
-      font-size: 0.9375rem;
-      font-weight: 700;
-      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(245,240,228,0.9);
+      letter-spacing: 0.02em;
     }
     .anhanguera-desc {
-      font-size: 0.8rem;
-      color: rgba(245,240,228,0.55);
+      font-size: 0.72rem;
+      color: rgba(245,240,228,0.4);
+      letter-spacing: 0.04em;
     }
 
     .site-footer {
@@ -1530,9 +1542,10 @@
     </div>
 
     <div class="anhanguera-badge">
-      <span class="anhanguera-icon">🎓</span>
-      <div class="anhanguera-text">
+      <div class="anhanguera-rule">
         <span class="anhanguera-label">Parceria oficial</span>
+      </div>
+      <div class="anhanguera-content">
         <span class="anhanguera-name">Faculdade Anhanguera</span>
         <span class="anhanguera-desc">Formação com Extensão Universitária reconhecida</span>
       </div>
