@@ -1877,20 +1877,16 @@ async function init() {
   const loadEl = document.getElementById('loading-screen');
   const errEl  = document.getElementById('error-screen');
 
-  if (!lancamentoId) {
-    loadEl.classList.add('out');
-    setTimeout(() => { loadEl.style.display = 'none'; errEl.classList.add('show'); }, 600);
-    return;
-  }
-
   try {
-    const rows = await sb(
-      `lancamentos?id=eq.${lancamentoId}&select=id,nome,turma_destino_id,produto_destino,valor_mensalidade_destino,total_mensalidades_destino`
-    );
-    if (rows && rows.length > 0) {
-      lancamentoData = rows[0];
-      const el = document.getElementById('lancamento-nome');
-      if (el && lancamentoData.nome) el.textContent = lancamentoData.nome;
+    if (lancamentoId) {
+      const rows = await sb(
+        `lancamentos?id=eq.${lancamentoId}&select=id,nome,turma_destino_id,produto_destino,valor_mensalidade_destino,total_mensalidades_destino`
+      );
+      if (rows && rows.length > 0) {
+        lancamentoData = rows[0];
+        const el = document.getElementById('lancamento-nome');
+        if (el && lancamentoData.nome) el.textContent = lancamentoData.nome;
+      }
     }
   } catch (e) {
     console.warn('Lançamento não carregado:', e.message);
