@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    return [{ source: '/matricula', destination: '/matricula.html' }];
+    return [
+      { source: '/matricula', destination: '/matricula.html' },
+      { source: '/franquia', destination: '/franquia.html' },
+    ];
   },
   // @react-pdf/renderer usa módulos Node.js nativos — não pode ser bundlado pelo webpack
   serverExternalPackages: ['@react-pdf/renderer'],
