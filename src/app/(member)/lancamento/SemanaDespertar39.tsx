@@ -12,7 +12,7 @@ import {
 // CONFIG — edite aqui sem tocar no restante
 // ─────────────────────────────────────────────
 
-const WA_GROUP_URL   = 'https://chat.whatsapp.com/Fm7LJEUZy7w9RGu4gb0w51'
+const WA_GROUP_URL   = 'https://chat.whatsapp.com/HRzAlBObHpCChJ6b2fRIuu'
 const INTRO_VIDEO_ID = ''
 const EBOOK_URL      = '#'
 const BANNER_URL     = ''  // ex: '/banner-sdw39.png'
