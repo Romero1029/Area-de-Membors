@@ -2129,7 +2129,7 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
     cpf:             document.getElementById('cpf').value.trim(),
     rg:              document.getElementById('rg').value.trim(),
     sexo:            document.getElementById('sexo').value,
-    data_nascimento: document.getElementById('data_nascimento').value,
+    data_nascimento: (() => { const d=document.getElementById('nasc-dia').value, m=document.getElementById('nasc-mes').value, a=document.getElementById('nasc-ano').value; return (d&&m&&a)?`${a}-${m}-${d}`:''; })(),
     pais:            document.getElementById('pais').value.trim(),
     cep:             document.getElementById('cep').value.trim(),
     endereco:        document.getElementById('endereco').value.trim(),
