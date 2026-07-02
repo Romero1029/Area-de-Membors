@@ -1655,7 +1655,7 @@
           <div class="field">
             <label class="field-label" for="rg">RG <span class="field-required">*</span></label>
             <div class="field-control">
-              <input type="text" id="rg" name="rg" placeholder="00.000.000-0" maxlength="12" inputmode="numeric" />
+              <input type="text" id="rg" name="rg" placeholder="Número do RG" maxlength="20" />
             </div>
             <span class="field-error-msg" id="err-rg">Informe o RG.</span>
           </div>
@@ -1985,11 +1985,7 @@ document.querySelectorAll('.aos').forEach(el => obsAOS.observe(el));
 
 /* ── MASKS ───────────────────────────────────────── */
 document.getElementById('rg').addEventListener('input', function () {
-  let v = this.value.replace(/\D/g, '').slice(0, 9);
-  if (v.length > 8)      v = v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4');
-  else if (v.length > 5) v = v.replace(/(\d{2})(\d{3})(\d{0,3})/, '$1.$2.$3');
-  else if (v.length > 2) v = v.replace(/(\d{2})(\d{0,3})/, '$1.$2');
-  this.value = v;
+  this.value = this.value.replace(/[^0-9A-Za-z.\-\/]/g, '').slice(0, 20);
 });
 
 document.getElementById('cpf').addEventListener('input', function () {
@@ -2100,7 +2096,7 @@ function validate(d) {
   if (!d.telefone || d.telefone.replace(/\D/g,'').length < 10) { fieldError('err-telefone','telefone'); ok = false; }
   if (!validarCPF(d.cpf)) { fieldError('err-cpf','cpf'); ok = false; }
   if (!d.data_nascimento) { fieldError('err-data_nascimento','data_nascimento'); ok = false; }
-  if (!d.rg || d.rg.replace(/\D/g,'').length < 7) { fieldError('err-rg','rg'); ok = false; }
+  if (!d.rg || d.rg.trim().length < 4) { fieldError('err-rg','rg'); ok = false; }
   if (!d.sexo) { fieldError('err-sexo','sexo'); ok = false; }
   if (!d.pais) { fieldError('err-pais','pais'); ok = false; }
   if (!d.cep || d.cep.replace(/\D/g,'').length < 8) { fieldError('err-cep','cep'); ok = false; }
