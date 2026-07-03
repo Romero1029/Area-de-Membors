@@ -312,6 +312,24 @@
       .product:nth-child(n) { border-right: none; }
       .stat-num { font-size: 2rem; }
     }
+
+    /* ─── SPACE GALLERY ───────────────────────────────────────── */
+    .space-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 56px; }
+    .space-card { position: relative; border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 16/10; }
+    .space-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+    .space-card:hover img { transform: scale(1.03); }
+    .space-card-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 24px;
+      background: linear-gradient(transparent, rgba(0,9,28,.85));
+    }
+    .space-card-label h4 { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 500; margin-bottom: 4px; }
+    .space-card-label p { font-size: .82rem; color: var(--gray); line-height: 1.5; }
+    .space-card.full { grid-column: 1 / -1; aspect-ratio: 21/9; }
+    @media (max-width: 768px) {
+      .space-gallery { grid-template-columns: 1fr; }
+      .space-card.full { aspect-ratio: 16/10; }
+    }
   </style>
 </head>
 <body>
@@ -489,11 +507,27 @@
       </div>
       <p>Um projeto arquitetônico que une acolhimento, funcionalidade e identidade de marca para oferecer uma experiência memorável desde o primeiro contato.</p>
     </div>
-    <div class="diff-grid">
-      <div class="diff-item"><div class="diff-num">01</div><div class="diff-body"><h4>Recepção acolhedora</h4><p>Primeira impressão que transmite organização, credibilidade e profissionalismo.</p></div></div>
-      <div class="diff-item"><div class="diff-num">02</div><div class="diff-body"><h4>Salas terapêuticas</h4><p>Ambientes preparados para atendimentos clínicos com conforto, privacidade e bem-estar.</p></div></div>
-      <div class="diff-item"><div class="diff-num">03</div><div class="diff-body"><h4>Sala de aula / Centro de formação</h4><p>Espaço para cursos, workshops, palestras, supervisões e eventos exclusivos.</p></div></div>
-      <div class="diff-item"><div class="diff-num">04</div><div class="diff-body"><h4>Fachada IDM PSI</h4><p>Projeto arquitetônico padronizado para fortalecer a marca e gerar reconhecimento na cidade.</p></div></div>
+    <div class="space-gallery">
+      <div class="space-card">
+        <img src="/franquia-assets/recepcao.jpg" alt="Recepção IDM PSI" loading="lazy" />
+        <div class="space-card-label"><h4>Recepção acolhedora</h4><p>Primeira impressão que transmite organização, credibilidade e profissionalismo.</p></div>
+      </div>
+      <div class="space-card">
+        <img src="/franquia-assets/sala-terapeutica.jpg" alt="Sala terapêutica IDM PSI" loading="lazy" />
+        <div class="space-card-label"><h4>Salas terapêuticas</h4><p>Ambientes preparados para atendimentos clínicos com conforto, privacidade e bem-estar.</p></div>
+      </div>
+      <div class="space-card">
+        <img src="/franquia-assets/sala-aula.jpg" alt="Sala de aula IDM PSI" loading="lazy" />
+        <div class="space-card-label"><h4>Sala de aula / Centro de formação</h4><p>Espaço para cursos, workshops, palestras, supervisões e eventos exclusivos.</p></div>
+      </div>
+      <div class="space-card">
+        <img src="/franquia-assets/fachada.jpg" alt="Fachada IDM PSI" loading="lazy" />
+        <div class="space-card-label"><h4>Fachada IDM PSI</h4><p>Projeto arquitetônico padronizado para fortalecer a marca e gerar reconhecimento na cidade.</p></div>
+      </div>
+      <div class="space-card full">
+        <img src="/franquia-assets/planta.jpg" alt="Planta arquitetônica IDM PSI" loading="lazy" />
+        <div class="space-card-label"><h4>Projeto arquitetônico completo</h4><p>Planta baixa humanizada com recepção, salas terapêuticas, sala de aula, área administrativa e copa funcional.</p></div>
+      </div>
     </div>
   </div>
 </section>
