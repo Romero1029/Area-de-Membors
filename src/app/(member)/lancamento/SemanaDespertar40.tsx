@@ -36,15 +36,14 @@ const OFERTA = {
   url:            '#',
 }
 
-// TODO: substituir os videoId ('PENDENTE_AULA_X') pelos IDs reais assim que as 3 lives forem criadas no YouTube
 const AULAS: Aula[] = [
   {
     id: 1,
     titulo: 'Aula 1 — O Despertar',
     data: '21/07 · Terça-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_1',
-    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_1/maxresdefault.jpg',
+    youtubeUrl: 'https://youtube.com/live/0DZKat0mIEo',
+    imageUrl: 'https://img.youtube.com/vi/0DZKat0mIEo/maxresdefault.jpg',
     gcal: { titulo: 'SDW #40 — Aula 1', inicio: '20260721T230000Z', fim: '20260722T010000Z', desc: 'Aula 1 da Semana do Despertar #40 · IDM' },
   },
   {
@@ -52,8 +51,8 @@ const AULAS: Aula[] = [
     titulo: 'Aula 2 — A Cura',
     data: '22/07 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_2',
-    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_2/maxresdefault.jpg',
+    youtubeUrl: 'https://youtube.com/live/oPKHw9N0Z3g',
+    imageUrl: 'https://img.youtube.com/vi/oPKHw9N0Z3g/maxresdefault.jpg',
     gcal: { titulo: 'SDW #40 — Aula 2', inicio: '20260722T230000Z', fim: '20260723T010000Z', desc: 'Aula 2 da Semana do Despertar #40 · IDM' },
   },
   {
@@ -61,8 +60,8 @@ const AULAS: Aula[] = [
     titulo: 'Aula 3 — A Revelação',
     data: '23/07 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_3',
-    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_3/maxresdefault.jpg',
+    youtubeUrl: 'https://youtube.com/live/lNgKq0k1UKM',
+    imageUrl: 'https://img.youtube.com/vi/lNgKq0k1UKM/maxresdefault.jpg',
     gcal: { titulo: 'SDW #40 — Aula 3', inicio: '20260723T230000Z', fim: '20260724T010000Z', desc: 'Aula 3 da Semana do Despertar #40 · IDM' },
   },
 ]
