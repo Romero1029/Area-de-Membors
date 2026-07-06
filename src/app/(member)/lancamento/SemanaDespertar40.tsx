@@ -40,29 +40,29 @@ const AULAS: Aula[] = [
   {
     id: 1,
     titulo: 'Aula 1 — O Despertar',
-    data: '21/07 · Terça-feira',
+    data: '14/07 · Terça-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/0DZKat0mIEo',
     imageUrl: 'https://img.youtube.com/vi/0DZKat0mIEo/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #40 — Aula 1', inicio: '20260721T230000Z', fim: '20260722T010000Z', desc: 'Aula 1 da Semana do Despertar #40 · IDM' },
+    gcal: { titulo: 'SDW #40 — Aula 1', inicio: '20260714T230000Z', fim: '20260715T010000Z', desc: 'Aula 1 da Semana do Despertar #40 · IDM' },
   },
   {
     id: 2,
     titulo: 'Aula 2 — A Cura',
-    data: '22/07 · Quarta-feira',
+    data: '15/07 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/oPKHw9N0Z3g',
     imageUrl: 'https://img.youtube.com/vi/oPKHw9N0Z3g/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #40 — Aula 2', inicio: '20260722T230000Z', fim: '20260723T010000Z', desc: 'Aula 2 da Semana do Despertar #40 · IDM' },
+    gcal: { titulo: 'SDW #40 — Aula 2', inicio: '20260715T230000Z', fim: '20260716T010000Z', desc: 'Aula 2 da Semana do Despertar #40 · IDM' },
   },
   {
     id: 3,
     titulo: 'Aula 3 — A Revelação',
-    data: '23/07 · Quinta-feira',
+    data: '16/07 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
     youtubeUrl: 'https://youtube.com/live/lNgKq0k1UKM',
     imageUrl: 'https://img.youtube.com/vi/lNgKq0k1UKM/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #40 — Aula 3', inicio: '20260723T230000Z', fim: '20260724T010000Z', desc: 'Aula 3 da Semana do Despertar #40 · IDM' },
+    gcal: { titulo: 'SDW #40 — Aula 3', inicio: '20260716T230000Z', fim: '20260717T010000Z', desc: 'Aula 3 da Semana do Despertar #40 · IDM' },
   },
 ]
 
@@ -70,8 +70,8 @@ const XP_PER_STEP = 200
 const TOTAL_STEPS  = 3
 const STORAGE_KEY  = 'sdw40_progress'
 
-// 22h Horário de Brasília em 23/07/2026 (última aula) = 01h UTC do dia 24/07/2026
-const CERT_UNLOCK = new Date('2026-07-24T01:00:00Z')
+// 22h Horário de Brasília em 16/07/2026 (última aula) = 01h UTC do dia 17/07/2026
+const CERT_UNLOCK = new Date('2026-07-17T01:00:00Z')
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -446,7 +446,7 @@ export function SemanaDespertar40({ firstName }: { firstName: string }) {
             {/* Copy */}
             <p className="text-sm text-white/60 leading-relaxed mb-7">
               Você garantiu sua vaga no <span className="text-white/80 font-semibold">Curso Gratuito!</span> O evento será nos dias{' '}
-              <span className="text-white/80 font-semibold">21, 22 e 23 de Julho.</span>
+              <span className="text-white/80 font-semibold">14, 15 e 16 de Julho.</span>
               <br />
               Siga as etapas abaixo para garantir seu acesso completo.
             </p>
@@ -641,7 +641,7 @@ export function SemanaDespertar40({ firstName }: { firstName: string }) {
                   subtitle={
                     certUnlocked
                       ? (todasAulasFeitas ? 'Disponível para resgate!' : 'Complete as 3 aulas para resgatar.')
-                      : 'Libera às 22h · 23/07 · após a última aula'
+                      : 'Libera às 22h · 16/07 · após a última aula'
                   }
                 >
                   <div className="space-y-4">
@@ -684,7 +684,7 @@ export function SemanaDespertar40({ firstName }: { firstName: string }) {
                           </div>
                         </div>
                         <p className="text-[11px] text-white/25 leading-relaxed">
-                          📅 23/07 às 22h (Horário de Brasília) — ao final da 3ª aula ao vivo
+                          📅 16/07 às 22h (Horário de Brasília) — ao final da 3ª aula ao vivo
                         </p>
                       </div>
                     ) : todasAulasFeitas ? (
