@@ -39,11 +39,9 @@ export async function updateSession(request: NextRequest) {
 
   // Não autenticado → login, lembrando pra onde voltar depois
   if (!user && isProtected) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    url.search = ''
-    url.searchParams.set('next', pathname + request.nextUrl.search)
-    return NextResponse.redirect(url)
+    const loginUrl = new URL('/login', request.url)
+    loginUrl.searchParams.set('next', pathname + request.nextUrl.search)
+    return NextResponse.redirect(loginUrl)
   }
 
   // Autenticado em rota de auth → dashboard (admin acessa /admin pelo menu quando quiser)
