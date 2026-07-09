@@ -4,6 +4,12 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
+// Só aceita caminhos internos (evita open redirect via ?next=https://...)
+function safeNext(next: FormDataEntryValue | null): string {
+  if (typeof next === 'string' && next.startsWith('/') && !next.startsWith('//')) return next
+  return '/dashboard'
+}
+
 export async function signIn(formData: FormData) {
   const supabase = await createClient()
   const email = formData.get('email') as string
@@ -12,8 +18,8 @@ export async function signIn(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) return { error: 'E-mail ou senha inválidos.' }
 
-  // Todo mundo cai no dashboard — admins acessam /admin pelo menu quando quiserem
-  redirect('/dashboard')
+  // Volta pra onde a pessoa estava indo — admins acessam /admin pelo menu quando quiserem
+  redirect(safeNext(formData.get('next')))
 }
 
 export async function signUp(formData: FormData) {
@@ -40,7 +46,7 @@ export async function signUp(formData: FormData) {
   const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
   if (signInError) return { error: 'Conta criada, mas houve um erro ao entrar. Tente fazer login.' }
 
-  redirect('/dashboard')
+  redirect(safeNext(formData.get('next')))
 }
 
 export async function signOut() {

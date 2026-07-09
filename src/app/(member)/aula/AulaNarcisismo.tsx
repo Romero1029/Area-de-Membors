@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import {
   Sparkles, Lock, CheckCircle2, Circle, Download, FileText,
-  MessageCircle, Gift, Brain, RotateCcw,
+  Gift, Brain, RotateCcw,
 } from 'lucide-react'
 
 // ─────────────────────────────────────────────
@@ -208,8 +208,8 @@ export function AulaNarcisismo({
 
           <p className="text-sm text-white/60 leading-relaxed">
             <span className="text-white/85 font-semibold">Narcisismo na Ótica da Psicanálise</span> — um conteúdo
-            que só quem chegou até aqui tem acesso. Assista com atenção: no final você responde um quiz rápido,
-            baixa o material de apoio exclusivo e resgata um presente especial.
+            que só quem chegou até aqui tem acesso. Assista com atenção, baixe o ebook de apoio e, ao final,
+            resgate um presente especial no WhatsApp.
           </p>
         </div>
 
@@ -226,7 +226,7 @@ export function AulaNarcisismo({
             {[
               'Conteúdo raro sobre narcisismo direto da ótica da psicanálise — não é senso comum de internet.',
               'Vai te ajudar a reconhecer padrões narcisistas em relações reais, com mais clareza e menos culpa.',
-              'Só quem assiste até o fim e responde o quiz libera o material de apoio completo.',
+              'O ebook de apoio já está liberado aqui embaixo, pra você aprofundar no seu tempo.',
               'Ao concluir, você resgata um presente exclusivo direto no WhatsApp.',
             ].map((txt, i) => (
               <li key={i} className="flex items-start gap-2.5 text-sm text-white/65 leading-relaxed">
@@ -306,12 +306,12 @@ export function AulaNarcisismo({
             href={WA_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 rounded-xl py-3.5 text-[15px] font-bold text-white transition-all active:scale-[0.98]"
+            className="flex items-center justify-center gap-2 rounded-xl py-3.5 px-4 text-[15px] font-bold text-white text-center whitespace-nowrap transition-all active:scale-[0.98]"
             style={{ background: '#25D366', boxShadow: '0 8px 32px rgba(37,211,102,0.30)' }}
           >
-            <Gift className="h-5 w-5" />
-            Resgatar meu presente no WhatsApp
-            <MessageCircle className="h-5 w-5" />
+            <Gift className="h-5 w-5 shrink-0" />
+            <span className="hidden sm:inline">Resgatar meu presente no WhatsApp</span>
+            <span className="sm:hidden">Resgatar presente</span>
           </a>
         </div>
       </div>

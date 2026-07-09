@@ -8,7 +8,7 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { loginSchema, type LoginInput } from '@/lib/validations/auth'
 import { signIn } from '@/lib/actions/auth'
 
-export function LoginForm() {
+export function LoginForm({ next }: { next?: string }) {
   const [showPassword, setShowPassword] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -23,6 +23,7 @@ export function LoginForm() {
     const fd = new FormData()
     fd.append('email', data.email)
     fd.append('password', data.password)
+    if (next) fd.append('next', next)
     const result = await signIn(fd)
     if (result?.error) {
       setServerError(result.error)
@@ -90,7 +91,10 @@ export function LoginForm() {
 
       <p className="text-center text-base text-[#5f6b78]">
         Não tem conta?{' '}
-        <Link href="/register" className="font-bold hover:underline" style={{ color: '#FFB800' }}>
+        <Link
+          href={next ? `/register?next=${encodeURIComponent(next)}` : '/register'}
+          className="font-bold hover:underline" style={{ color: '#FFB800' }}
+        >
           Criar conta gratuita
         </Link>
       </p>

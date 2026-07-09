@@ -31,15 +31,18 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/cursos') ||
     pathname.startsWith('/perfil') ||
     pathname.startsWith('/certificados') ||
-    pathname.startsWith('/ao-vivo')
+    pathname.startsWith('/ao-vivo') ||
+    pathname.startsWith('/aula')
 
   const isAdminRoute = pathname.startsWith('/admin')
   const isProtected = isMemberRoute || isAdminRoute
 
-  // Não autenticado → login
+  // Não autenticado → login, lembrando pra onde voltar depois
   if (!user && isProtected) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
+    url.search = ''
+    url.searchParams.set('next', pathname + request.nextUrl.search)
     return NextResponse.redirect(url)
   }
 

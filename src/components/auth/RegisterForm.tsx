@@ -11,7 +11,7 @@ import { signUp } from '@/lib/actions/auth'
 const inputCls = 'w-full h-12 px-4 rounded-2xl text-[#1a2430] text-[15px] outline-none transition-all'
 const inputStyle = { background: 'rgba(255,255,255,0.85)', border: '1.5px solid rgba(23,36,50,0.1)' }
 
-export function RegisterForm() {
+export function RegisterForm({ next }: { next?: string }) {
   const [showPassword, setShowPassword] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -27,6 +27,7 @@ export function RegisterForm() {
     fd.append('email', data.email)
     fd.append('password', data.password)
     fd.append('full_name', data.full_name)
+    if (next) fd.append('next', next)
     const result = await signUp(fd)
     setLoading(false)
     if (result?.error) setServerError(result.error)
@@ -105,7 +106,10 @@ export function RegisterForm() {
 
       <p className="text-center text-base text-[#5f6b78]">
         Já tem uma conta?{' '}
-        <Link href="/login" className="font-bold hover:underline" style={{ color: '#FFB800' }}>
+        <Link
+          href={next ? `/login?next=${encodeURIComponent(next)}` : '/login'}
+          className="font-bold hover:underline" style={{ color: '#FFB800' }}
+        >
           Entrar na plataforma
         </Link>
       </p>
