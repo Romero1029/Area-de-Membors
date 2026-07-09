@@ -8,15 +8,11 @@ export async function signIn(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const { error, data } = await supabase.auth.signInWithPassword({ email, password })
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) return { error: 'E-mail ou senha inválidos.' }
 
-  // Redireciona por role
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase.from('profiles') as any)
-    .select('role').eq('id', data.user.id).single()
-
-  redirect(profile?.role === 'admin' ? '/admin' : '/dashboard')
+  // Todo mundo cai no dashboard — admins acessam /admin pelo menu quando quiserem
+  redirect('/dashboard')
 }
 
 export async function signUp(formData: FormData) {

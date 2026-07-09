@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Bell, Menu, X, ShoppingBag, Award, User, LogOut, ChevronDown, CalendarDays } from 'lucide-react'
+import { Bell, Menu, X, ShoppingBag, Award, User, LogOut, ChevronDown, CalendarDays, Shield } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/lib/actions/auth'
 import { IdmWordmark } from './IdmWordmark'
@@ -123,6 +123,13 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                     <Award className="h-3.5 w-3.5" /> Certificados
                   </Link>
                 </DropdownMenuItem>
+                {profile.role === 'admin' && (
+                  <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/[0.07] focus:bg-white/[0.07]">
+                    <Link href="/admin" className="flex items-center gap-2">
+                      <Shield className="h-3.5 w-3.5" /> Painel Admin
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator className="bg-white/[0.08]" />
                 <DropdownMenuItem className="cursor-pointer text-red-400 hover:bg-white/[0.07] focus:bg-white/[0.07]" asChild>
                   <form action={signOut}>
@@ -164,7 +171,11 @@ export function TopNavbar({ profile }: TopNavbarProps) {
 
                   {/* Links mobile */}
                   <nav className="flex-1 px-3 py-4 space-y-1">
-                    {[...navLinks, { href: '/perfil', label: 'Meu Perfil', icon: User }].map(({ href, label, icon: Icon }) => (
+                    {[
+                      ...navLinks,
+                      { href: '/perfil', label: 'Meu Perfil', icon: User },
+                      ...(profile.role === 'admin' ? [{ href: '/admin', label: 'Painel Admin', icon: Shield }] : []),
+                    ].map(({ href, label, icon: Icon }) => (
                       <Link
                         key={href}
                         href={href}

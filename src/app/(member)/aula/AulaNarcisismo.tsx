@@ -278,9 +278,9 @@ export function AulaNarcisismo({
             <FileText className="h-6 w-6 text-[#FFB800]" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-white/85">Material de apoio exclusivo</p>
+            <p className="text-sm font-semibold text-white/85">Ebook exclusivo — Desenvolvimento da Personalidade</p>
             <p className="text-xs text-white/35 mt-0.5 leading-relaxed">
-              Apostila em PDF com a marca do Instituto Despertamente, aprofundando o tema da aula.
+              Material de apoio em PDF do Instituto Despertamente, aprofundando o tema da aula.
             </p>
           </div>
           <a

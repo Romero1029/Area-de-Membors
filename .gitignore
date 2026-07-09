@@ -44,4 +44,7 @@ next-env.d.ts
 *.pdf
 src/lib/pdf/*.txt
 
+# materiais de apoio reais servidos pelas rotas autenticadas — não são temporários
+!materiais-privados/*.pdf
+
 .vercel
