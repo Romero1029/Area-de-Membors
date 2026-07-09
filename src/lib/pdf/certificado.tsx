@@ -14,6 +14,15 @@ function nameFontSize(nome: string): number {
   return 22
 }
 
+// O espaço do "Nos dias ___" no template é fixo (~11 caracteres em Helvetica-Bold 11pt).
+// Datas que cruzam meses (ex: "30/06 a 02/07") são mais longas — reduz a fonte para não invadir o "de" impresso.
+function daysFontSize(dias: string): number {
+  const l = dias.length
+  if (l <= 11) return 11
+  if (l <= 15) return 9
+  return 7.5
+}
+
 // ─── Estilos ──────────────────────────────────────────────────────────────────
 
 const S = StyleSheet.create({
@@ -109,13 +118,17 @@ export function CertificadoPDF({
 
           {/* Dias — preenche o 1º campo em branco "Nos dias ___" */}
           <View style={S.daysWrap}>
-            <Text style={S.daysText}>{dias}</Text>
+            <Text style={[S.daysText, { fontSize: daysFontSize(dias) }]}>{dias}</Text>
           </View>
 
           {/* Mês+ano — preenche o 2º campo em branco "de ___" */}
           <View style={S.monthWrap}>
-            <Text style={S.monthBold}>{mes}</Text>
-            <Text style={S.monthNormal}> de </Text>
+            {mes && (
+              <>
+                <Text style={S.monthBold}>{mes}</Text>
+                <Text style={S.monthNormal}> de </Text>
+              </>
+            )}
             <Text style={S.monthBold}>{ano}</Text>
           </View>
 

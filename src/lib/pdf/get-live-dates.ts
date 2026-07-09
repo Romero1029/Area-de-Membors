@@ -22,6 +22,12 @@ function extractYear(label: string): string | null {
   return match ? match[0] : null
 }
 
+const MONTH_NUMBER: Record<string, string> = {
+  janeiro: '01', fevereiro: '02', março: '03', abril: '04',
+  maio: '05', junho: '06', julho: '07', agosto: '08',
+  setembro: '09', outubro: '10', novembro: '11', dezembro: '12',
+}
+
 function formatDays(days: string[]): string {
   if (days.length === 0) return '—'
   if (days.length === 1) return days[0]
@@ -57,29 +63,40 @@ export async function getLiveDates(): Promise<LiveDates> {
 
     if (!lives?.length) return fallback
 
-    const days: string[]   = []
-    let   month: string    = ''
-    let   year: string     = new Date().getFullYear().toString()
+    const entries: { day: string; month: string }[] = []
+    let year: string = new Date().getFullYear().toString()
 
     for (const live of lives) {
       const day = extractDay(live.date_label ?? '')
-      if (day) days.push(day)
+      const month = extractMonth(live.date_label ?? '')
+      if (day && month) entries.push({ day, month })
 
-      if (!month) {
-        const m = extractMonth(live.date_label ?? '')
-        if (m) month = m
-      }
       if (!year || year === new Date().getFullYear().toString()) {
         const y = extractYear(live.date_label ?? '')
         if (y) year = y
       }
     }
 
-    return {
-      diasLive: days.length ? formatDays(days) : '—',
-      mesLive:  month || '—',
-      anoLive:  year,
+    if (!entries.length) return fallback
+
+    const months = [...new Set(entries.map(e => e.month))]
+
+    // Todas as aulas no mesmo mês — "02, 03 e 04" + mês separado
+    if (months.length === 1) {
+      return {
+        diasLive: formatDays(entries.map(e => e.day)),
+        mesLive:  months[0],
+        anoLive:  year,
+      }
     }
+
+    // Aulas cruzam meses — formato compacto "DD/MM a DD/MM" (cabe no espaço fixo do template)
+    const first = entries[0]
+    const last = entries[entries.length - 1]
+    const toSlash = (e: { day: string; month: string }) => `${e.day}/${MONTH_NUMBER[e.month] ?? '??'}`
+    const diasLive = `${toSlash(first)} a ${toSlash(last)}`
+
+    return { diasLive, mesLive: '', anoLive: year }
   } catch {
     return fallback
   }

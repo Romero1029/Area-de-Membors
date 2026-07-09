@@ -43,3 +43,5 @@ next-env.d.ts
 # arquivos temporários de desenvolvimento
 *.pdf
 src/lib/pdf/*.txt
+
+.vercel
