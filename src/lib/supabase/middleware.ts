@@ -43,32 +43,11 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Autenticado em rota de auth → redireciona por role
+  // Autenticado em rota de auth → dashboard (admin acessa /admin pelo menu quando quiser)
   if (user && isAuthRoute) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
     const url = request.nextUrl.clone()
-    url.pathname = profile?.role === 'admin' ? '/admin' : '/dashboard'
+    url.pathname = '/dashboard'
     return NextResponse.redirect(url)
-  }
-
-  // Admin tentando acessar área de aluno → redireciona para /admin
-  if (user && isMemberRoute) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (profile?.role === 'admin' && !pathname.startsWith('/cursos') && !pathname.startsWith('/perfil')) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/admin'
-      return NextResponse.redirect(url)
-    }
   }
 
   // Aluno tentando acessar /admin → redireciona para /dashboard
