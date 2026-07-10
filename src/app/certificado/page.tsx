@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { Award } from 'lucide-react'
 import { CertificadoForm } from './CertificadoForm'
+import { MatriculasCTA } from './MatriculasCTA'
 
 export const metadata = {
   title: 'Certificado — Instituto Despertamente',
@@ -64,6 +65,8 @@ export default function CertificadoPage() {
             ))}
           </div>
         </div>
+
+        <MatriculasCTA />
 
         {/* Card do formulário */}
         <div

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Award, Loader2, XCircle, AlertTriangle, Download } from 'lucide-react'
+import { ObrigadoModal } from './ObrigadoModal'
 
 // ─── Phone mask ───────────────────────────────────────────────────────────────
 
@@ -26,6 +27,7 @@ export function CertificadoForm() {
   const [nome, setNome] = useState('')
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
   const [downloadFilename, setDownloadFilename] = useState('')
+  const [showObrigadoModal, setShowObrigadoModal] = useState(false)
 
   // Form fields
   const [fullName, setFullName] = useState('')
@@ -78,6 +80,7 @@ export function CertificadoForm() {
         setDownloadFilename(filename)
         setNome(fullName.trim())
         setStatus('success')
+        setShowObrigadoModal(true)
         return
       }
 
@@ -100,6 +103,10 @@ export function CertificadoForm() {
   // ── Sucesso ──────────────────────────────────────────────────────────────────
   if (status === 'success') {
     return (
+      <>
+      {showObrigadoModal && (
+        <ObrigadoModal nome={nome} onClose={() => setShowObrigadoModal(false)} />
+      )}
       <div className="space-y-6 text-center">
         <div
           className="w-20 h-20 rounded-full flex items-center justify-center mx-auto"
@@ -138,6 +145,7 @@ export function CertificadoForm() {
           Caso o download não tenha iniciado, clique no botão acima.
         </p>
       </div>
+      </>
     )
   }
 
