@@ -18,14 +18,26 @@ function maskPhone(v: string) {
   return d.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{4})$/, '$1-$2')
 }
 
-export function CicatrizesCheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+function formatBRL(v: number) {
+  return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
+export interface CheckoutModalProps {
+  open: boolean
+  onClose: () => void
+  produtoSlug: string
+  titulo: string
+  valor: number
+  onPago?: (identifier: string) => void
+}
+
+export function CheckoutModal({ open, onClose, produtoSlug, titulo, valor, onPago }: CheckoutModalProps) {
   const [step, setStep] = useState<Step>('form')
   const [nome, setNome] = useState('')
   const [cpf, setCpf] = useState('')
   const [email, setEmail] = useState('')
   const [telefone, setTelefone] = useState('')
   const [pixCode, setPixCode] = useState('')
-  const [identifier, setIdentifier] = useState('')
   const [copiado, setCopiado] = useState(false)
   const [erro, setErro] = useState('')
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -49,10 +61,7 @@ export function CicatrizesCheckoutModal({ open, onClose }: { open: boolean; onCl
       const res = await fetch('/api/payments/syncpay/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          produtoSlug: 'cicatrizes-que-curam',
-          comprador: { nome, cpf, email, telefone },
-        }),
+        body: JSON.stringify({ produtoSlug, comprador: { nome, cpf, email, telefone } }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -61,7 +70,6 @@ export function CicatrizesCheckoutModal({ open, onClose }: { open: boolean; onCl
         return
       }
       setPixCode(json.pixCode)
-      setIdentifier(json.identifier)
       setStep('pix')
 
       pollRef.current = setInterval(async () => {
@@ -71,6 +79,7 @@ export function CicatrizesCheckoutModal({ open, onClose }: { open: boolean; onCl
         if (s.status === 'completed') {
           if (pollRef.current) clearInterval(pollRef.current)
           setStep('paid')
+          onPago?.(json.identifier)
         }
       }, 4000)
     } catch {
@@ -97,9 +106,9 @@ export function CicatrizesCheckoutModal({ open, onClose }: { open: boolean; onCl
           <div className="space-y-5">
             <div>
               <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-2xl font-bold text-white">
-                Cicatrizes que Curam
+                {titulo}
               </p>
-              <p className="text-sm text-white/45 mt-1">R$ 37,80 · Pix</p>
+              <p className="text-sm text-white/45 mt-1">{formatBRL(valor)} · Pix</p>
             </div>
             <div className="space-y-3">
               <input
@@ -131,7 +140,7 @@ export function CicatrizesCheckoutModal({ open, onClose }: { open: boolean; onCl
               disabled={!nome || cpf.replace(/\D/g, '').length !== 11 || !email || telefone.replace(/\D/g, '').length < 10}
               className="w-full py-3.5 rounded-xl bg-[#FFB800] text-[#0D1638] font-bold text-sm hover:bg-[#FFC933] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              Gerar Pix — R$ 37,80
+              Gerar Pix — {formatBRL(valor)}
             </button>
           </div>
         )}
@@ -149,7 +158,7 @@ export function CicatrizesCheckoutModal({ open, onClose }: { open: boolean; onCl
               <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-xl font-bold text-white">
                 Pague com Pix
               </p>
-              <p className="text-sm text-white/45 mt-1">R$ 37,80 · confirmação automática</p>
+              <p className="text-sm text-white/45 mt-1">{formatBRL(valor)} · confirmação automática</p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
               <p className="text-[11px] font-mono text-white/40 break-all leading-relaxed">{pixCode}</p>
@@ -173,10 +182,10 @@ export function CicatrizesCheckoutModal({ open, onClose }: { open: boolean; onCl
               <Check className="h-7 w-7 text-[#FFB800]" />
             </div>
             <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-xl font-bold text-white">
-              Vaga garantida!
+              Pagamento confirmado!
             </p>
             <p className="text-sm text-white/50 max-w-xs">
-              Pagamento confirmado. Em breve você recebe os detalhes da próxima turma pelo WhatsApp e e-mail.
+              Em breve você recebe os detalhes pelo WhatsApp e e-mail.
             </p>
           </div>
         )}
@@ -194,7 +203,7 @@ export function CicatrizesCheckoutModal({ open, onClose }: { open: boolean; onCl
   )
 }
 
-export function useCicatrizesCheckout() {
+export function useCheckoutModal() {
   const [open, setOpen] = useState(false)
   return { open, abrir: () => setOpen(true), fechar: () => setOpen(false) }
 }

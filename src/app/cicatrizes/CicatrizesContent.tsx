@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { ArrowRight, MessageCircle, Clock, Ticket, CalendarDays } from 'lucide-react'
 import {
@@ -9,7 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { CicatrizesCheckoutModal, useCicatrizesCheckout } from './CicatrizesCheckout'
+import { CheckoutModal, useCheckoutModal } from '@/components/checkout/CheckoutModal'
 
 const WA_URL = 'https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Cicatrizes%20que%20Curam.'
 
@@ -61,11 +62,19 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
 }
 
 export function CicatrizesContent() {
-  const { open, abrir, fechar } = useCicatrizesCheckout()
+  const { open, abrir, fechar } = useCheckoutModal()
+  const router = useRouter()
 
   return (
     <>
-      <CicatrizesCheckoutModal open={open} onClose={fechar} />
+      <CheckoutModal
+        open={open}
+        onClose={fechar}
+        produtoSlug="cicatrizes-que-curam"
+        titulo="Cicatrizes que Curam"
+        valor={37.80}
+        onPago={(identifier) => router.push(`/cicatrizes/obrigado?id=${identifier}`)}
+      />
 
       {/* ── HERO ─────────────────────────────────── */}
       <section

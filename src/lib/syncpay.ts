@@ -91,4 +91,16 @@ export const PRODUTOS_CHECKOUT: Record<string, { nome: string; valor: number; sp
     valor: 37.80,
     // TODO: adicionar split IDM + Jocimara assim que tivermos o user_id SyncPay dela.
   },
+  'sessao-jocimara': {
+    nome: 'Sessão com a Jocimara',
+    valor: 100.00,
+    // TODO: split 80% Jocimara / 20% IDM assim que tivermos o user_id SyncPay dela.
+  },
+  // Downsell proposto — oferta e conteúdo (áudio-aula + guia em PDF) ainda
+  // não confirmados pelo usuário, cadastrado aqui só pra deixar o fluxo
+  // de checkout pronto assim que a oferta for validada.
+  'kit-cicatrizes': {
+    nome: 'Kit Cicatrizes que Curam (áudio-aula + guia em PDF)',
+    valor: 27.00,
+  },
 }

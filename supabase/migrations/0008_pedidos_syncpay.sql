@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS public.pedidos_syncpay (
   syncpay_identifier  TEXT,
   pix_code            TEXT,
   split_config        JSONB,
+  acesso_liberado     BOOLEAN NOT NULL DEFAULT FALSE,
   created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT pedidos_syncpay_status_check CHECK (status IN ('pending', 'completed', 'failed', 'refunded', 'med'))
