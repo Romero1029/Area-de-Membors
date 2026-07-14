@@ -53,15 +53,17 @@ export default function LinksCarmenPage() {
         </div>
 
         <div
-          className="w-[104px] h-[104px] rounded-full flex items-center justify-center mb-5"
-          style={{
-            background: 'linear-gradient(135deg, #FFC933, #FFB800)',
-            boxShadow: '0 0 0 4px rgba(255,184,0,0.14), 0 12px 32px rgba(0,0,0,0.35)',
-          }}
+          className="w-[104px] h-[104px] rounded-full overflow-hidden mb-5 shrink-0"
+          style={{ boxShadow: '0 0 0 4px rgba(255,184,0,0.14), 0 12px 32px rgba(0,0,0,0.35)' }}
         >
-          <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-[34px] font-bold text-[#0D1638]">
-            JA
-          </span>
+          <Image
+            src="/jocimara-anjos.jpg"
+            alt="Jocimara Anjos"
+            width={104}
+            height={104}
+            className="w-full h-full object-cover"
+            priority
+          />
         </div>
 
         <h1 style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-[26px] font-bold text-white text-center">
