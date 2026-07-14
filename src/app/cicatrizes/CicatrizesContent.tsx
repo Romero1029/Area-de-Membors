@@ -9,6 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { CicatrizesCheckoutModal, useCicatrizesCheckout } from './CicatrizesCheckout'
 
 const WA_URL = 'https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Cicatrizes%20que%20Curam.'
 
@@ -60,8 +61,12 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
 }
 
 export function CicatrizesContent() {
+  const { open, abrir, fechar } = useCicatrizesCheckout()
+
   return (
     <>
+      <CicatrizesCheckoutModal open={open} onClose={fechar} />
+
       {/* ── HERO ─────────────────────────────────── */}
       <section
         className="relative min-h-screen flex flex-col justify-end pb-20 pt-32 overflow-hidden"
@@ -114,18 +119,16 @@ export function CicatrizesContent() {
             </div>
           </motion.div>
 
-          <motion.a
+          <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            href={WA_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={abrir}
             className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-7 py-3.5 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors whitespace-nowrap w-fit"
           >
             Garantir minha vaga
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-          </motion.a>
+          </motion.button>
         </div>
       </section>
 
@@ -243,14 +246,12 @@ export function CicatrizesContent() {
                   R$ 37,80
                 </p>
                 <p className="text-[11px] text-white/50 pt-1">jocimaraanjos.com.br/cicatrizes-cupom</p>
-                <a
-                  href={WA_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={abrir}
                   className="mt-2 flex items-center justify-center py-3 rounded-xl bg-[#FFB800] text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
                 >
                   Garantir minha vaga
-                </a>
+                </button>
               </div>
             </div>
 
@@ -314,16 +315,14 @@ export function CicatrizesContent() {
             Sua próxima turma<br />está quase fechando.
           </h2>
           <div className="flex flex-col sm:flex-row items-start gap-4">
-            <a
-              href={WA_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={abrir}
               className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-8 py-4 text-base font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
               style={{ boxShadow: '0 8px 32px rgba(255,184,0,0.22)' }}
             >
               Quero minha vaga por R$ 37,80
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </a>
+            </button>
           </div>
           <p className="text-xs font-mono text-white/25">
             Com o cupom exclusivo da Jocimara · Vagas limitadas
