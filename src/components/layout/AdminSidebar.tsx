@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, BookOpen, Users, LogOut, Sparkles, BarChart3, Rocket, Plus, Settings, ShoppingBag, Star, Image, Radio, Link2 } from 'lucide-react'
+import { LayoutDashboard, BookOpen, Users, LogOut, Sparkles, BarChart3, Rocket, Plus, Settings, ShoppingBag, Star, Image, Radio } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/lib/actions/auth'
 import type { Profile } from '@/types'
@@ -11,7 +11,6 @@ const adminNavItems = [
   { href: '/admin',              label: 'Dashboard',   icon: BarChart3,    exact: true },
   { href: '/admin/cursos',       label: 'Cursos',      icon: BookOpen },
   { href: '/admin/loja',         label: 'Loja',        icon: ShoppingBag },
-  { href: '/admin/parceiras',    label: 'Parceiras',   icon: Link2 },
   { href: '/admin/banners',      label: 'Banners',     icon: Image },
   { href: '/admin/ao-vivo',      label: 'Ao Vivo',     icon: Radio },
   { href: '/admin/depoimentos',  label: 'Depoimentos', icon: Star },

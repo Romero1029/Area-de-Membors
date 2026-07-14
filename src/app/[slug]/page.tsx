@@ -1,47 +1,78 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getPublishedPartnerBySlug } from "@/lib/actions/parceiras";
-import { AnimatedBackground } from "@/components/backgrounds/AnimatedBackground";
-import { PartnerLinkButton } from "@/components/PartnerLinkButton";
+import type { Metadata } from 'next'
+import { notFound, redirect } from 'next/navigation'
+import {
+  getPublishedPartnerBySlug,
+  getPartnerBySlugForAdmin,
+  getPartnerThemes,
+} from '@/lib/actions/parceiras'
+import { isParceirasAuthed } from '@/lib/actions/parceirasAuth'
+import { AnimatedBackground } from '@/components/backgrounds/AnimatedBackground'
+import { PartnerLinkButton } from '@/components/PartnerLinkButton'
+import { EditarParceiraForm } from '@/components/admin/EditarParceiraForm'
 
-export const revalidate = 60;
+export const revalidate = 60
+
+const ADMIN_SUFFIX = '-admin'
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const partner = await getPublishedPartnerBySlug(slug);
+  const { slug: rawSlug } = await params
 
-  if (!partner) return { title: "Página não encontrada" };
+  if (rawSlug.endsWith(ADMIN_SUFFIX)) {
+    return { title: 'Editar parceira', robots: { index: false, follow: false } }
+  }
+
+  const partner = await getPublishedPartnerBySlug(rawSlug)
+  if (!partner) return { title: 'Página não encontrada' }
 
   return {
     title: `${partner.name} | Instituto Despertamente`,
     description: partner.tagline ?? partner.bio ?? undefined,
-  };
+  }
 }
 
-export default async function PartnerPage({
+export default async function SlugRoute({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }) {
-  const { slug } = await params;
-  const partner = await getPublishedPartnerBySlug(slug);
+  const { slug: rawSlug } = await params
 
-  if (!partner || !partner.theme) notFound();
+  if (rawSlug.endsWith(ADMIN_SUFFIX)) {
+    if (!(await isParceirasAuthed())) redirect('/parceiras-login')
+
+    const slug = rawSlug.slice(0, -ADMIN_SUFFIX.length)
+    const [partner, themes] = await Promise.all([
+      getPartnerBySlugForAdmin(slug),
+      getPartnerThemes(),
+    ])
+    if (!partner) notFound()
+
+    return (
+      <div className="min-h-screen" style={{ background: '#0a0a0a' }}>
+        <div className="mx-auto max-w-2xl px-6 py-10">
+          <EditarParceiraForm partner={partner} themes={themes} links={partner.links} />
+        </div>
+      </div>
+    )
+  }
+
+  const partner = await getPublishedPartnerBySlug(rawSlug)
+  if (!partner || !partner.theme) notFound()
 
   const links = (partner.links ?? [])
     .filter((l) => l.is_active)
-    .sort((a, b) => a.position - b.position);
+    .sort((a, b) => a.position - b.position)
 
   const initials = partner.name
-    .split(" ")
+    .split(' ')
     .slice(0, 2)
     .map((w) => w[0])
-    .join("")
-    .toUpperCase();
+    .join('')
+    .toUpperCase()
 
   return (
     <main className="relative min-h-screen">
@@ -98,5 +129,5 @@ export default async function PartnerPage({
         </footer>
       </div>
     </main>
-  );
+  )
 }

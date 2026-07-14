@@ -1,9 +1,25 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/serviceAccount'
 import { revalidatePath } from 'next/cache'
 import type { Partner, PartnerTheme, PartnerWithRelations } from '@/types'
 
+const RESERVED_SLUGS = new Set(['parceiras', 'parceiras-login'])
+
+// "-admin" é reservado pra rota de edição (/[slug]-admin); "parceiras" e
+// "parceiras-login" são rotas estáticas fixas — nenhuma parceira pode usar esses slugs.
+function validateSlug(slug: string): string | null {
+  if (RESERVED_SLUGS.has(slug)) {
+    return `"${slug}" é uma URL reservada do sistema, escolha outro slug.`
+  }
+  if (slug.endsWith('-admin')) {
+    return 'O slug não pode terminar em "-admin" (reservado para a URL de edição).'
+  }
+  return null
+}
+
+// Leitura pública (temas têm policy de leitura aberta, não precisa de conta de serviço)
 export async function getPartnerThemes(): Promise<PartnerTheme[]> {
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,8 +30,11 @@ export async function getPartnerThemes(): Promise<PartnerTheme[]> {
   return data ?? []
 }
 
+// A partir daqui, funções chamadas de dentro do gate de senha (/parceiras/*,
+// /[slug]-admin) — usam a conta de serviço pra satisfazer o RLS (role=admin).
+
 export async function getAllPartners(): Promise<(Partner & { theme: PartnerTheme | null })[]> {
-  const supabase = await createClient()
+  const supabase = await createServiceClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase.from('partners') as any)
     .select('*, theme:partner_themes(*)')
@@ -24,18 +43,28 @@ export async function getAllPartners(): Promise<(Partner & { theme: PartnerTheme
   return data ?? []
 }
 
-export async function getPartnerById(id: string): Promise<PartnerWithRelations | null> {
-  const supabase = await createClient()
-  const [{ data: partner }, { data: links }] = await Promise.all([
+export async function getPartnerBySlugForAdmin(slug: string): Promise<PartnerWithRelations | null> {
+  const supabase = await createServiceClient()
+  const { data: partner } = await (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabase.from('partners') as any).select('*, theme:partner_themes(*)').eq('id', id).single(),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabase.from('partner_links') as any).select('*').eq('partner_id', id).order('position'),
-  ])
+    supabase.from('partners') as any
+  )
+    .select('*, theme:partner_themes(*)')
+    .eq('slug', slug)
+    .single()
   if (!partner) return null
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: links } = await (supabase.from('partner_links') as any)
+    .select('*')
+    .eq('partner_id', partner.id)
+    .order('position')
+
   return { ...partner, links: links ?? [] }
 }
 
+// Página pública — sem gate nenhum, usa o client anônimo normal (RLS já
+// restringe a leitura só a status='published').
 export async function getPublishedPartnerBySlug(slug: string): Promise<PartnerWithRelations | null> {
   const supabase = await createClient()
   const { data: partner } = await (
@@ -51,9 +80,14 @@ export async function getPublishedPartnerBySlug(slug: string): Promise<PartnerWi
 }
 
 export async function createPartner(formData: FormData) {
-  const supabase = await createClient()
+  const slug = (formData.get('slug') as string).trim().toLowerCase()
+
+  const slugError = validateSlug(slug)
+  if (slugError) return { error: slugError }
+
+  const supabase = await createServiceClient()
   const payload = {
-    slug: (formData.get('slug') as string).trim().toLowerCase(),
+    slug,
     name: (formData.get('name') as string).trim(),
     tagline: (formData.get('tagline') as string)?.trim() || null,
     bio: (formData.get('bio') as string)?.trim() || null,
@@ -68,14 +102,19 @@ export async function createPartner(formData: FormData) {
     .select('id')
     .single()
   if (error) return { error: error.message }
-  revalidatePath('/admin/parceiras')
-  return { success: true, id: data.id as string }
+  revalidatePath('/parceiras')
+  return { success: true, id: data.id as string, slug }
 }
 
 export async function updatePartner(id: string, formData: FormData) {
-  const supabase = await createClient()
+  const slug = (formData.get('slug') as string).trim().toLowerCase()
+
+  const slugError = validateSlug(slug)
+  if (slugError) return { error: slugError }
+
+  const supabase = await createServiceClient()
   const payload = {
-    slug: (formData.get('slug') as string).trim().toLowerCase(),
+    slug,
     name: (formData.get('name') as string).trim(),
     tagline: (formData.get('tagline') as string)?.trim() || null,
     bio: (formData.get('bio') as string)?.trim() || null,
@@ -85,34 +124,34 @@ export async function updatePartner(id: string, formData: FormData) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('partners') as any).update(payload).eq('id', id)
   if (error) return { error: error.message }
-  revalidatePath('/admin/parceiras')
-  revalidatePath(`/admin/parceiras/${id}`)
-  revalidatePath(`/parceiras/${payload.slug}`)
-  return { success: true }
+  revalidatePath('/parceiras')
+  revalidatePath(`/${slug}-admin`)
+  revalidatePath(`/${slug}`)
+  return { success: true, slug }
 }
 
 export async function setPartnerStatus(id: string, slug: string, status: 'draft' | 'published') {
-  const supabase = await createClient()
+  const supabase = await createServiceClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('partners') as any).update({ status }).eq('id', id)
   if (error) return { error: error.message }
-  revalidatePath('/admin/parceiras')
-  revalidatePath(`/admin/parceiras/${id}`)
-  revalidatePath(`/parceiras/${slug}`)
+  revalidatePath('/parceiras')
+  revalidatePath(`/${slug}-admin`)
+  revalidatePath(`/${slug}`)
   return { success: true }
 }
 
 export async function deletePartner(id: string) {
-  const supabase = await createClient()
+  const supabase = await createServiceClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('partners') as any).delete().eq('id', id)
   if (error) return { error: error.message }
-  revalidatePath('/admin/parceiras')
+  revalidatePath('/parceiras')
   return { success: true }
 }
 
 export async function addPartnerLink(partnerId: string, slug: string, formData: FormData) {
-  const supabase = await createClient()
+  const supabase = await createServiceClient()
   const { count } = await (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     supabase.from('partner_links') as any
@@ -131,8 +170,8 @@ export async function addPartnerLink(partnerId: string, slug: string, formData: 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('partner_links') as any).insert(payload)
   if (error) return { error: error.message }
-  revalidatePath(`/admin/parceiras/${partnerId}`)
-  revalidatePath(`/parceiras/${slug}`)
+  revalidatePath(`/${slug}-admin`)
+  revalidatePath(`/${slug}`)
   return { success: true }
 }
 
@@ -142,7 +181,7 @@ export async function updatePartnerLink(
   slug: string,
   formData: FormData
 ) {
-  const supabase = await createClient()
+  const supabase = await createServiceClient()
   const payload = {
     label: (formData.get('label') as string).trim(),
     url: (formData.get('url') as string).trim(),
@@ -152,8 +191,8 @@ export async function updatePartnerLink(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('partner_links') as any).update(payload).eq('id', linkId)
   if (error) return { error: error.message }
-  revalidatePath(`/admin/parceiras/${partnerId}`)
-  revalidatePath(`/parceiras/${slug}`)
+  revalidatePath(`/${slug}-admin`)
+  revalidatePath(`/${slug}`)
   return { success: true }
 }
 
@@ -163,7 +202,7 @@ export async function toggleLinkActive(
   slug: string,
   isActive: boolean
 ) {
-  const supabase = await createClient()
+  const supabase = await createServiceClient()
   const { error } = await (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     supabase.from('partner_links') as any
@@ -171,30 +210,30 @@ export async function toggleLinkActive(
     .update({ is_active: isActive })
     .eq('id', linkId)
   if (error) return { error: error.message }
-  revalidatePath(`/admin/parceiras/${partnerId}`)
-  revalidatePath(`/parceiras/${slug}`)
+  revalidatePath(`/${slug}-admin`)
+  revalidatePath(`/${slug}`)
   return { success: true }
 }
 
 export async function deletePartnerLink(linkId: string, partnerId: string, slug: string) {
-  const supabase = await createClient()
+  const supabase = await createServiceClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('partner_links') as any).delete().eq('id', linkId)
   if (error) return { error: error.message }
-  revalidatePath(`/admin/parceiras/${partnerId}`)
-  revalidatePath(`/parceiras/${slug}`)
+  revalidatePath(`/${slug}-admin`)
+  revalidatePath(`/${slug}`)
   return { success: true }
 }
 
 export async function reorderPartnerLinks(partnerId: string, slug: string, orderedIds: string[]) {
-  const supabase = await createClient()
+  const supabase = await createServiceClient()
   await Promise.all(
     orderedIds.map((id, index) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.from('partner_links') as any).update({ position: index }).eq('id', id)
     )
   )
-  revalidatePath(`/admin/parceiras/${partnerId}`)
-  revalidatePath(`/parceiras/${slug}`)
+  revalidatePath(`/${slug}-admin`)
+  revalidatePath(`/${slug}`)
   return { success: true }
 }

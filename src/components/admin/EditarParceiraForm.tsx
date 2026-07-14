@@ -57,7 +57,7 @@ export function EditarParceiraForm({
     if (!confirm(`Excluir "${partner.name}" permanentemente? Essa ação não pode ser desfeita.`)) return
     startTransition(async () => {
       await deletePartner(partner.id)
-      router.push('/admin/parceiras')
+      router.push('/parceiras')
     })
   }
 
@@ -66,7 +66,7 @@ export function EditarParceiraForm({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link
-            href="/admin/parceiras"
+            href="/parceiras"
             className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors"
             style={{ background: '#1a1a1a', color: '#888' }}
           >
@@ -75,12 +75,12 @@ export function EditarParceiraForm({
           <div>
             <h1 className="text-xl font-bold text-white">{partner.name}</h1>
             <a
-              href={`/parceiras/${slug}`}
+              href={`/${slug}`}
               target="_blank"
               className="text-xs underline"
               style={{ color: '#FFA902' }}
             >
-              /parceiras/{slug} ↗
+              /{slug} ↗
             </a>
           </div>
         </div>
@@ -128,7 +128,7 @@ export function EditarParceiraForm({
               className="flex items-center rounded-xl px-3 py-2.5 focus-within:ring-1 focus-within:ring-[#FFA902]"
               style={inputStyle}
             >
-              <span style={{ color: '#555' }}>/parceiras/</span>
+              <span style={{ color: '#555' }}>/</span>
               <input
                 name="slug"
                 defaultValue={partner.slug}

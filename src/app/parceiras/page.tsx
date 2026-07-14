@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { getAllPartners } from '@/lib/actions/parceiras'
 import { Link2, ChevronRight, Plus, Eye, EyeOff } from 'lucide-react'
 
-export default async function AdminParceirasPage() {
+export default async function ParceirasPage() {
   const partners = await getAllPartners()
 
   return (
@@ -15,7 +15,7 @@ export default async function AdminParceirasPage() {
           </p>
         </div>
         <Link
-          href="/admin/parceiras/nova"
+          href="/parceiras/nova"
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
           style={{ background: '#FFA902', color: '#0a0a0a' }}
         >
@@ -27,7 +27,7 @@ export default async function AdminParceirasPage() {
         {partners.map((partner) => (
           <Link
             key={partner.id}
-            href={`/admin/parceiras/${partner.id}/editar`}
+            href={`/${partner.slug}-admin`}
             className="flex items-center gap-4 px-5 py-4 rounded-xl transition-colors group"
             style={{ background: '#111', border: '1px solid #1a1a1a' }}
           >
@@ -42,7 +42,7 @@ export default async function AdminParceirasPage() {
 
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-white truncate">{partner.name}</p>
-              <p className="text-xs mt-0.5" style={{ color: '#555' }}>/parceiras/{partner.slug}</p>
+              <p className="text-xs mt-0.5" style={{ color: '#555' }}>/{partner.slug}</p>
             </div>
 
             <div className="flex items-center gap-3 shrink-0">
@@ -64,7 +64,7 @@ export default async function AdminParceirasPage() {
           <div className="text-center py-16 rounded-xl" style={{ background: '#111', border: '1px solid #1a1a1a' }}>
             <Link2 className="w-8 h-8 mx-auto mb-3" style={{ color: '#333' }} />
             <p className="text-sm font-medium" style={{ color: '#555' }}>Nenhuma parceira cadastrada ainda.</p>
-            <Link href="/admin/parceiras/nova" className="inline-block mt-3 text-xs underline" style={{ color: '#FFA902' }}>
+            <Link href="/parceiras/nova" className="inline-block mt-3 text-xs underline" style={{ color: '#FFA902' }}>
               Criar a primeira parceira
             </Link>
           </div>

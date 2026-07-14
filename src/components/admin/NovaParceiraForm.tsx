@@ -27,7 +27,7 @@ export function NovaParceiraForm({ themes }: { themes: PartnerTheme[] }) {
       if (result.error) {
         setErr(result.error)
       } else {
-        router.push(`/admin/parceiras/${result.id}/editar`)
+        router.push(`/${result.slug}-admin`)
       }
     })
   }
@@ -36,7 +36,7 @@ export function NovaParceiraForm({ themes }: { themes: PartnerTheme[] }) {
     <div className="max-w-2xl space-y-6 pb-10">
       <div className="flex items-center gap-3">
         <Link
-          href="/admin/parceiras"
+          href="/parceiras"
           className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors"
           style={{ background: '#1a1a1a', color: '#888' }}
         >
@@ -70,7 +70,7 @@ export function NovaParceiraForm({ themes }: { themes: PartnerTheme[] }) {
               className="flex items-center rounded-xl px-3 py-2.5 focus-within:ring-1 focus-within:ring-[#FFA902]"
               style={inputStyle}
             >
-              <span style={{ color: '#555' }}>/parceiras/</span>
+              <span style={{ color: '#555' }}>/</span>
               <input
                 name="slug"
                 required
