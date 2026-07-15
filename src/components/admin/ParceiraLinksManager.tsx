@@ -111,68 +111,78 @@ function SortableLinkRow({
     <div
       ref={setNodeRef}
       style={{ ...style, background: '#0d0d0d', border: '1px solid #1a1a1a' }}
-      className="flex items-center gap-3 rounded-lg p-3"
+      className="space-y-2 rounded-lg p-3"
     >
-      <button
-        type="button"
-        {...attributes}
-        {...listeners}
-        className="cursor-grab"
-        style={{ color: '#555' }}
-        aria-label="Reordenar"
-      >
-        <GripVertical size={18} />
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          {...attributes}
+          {...listeners}
+          className="shrink-0 cursor-grab"
+          style={{ color: '#555' }}
+          aria-label="Reordenar"
+        >
+          <GripVertical size={18} />
+        </button>
 
-      <Icon className="h-4 w-4 shrink-0" style={{ color: '#888' }} aria-hidden />
+        <Icon className="h-4 w-4 shrink-0" style={{ color: '#888' }} aria-hidden />
 
-      <div className="grid flex-1 grid-cols-1 gap-2 sm:grid-cols-2">
         <input
           defaultValue={link.label}
           onBlur={(e) => handleBlurUpdate('label', e.target.value)}
           placeholder="Texto do link"
-          className={inputCls}
+          className={`min-w-0 flex-1 ${inputCls}`}
           style={inputStyle}
         />
+
+        <button
+          type="button"
+          onClick={() =>
+            startTransition(async () => {
+              await deletePartnerLink(link.id, partnerId, slug)
+            })
+          }
+          style={{ color: '#555' }}
+          className="shrink-0 hover:text-red-400"
+          aria-label="Remover link"
+        >
+          <Trash2 size={16} />
+        </button>
+      </div>
+
+      <div className="flex items-center gap-2 pl-[30px]">
         <input
           defaultValue={link.url}
           onBlur={(e) => handleBlurUpdate('url', e.target.value)}
           placeholder="https://..."
-          className={inputCls}
+          className={`min-w-0 flex-1 ${inputCls}`}
           style={inputStyle}
         />
-      </div>
 
-      <IconSelect value={icon} onChange={handleIconChange} className={`${inputCls} text-xs`} />
-
-      <label className="flex items-center gap-1.5 text-xs" style={{ color: '#888' }}>
-        <input
-          type="checkbox"
-          defaultChecked={link.is_active}
-          disabled={isPending}
-          onChange={(e) => {
-            const checked = e.target.checked
-            startTransition(async () => {
-              await toggleLinkActive(link.id, partnerId, slug, checked)
-            })
-          }}
+        <IconSelect
+          value={icon}
+          onChange={handleIconChange}
+          className="w-32 shrink-0 rounded-lg px-2 py-1.5 text-xs text-white outline-none focus:ring-1 focus:ring-[#FFA902]"
         />
-        ativo
-      </label>
 
-      <button
-        type="button"
-        onClick={() =>
-          startTransition(async () => {
-            await deletePartnerLink(link.id, partnerId, slug)
-          })
-        }
-        style={{ color: '#555' }}
-        className="hover:text-red-400"
-        aria-label="Remover link"
-      >
-        <Trash2 size={16} />
-      </button>
+        <label
+          className="flex shrink-0 items-center gap-1.5 text-xs"
+          style={{ color: '#888' }}
+        >
+          <input
+            type="checkbox"
+            defaultChecked={link.is_active}
+            disabled={isPending}
+            onChange={(e) => {
+              const checked = e.target.checked
+              startTransition(async () => {
+                await toggleLinkActive(link.id, partnerId, slug, checked)
+              })
+            }}
+          />
+          ativo
+        </label>
+      </div>
     </div>
   )
 }
@@ -257,18 +267,26 @@ export function ParceiraLinksManager({
           name="label"
           placeholder="Texto do link (ex: Instagram)"
           required
-          className={`flex-1 ${inputCls}`}
+          className={`min-w-0 flex-1 ${inputCls}`}
           style={inputStyle}
         />
         <input
           name="url"
           placeholder="https://..."
           required
-          className={`flex-1 ${inputCls}`}
+          className={`min-w-0 flex-1 ${inputCls}`}
           style={inputStyle}
         />
-        <IconSelect value={newIcon} onChange={setNewIcon} className={inputCls} />
-        <select name="type" className={inputCls} style={inputStyle}>
+        <IconSelect
+          value={newIcon}
+          onChange={setNewIcon}
+          className="w-full shrink-0 rounded-lg px-2.5 py-1.5 text-sm text-white outline-none focus:ring-1 focus:ring-[#FFA902] sm:w-36"
+        />
+        <select
+          name="type"
+          className="w-full shrink-0 rounded-lg px-2.5 py-1.5 text-sm text-white outline-none focus:ring-1 focus:ring-[#FFA902] sm:w-28"
+          style={inputStyle}
+        >
           <option value="link">Link</option>
           <option value="social">Social</option>
           <option value="destaque">Destaque</option>
