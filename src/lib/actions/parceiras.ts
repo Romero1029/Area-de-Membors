@@ -119,7 +119,6 @@ export async function updatePartner(id: string, formData: FormData) {
     tagline: (formData.get('tagline') as string)?.trim() || null,
     bio: (formData.get('bio') as string)?.trim() || null,
     theme_id: formData.get('theme_id') as string,
-    avatar_url: (formData.get('avatar_url') as string)?.trim() || null,
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('partners') as any).update(payload).eq('id', id)
@@ -128,6 +127,40 @@ export async function updatePartner(id: string, formData: FormData) {
   revalidatePath(`/${slug}-admin`)
   revalidatePath(`/${slug}`)
   return { success: true, slug }
+}
+
+export async function uploadPartnerAvatar(partnerId: string, slug: string, formData: FormData) {
+  const file = formData.get('avatar') as File | null
+  if (!file || file.size === 0) return { error: 'Nenhuma imagem selecionada.' }
+  if (!file.type.startsWith('image/')) return { error: 'O arquivo precisa ser uma imagem.' }
+
+  const supabase = await createServiceClient()
+  const ext = file.name.split('.').pop() || 'jpg'
+  const path = `${partnerId}/avatar.${ext}`
+
+  const { error: uploadError } = await supabase.storage
+    .from('partner-avatars')
+    .upload(path, file, { upsert: true })
+  if (uploadError) return { error: uploadError.message }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from('partner-avatars').getPublicUrl(path)
+  // cache-bust pra refletir a troca de foto imediatamente na página pública
+  const avatarUrl = `${publicUrl}?v=${Date.now()}`
+
+  const { error: updateError } = await (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    supabase.from('partners') as any
+  )
+    .update({ avatar_url: avatarUrl })
+    .eq('id', partnerId)
+  if (updateError) return { error: updateError.message }
+
+  revalidatePath('/parceiras')
+  revalidatePath(`/${slug}-admin`)
+  revalidatePath(`/${slug}`)
+  return { success: true, avatarUrl }
 }
 
 export async function setPartnerStatus(id: string, slug: string, status: 'draft' | 'published') {

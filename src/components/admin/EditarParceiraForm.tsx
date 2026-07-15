@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Loader2, Eye, EyeOff, Trash2 } from 'lucide-react'
-import { deletePartner, setPartnerStatus, updatePartner } from '@/lib/actions/parceiras'
+import { ArrowLeft, Loader2, Eye, EyeOff, Trash2, Camera } from 'lucide-react'
+import { deletePartner, setPartnerStatus, updatePartner, uploadPartnerAvatar } from '@/lib/actions/parceiras'
 import { ParceiraThemePicker } from './ParceiraThemePicker'
 import { ParceiraLinksManager } from './ParceiraLinksManager'
 import type { Partner, PartnerLink, PartnerTheme } from '@/types'
@@ -28,6 +28,28 @@ export function EditarParceiraForm({
   const [err, setErr] = useState<string | null>(null)
   const [status, setStatus] = useState(partner.status)
   const [slug, setSlug] = useState(partner.slug)
+  const [avatarUrl, setAvatarUrl] = useState(partner.avatar_url)
+  const [avatarErr, setAvatarErr] = useState<string | null>(null)
+  const [isUploadingAvatar, startAvatarTransition] = useTransition()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setAvatarErr(null)
+
+    const formData = new FormData()
+    formData.set('avatar', file)
+
+    startAvatarTransition(async () => {
+      const result = await uploadPartnerAvatar(partner.id, slug, formData)
+      if (result.error) {
+        setAvatarErr(result.error)
+      } else {
+        setAvatarUrl(result.avatarUrl ?? null)
+      }
+    })
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -162,15 +184,55 @@ export function EditarParceiraForm({
 
         <div className="space-y-1.5">
           <label className="block text-xs font-semibold" style={{ color: '#aaa' }}>
-            URL da foto/avatar
+            Foto
           </label>
-          <input
-            name="avatar_url"
-            defaultValue={partner.avatar_url ?? ''}
-            placeholder="https://..."
-            className={inputCls}
-            style={inputStyle}
-          />
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploadingAvatar}
+              className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full disabled:opacity-60"
+              style={{ background: '#0d0d0d', border: '1px solid #2a2a2a' }}
+              aria-label="Trocar foto"
+            >
+              {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatarUrl} alt={partner.name} className="h-full w-full object-cover" />
+              ) : (
+                <Camera className="h-6 w-6" style={{ color: '#555' }} />
+              )}
+              {isUploadingAvatar && (
+                <div
+                  className="absolute inset-0 flex items-center justify-center"
+                  style={{ background: 'rgba(0,0,0,0.6)' }}
+                >
+                  <Loader2 className="h-5 w-5 animate-spin text-white" />
+                </div>
+              )}
+            </button>
+            <div>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploadingAvatar}
+                className="rounded-lg px-3 py-1.5 text-xs font-semibold disabled:opacity-60"
+                style={{ background: '#1a1a1a', color: '#fff' }}
+              >
+                {avatarUrl ? 'Trocar foto' : 'Adicionar foto'}
+              </button>
+              <p className="mt-1 text-xs" style={{ color: '#555' }}>
+                JPG, PNG, WebP ou GIF — até 5MB
+              </p>
+              {avatarErr && <p className="mt-1 text-xs text-red-400">{avatarErr}</p>}
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="hidden"
+            />
+          </div>
         </div>
 
         <div className="space-y-1.5">
