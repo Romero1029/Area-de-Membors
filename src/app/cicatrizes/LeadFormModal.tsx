@@ -3,9 +3,8 @@
 import { useState } from 'react'
 import { X, Loader2 } from 'lucide-react'
 
-// URL do checkout hospedado pelo SyncPay pro Cicatrizes que Curam — trocar
-// assim que o produto for publicado no painel deles (Checkout > Links).
-const SYNCPAY_CHECKOUT_URL = ''
+// URL do checkout hospedado pelo SyncPay pro Cicatrizes que Curam.
+const SYNCPAY_CHECKOUT_URL = 'https://syncpay.link/bWOKbO'
 
 function maskPhone(v: string) {
   const d = v.replace(/\D/g, '').slice(0, 11)
