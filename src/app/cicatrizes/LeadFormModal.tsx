@@ -1,7 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Check, Loader2 } from 'lucide-react'
+import { X, Loader2 } from 'lucide-react'
+
+// URL do checkout hospedado pelo SyncPay pro Cicatrizes que Curam — trocar
+// assim que o produto for publicado no painel deles (Checkout > Links).
+const SYNCPAY_CHECKOUT_URL = ''
 
 function maskPhone(v: string) {
   const d = v.replace(/\D/g, '').slice(0, 11)
@@ -13,7 +17,6 @@ export function LeadFormModal({ open, onClose }: { open: boolean; onClose: () =>
   const [email, setEmail] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
   const [enviando, setEnviando] = useState(false)
-  const [enviado, setEnviado] = useState(false)
   const [erro, setErro] = useState('')
 
   if (!open) return null
@@ -33,11 +36,19 @@ export function LeadFormModal({ open, onClose }: { open: boolean; onClose: () =>
         setEnviando(false)
         return
       }
-      setEnviado(true)
+
+      if (!SYNCPAY_CHECKOUT_URL) {
+        setErro('Checkout ainda não configurado — avise o time.')
+        setEnviando(false)
+        return
+      }
+
+      const params = new URLSearchParams({ name: nome, email })
+      window.location.href = `${SYNCPAY_CHECKOUT_URL}?${params.toString()}`
     } catch {
       setErro('Erro ao conectar. Tente novamente.')
+      setEnviando(false)
     }
-    setEnviando(false)
   }
 
   return (
@@ -48,56 +59,45 @@ export function LeadFormModal({ open, onClose }: { open: boolean; onClose: () =>
           <X className="h-5 w-5" />
         </button>
 
-        {!enviado ? (
-          <div className="space-y-5">
-            <div>
-              <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-2xl font-bold text-white">
-                Quero garantir meu ingresso
-              </p>
-              <p className="text-sm text-white/45 mt-1">Deixe seus dados que a Jocimara te chama pessoalmente</p>
-            </div>
-            <div className="space-y-3">
-              <input
-                value={nome} onChange={e => setNome(e.target.value)}
-                placeholder="Nome completo"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFB800]/50"
-              />
-              <input
-                value={email} onChange={e => setEmail(e.target.value)}
-                placeholder="E-mail"
-                type="email"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFB800]/50"
-              />
-              <input
-                value={whatsapp} onChange={e => setWhatsapp(maskPhone(e.target.value))}
-                placeholder="WhatsApp"
-                inputMode="numeric"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFB800]/50"
-              />
-            </div>
-            {erro && <p className="text-sm text-red-300">{erro}</p>}
-            <button
-              onClick={submeter}
-              disabled={enviando || !nome || !email || whatsapp.replace(/\D/g, '').length < 10}
-              className="w-full py-3.5 rounded-xl bg-[#FFB800] text-[#0D1638] font-bold text-sm hover:bg-[#FFC933] disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
-            >
-              {enviando && <Loader2 className="h-4 w-4 animate-spin" />}
-              {enviando ? 'Enviando...' : 'Quero garantir meu ingresso'}
-            </button>
-          </div>
-        ) : (
-          <div className="py-10 flex flex-col items-center gap-3 text-center">
-            <div className="w-14 h-14 rounded-full bg-[#FFB800]/15 flex items-center justify-center">
-              <Check className="h-7 w-7 text-[#FFB800]" />
-            </div>
-            <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-xl font-bold text-white">
-              Recebemos seus dados!
+        <div className="space-y-5">
+          <div>
+            <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-2xl font-bold text-white">
+              Quero garantir meu ingresso
             </p>
-            <p className="text-sm text-white/50 max-w-xs">
-              Em instantes você recebe um e-mail e uma mensagem da Jocimara no WhatsApp com todos os detalhes pra garantir sua vaga.
-            </p>
+            <p className="text-sm text-white/45 mt-1">Preencha seus dados pra ir direto pro checkout</p>
           </div>
-        )}
+          <div className="space-y-3">
+            <input
+              value={nome} onChange={e => setNome(e.target.value)}
+              placeholder="Nome completo"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFB800]/50"
+            />
+            <input
+              value={email} onChange={e => setEmail(e.target.value)}
+              placeholder="E-mail"
+              type="email"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFB800]/50"
+            />
+            <input
+              value={whatsapp} onChange={e => setWhatsapp(maskPhone(e.target.value))}
+              placeholder="WhatsApp"
+              inputMode="numeric"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFB800]/50"
+            />
+          </div>
+          {erro && <p className="text-sm text-red-300">{erro}</p>}
+          <button
+            onClick={submeter}
+            disabled={enviando || !nome || !email || whatsapp.replace(/\D/g, '').length < 10}
+            className="w-full py-3.5 rounded-xl bg-[#FFB800] text-[#0D1638] font-bold text-sm hover:bg-[#FFC933] disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          >
+            {enviando && <Loader2 className="h-4 w-4 animate-spin" />}
+            {enviando ? 'Enviando...' : 'Ir para o checkout'}
+          </button>
+          <p className="text-[11px] text-white/30 text-center">
+            Você também recebe um e-mail e uma mensagem da Jocimara no WhatsApp com todos os detalhes.
+          </p>
+        </div>
       </div>
     </div>
   )
