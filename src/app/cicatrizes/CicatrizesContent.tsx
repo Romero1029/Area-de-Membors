@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef } from 'react'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { ArrowRight, MessageCircle, Clock, Ticket, CalendarDays } from 'lucide-react'
@@ -11,10 +10,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { CheckoutModal, useCheckoutModal } from '@/components/checkout/CheckoutModal'
+import { useCheckoutModal } from '@/components/checkout/CheckoutModal'
 import { LeadFormModal } from './LeadFormModal'
 
-const WA_URL = 'https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Cicatrizes%20que%20Curam.'
+const WA_URL = 'https://wa.me/5511919434040?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Cicatrizes%20que%20Curam.'
+
+const bonusStack = [
+  { t: 'Kit de reflexão pós-workshop', d: 'Um guia em PDF com exercícios pra continuar o processo em casa, nos dias seguintes ao encontro.' },
+  { t: 'Prioridade nas próximas turmas', d: 'Acesso antecipado pra garantir vaga nos próximos workshops, antes da abertura geral.' },
+  { t: 'Grupo de apoio no WhatsApp', d: 'Espaço com as outras participantes da sua turma, pra continuar a troca depois do encontro.' },
+]
 
 const paraQuemE = [
   'Quem sente que carrega marcas do passado que ainda pesam no presente',
@@ -33,8 +38,8 @@ const faqItems = [
     a: 'Não. O workshop recebe tanto quem nunca fez terapia quanto quem já tem processo em andamento e quer um espaço coletivo complementar.',
   },
   {
-    q: 'Como funciona o cupom da Jocimara?',
-    a: 'O investimento padrão é R$49,90. Usando o cupom ou o link da Jocimara, o valor cai para R$37,80 — ela mesma libera esse desconto pra quem a acompanha.',
+    q: 'Tem algum desconto disponível?',
+    a: 'De vez em quando a Jocimara libera cupons pra quem a acompanha de perto. Se você tiver um código, é só aplicar na etapa de pagamento do checkout.',
   },
   {
     q: 'Com que frequência o workshop acontece?',
@@ -64,20 +69,10 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
 }
 
 export function CicatrizesContent() {
-  const { open, abrir, fechar } = useCheckoutModal()
   const lead = useCheckoutModal()
-  const router = useRouter()
 
   return (
     <>
-      <CheckoutModal
-        open={open}
-        onClose={fechar}
-        produtoSlug="cicatrizes-que-curam"
-        titulo="Cicatrizes que Curam"
-        valor={37.80}
-        onPago={(identifier) => router.push(`/cicatrizes/obrigado?id=${identifier}`)}
-      />
       <LeadFormModal open={lead.open} onClose={lead.fechar} />
 
       {/* ── HERO ─────────────────────────────────── */}
@@ -223,38 +218,37 @@ export function CicatrizesContent() {
               Investimento.
             </h2>
             <p className="text-sm text-white/45 leading-relaxed mb-10 max-w-md">
-              Valor de referência R$250 — o ingresso avulso sai por bem menos.
+              Valor de referência R$250 — o ingresso avulso sai por bem menos, e ainda vem com bônus.
             </p>
 
-            <div className="grid sm:grid-cols-2 gap-4 max-w-2xl">
-              <div className="rounded-2xl border border-white/8 bg-[#0D1638] p-7 space-y-2.5">
-                <p className="text-[11px] font-mono uppercase tracking-widest text-white/30">Investimento padrão</p>
-                <p className="text-xs text-white/25 line-through">R$ 250,00</p>
-                <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-4xl font-bold text-white leading-none pt-1">
+            <div className="grid sm:grid-cols-[1fr_1.3fr] gap-6 items-start">
+              <div className="rounded-2xl border p-7 space-y-3" style={{ borderColor: 'rgba(255,184,0,0.35)', background: 'linear-gradient(160deg, rgba(255,184,0,0.08), rgba(10,18,50,0.4))' }}>
+                <p className="text-[11px] font-mono uppercase tracking-widest text-[#FFB800]">Seu ingresso hoje</p>
+                <p className="text-xs text-white/30 line-through">R$ 250,00</p>
+                <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-5xl font-bold text-white leading-none pt-1">
                   R$ 49,90
                 </p>
-                <p className="text-[11px] text-white/30 pt-1">Em todos os canais do IDM</p>
+                <p className="text-[11px] text-white/40 pt-1">Pix ou cartão · em todos os canais do IDM</p>
+                <button
+                  onClick={lead.abrir}
+                  className="w-full mt-3 flex items-center justify-center py-3.5 rounded-xl bg-[#FFB800] text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
+                >
+                  Quero garantir meu ingresso
+                </button>
               </div>
 
-              <div
-                className="rounded-2xl border p-7 space-y-2.5 relative"
-                style={{ borderColor: 'rgba(255,184,0,0.35)', background: 'linear-gradient(160deg, rgba(255,184,0,0.08), rgba(10,18,50,0.4))' }}
-              >
-                <p className="text-[11px] font-mono uppercase tracking-widest text-[#FFB800]">Com o cupom da Jocimara</p>
-                <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-4xl font-bold text-[#FFC933] leading-none pt-1">
-                  R$ 37,80
-                </p>
-                <p className="text-[11px] text-white/50 pt-1">jocimaraanjos.com.br/cicatrizes-cupom</p>
-                <button
-                  onClick={abrir}
-                  className="mt-2 flex items-center justify-center py-3 rounded-xl bg-[#FFB800] text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
-                >
-                  Garantir minha vaga
-                </button>
+              <div className="space-y-3">
+                <p className="text-[11px] font-mono uppercase tracking-widest text-white/30 mb-1">Ao garantir sua vaga, você também leva</p>
+                {bonusStack.map((b) => (
+                  <div key={b.t} className="rounded-xl border border-white/8 bg-[#0D1638] p-4">
+                    <p className="text-sm font-semibold text-white">{b.t}</p>
+                    <p className="text-xs text-white/40 mt-1 leading-relaxed">{b.d}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <p className="text-xs text-white/30 mt-6 max-w-md">
+            <p className="text-xs text-white/30 mt-8 max-w-md">
               Ganhou o workshop de bônus em outro produto do IDM? Sua vaga já está garantida, sem custo adicional.
             </p>
 
@@ -315,16 +309,16 @@ export function CicatrizesContent() {
           </h2>
           <div className="flex flex-col sm:flex-row items-start gap-4">
             <button
-              onClick={abrir}
+              onClick={lead.abrir}
               className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-8 py-4 text-base font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
               style={{ boxShadow: '0 8px 32px rgba(255,184,0,0.22)' }}
             >
-              Quero minha vaga por R$ 37,80
+              Quero garantir meu ingresso
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
           </div>
           <p className="text-xs font-mono text-white/25">
-            Com o cupom exclusivo da Jocimara · Vagas limitadas
+            Vagas limitadas · turma pequena de propósito
           </p>
         </Reveal>
       </section>

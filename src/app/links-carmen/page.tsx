@@ -56,7 +56,7 @@ const links = [
     icon: Sparkles,
     title: 'Workshop Cicatrizes que Curam',
     sub: '3h · vagas limitadas · uma vez por mês',
-    tag: 'R$ 37,80 com cupom',
+    tag: 'R$ 49,90',
   },
   {
     href: 'https://mapa.seunumerologo.com.br/',

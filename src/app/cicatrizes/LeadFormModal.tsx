@@ -42,7 +42,7 @@ export function LeadFormModal({ open, onClose }: { open: boolean; onClose: () =>
         return
       }
 
-      const params = new URLSearchParams({ name: nome, email })
+      const params = new URLSearchParams({ name: nome, email, phone: whatsapp.replace(/\D/g, '') })
       window.location.href = `${SYNCPAY_CHECKOUT_URL}?${params.toString()}`
     } catch {
       setErro('Erro ao conectar. Tente novamente.')
