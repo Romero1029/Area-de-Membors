@@ -12,6 +12,10 @@ import {
 } from '@/components/ui/accordion'
 import { useCheckoutModal } from '@/components/checkout/CheckoutModal'
 import { LeadFormModal } from './LeadFormModal'
+import { VideoPlayer } from './VideoPlayer'
+
+// Vídeo provisório — trocar pelo vídeo de vendas real assim que estiver pronto.
+const VIDEO_VENDAS_YOUTUBE_ID = 'megMz1qsixU'
 
 const WA_URL = 'https://wa.me/5511919434040?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Cicatrizes%20que%20Curam.'
 
@@ -128,7 +132,7 @@ export function CicatrizesContent() {
 
       {/* ── MANIFESTO ────────────────────────────── */}
       <section className="bg-[#0A1232] border-y border-white/5">
-        <Reveal className="max-w-2xl mx-auto px-6 sm:px-10 py-20">
+        <Reveal className="max-w-2xl mx-auto px-6 sm:px-10 py-20 space-y-12">
           <p
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
             className="text-2xl sm:text-3xl font-light leading-relaxed text-white/45"
@@ -140,6 +144,7 @@ export function CicatrizesContent() {
             elaborar o que ainda pesa e{' '}
             <span className="text-white/80">seguir mais leve.</span>
           </p>
+          <VideoPlayer youtubeId={VIDEO_VENDAS_YOUTUBE_ID} title="Cicatrizes que Curam — vídeo de apresentação" />
         </Reveal>
       </section>
 
