@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { ArrowRight, MessageCircle, Clock, Ticket, CalendarDays } from 'lucide-react'
 import {
@@ -11,6 +12,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { CheckoutModal, useCheckoutModal } from '@/components/checkout/CheckoutModal'
+import { LeadFormModal } from './LeadFormModal'
 
 const WA_URL = 'https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Cicatrizes%20que%20Curam.'
 
@@ -63,6 +65,7 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
 
 export function CicatrizesContent() {
   const { open, abrir, fechar } = useCheckoutModal()
+  const lead = useCheckoutModal()
   const router = useRouter()
 
   return (
@@ -75,43 +78,29 @@ export function CicatrizesContent() {
         valor={37.80}
         onPago={(identifier) => router.push(`/cicatrizes/obrigado?id=${identifier}`)}
       />
+      <LeadFormModal open={lead.open} onClose={lead.fechar} />
 
       {/* ── HERO ─────────────────────────────────── */}
-      <section
-        className="relative min-h-screen flex flex-col justify-end pb-20 pt-32 overflow-hidden"
-        style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0)',
-          backgroundSize: '48px 48px',
-        }}
-      >
-        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full bg-[#FFB800]/5 blur-[250px] pointer-events-none" />
+      <section className="relative overflow-hidden pt-24">
+        <div className="relative w-full aspect-[16/9] sm:aspect-[21/9]">
+          <Image
+            src="/banner-cicatrizes.png"
+            alt="Workshop Cicatrizes que Curam — Jocimara Anjos × Instituto DespertaMENTE"
+            fill
+            priority
+            className="object-cover object-center"
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 h-2/3 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, transparent, #0D1638 92%)' }}
+          />
+        </div>
 
-        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full space-y-10">
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-            className="space-y-7"
-          >
-            <p className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#FFB800]/70">
-              Instituto Despertamente · Workshop vivencial
-            </p>
-            <h1
-              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-[56px] sm:text-[76px] lg:text-[92px] font-bold leading-[0.97] text-white tracking-tight"
-            >
-              Cicatrizes<br />que Curam.
-            </h1>
-            <p className="text-base text-white/50 leading-relaxed max-w-md">
-              Um encontro de 3 horas para entender as marcas que você carrega — e transformá-las em ponto de virada, não em peso.
-            </p>
-            <div className="w-full max-w-3xl h-px bg-white/6" />
-          </motion.div>
-
+        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full -mt-4 sm:-mt-10 pb-16 space-y-8">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
             className="flex flex-wrap items-center gap-3"
           >
             <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
@@ -131,12 +120,13 @@ export function CicatrizesContent() {
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            onClick={abrir}
-            className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-7 py-3.5 text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors whitespace-nowrap w-fit"
+            transition={{ delay: 0.35, duration: 0.6 }}
+            onClick={lead.abrir}
+            className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-8 py-4 text-base font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors whitespace-nowrap w-fit"
+            style={{ boxShadow: '0 8px 32px rgba(255,184,0,0.22)' }}
           >
-            Garantir minha vaga
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+            QUERO GARANTIR MEU INGRESSO
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </motion.button>
         </div>
       </section>
