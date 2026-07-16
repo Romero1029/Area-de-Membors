@@ -316,6 +316,110 @@ export interface Database {
           unlocked_at?: string
         }
       }
+      partner_themes: {
+        Row: {
+          id: string
+          name: string
+          primary_color: string
+          secondary_color: string
+          accent_color: string
+          font_family: string
+          background_preset: 'aurora' | 'waves' | 'orbs' | 'particles' | 'geometric'
+          background_config: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          primary_color: string
+          secondary_color: string
+          accent_color: string
+          font_family?: string
+          background_preset: 'aurora' | 'waves' | 'orbs' | 'particles' | 'geometric'
+          background_config?: Json
+          created_at?: string
+        }
+        Update: {
+          name?: string
+          primary_color?: string
+          secondary_color?: string
+          accent_color?: string
+          font_family?: string
+          background_preset?: 'aurora' | 'waves' | 'orbs' | 'particles' | 'geometric'
+          background_config?: Json
+        }
+      }
+      partners: {
+        Row: {
+          id: string
+          slug: string
+          name: string
+          tagline: string | null
+          bio: string | null
+          avatar_url: string | null
+          theme_id: string | null
+          status: 'draft' | 'published'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          name: string
+          tagline?: string | null
+          bio?: string | null
+          avatar_url?: string | null
+          theme_id?: string | null
+          status?: 'draft' | 'published'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          slug?: string
+          name?: string
+          tagline?: string | null
+          bio?: string | null
+          avatar_url?: string | null
+          theme_id?: string | null
+          status?: 'draft' | 'published'
+          updated_at?: string
+        }
+      }
+      partner_links: {
+        Row: {
+          id: string
+          partner_id: string
+          label: string
+          url: string
+          icon: string | null
+          position: number
+          type: 'link' | 'social' | 'destaque'
+          is_active: boolean
+          click_count: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          partner_id: string
+          label: string
+          url: string
+          icon?: string | null
+          position?: number
+          type?: 'link' | 'social' | 'destaque'
+          is_active?: boolean
+          click_count?: number
+          created_at?: string
+        }
+        Update: {
+          label?: string
+          url?: string
+          icon?: string | null
+          position?: number
+          type?: 'link' | 'social' | 'destaque'
+          is_active?: boolean
+          click_count?: number
+        }
+      }
     }
     Views: {
       course_progress: {

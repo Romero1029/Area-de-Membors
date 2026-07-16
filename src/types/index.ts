@@ -11,3 +11,8 @@ export type CourseProgress = Database['public']['Views']['course_progress']['Row
 export type ModuleWithLessons = Module & { lessons: Lesson[] }
 export type ProductWithModules = Product & { modules: ModuleWithLessons[] }
 export type ProgressMap = Record<string, Progress>
+
+export type PartnerTheme = Database['public']['Tables']['partner_themes']['Row']
+export type Partner = Database['public']['Tables']['partners']['Row']
+export type PartnerLink = Database['public']['Tables']['partner_links']['Row']
+export type PartnerWithRelations = Partner & { theme: PartnerTheme | null; links: PartnerLink[] }
