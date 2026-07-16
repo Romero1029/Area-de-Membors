@@ -27,7 +27,7 @@ function emailCartaDeVendas(nome: string) {
         <p>Se já sentiu isso, eu quero te contar sobre o <strong>Cicatrizes que Curam</strong>.</p>
         <p>Eu sou Jocimara Anjos. Sou terapeuta, trabalho com Psicanálise Integrativa, e coordeno pedagogicamente a Formação em Psicanálise do Instituto DespertaMENTE. Depois de anos ouvindo gente na clínica e formando gente na sala de aula, percebi a mesma coisa se repetindo: quase todo mundo carrega marcas que nunca teve um espaço de verdade pra elaborar.</p>
         <p>Por isso criei esse workshop: <strong>3 horas de um encontro vivencial</strong>, em grupo pequeno de propósito, pra você elaborar o que ainda pesa e sair com clareza — não com mais teoria.</p>
-        <p>O investimento normal é R$49,90. Mas com o meu cupom, você garante sua vaga por <strong>R$37,80</strong>.</p>
+        <p>O investimento é <strong>R$47,90</strong> — valor de referência R$250.</p>
         <p style="text-align: center; margin: 32px 0;">
           <a href="https://www.idmpsi.com.br/cicatrizes" style="background: #FFB800; color: #0D1638; padding: 14px 28px; border-radius: 10px; text-decoration: none; font-weight: bold;">Quero garantir minha vaga</a>
         </p>
@@ -40,7 +40,7 @@ function emailCartaDeVendas(nome: string) {
 
 function mensagemWhatsapp(nome: string) {
   const primeiroNome = nome.trim().split(' ')[0]
-  return `Oi, ${primeiroNome}! Aqui é a Jocimara 💛\n\nQueria te contar rapidinho sobre o Cicatrizes que Curam — um workshop de 3 horas que eu criei pra quem carrega marcas que nunca teve espaço pra elaborar. É vivencial, turma pequena de propósito, e com o meu cupom sai por R$37,80.\n\nSe ainda não garantiu sua vaga, me manda um "oi" aqui que eu te ajudo a finalizar. E se já garantiu, também me manda um "oi" — quero confirmar sua presença pessoalmente!`
+  return `Oi, ${primeiroNome}! Aqui é a Jocimara 💛\n\nQueria te contar rapidinho sobre o Cicatrizes que Curam — um workshop de 3 horas que eu criei pra quem carrega marcas que nunca teve espaço pra elaborar. É vivencial, turma pequena de propósito, por R$47,90.\n\nSe ainda não garantiu sua vaga, me manda um "oi" aqui que eu te ajudo a finalizar. E se já garantiu, também me manda um "oi" — quero confirmar sua presença pessoalmente!`
 }
 
 export async function POST(req: NextRequest) {

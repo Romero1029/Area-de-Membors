@@ -226,7 +226,7 @@ export function CicatrizesContent() {
                 <p className="text-[11px] font-mono uppercase tracking-widest text-[#FFB800]">Seu ingresso hoje</p>
                 <p className="text-xs text-white/30 line-through">R$ 250,00</p>
                 <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-5xl font-bold text-white leading-none pt-1">
-                  R$ 49,90
+                  R$ 47,90
                 </p>
                 <p className="text-[11px] text-white/40 pt-1">Pix ou cartão · em todos os canais do IDM</p>
                 <button

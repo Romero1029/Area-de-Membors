@@ -88,7 +88,7 @@ export async function consultarTransacaoSyncPay(identifier: string) {
 export const PRODUTOS_CHECKOUT: Record<string, { nome: string; valor: number; split?: SyncPaySplit[] }> = {
   'cicatrizes-que-curam': {
     nome: 'Workshop Cicatrizes que Curam',
-    valor: 37.80,
+    valor: 47.90,
     // TODO: adicionar split IDM + Jocimara assim que tivermos o user_id SyncPay dela.
   },
   'sessao-jocimara': {
