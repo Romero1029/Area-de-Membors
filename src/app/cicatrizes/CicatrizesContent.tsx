@@ -76,7 +76,7 @@ export function CicatrizesContent() {
       <LeadFormModal open={lead.open} onClose={lead.fechar} />
 
       {/* ── HERO ─────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-24">
+      <section className="relative overflow-hidden pt-[72px]">
         <div className="relative w-full aspect-[16/9] sm:aspect-[21/9]">
           <Image
             src="/banner-cicatrizes.png"
@@ -86,12 +86,12 @@ export function CicatrizesContent() {
             className="object-cover object-center"
           />
           <div
-            className="absolute inset-x-0 bottom-0 h-2/3 pointer-events-none"
-            style={{ background: 'linear-gradient(to bottom, transparent, #0D1638 92%)' }}
+            className="absolute inset-x-0 bottom-0 h-1/4 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, transparent, #0D1638 96%)' }}
           />
         </div>
 
-        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full -mt-4 sm:-mt-10 pb-16 space-y-8">
+        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full pt-8 pb-16 space-y-8">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
