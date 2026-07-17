@@ -130,19 +130,14 @@ export function CicatrizesContent() {
         </div>
       </section>
 
-      {/* ── MANIFESTO ────────────────────────────── */}
+      {/* ── VÍDEO DE APRESENTAÇÃO ─────────────────── */}
       <section className="bg-[#0A1232] border-y border-white/5">
-        <Reveal className="max-w-2xl mx-auto px-6 sm:px-10 py-20 space-y-12">
+        <Reveal className="max-w-2xl mx-auto px-6 sm:px-10 py-12 space-y-5">
           <p
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-2xl sm:text-3xl font-light leading-relaxed text-white/45"
+            className="text-xl sm:text-2xl font-light leading-snug text-white/80 text-center"
           >
-            Todo mundo carrega marcas.{' '}
-            <span className="text-white/80">A diferença está no que fazemos com elas</span>{' '}
-            — se viram peso que arrastamos, ou ponto de virada que nos move. O Cicatrizes que
-            Curam é um espaço vivencial de 3 horas, guiado pela Jocimara Anjos, pra você
-            elaborar o que ainda pesa e{' '}
-            <span className="text-white/80">seguir mais leve.</span>
+            Assista a esse vídeo, a Jocimara Anjos está te apresentando o que é o &ldquo;Cicatrizes que Curam&rdquo;.
           </p>
           <VideoPlayer youtubeId={VIDEO_VENDAS_YOUTUBE_ID} title="Cicatrizes que Curam — vídeo de apresentação" />
         </Reveal>
@@ -168,26 +163,6 @@ export function CicatrizesContent() {
                 <p className="text-sm text-white/45 leading-relaxed">{c.d}</p>
               </div>
             ))}
-          </div>
-        </section>
-      </Reveal>
-
-      {/* ── DEPOIMENTO DA JOCIMARA ───────────────── */}
-      <Reveal>
-        <section className="bg-[#0A1232] border-y border-white/5">
-          <div className="max-w-3xl mx-auto px-6 sm:px-10 py-20 text-center space-y-6">
-            <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="block text-[70px] leading-none text-[#FFB800]/10 select-none">
-              &ldquo;
-            </span>
-            <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-xl sm:text-2xl text-white/70 leading-relaxed font-light italic -mt-8">
-              Eu criei o Cicatrizes que Curam porque via, na clínica e na sala de aula, a mesma
-              dor se repetindo: gente carregando marcas que nunca teve espaço pra elaborar.
-              Esse workshop é esse espaço.
-            </p>
-            <div>
-              <p className="text-sm font-semibold text-white/85">Jocimara Anjos</p>
-              <p className="text-xs text-white/35 mt-0.5">Coordenadora Pedagógica da Formação em Psicanálise · IDM</p>
-            </div>
           </div>
         </section>
       </Reveal>
