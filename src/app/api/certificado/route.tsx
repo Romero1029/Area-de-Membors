@@ -49,6 +49,8 @@ function getIp(req: NextRequest) {
   )
 }
 
+const MAX_TENTATIVAS = 3
+
 // ─── POST /api/certificado ────────────────────────────────────────────────────
 
 export async function POST(request: NextRequest) {
@@ -87,7 +89,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Erro de configuração do servidor.' }, { status: 500 })
   }
 
-  // 5. Rate limiting: máximo 3 requisições por IP por hora
+  // 5. Rate limiting: máximo 10 requisições por IP por hora (folga para as 3 tentativas por e-mail)
   const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { count: ipCount } = await (supabase.from('tentativas_certificado') as any)
@@ -95,35 +97,35 @@ export async function POST(request: NextRequest) {
     .eq('ip', ip)
     .gte('data_tentativa', oneHourAgo)
 
-  if ((ipCount ?? 0) >= 3) {
+  if ((ipCount ?? 0) >= 10) {
     return NextResponse.json(
       { error: 'Limite de tentativas atingido para este endereço. Tente novamente em uma hora.' },
       { status: 429 }
     )
   }
 
-  // 6. Verificar se e-mail já tentou antes
+  // 6. Verificar quantas tentativas esse e-mail já usou
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { count: emailCount } = await (supabase.from('tentativas_certificado') as any)
     .select('*', { count: 'exact', head: true })
     .eq('email', emailNorm)
 
-  if ((emailCount ?? 0) > 0) {
+  if ((emailCount ?? 0) >= MAX_TENTATIVAS) {
     return NextResponse.json(
-      { error: 'Este e-mail já foi utilizado em uma tentativa anterior.\nNão é possível tentar novamente.' },
+      { error: `Você já utilizou suas ${MAX_TENTATIVAS} tentativas para este e-mail.\nNão é possível tentar novamente.`, tentativasRestantes: 0 },
       { status: 403 }
     )
   }
 
-  // 7. Verificar se telefone já tentou antes
+  // 7. Verificar quantas tentativas esse telefone já usou
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { count: phoneCount } = await (supabase.from('tentativas_certificado') as any)
     .select('*', { count: 'exact', head: true })
     .eq('telefone', telefoneNorm)
 
-  if ((phoneCount ?? 0) > 0) {
+  if ((phoneCount ?? 0) >= MAX_TENTATIVAS) {
     return NextResponse.json(
-      { error: 'Este telefone já foi utilizado em uma tentativa anterior.\nNão é possível tentar novamente.' },
+      { error: `Você já utilizou suas ${MAX_TENTATIVAS} tentativas com este telefone.\nNão é possível tentar novamente.`, tentativasRestantes: 0 },
       { status: 403 }
     )
   }
@@ -154,10 +156,23 @@ export async function POST(request: NextRequest) {
     acertou,
   })
 
-  // 10. Se errou → retornar erro (tentativa já registrada, não pode mais tentar)
+  // 10. Se errou → informar quantas tentativas ainda restam (ou bloquear se esgotou)
   if (!acertou) {
+    const tentativasUsadas = (emailCount ?? 0) + 1
+    const tentativasRestantes = Math.max(0, MAX_TENTATIVAS - tentativasUsadas)
+
+    if (tentativasRestantes === 0) {
+      return NextResponse.json(
+        { error: `Infelizmente você não acertou as palavras-chave da aula.\nVocê esgotou suas ${MAX_TENTATIVAS} tentativas.`, tentativasRestantes: 0 },
+        { status: 403 }
+      )
+    }
+
     return NextResponse.json(
-      { error: 'Infelizmente você não acertou as palavras-chave da aula.\nVocê não possui mais tentativas disponíveis.' },
+      {
+        error: `Infelizmente você não acertou as palavras-chave da aula.\nVocê tem mais ${tentativasRestantes} tentativa${tentativasRestantes > 1 ? 's' : ''}.`,
+        tentativasRestantes,
+      },
       { status: 400 }
     )
   }

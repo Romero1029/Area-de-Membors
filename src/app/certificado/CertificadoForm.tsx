@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Award, Loader2, XCircle, AlertTriangle, Download } from 'lucide-react'
+import { Award, Loader2, XCircle, AlertTriangle, Download, RotateCcw } from 'lucide-react'
 import { ObrigadoModal } from './ObrigadoModal'
 
 // ─── Phone mask ───────────────────────────────────────────────────────────────
@@ -93,6 +93,9 @@ export function CertificadoForm() {
       } else {
         setErrorMsg(msg)
         setStatus('error')
+        setPalavra1('')
+        setPalavra2('')
+        setPalavra3('')
       }
     } catch {
       setErrorMsg('Erro de conexão. Verifique sua internet e tente novamente.')
@@ -269,28 +272,26 @@ export function CertificadoForm() {
         </div>
       )}
 
-      {/* Aviso de tentativa única */}
+      {/* Aviso de tentativas */}
       <p className="text-xs text-center" style={{ color: 'rgba(255,255,255,0.25)' }}>
-        Cada e-mail tem direito a apenas 1 tentativa. Verifique as palavras antes de enviar.
+        Cada e-mail tem direito a até 3 tentativas. Verifique as palavras antes de enviar.
       </p>
 
       {/* Botão */}
       <button
         type="submit"
-        disabled={status === 'loading' || status === 'error'}
+        disabled={status === 'loading'}
         className="w-full rounded-2xl text-sm font-bold text-[#0D1638] flex items-center justify-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
         style={{
           height: 52,
-          background: status === 'error'
-            ? '#374151'
-            : 'linear-gradient(135deg, #FFB800, #FFC933)',
-          boxShadow: status === 'error' ? 'none' : '0 8px 24px rgba(255,184,0,0.3)',
+          background: 'linear-gradient(135deg, #FFB800, #FFC933)',
+          boxShadow: '0 8px 24px rgba(255,184,0,0.3)',
         }}
       >
         {status === 'loading'
           ? <><Loader2 className="w-4 h-4 animate-spin text-[#0D1638]" /> Validando...</>
           : status === 'error'
-            ? <><XCircle className="w-4 h-4 text-white" /> <span className="text-white">Tentativa encerrada</span></>
+            ? <><RotateCcw className="w-4 h-4" /> Tentar novamente</>
             : <><Award className="w-4 h-4" /> Gerar meu certificado</>
         }
       </button>

@@ -50,7 +50,7 @@ export default function CertificadoPage() {
 
           {/* Info badges */}
           <div className="flex items-center justify-center gap-3 flex-wrap">
-            {['PDF gratuito', '1 tentativa por e-mail', 'Download imediato'].map(label => (
+            {['PDF gratuito', '3 tentativas por e-mail', 'Download imediato'].map(label => (
               <span
                 key={label}
                 className="text-[11px] font-medium px-2.5 py-1 rounded-full"
