@@ -213,13 +213,12 @@ export function CicatrizesContent() {
             </div>
           </motion.div>
 
-          {/* Painel integrado: badges + CTA, sobreposto ao rodapé do banner */}
+          {/* Badges + CTA, abaixo do banner (sem sobrepor a imagem) */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="relative -mt-8 sm:-mt-9 mx-3 sm:mx-6 rounded-2xl border border-white/10 bg-[#0A1232]/95 backdrop-blur-md px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center gap-5 text-center"
-            style={{ boxShadow: '0 20px 50px -20px rgba(0,0,0,0.55)' }}
+            className="relative mt-8 flex flex-col items-center gap-5 text-center"
           >
             <div className="flex flex-wrap items-center justify-center gap-2.5">
               {[
@@ -444,7 +443,7 @@ export function CicatrizesContent() {
                   >
                     R$ 47,90
                   </p>
-                  <p className="relative text-[11px] text-white/40 pt-1">Pix ou cartão · em todos os canais do IDM</p>
+                  <p className="relative text-[11px] text-white/40 pt-1">Pix à vista ou em até 5x no cartão</p>
                   <button
                     onClick={lead.abrir}
                     className="relative w-full mt-4 flex items-center justify-center py-3.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] text-sm font-bold text-[#0D1638] hover:brightness-[1.06] active:scale-[0.98] transition-all duration-200"
