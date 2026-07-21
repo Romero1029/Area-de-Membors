@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import Image from 'next/image'
 import {
   motion,
@@ -10,7 +10,6 @@ import {
   useTransform,
   useMotionValue,
   useSpring,
-  animate,
 } from 'framer-motion'
 import { ArrowRight, MessageCircle, Clock, Ticket, CalendarDays, Check, Quote, Sparkles, GraduationCap, Users, Award } from 'lucide-react'
 import {
@@ -146,32 +145,6 @@ function ScrollProgress() {
   )
 }
 
-function StatCounter({ value, suffix = '', label }: { value: number; suffix?: string; label: string }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' as `${number}px` })
-  const [display, setDisplay] = useState(0)
-
-  useEffect(() => {
-    if (!inView) return
-    const controls = animate(0, value, {
-      duration: 1.8,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => setDisplay(Math.floor(v)),
-    })
-    return () => controls.stop()
-  }, [inView, value])
-
-  return (
-    <div ref={ref} className="text-center sm:text-left">
-      <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-4xl sm:text-5xl font-bold text-white leading-none">
-        {display.toLocaleString('pt-BR')}
-        <span className="text-[#FFB800]">{suffix}</span>
-      </p>
-      <p className="text-xs text-white/45 mt-2.5 tracking-wide leading-snug">{label}</p>
-    </div>
-  )
-}
-
 function TiltCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const rx = useMotionValue(0)
@@ -209,8 +182,8 @@ export function CicatrizesContent() {
   const lead = useCheckoutModal()
   const heroRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const heroY = useTransform(heroProgress, [0, 1], [0, 90])
-  const heroScale = useTransform(heroProgress, [0, 1], [1, 1.08])
+  const heroY = useTransform(heroProgress, [0, 1], [0, 30])
+  const heroScale = useTransform(heroProgress, [0, 1], [1, 1.04])
 
   return (
     <>
@@ -218,87 +191,76 @@ export function CicatrizesContent() {
       <ScrollProgress />
 
       {/* ── HERO ─────────────────────────────────── */}
-      <section ref={heroRef} className="relative overflow-hidden pt-[72px]">
-        <div className="relative w-full aspect-[1734/907] overflow-hidden">
-          <motion.div className="absolute inset-0" style={{ y: heroY, scale: heroScale }}>
-            <Image
-              src="/banner-cicatrizes.png"
-              alt="Workshop Cicatrizes que Curam — Jocimara Anjos × Instituto DespertaMENTE"
-              fill
-              priority
-              className="object-cover object-center"
-            />
-          </motion.div>
-          <div
-            className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
-            style={{ background: 'linear-gradient(to bottom, transparent, #0D1638 96%)' }}
-          />
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ boxShadow: 'inset 0 0 120px 40px rgba(9,18,44,0.55)' }}
-          />
-        </div>
-
-        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full pt-10 pb-20 space-y-9">
+      <section ref={heroRef} className="relative overflow-hidden pt-[104px] pb-14 px-6 sm:px-10 bg-[#0D1638]">
+        <div className="relative max-w-3xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-wrap items-center gap-2.5"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="relative rounded-2xl overflow-hidden border border-white/10"
+            style={{ boxShadow: '0 30px 80px -30px rgba(0,0,0,0.6)' }}
           >
-            {[
-              { icon: Clock, label: '3 horas de duração' },
-              { icon: Ticket, label: 'Vagas limitadas' },
-              { icon: CalendarDays, label: 'Uma turma por mês' },
-            ].map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-sm px-4 py-2 shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]"
-              >
-                <Icon className="h-3.5 w-3.5 text-[#FFC933]" strokeWidth={1.75} />
-                <span className="text-xs text-white/65 tracking-wide">{label}</span>
-              </div>
-            ))}
+            <div className="relative w-full aspect-[1734/907] overflow-hidden">
+              <motion.div className="absolute inset-0" style={{ y: heroY, scale: heroScale }}>
+                <Image
+                  src="/banner-cicatrizes.png"
+                  alt="Workshop Cicatrizes que Curam — Jocimara Anjos × Instituto DespertaMENTE"
+                  fill
+                  priority
+                  className="object-cover object-center"
+                />
+              </motion.div>
+            </div>
           </motion.div>
 
-          <motion.button
-            initial={{ opacity: 0, y: 8 }}
+          {/* Painel integrado: badges + CTA, sobreposto ao rodapé do banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.32, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            onClick={lead.abrir}
-            className="group relative inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] px-8 py-4 text-base font-bold text-[#0D1638] transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98] whitespace-nowrap w-fit"
-            style={{ boxShadow: '0 12px 40px -8px rgba(255,184,0,0.45), 0 1px 0 rgba(255,255,255,0.4) inset' }}
+            transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="relative -mt-8 sm:-mt-9 mx-3 sm:mx-6 rounded-2xl border border-white/10 bg-[#0A1232]/95 backdrop-blur-md px-6 py-6 sm:px-8 sm:py-7 flex flex-col items-center gap-5 text-center"
+            style={{ boxShadow: '0 20px 50px -20px rgba(0,0,0,0.55)' }}
           >
-            <motion.span
-              className="absolute inset-0 rounded-xl"
-              animate={{ boxShadow: ['0 0 0 0 rgba(255,184,0,0.35)', '0 0 0 10px rgba(255,184,0,0)'] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
-            />
-            QUERO GARANTIR MEU INGRESSO
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </motion.button>
+            <div className="flex flex-wrap items-center justify-center gap-2.5">
+              {[
+                { icon: Clock, label: '3 horas de duração' },
+                { icon: Ticket, label: 'Vagas limitadas' },
+                { icon: CalendarDays, label: 'Uma turma por mês' },
+              ].map(({ icon: Icon, label }) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2"
+                >
+                  <Icon className="h-3.5 w-3.5 text-[#FFC933]" strokeWidth={1.75} />
+                  <span className="text-xs text-white/65 tracking-wide">{label}</span>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={lead.abrir}
+              className="group relative inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] px-8 py-4 text-base font-bold text-[#0D1638] transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98] whitespace-nowrap w-fit"
+              style={{ boxShadow: '0 12px 40px -8px rgba(255,184,0,0.45), 0 1px 0 rgba(255,255,255,0.4) inset' }}
+            >
+              <motion.span
+                className="absolute inset-0 rounded-xl"
+                animate={{ boxShadow: ['0 0 0 0 rgba(255,184,0,0.35)', '0 0 0 10px rgba(255,184,0,0)'] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
+              />
+              QUERO GARANTIR MEU INGRESSO
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </button>
+          </motion.div>
         </div>
       </section>
 
       {/* ── AUTORIDADE / PROVA SOCIAL ─────────────── */}
-      <section className="relative bg-[#0A1232] border-b border-white/5 overflow-hidden">
-        <Reveal className="relative max-w-5xl mx-auto px-6 sm:px-10 py-12">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6 items-start">
-            <StatCounter value={9} suffix="+" label="anos de metodologia própria" />
-            <StatCounter value={12000} suffix="+" label="vidas transformadas pelo IDM" />
-            <div className="text-center sm:text-left">
-              <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-4xl sm:text-5xl font-bold text-white leading-none">
-                1<span className="text-[#FFB800]">ª</span>
-              </p>
-              <p className="text-xs text-white/45 mt-2.5 tracking-wide leading-snug">maior escola de psicanálise integrativa do Brasil</p>
-            </div>
-            <div className="text-center sm:text-left">
-              <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-4xl sm:text-5xl font-bold text-white leading-none">
-                Nacional
-              </p>
-              <p className="text-xs text-white/45 mt-2.5 tracking-wide leading-snug">maior hub de autoconhecimento do país</p>
-            </div>
-          </div>
+      <section className="relative bg-[#0A1232] border-y border-white/5 overflow-hidden">
+        <Reveal className="relative max-w-2xl mx-auto px-6 sm:px-10 py-10 text-center">
+          <p className="text-[15px] sm:text-base text-white/60 leading-relaxed">
+            Conduzido pela equipe pedagógica do <span className="text-white font-semibold">Instituto Despertamente</span>,
+            com uma metodologia já aplicada a mais de <span className="text-[#FFB800] font-semibold">12.000 alunos em todo o país</span>.
+          </p>
         </Reveal>
       </section>
 
@@ -377,9 +339,8 @@ export function CicatrizesContent() {
                 <p className="text-sm text-[#FFB800]/80 mt-1">Coordenadora Pedagógica da Formação em Psicanálise do IDM</p>
               </div>
               <p className="text-sm text-white/50 leading-relaxed max-w-lg mx-auto sm:mx-0">
-                Formada e em constante prática clínica, Jocimara integra a equipe pedagógica do Instituto Despertamente
-                — reconhecido como a maior escola de psicanálise integrativa e o maior hub de autoconhecimento do Brasil,
-                com 9 anos de metodologia própria e mais de 12.000 vidas impactadas em todo o país.
+                Em constante prática clínica, Jocimara conduz o workshop com uma escuta que une técnica e acolhimento —
+                a mesma abordagem que forma os profissionais de psicanálise integrativa do Instituto Despertamente.
               </p>
               <div className="flex flex-wrap justify-center sm:justify-start gap-2 pt-1">
                 {[
