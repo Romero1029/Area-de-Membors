@@ -218,30 +218,28 @@ export function CicatrizesContent() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="relative max-w-4xl mx-auto px-6 sm:px-10 pt-10 pb-14 flex flex-col items-center gap-8 text-center"
+          className="relative max-w-4xl mx-auto px-6 sm:px-10 pt-6 pb-10 sm:pt-10 sm:pb-14 flex flex-col items-center gap-6 sm:gap-8 text-center"
         >
-          <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-2 text-[13px] text-white/55">
             {[
               { icon: Clock, label: '3 horas de duração' },
               { icon: Ticket, label: 'Vagas limitadas' },
               { icon: CalendarDays, label: 'Uma turma por mês' },
             ].map(({ icon: Icon, label }, i, arr) => (
-              <div key={label} className="flex items-center gap-x-7">
-                <div className="flex items-center gap-2.5">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#FFB800]/10 border border-[#FFB800]/25">
-                    <Icon className="h-3.5 w-3.5 text-[#FFC933]" strokeWidth={1.75} />
-                  </span>
-                  <span className="text-[13px] text-white/70 tracking-wide">{label}</span>
-                </div>
-                {i < arr.length - 1 && <span className="hidden sm:block h-4 w-px bg-white/10" />}
-              </div>
+              <span key={label} className="inline-flex items-center gap-x-2.5">
+                <span className="inline-flex items-center gap-1.5">
+                  <Icon className="h-3.5 w-3.5 text-[#FFC933]" strokeWidth={1.75} />
+                  {label}
+                </span>
+                {i < arr.length - 1 && <span className="text-white/20">·</span>}
+              </span>
             ))}
           </div>
 
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3 sm:gap-4">
             <button
               onClick={lead.abrir}
-              className="group relative inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] px-10 py-4 text-base font-bold text-[#0D1638] transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98] whitespace-nowrap w-fit"
+              className="group relative inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] px-8 py-3.5 sm:px-10 sm:py-4 text-sm sm:text-base font-bold text-[#0D1638] transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98] whitespace-nowrap w-fit"
               style={{ boxShadow: '0 16px 44px -10px rgba(255,184,0,0.5), 0 1px 0 rgba(255,255,255,0.4) inset' }}
             >
               <motion.span
