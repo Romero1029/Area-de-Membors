@@ -313,6 +313,27 @@
       .stat-num { font-size: 2rem; }
     }
 
+    /* ─── FOUNDERS ─────────────────────────────────────────────── */
+    .founders { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 56px; }
+    .founder-card {
+      background: var(--navy-2); border: 1px solid var(--line); border-radius: var(--r-lg);
+      overflow: hidden; transition: border-color .3s;
+    }
+    .founder-card:hover { border-color: rgba(250,179,56,.25); }
+    .founder-photo {
+      width: 100%; aspect-ratio: 4/3; overflow: hidden;
+    }
+    .founder-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform .4s ease; }
+    .founder-card:hover .founder-photo img { transform: scale(1.03); }
+    .founder-info { padding: 32px 30px; }
+    .founder-name { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 500; margin-bottom: 4px; }
+    .founder-role { font-size: .78rem; color: var(--orange); font-weight: 600; letter-spacing: .04em; margin-bottom: 18px; line-height: 1.5; }
+    .founder-bio { font-size: .88rem; color: var(--gray); line-height: 1.7; }
+    .founder-bio + .founder-bio { margin-top: 14px; }
+    @media (max-width: 768px) {
+      .founders { grid-template-columns: 1fr; gap: 28px; }
+    }
+
     /* ─── SPACE GALLERY ───────────────────────────────────────── */
     .space-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 56px; }
     .space-card { position: relative; border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 16/10; }
@@ -459,19 +480,41 @@
         <div class="about-photo">
           <img class="mark" src="/franquia-assets/idm-logo.png" alt="" />
           <div class="photo-cap">
-            <strong>Rodrygo Murari</strong>
-            <span>Fundador do Instituto DespertaMente</span>
+            <strong>Instituto DespertaMente</strong>
+            <span>Educação, clínica e desenvolvimento humano</span>
           </div>
         </div>
       </div>
       <div class="about-content">
         <div class="eyebrow">Sobre o IDM PSI</div>
         <h2 class="lead-h2">A franquia IDM PSI</h2>
-        <p>A franquia IDM PSI nasceu da experiência do Instituto DespertaMente (IDM), fundado em 2021 com a missão de formar profissionais para a saúde mental e o desenvolvimento humano.</p>
+        <p>A franquia IDM PSI nasceu da experiência do Instituto DespertaMente (IDM), fundado com a missão de formar profissionais para a saúde mental e o desenvolvimento humano.</p>
         <p>Com mais de 1.000 alunos impactados no Brasil e na Europa, o IDM consolidou uma metodologia própria e um modelo educacional que une excelência acadêmica, prática clínica e empreendedorismo.</p>
         <p>Agora, esse ecossistema se expande por meio de franquias, levando conhecimento, propósito e oportunidades de negócio para novas regiões do país.</p>
-        <div class="pillars">
-          <div class="pillar"><div class="pillar-n"><img class="mark" src="/franquia-assets/idm-logo.png" alt="" style="width:48px;height:48px;object-fit:contain;" /></div><div><h4>Rodrygo Murari</h4><p>Psicanalista Clínico Integrativo, empreendedor e fundador do Instituto DespertaMente (IDM). Idealizador da metodologia de Integratividade Psicanalítica, que integra fundamentos da Psicanálise a abordagens complementares como PNL, Hipnose Ericksoniana, Constelação Familiar Sistêmica e Inteligência Emocional. Tem como propósito ampliar o acesso à formação de excelência e fortalecer a saúde mental por meio da educação, da prática clínica e do empreendedorismo.</p></div></div>
+      </div>
+    </div>
+
+    <div class="founders">
+      <div class="founder-card">
+        <div class="founder-photo">
+          <img src="/franquia-assets/rodrygo.jpg" alt="Rodrygo Murari" loading="lazy" />
+        </div>
+        <div class="founder-info">
+          <h3 class="founder-name">Rodrygo Murari</h3>
+          <div class="founder-role">Fundador e Diretor do IDM &amp; IDM PSI Franqueadora<br>Psicanalista Cl&iacute;nico Integrativo &bull; Mentor &bull; Empreendedor</div>
+          <p class="founder-bio">Possui mais de 15 anos de experi&ecirc;ncia na forma&ccedil;&atilde;o de profissionais e na estrutura&ccedil;&atilde;o de neg&oacute;cios voltados &agrave; sa&uacute;de emocional, educa&ccedil;&atilde;o e desenvolvimento humano, com mais de 10 mil horas de atua&ccedil;&atilde;o entre atendimentos, mentorias e treinamentos.</p>
+          <p class="founder-bio">&Agrave; frente da IDM PSI, lidera a expans&atilde;o da marca por meio de um modelo que integra cl&iacute;nica, educa&ccedil;&atilde;o, tecnologia e franquias &mdash; com foco em gest&atilde;o estrat&eacute;gica, suporte cont&iacute;nuo e crescimento sustent&aacute;vel para os franqueados.</p>
+        </div>
+      </div>
+      <div class="founder-card">
+        <div class="founder-photo">
+          <img src="/franquia-assets/marcos.jpg" alt="Marcos Salvucci" loading="lazy" />
+        </div>
+        <div class="founder-info">
+          <h3 class="founder-name">Marcos Salvucci</h3>
+          <div class="founder-role">S&oacute;cio-Fundador da IDM PSI Franqueadora &amp; Axyon Brazil Group<br>Publicidade &bull; P&oacute;s em Marketing (ESPM) &bull; MBA em Finan&ccedil;as</div>
+          <p class="founder-bio">Com mais de 40 anos de experi&ecirc;ncia em gest&atilde;o, desenvolvimento comercial e expans&atilde;o de neg&oacute;cios, atuou em multinacionais da ind&uacute;stria farmac&ecirc;utica e liderou opera&ccedil;&otilde;es em diversos segmentos.</p>
+          <p class="founder-bio">Administrou franquias de grandes marcas como Subway, Instituto Embelleze, Supera e Oligoflora. Hoje dedica sua experi&ecirc;ncia ao fortalecimento da rede IDM PSI, contribuindo para a expans&atilde;o da franquia e a constru&ccedil;&atilde;o de um modelo de neg&oacute;cios s&oacute;lido, transparente e sustent&aacute;vel.</p>
         </div>
       </div>
     </div>
