@@ -196,7 +196,7 @@ export function CicatrizesContent() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="relative w-full aspect-[1734/907] overflow-hidden"
+          className="relative w-full aspect-[1909/824] overflow-hidden"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY, scale: heroScale }}>
             <Image
