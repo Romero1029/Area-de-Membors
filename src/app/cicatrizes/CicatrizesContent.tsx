@@ -191,66 +191,76 @@ export function CicatrizesContent() {
       <ScrollProgress />
 
       {/* ── HERO ─────────────────────────────────── */}
-      <section ref={heroRef} className="relative overflow-hidden pt-[104px] pb-14 px-6 sm:px-10 bg-[#0D1638]">
-        <div className="relative max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="relative rounded-2xl overflow-hidden border border-white/10"
-            style={{ boxShadow: '0 30px 80px -30px rgba(0,0,0,0.6)' }}
-          >
-            <div className="relative w-full aspect-[1734/907] overflow-hidden">
-              <motion.div className="absolute inset-0" style={{ y: heroY, scale: heroScale }}>
-                <Image
-                  src="/banner-cicatrizes.png"
-                  alt="Workshop Cicatrizes que Curam — Jocimara Anjos × Instituto DespertaMENTE"
-                  fill
-                  priority
-                  className="object-cover object-center"
-                />
-              </motion.div>
-            </div>
+      <section ref={heroRef} className="relative overflow-hidden pt-[72px] bg-[#0D1638]">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="relative w-full aspect-[1734/907] overflow-hidden"
+        >
+          <motion.div className="absolute inset-0" style={{ y: heroY, scale: heroScale }}>
+            <Image
+              src="/banner-cicatrizes.png"
+              alt="Workshop Cicatrizes que Curam — Jocimara Anjos × Instituto DespertaMENTE"
+              fill
+              priority
+              className="object-cover object-center"
+            />
           </motion.div>
+          <div
+            className="absolute inset-x-0 bottom-0 h-10 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, transparent, #0D1638)' }}
+          />
+        </motion.div>
 
-          {/* Badges + CTA, abaixo do banner (sem sobrepor a imagem) */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mt-8 flex flex-col items-center gap-5 text-center"
-          >
-            <div className="flex flex-wrap items-center justify-center gap-2.5">
-              {[
-                { icon: Clock, label: '3 horas de duração' },
-                { icon: Ticket, label: 'Vagas limitadas' },
-                { icon: CalendarDays, label: 'Uma turma por mês' },
-              ].map(({ icon: Icon, label }) => (
-                <div
-                  key={label}
-                  className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2"
-                >
-                  <Icon className="h-3.5 w-3.5 text-[#FFC933]" strokeWidth={1.75} />
-                  <span className="text-xs text-white/65 tracking-wide">{label}</span>
+        {/* Badges + CTA, abaixo do banner (sem sobrepor a imagem) */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="relative max-w-4xl mx-auto px-6 sm:px-10 pt-10 pb-14 flex flex-col items-center gap-8 text-center"
+        >
+          <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-4">
+            {[
+              { icon: Clock, label: '3 horas de duração' },
+              { icon: Ticket, label: 'Vagas limitadas' },
+              { icon: CalendarDays, label: 'Uma turma por mês' },
+            ].map(({ icon: Icon, label }, i, arr) => (
+              <div key={label} className="flex items-center gap-x-7">
+                <div className="flex items-center gap-2.5">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#FFB800]/10 border border-[#FFB800]/25">
+                    <Icon className="h-3.5 w-3.5 text-[#FFC933]" strokeWidth={1.75} />
+                  </span>
+                  <span className="text-[13px] text-white/70 tracking-wide">{label}</span>
                 </div>
-              ))}
-            </div>
+                {i < arr.length - 1 && <span className="hidden sm:block h-4 w-px bg-white/10" />}
+              </div>
+            ))}
+          </div>
 
+          <div className="flex flex-col items-center gap-4">
             <button
               onClick={lead.abrir}
-              className="group relative inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] px-8 py-4 text-base font-bold text-[#0D1638] transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98] whitespace-nowrap w-fit"
-              style={{ boxShadow: '0 12px 40px -8px rgba(255,184,0,0.45), 0 1px 0 rgba(255,255,255,0.4) inset' }}
+              className="group relative inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] px-10 py-4 text-base font-bold text-[#0D1638] transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98] whitespace-nowrap w-fit"
+              style={{ boxShadow: '0 16px 44px -10px rgba(255,184,0,0.5), 0 1px 0 rgba(255,255,255,0.4) inset' }}
             >
               <motion.span
                 className="absolute inset-0 rounded-xl"
-                animate={{ boxShadow: ['0 0 0 0 rgba(255,184,0,0.35)', '0 0 0 10px rgba(255,184,0,0)'] }}
+                animate={{ boxShadow: ['0 0 0 0 rgba(255,184,0,0.35)', '0 0 0 12px rgba(255,184,0,0)'] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
               />
               QUERO GARANTIR MEU INGRESSO
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
-          </motion.div>
-        </div>
+            <p className="flex items-center gap-2 text-[11px] text-white/35 tracking-wide">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FFB800]/60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#FFB800]" />
+              </span>
+              Turma fecha assim que as vagas esgotam
+            </p>
+          </div>
+        </motion.div>
       </section>
 
       {/* ── AUTORIDADE / PROVA SOCIAL ─────────────── */}
@@ -443,7 +453,7 @@ export function CicatrizesContent() {
                   >
                     R$ 47,90
                   </p>
-                  <p className="relative text-[11px] text-white/40 pt-1">Pix à vista ou em até 5x no cartão</p>
+                  <p className="relative text-[11px] text-white/40 pt-1">Pix à vista ou em até 5x de R$ 10,53 no cartão</p>
                   <button
                     onClick={lead.abrir}
                     className="relative w-full mt-4 flex items-center justify-center py-3.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] text-sm font-bold text-[#0D1638] hover:brightness-[1.06] active:scale-[0.98] transition-all duration-200"
