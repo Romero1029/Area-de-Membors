@@ -1,9 +1,18 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { ArrowRight, MessageCircle, Clock, Ticket, CalendarDays } from 'lucide-react'
+import {
+  motion,
+  useInView,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useSpring,
+  animate,
+} from 'framer-motion'
+import { ArrowRight, MessageCircle, Clock, Ticket, CalendarDays, Check, Quote, Sparkles, GraduationCap, Users, Award } from 'lucide-react'
 import {
   Accordion,
   AccordionContent,
@@ -55,7 +64,11 @@ const faqItems = [
   },
 ]
 
-function Reveal({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+/* ============================================================
+   Primitivos de animação
+   ============================================================ */
+
+function Reveal({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' as `${number}px` })
   const reduce = useReducedMotion()
@@ -63,9 +76,129 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
     <motion.div
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y: reduce ? 0 : 18 }}
+      initial={{ opacity: 0, y: reduce ? 0 : 22 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function RevealWords({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-100px' as `${number}px` })
+  const reduce = useReducedMotion()
+  const words = text.split(' ')
+  return (
+    <span ref={ref} className={className} style={style}>
+      {words.map((w, i) => (
+        <motion.span
+          key={i}
+          className="inline-block"
+          initial={{ opacity: 0, y: reduce ? 0 : 16, filter: 'blur(4px)' }}
+          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+          transition={{ duration: 0.55, delay: i * 0.045, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {w}
+          {i < words.length - 1 ? ' ' : ''}
+        </motion.span>
+      ))}
+    </span>
+  )
+}
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -8 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="flex items-center gap-3 mb-5"
+    >
+      <span className="h-px w-8 bg-gradient-to-r from-[#FFB800] to-transparent" />
+      <span className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#FFB800]/80">{children}</span>
+    </motion.div>
+  )
+}
+
+function SectionDivider() {
+  return (
+    <div className="relative h-px w-full max-w-5xl mx-auto">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-1.5 w-1.5 rotate-45 bg-[#FFB800]/50" />
+    </div>
+  )
+}
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll()
+  return (
+    <motion.div
+      className="fixed top-0 left-0 right-0 h-[3px] origin-left z-[70] pointer-events-none"
+      style={{
+        scaleX: scrollYProgress,
+        background: 'linear-gradient(90deg, #FFC933, #FFB800)',
+        boxShadow: '0 0 12px rgba(255,184,0,0.6)',
+      }}
+    />
+  )
+}
+
+function StatCounter({ value, suffix = '', label }: { value: number; suffix?: string; label: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' as `${number}px` })
+  const [display, setDisplay] = useState(0)
+
+  useEffect(() => {
+    if (!inView) return
+    const controls = animate(0, value, {
+      duration: 1.8,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setDisplay(Math.floor(v)),
+    })
+    return () => controls.stop()
+  }, [inView, value])
+
+  return (
+    <div ref={ref} className="text-center sm:text-left">
+      <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-4xl sm:text-5xl font-bold text-white leading-none">
+        {display.toLocaleString('pt-BR')}
+        <span className="text-[#FFB800]">{suffix}</span>
+      </p>
+      <p className="text-xs text-white/45 mt-2.5 tracking-wide leading-snug">{label}</p>
+    </div>
+  )
+}
+
+function TiltCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const rx = useMotionValue(0)
+  const ry = useMotionValue(0)
+  const srx = useSpring(rx, { stiffness: 260, damping: 22 })
+  const sry = useSpring(ry, { stiffness: 260, damping: 22 })
+
+  function onMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    const px = (e.clientX - rect.left) / rect.width - 0.5
+    const py = (e.clientY - rect.top) / rect.height - 0.5
+    ry.set(px * 7)
+    rx.set(-py * 7)
+  }
+  function onLeave() {
+    rx.set(0)
+    ry.set(0)
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{ rotateX: srx, rotateY: sry, transformPerspective: 900 }}
+      className={className}
     >
       {children}
     </motion.div>
@@ -74,114 +207,222 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
 
 export function CicatrizesContent() {
   const lead = useCheckoutModal()
+  const heroRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+  const heroY = useTransform(heroProgress, [0, 1], [0, 90])
+  const heroScale = useTransform(heroProgress, [0, 1], [1, 1.08])
 
   return (
     <>
       <LeadFormModal open={lead.open} onClose={lead.fechar} />
+      <ScrollProgress />
 
       {/* ── HERO ─────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-[72px]">
-        <div className="relative w-full aspect-[16/9] sm:aspect-[21/9]">
-          <Image
-            src="/banner-cicatrizes.png"
-            alt="Workshop Cicatrizes que Curam — Jocimara Anjos × Instituto DespertaMENTE"
-            fill
-            priority
-            className="object-cover object-center"
+      <section ref={heroRef} className="relative overflow-hidden pt-[72px]">
+        <div className="relative w-full aspect-[1734/907] overflow-hidden">
+          <motion.div className="absolute inset-0" style={{ y: heroY, scale: heroScale }}>
+            <Image
+              src="/banner-cicatrizes.png"
+              alt="Workshop Cicatrizes que Curam — Jocimara Anjos × Instituto DespertaMENTE"
+              fill
+              priority
+              className="object-cover object-center"
+            />
+          </motion.div>
+          <div
+            className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, transparent, #0D1638 96%)' }}
           />
           <div
-            className="absolute inset-x-0 bottom-0 h-1/4 pointer-events-none"
-            style={{ background: 'linear-gradient(to bottom, transparent, #0D1638 96%)' }}
+            className="absolute inset-0 pointer-events-none"
+            style={{ boxShadow: 'inset 0 0 120px 40px rgba(9,18,44,0.55)' }}
           />
         </div>
 
-        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full pt-8 pb-16 space-y-8">
+        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 w-full pt-10 pb-20 space-y-9">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="flex flex-wrap items-center gap-3"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-wrap items-center gap-2.5"
           >
-            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              <Clock className="h-3.5 w-3.5 text-[#FFB800]/70" />
-              <span className="text-xs text-white/60">3 horas de duração</span>
-            </div>
-            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              <Ticket className="h-3.5 w-3.5 text-[#FFB800]/70" />
-              <span className="text-xs text-white/60">Vagas limitadas</span>
-            </div>
-            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              <CalendarDays className="h-3.5 w-3.5 text-[#FFB800]/70" />
-              <span className="text-xs text-white/60">Uma turma por mês</span>
-            </div>
+            {[
+              { icon: Clock, label: '3 horas de duração' },
+              { icon: Ticket, label: 'Vagas limitadas' },
+              { icon: CalendarDays, label: 'Uma turma por mês' },
+            ].map(({ icon: Icon, label }) => (
+              <div
+                key={label}
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-sm px-4 py-2 shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]"
+              >
+                <Icon className="h-3.5 w-3.5 text-[#FFC933]" strokeWidth={1.75} />
+                <span className="text-xs text-white/65 tracking-wide">{label}</span>
+              </div>
+            ))}
           </motion.div>
 
           <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.35, duration: 0.6 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.32, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             onClick={lead.abrir}
-            className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-8 py-4 text-base font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors whitespace-nowrap w-fit"
-            style={{ boxShadow: '0 8px 32px rgba(255,184,0,0.22)' }}
+            className="group relative inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] px-8 py-4 text-base font-bold text-[#0D1638] transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98] whitespace-nowrap w-fit"
+            style={{ boxShadow: '0 12px 40px -8px rgba(255,184,0,0.45), 0 1px 0 rgba(255,255,255,0.4) inset' }}
           >
+            <motion.span
+              className="absolute inset-0 rounded-xl"
+              animate={{ boxShadow: ['0 0 0 0 rgba(255,184,0,0.35)', '0 0 0 10px rgba(255,184,0,0)'] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
+            />
             QUERO GARANTIR MEU INGRESSO
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </motion.button>
         </div>
       </section>
 
+      {/* ── AUTORIDADE / PROVA SOCIAL ─────────────── */}
+      <section className="relative bg-[#0A1232] border-b border-white/5 overflow-hidden">
+        <Reveal className="relative max-w-5xl mx-auto px-6 sm:px-10 py-12">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6 items-start">
+            <StatCounter value={9} suffix="+" label="anos de metodologia própria" />
+            <StatCounter value={12000} suffix="+" label="vidas transformadas pelo IDM" />
+            <div className="text-center sm:text-left">
+              <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-4xl sm:text-5xl font-bold text-white leading-none">
+                1<span className="text-[#FFB800]">ª</span>
+              </p>
+              <p className="text-xs text-white/45 mt-2.5 tracking-wide leading-snug">maior escola de psicanálise integrativa do Brasil</p>
+            </div>
+            <div className="text-center sm:text-left">
+              <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-4xl sm:text-5xl font-bold text-white leading-none">
+                Nacional
+              </p>
+              <p className="text-xs text-white/45 mt-2.5 tracking-wide leading-snug">maior hub de autoconhecimento do país</p>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
       {/* ── VÍDEO DE APRESENTAÇÃO ─────────────────── */}
-      <section className="bg-[#0A1232] border-y border-white/5">
-        <Reveal className="max-w-2xl mx-auto px-6 sm:px-10 py-12 space-y-5">
+      <section className="relative bg-[#0A1232] overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.35]"
+          style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,184,0,0.08), transparent)' }}
+        />
+        <Reveal className="relative max-w-2xl mx-auto px-6 sm:px-10 py-16 space-y-7">
+          <Quote className="h-6 w-6 text-[#FFB800]/40 mx-auto" strokeWidth={1.5} />
           <p
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-xl sm:text-2xl font-light leading-snug text-white/80 text-center"
+            className="text-xl sm:text-[26px] font-light leading-snug text-white/85 text-center"
           >
             Assista a esse vídeo, a Jocimara Anjos está te apresentando o que é o &ldquo;Cicatrizes que Curam&rdquo;.
           </p>
-          <VideoPlayer youtubeId={VIDEO_VENDAS_YOUTUBE_ID} title="Cicatrizes que Curam — vídeo de apresentação" />
+          <div className="rounded-[20px] p-[1px] bg-gradient-to-br from-[#FFB800]/25 via-white/5 to-transparent">
+            <VideoPlayer youtubeId={VIDEO_VENDAS_YOUTUBE_ID} title="Cicatrizes que Curam — vídeo de apresentação" />
+          </div>
         </Reveal>
       </section>
 
       {/* ── O QUE É ──────────────────────────────── */}
       <Reveal>
-        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-20">
+        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-24">
+          <Eyebrow>O workshop</Eyebrow>
           <h2
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-4xl sm:text-5xl font-bold text-white mb-12"
+            className="text-4xl sm:text-5xl font-bold text-white mb-14 max-w-lg leading-[1.08]"
           >
-            O que é o workshop.
+            <RevealWords text="O que é o workshop." />
           </h2>
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-3 gap-px rounded-2xl overflow-hidden bg-white/[0.06] border border-white/[0.06]">
             {[
-              { t: 'Vivência guiada', d: '3 horas de imersão prática, conduzida pela Jocimara, unindo psicanálise integrativa e acolhimento em grupo.' },
-              { t: 'Autoconhecimento aplicado', d: 'Identifique as marcas emocionais que ainda influenciam suas decisões — e o que fazer com elas a partir de hoje.' },
-              { t: 'Turma pequena', d: 'Vagas limitadas de propósito: mais espaço de escuta, mais profundidade, menos gente por sessão.' },
+              { n: '01', t: 'Vivência guiada', d: '3 horas de imersão prática, conduzida pela Jocimara, unindo psicanálise integrativa e acolhimento em grupo.' },
+              { n: '02', t: 'Autoconhecimento aplicado', d: 'Identifique as marcas emocionais que ainda influenciam suas decisões — e o que fazer com elas a partir de hoje.' },
+              { n: '03', t: 'Turma pequena', d: 'Vagas limitadas de propósito: mais espaço de escuta, mais profundidade, menos gente por sessão.' },
             ].map((c) => (
-              <div key={c.t} className="rounded-2xl border border-white/8 bg-[#0A1232] p-7 space-y-3">
+              <TiltCard key={c.t} className="group relative bg-[#0D1638] p-8 space-y-4 transition-colors duration-300 hover:bg-[#0F1B45]">
+                <span
+                  style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                  className="block text-sm font-semibold text-[#FFB800]/50 group-hover:text-[#FFB800]/80 transition-colors"
+                >
+                  {c.n}
+                </span>
                 <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-lg font-semibold text-white">{c.t}</p>
                 <p className="text-sm text-white/45 leading-relaxed">{c.d}</p>
-              </div>
+              </TiltCard>
             ))}
+          </div>
+        </section>
+      </Reveal>
+
+      <SectionDivider />
+
+      {/* ── QUEM CONDUZ ──────────────────────────── */}
+      <Reveal>
+        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-24">
+          <Eyebrow>Quem conduz</Eyebrow>
+          <div className="grid sm:grid-cols-[auto_1fr] gap-8 sm:gap-12 items-center">
+            <div className="relative mx-auto sm:mx-0 shrink-0">
+              <div
+                className="absolute -inset-3 rounded-full opacity-40 blur-xl"
+                style={{ background: 'radial-gradient(circle, #FFB800, transparent 70%)' }}
+              />
+              <div className="relative h-28 w-28 sm:h-36 sm:w-36 rounded-full overflow-hidden border-2 border-[#FFB800]/40">
+                <Image src="/jocimara-anjos.jpg" alt="Jocimara Anjos" fill className="object-cover" />
+              </div>
+            </div>
+            <div className="space-y-4 text-center sm:text-left">
+              <div>
+                <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-2xl sm:text-3xl font-bold text-white">
+                  Jocimara Anjos
+                </p>
+                <p className="text-sm text-[#FFB800]/80 mt-1">Coordenadora Pedagógica da Formação em Psicanálise do IDM</p>
+              </div>
+              <p className="text-sm text-white/50 leading-relaxed max-w-lg mx-auto sm:mx-0">
+                Formada e em constante prática clínica, Jocimara integra a equipe pedagógica do Instituto Despertamente
+                — reconhecido como a maior escola de psicanálise integrativa e o maior hub de autoconhecimento do Brasil,
+                com 9 anos de metodologia própria e mais de 12.000 vidas impactadas em todo o país.
+              </p>
+              <div className="flex flex-wrap justify-center sm:justify-start gap-2 pt-1">
+                {[
+                  { icon: GraduationCap, label: 'Psicanálise Integrativa' },
+                  { icon: Users, label: 'Facilitação em grupo' },
+                  { icon: Award, label: 'Formação certificada' },
+                ].map(({ icon: Icon, label }) => (
+                  <span key={label} className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[11px] text-white/50">
+                    <Icon className="h-3 w-3 text-[#FFB800]/70" />
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
       </Reveal>
 
       {/* ── PRA QUEM É ───────────────────────────── */}
       <Reveal>
-        <section className="max-w-3xl mx-auto px-6 sm:px-10 py-20">
+        <section className="max-w-3xl mx-auto px-6 sm:px-10 py-24">
+          <Eyebrow>É pra você?</Eyebrow>
           <h2
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-4xl sm:text-5xl font-bold text-white mb-10"
+            className="text-4xl sm:text-5xl font-bold text-white mb-12 leading-[1.08]"
           >
-            Pra quem é.
+            <RevealWords text="Pra quem é." />
           </h2>
-          <div className="space-y-0 divide-y divide-white/5">
-            {paraQuemE.map((item) => (
-              <div key={item} className="flex items-start gap-4 py-5">
-                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#FFB800]/60 shrink-0" />
-                <p className="text-sm text-white/60 leading-relaxed">{item}</p>
-              </div>
+          <div className="space-y-0 divide-y divide-white/[0.06]">
+            {paraQuemE.map((item, i) => (
+              <motion.div
+                key={item}
+                initial={{ opacity: 0, x: -12 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="flex items-start gap-4 py-6"
+              >
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#FFB800]/10 border border-[#FFB800]/25">
+                  <Check className="h-3.5 w-3.5 text-[#FFB800]" strokeWidth={2.5} />
+                </span>
+                <p className="text-[15px] text-white/65 leading-relaxed pt-0.5">{item}</p>
+              </motion.div>
             ))}
           </div>
         </section>
@@ -189,46 +430,94 @@ export function CicatrizesContent() {
 
       {/* ── INVESTIMENTO ─────────────────────────── */}
       <Reveal>
-        <section id="investimento" className="bg-[#0A1232] border-y border-white/5">
-          <div className="max-w-5xl mx-auto px-6 sm:px-10 py-20">
+        <section id="investimento" className="relative bg-[#0A1232] border-y border-white/5 overflow-hidden">
+          <motion.div
+            className="absolute -top-32 left-1/2 -translate-x-1/2 h-64 w-[36rem] rounded-full pointer-events-none blur-3xl"
+            animate={{ opacity: [0.15, 0.28, 0.15] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ background: 'radial-gradient(circle, #FFB800, transparent 70%)' }}
+          />
+          <div className="relative max-w-5xl mx-auto px-6 sm:px-10 py-24">
+            <Eyebrow>Sua vaga</Eyebrow>
             <h2
               style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-              className="text-4xl sm:text-5xl font-bold text-white mb-3"
+              className="text-4xl sm:text-5xl font-bold text-white mb-3 leading-[1.08]"
             >
-              Investimento.
+              <RevealWords text="Investimento." />
             </h2>
-            <p className="text-sm text-white/45 leading-relaxed mb-10 max-w-md">
+            <p className="text-sm text-white/45 leading-relaxed mb-12 max-w-md">
               Valor de referência R$250 — o ingresso avulso sai por bem menos, e ainda vem com bônus.
             </p>
 
             <div className="grid sm:grid-cols-[1fr_1.3fr] gap-6 items-start">
-              <div className="rounded-2xl border p-7 space-y-3" style={{ borderColor: 'rgba(255,184,0,0.35)', background: 'linear-gradient(160deg, rgba(255,184,0,0.08), rgba(10,18,50,0.4))' }}>
-                <p className="text-[11px] font-mono uppercase tracking-widest text-[#FFB800]">Seu ingresso hoje</p>
-                <p className="text-xs text-white/30 line-through">R$ 250,00</p>
-                <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-5xl font-bold text-white leading-none pt-1">
-                  R$ 47,90
-                </p>
-                <p className="text-[11px] text-white/40 pt-1">Pix ou cartão · em todos os canais do IDM</p>
-                <button
-                  onClick={lead.abrir}
-                  className="w-full mt-3 flex items-center justify-center py-3.5 rounded-xl bg-[#FFB800] text-sm font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
+              {/* Ticket-style price card */}
+              <div className="relative">
+                <div
+                  className="relative rounded-2xl border p-8 space-y-3 overflow-hidden"
+                  style={{
+                    borderColor: 'rgba(255,184,0,0.35)',
+                    background: 'linear-gradient(160deg, rgba(255,184,0,0.10), rgba(10,18,50,0.5))',
+                    boxShadow: '0 24px 60px -20px rgba(255,184,0,0.18)',
+                  }}
                 >
-                  Quero garantir meu ingresso
-                </button>
+                  <motion.div
+                    className="absolute -top-10 -right-10 h-28 w-28 rounded-full pointer-events-none"
+                    animate={{ opacity: [0.2, 0.35, 0.2] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ background: '#FFB800', filter: 'blur(24px)' }}
+                  />
+                  <motion.div
+                    className="absolute inset-y-0 w-16 pointer-events-none"
+                    style={{ background: 'linear-gradient(100deg, transparent, rgba(255,255,255,0.10), transparent)' }}
+                    animate={{ left: ['-20%', '120%'] }}
+                    transition={{ duration: 3.2, repeat: Infinity, repeatDelay: 2.5, ease: 'easeInOut' }}
+                  />
+                  <div className="relative flex items-center gap-1.5">
+                    <Sparkles className="h-3 w-3 text-[#FFB800]" />
+                    <p className="text-[11px] font-mono uppercase tracking-widest text-[#FFB800]">Seu ingresso hoje</p>
+                  </div>
+                  <p className="relative text-xs text-white/30 line-through">R$ 250,00</p>
+                  <p
+                    style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+                    className="relative text-5xl font-bold text-white leading-none pt-1"
+                  >
+                    R$ 47,90
+                  </p>
+                  <p className="relative text-[11px] text-white/40 pt-1">Pix ou cartão · em todos os canais do IDM</p>
+                  <button
+                    onClick={lead.abrir}
+                    className="relative w-full mt-4 flex items-center justify-center py-3.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] text-sm font-bold text-[#0D1638] hover:brightness-[1.06] active:scale-[0.98] transition-all duration-200"
+                    style={{ boxShadow: '0 10px 28px -8px rgba(255,184,0,0.4)' }}
+                  >
+                    Quero garantir meu ingresso
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-3">
                 <p className="text-[11px] font-mono uppercase tracking-widest text-white/30 mb-1">Ao garantir sua vaga, você também leva</p>
-                {bonusStack.map((b) => (
-                  <div key={b.t} className="rounded-xl border border-white/8 bg-[#0D1638] p-4">
-                    <p className="text-sm font-semibold text-white">{b.t}</p>
-                    <p className="text-xs text-white/40 mt-1 leading-relaxed">{b.d}</p>
-                  </div>
+                {bonusStack.map((b, i) => (
+                  <motion.div
+                    key={b.t}
+                    initial={{ opacity: 0, x: 12 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                    className="group flex items-start gap-4 rounded-xl border border-white/[0.07] bg-[#0D1638] p-5 transition-colors duration-200 hover:border-[#FFB800]/25"
+                  >
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#FFB800]/10 border border-[#FFB800]/20 text-[10px] font-bold text-[#FFB800] font-mono">
+                      {i + 1}
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-white">{b.t}</p>
+                      <p className="text-xs text-white/40 mt-1 leading-relaxed">{b.d}</p>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
 
-            <p className="text-xs text-white/30 mt-8 max-w-md">
+            <p className="text-xs text-white/30 mt-10 max-w-md">
               Ganhou o workshop de bônus em outro produto do IDM? Sua vaga já está garantida, sem custo adicional.
             </p>
 
@@ -236,7 +525,7 @@ export function CicatrizesContent() {
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 text-xs text-white/35 hover:text-white/60 transition-colors"
+              className="mt-6 inline-flex items-center gap-2 text-xs text-white/35 hover:text-[#FFB800]/80 transition-colors"
             >
               <MessageCircle className="h-3 w-3" />
               Tirar dúvidas pelo WhatsApp
@@ -247,17 +536,22 @@ export function CicatrizesContent() {
 
       {/* ── FAQ ──────────────────────────────────── */}
       <Reveal>
-        <section className="max-w-3xl mx-auto px-6 sm:px-10 py-20">
+        <section className="max-w-3xl mx-auto px-6 sm:px-10 py-24">
+          <Eyebrow>Perguntas frequentes</Eyebrow>
           <h2
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-            className="text-4xl sm:text-5xl font-bold text-white mb-10"
+            className="text-4xl sm:text-5xl font-bold text-white mb-12 leading-[1.08]"
           >
-            Dúvidas.
+            <RevealWords text="Dúvidas." />
           </h2>
           <Accordion type="single" collapsible>
-            <div className="divide-y divide-white/5">
+            <div className="space-y-2.5">
               {faqItems.map((item, i) => (
-                <AccordionItem key={i} value={`faq-${i}`} className="border-0">
+                <AccordionItem
+                  key={i}
+                  value={`faq-${i}`}
+                  className="border border-white/[0.06] rounded-xl bg-white/[0.02] px-5 data-[state=open]:border-[#FFB800]/20 data-[state=open]:bg-[#FFB800]/[0.03] transition-colors"
+                >
                   <AccordionTrigger className="hover:no-underline py-5 text-left text-sm font-medium text-white/70 hover:text-white transition-colors">
                     {item.q}
                   </AccordionTrigger>
@@ -280,24 +574,32 @@ export function CicatrizesContent() {
             backgroundSize: '48px 48px',
           }}
         />
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-80 w-80 rounded-full pointer-events-none blur-[100px]"
+          animate={{ x: [0, 24, 0], y: [0, -18, 0], opacity: [0.2, 0.32, 0.2] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ background: 'radial-gradient(circle, #FFB800, transparent 70%)' }}
+        />
         <Reveal className="relative max-w-3xl mx-auto px-6 sm:px-10 space-y-10">
           <h2
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
             className="text-5xl sm:text-6xl font-bold text-white leading-[1.0]"
           >
-            Sua próxima turma<br />está quase fechando.
+            <RevealWords text="Sua próxima turma" />
+            <br />
+            <RevealWords text="está quase fechando." />
           </h2>
           <div className="flex flex-col sm:flex-row items-start gap-4">
             <button
               onClick={lead.abrir}
-              className="group inline-flex items-center gap-2.5 rounded-xl bg-[#FFB800] px-8 py-4 text-base font-bold text-[#0D1638] hover:bg-[#FFC933] transition-colors"
-              style={{ boxShadow: '0 8px 32px rgba(255,184,0,0.22)' }}
+              className="group inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] px-8 py-4 text-base font-bold text-[#0D1638] hover:brightness-[1.06] active:scale-[0.98] transition-all duration-200"
+              style={{ boxShadow: '0 12px 40px -8px rgba(255,184,0,0.45), 0 1px 0 rgba(255,255,255,0.4) inset' }}
             >
               Quero garantir meu ingresso
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
           </div>
-          <p className="text-xs font-mono text-white/25">
+          <p className="text-xs font-mono text-white/25 tracking-wide">
             Vagas limitadas · turma pequena de propósito
           </p>
         </Reveal>
