@@ -42,8 +42,8 @@ const AULAS: Aula[] = [
     titulo: 'Aula 1 — O Despertar',
     data: '21/07 · Terça-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_1',
-    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_1/maxresdefault.jpg',
+    youtubeUrl: 'https://youtube.com/live/cj9cbMY85L8',
+    imageUrl: 'https://img.youtube.com/vi/cj9cbMY85L8/maxresdefault.jpg',
     gcal: { titulo: 'SDW #41 — Aula 1', inicio: '20260721T230000Z', fim: '20260722T010000Z', desc: 'Aula 1 da Semana do Despertar #41 · IDM' },
   },
   {
@@ -51,8 +51,8 @@ const AULAS: Aula[] = [
     titulo: 'Aula 2 — A Cura',
     data: '22/07 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_2',
-    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_2/maxresdefault.jpg',
+    youtubeUrl: 'https://youtube.com/live/wg3rIvyxyYc',
+    imageUrl: 'https://img.youtube.com/vi/wg3rIvyxyYc/maxresdefault.jpg',
     gcal: { titulo: 'SDW #41 — Aula 2', inicio: '20260722T230000Z', fim: '20260723T010000Z', desc: 'Aula 2 da Semana do Despertar #41 · IDM' },
   },
   {
@@ -60,8 +60,8 @@ const AULAS: Aula[] = [
     titulo: 'Aula 3 — A Revelação',
     data: '23/07 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_3',
-    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_3/maxresdefault.jpg',
+    youtubeUrl: 'https://youtube.com/live/ddQ0K3XObu8',
+    imageUrl: 'https://img.youtube.com/vi/ddQ0K3XObu8/maxresdefault.jpg',
     gcal: { titulo: 'SDW #41 — Aula 3', inicio: '20260723T230000Z', fim: '20260724T010000Z', desc: 'Aula 3 da Semana do Despertar #41 · IDM' },
   },
 ]
