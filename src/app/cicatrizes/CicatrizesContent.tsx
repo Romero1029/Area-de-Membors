@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import {
   motion,
@@ -178,6 +178,41 @@ function TiltCard({ children, className = '' }: { children: React.ReactNode; cla
   )
 }
 
+function StickyCTACicatrizes({ onAbrir }: { onAbrir: () => void }) {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const threshold = window.innerHeight * 0.3
+    const handler = () => setVisible(window.scrollY > threshold)
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
+
+  return (
+    <div
+      className={`md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0A1232]/96 backdrop-blur-xl border-t border-white/8 px-4 py-3 flex gap-2.5 transition-transform duration-300 ${
+        visible ? 'translate-y-0' : 'translate-y-full'
+      }`}
+      aria-hidden={!visible}
+    >
+      <a
+        href={WA_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#25D366]/30 text-sm font-bold text-[#25D366] hover:bg-[#25D366]/8 transition-colors"
+      >
+        <MessageCircle className="h-4 w-4" />
+      </a>
+      <button
+        onClick={onAbrir}
+        className="flex flex-1 items-center justify-center py-3 rounded-xl bg-gradient-to-b from-[#FFC933] to-[#FFA800] text-sm font-bold text-[#0D1638] hover:brightness-[1.06] transition-all"
+      >
+        Quero garantir meu ingresso
+      </button>
+    </div>
+  )
+}
+
 export function CicatrizesContent() {
   const lead = useCheckoutModal()
   const heroRef = useRef<HTMLDivElement>(null)
@@ -189,6 +224,7 @@ export function CicatrizesContent() {
     <>
       <LeadFormModal open={lead.open} onClose={lead.fechar} />
       <ScrollProgress />
+      <StickyCTACicatrizes onAbrir={lead.abrir} />
 
       {/* ── HERO ─────────────────────────────────── */}
       <section ref={heroRef} className="relative overflow-hidden pt-[72px] bg-[#0D1638]">
