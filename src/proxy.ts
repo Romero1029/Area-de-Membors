@@ -13,6 +13,18 @@ export async function proxy(request: NextRequest) {
       return NextResponse.next()
     }
 
+    if (pathname === '/privacidade.html' || pathname === '/privacidade') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/franquia-privacidade.html'
+      return NextResponse.rewrite(url)
+    }
+
+    if (pathname === '/termos.html' || pathname === '/termos') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/franquia-termos.html'
+      return NextResponse.rewrite(url)
+    }
+
     if (pathname !== '/franquia') {
       const url = request.nextUrl.clone()
       url.pathname = '/franquia'
