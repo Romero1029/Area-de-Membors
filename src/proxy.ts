@@ -9,7 +9,7 @@ export async function proxy(request: NextRequest) {
   if (FRANQUIA_HOSTS.includes(host)) {
     const { pathname } = request.nextUrl
 
-    if (pathname.startsWith('/franquia-assets/') || pathname.startsWith('/_next') || pathname.startsWith('/favicon')) {
+    if (pathname.startsWith('/franquia-assets/') || pathname.startsWith('/_next') || pathname.startsWith('/favicon') || pathname.startsWith('/google')) {
       return NextResponse.next()
     }
 
