@@ -127,9 +127,9 @@ export function HeroCarousel({ slides: rawSlides, autoPlayInterval = 7000 }: Her
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#0A1232] to-[#0F1940]" />
           )}
-          {/* Gradientes de leitura */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0D1638] via-[#0D1638]/55 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0D1638] via-[#0D1638]/20 to-transparent" style={{ backgroundImage: 'linear-gradient(to top, #0D1638 0%, rgba(13,22,56,0.4) 40%, transparent 70%)' }} />
+          {/* Gradientes de leitura — sólido até ~58% pra cobrir texto embutido na arte, revelando só a imagem de impacto à direita */}
+          <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(to right, #0D1638 0%, #0D1638 42%, rgba(13,22,56,0.94) 58%, rgba(13,22,56,0.55) 72%, transparent 92%)' }} />
+          <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(to top, #0D1638 0%, rgba(13,22,56,0.4) 40%, transparent 70%)' }} />
         </motion.div>
       </AnimatePresence>
 

@@ -12,7 +12,7 @@ import {
 // CONFIG — edite aqui sem tocar no restante
 // ─────────────────────────────────────────────
 
-const WA_GROUP_URL   = 'https://chat.whatsapp.com/PENDENTE_GRUPO_VIP_42'
+const WA_GROUP_URL   = 'https://chat.whatsapp.com/KoK9CDjElOcJ3nkjjd96jW'
 const INTRO_VIDEO_ID = ''
 const EBOOK_URL      = '#'
 const BANNER_URL     = ''  // ex: '/banner-sdw42.png'
@@ -42,8 +42,8 @@ const AULAS: Aula[] = [
     titulo: 'Aula 1 — O Despertar',
     data: '28/07 · Terça-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_1',
-    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_1/maxresdefault.jpg',
+    youtubeUrl: 'https://youtube.com/live/z5d6twnYiGg',
+    imageUrl: 'https://img.youtube.com/vi/z5d6twnYiGg/maxresdefault.jpg',
     gcal: { titulo: 'SDW #42 — Aula 1', inicio: '20260728T230000Z', fim: '20260729T010000Z', desc: 'Aula 1 da Semana do Despertar #42 · IDM' },
   },
   {
@@ -51,8 +51,8 @@ const AULAS: Aula[] = [
     titulo: 'Aula 2 — A Cura',
     data: '29/07 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_2',
-    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_2/maxresdefault.jpg',
+    youtubeUrl: 'https://youtube.com/live/_cNu6ECHml8',
+    imageUrl: 'https://img.youtube.com/vi/_cNu6ECHml8/maxresdefault.jpg',
     gcal: { titulo: 'SDW #42 — Aula 2', inicio: '20260729T230000Z', fim: '20260730T010000Z', desc: 'Aula 2 da Semana do Despertar #42 · IDM' },
   },
   {
@@ -60,8 +60,8 @@ const AULAS: Aula[] = [
     titulo: 'Aula 3 — A Revelação',
     data: '30/07 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_3',
-    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_3/maxresdefault.jpg',
+    youtubeUrl: 'https://youtube.com/live/1mHLICt7ag4',
+    imageUrl: 'https://img.youtube.com/vi/1mHLICt7ag4/maxresdefault.jpg',
     gcal: { titulo: 'SDW #42 — Aula 3', inicio: '20260730T230000Z', fim: '20260731T010000Z', desc: 'Aula 3 da Semana do Despertar #42 · IDM' },
   },
 ]

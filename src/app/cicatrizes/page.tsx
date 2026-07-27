@@ -1,6 +1,5 @@
 import { NavbarComecar } from '@/app/comecar/NavbarComecar'
 import { WhatsAppButton } from '@/app/comecar/WhatsAppButton'
-import { StickyCTA } from '@/app/comecar/StickyCTA'
 import { CookieBanner } from '@/app/comecar/CookieBanner'
 import { CicatrizesContent } from './CicatrizesContent'
 import Link from 'next/link'
@@ -20,7 +19,6 @@ export default function CicatrizesPage() {
     <div className="min-h-screen bg-[#0D1638] text-white overflow-x-hidden">
       <NavbarComecar />
       <WhatsAppButton />
-      <StickyCTA />
       <CookieBanner />
 
       <CicatrizesContent />

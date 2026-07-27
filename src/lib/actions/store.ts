@@ -63,7 +63,6 @@ export async function getUpsellProducts(enrolledProductIds: string[]): Promise<S
     .eq('is_published', true)
     .not('price', 'is', null)
     .order('sort_order', { ascending: true })
-    .limit(3)
 
   if (enrolledProductIds.length > 0) {
     query = query.not('id', 'in', `(${enrolledProductIds.join(',')})`)

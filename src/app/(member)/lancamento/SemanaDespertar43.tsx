@@ -12,10 +12,10 @@ import {
 // CONFIG — edite aqui sem tocar no restante
 // ─────────────────────────────────────────────
 
-const WA_GROUP_URL   = 'https://chat.whatsapp.com/FbmkGkOQ8YuItRZVTiJtMY'
+const WA_GROUP_URL   = 'https://chat.whatsapp.com/DVGrhys2MXZIhAvbJzi6oq'
 const INTRO_VIDEO_ID = ''
 const EBOOK_URL      = '#'
-const BANNER_URL     = ''  // ex: '/banner-sdw41.png'
+const BANNER_URL     = ''  // ex: '/banner-sdw43.png'
 
 const OFERTA = {
   ativo: false,
@@ -40,38 +40,38 @@ const AULAS: Aula[] = [
   {
     id: 1,
     titulo: 'Aula 1 — O Despertar',
-    data: '21/07 · Terça-feira',
+    data: '04/08 · Terça-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/cj9cbMY85L8',
-    imageUrl: 'https://img.youtube.com/vi/cj9cbMY85L8/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #41 — Aula 1', inicio: '20260721T230000Z', fim: '20260722T010000Z', desc: 'Aula 1 da Semana do Despertar #41 · IDM' },
+    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_1',
+    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_1/maxresdefault.jpg',
+    gcal: { titulo: 'SDW #43 — Aula 1', inicio: '20260804T230000Z', fim: '20260805T010000Z', desc: 'Aula 1 da Semana do Despertar #43 · IDM' },
   },
   {
     id: 2,
     titulo: 'Aula 2 — A Cura',
-    data: '22/07 · Quarta-feira',
+    data: '05/08 · Quarta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/wg3rIvyxyYc',
-    imageUrl: 'https://img.youtube.com/vi/wg3rIvyxyYc/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #41 — Aula 2', inicio: '20260722T230000Z', fim: '20260723T010000Z', desc: 'Aula 2 da Semana do Despertar #41 · IDM' },
+    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_2',
+    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_2/maxresdefault.jpg',
+    gcal: { titulo: 'SDW #43 — Aula 2', inicio: '20260805T230000Z', fim: '20260806T010000Z', desc: 'Aula 2 da Semana do Despertar #43 · IDM' },
   },
   {
     id: 3,
     titulo: 'Aula 3 — A Revelação',
-    data: '23/07 · Quinta-feira',
+    data: '06/08 · Quinta-feira',
     horario: '20h (Horário de Brasília)',
-    youtubeUrl: 'https://youtube.com/live/ddQ0K3XObu8',
-    imageUrl: 'https://img.youtube.com/vi/ddQ0K3XObu8/maxresdefault.jpg',
-    gcal: { titulo: 'SDW #41 — Aula 3', inicio: '20260723T230000Z', fim: '20260724T010000Z', desc: 'Aula 3 da Semana do Despertar #41 · IDM' },
+    youtubeUrl: 'https://youtube.com/live/PENDENTE_AULA_3',
+    imageUrl: 'https://img.youtube.com/vi/PENDENTE_AULA_3/maxresdefault.jpg',
+    gcal: { titulo: 'SDW #43 — Aula 3', inicio: '20260806T230000Z', fim: '20260807T010000Z', desc: 'Aula 3 da Semana do Despertar #43 · IDM' },
   },
 ]
 
 const XP_PER_STEP = 200
 const TOTAL_STEPS  = 3
-const STORAGE_KEY  = 'sdw41_progress'
+const STORAGE_KEY  = 'sdw43_progress'
 
-// 22h Horário de Brasília em 23/07/2026 (última aula) = 01h UTC do dia 24/07/2026
-const CERT_UNLOCK = new Date('2026-07-24T01:00:00Z')
+// 22h Horário de Brasília em 06/08/2026 (última aula) = 01h UTC do dia 07/08/2026
+const CERT_UNLOCK = new Date('2026-08-07T01:00:00Z')
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -98,12 +98,12 @@ function openCalendar(aula: Aula) {
   const { titulo, inicio, fim, desc } = aula.gcal
   const descFull = `${desc}\n\nAssista em: ${aula.youtubeUrl}`
   if (isIOS) {
-    const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//IDM//SDW41//PT','BEGIN:VEVENT',
+    const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//IDM//SDW43//PT','BEGIN:VEVENT',
       `SUMMARY:${titulo}`,`DTSTART:${inicio}`,`DTEND:${fim}`,
       `DESCRIPTION:${descFull.replace(/\n/g,'\\n')}`,`URL:${aula.youtubeUrl}`,
       'END:VEVENT','END:VCALENDAR'].join('\r\n')
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
-    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `sdw41-aula${aula.id}.ics` })
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `sdw43-aula${aula.id}.ics` })
     document.body.appendChild(a); a.click(); document.body.removeChild(a)
     return
   }
@@ -264,7 +264,7 @@ function CertResgateForm() {
         </div>
         <div>
           <p className="text-sm font-semibold text-white/90">Certificado emitido!</p>
-          <p className="text-xs text-white/35 mt-0.5">Parabéns por concluir a Semana do Despertar #41.</p>
+          <p className="text-xs text-white/35 mt-0.5">Parabéns por concluir a Semana do Despertar #43.</p>
         </div>
         <Link href="/certificados?celebrar=true"
           className="inline-flex items-center gap-2 rounded-xl py-3 px-6 text-sm font-bold text-[#0D1638] transition-all"
@@ -354,7 +354,7 @@ function MiniTimeline({ currentStep }: { currentStep: number }) {
 // ─────────────────────────────────────────────
 // MAIN COMPONENT
 // ─────────────────────────────────────────────
-export function SemanaDespertar41({ firstName }: { firstName: string }) {
+export function SemanaDespertar43({ firstName }: { firstName: string }) {
   const [progress, setProgress] = useState<Progress>(EMPTY)
   const [hydrated, setHydrated] = useState(false)
   const [now, setNow] = useState<Date>(() => new Date())
@@ -411,7 +411,7 @@ export function SemanaDespertar41({ firstName }: { firstName: string }) {
             <div className="w-full rounded-xl overflow-hidden mb-8 relative">
               <img
                 src={BANNER_URL}
-                alt="Semana do Despertar #41"
+                alt="Semana do Despertar #43"
                 className="w-full block"
                 style={{ maxHeight: 260, objectFit: 'cover' }}
               />
@@ -427,7 +427,7 @@ export function SemanaDespertar41({ firstName }: { firstName: string }) {
             {/* Barra superior editorial */}
             <div className="flex items-center justify-between border-t border-b border-white/[0.08] py-2.5 mb-7">
               <span className="text-[10px] uppercase tracking-[0.22em] text-white/30 font-medium">Instituto Despertamente</span>
-              <span className="text-[10px] uppercase tracking-[0.15em] text-white/25 border border-white/[0.12] px-2 py-0.5 rounded">SDW #41</span>
+              <span className="text-[10px] uppercase tracking-[0.15em] text-white/25 border border-white/[0.12] px-2 py-0.5 rounded">SDW #43</span>
             </div>
 
             {/* Headline */}
@@ -446,7 +446,7 @@ export function SemanaDespertar41({ firstName }: { firstName: string }) {
             {/* Copy */}
             <p className="text-sm text-white/60 leading-relaxed mb-7">
               Você garantiu sua vaga no <span className="text-white/80 font-semibold">Curso Gratuito!</span> O evento será nos dias{' '}
-              <span className="text-white/80 font-semibold">21, 22 e 23 de Julho.</span>
+              <span className="text-white/80 font-semibold">04, 05 e 06 de Agosto.</span>
               <br />
               Siga as etapas abaixo para garantir seu acesso completo.
             </p>
@@ -641,7 +641,7 @@ export function SemanaDespertar41({ firstName }: { firstName: string }) {
                   subtitle={
                     certUnlocked
                       ? (todasAulasFeitas ? 'Disponível para resgate!' : 'Complete as 3 aulas para resgatar.')
-                      : 'Libera às 22h · 23/07 · após a última aula'
+                      : 'Libera às 22h · 06/08 · após a última aula'
                   }
                 >
                   <div className="space-y-4">
@@ -651,7 +651,7 @@ export function SemanaDespertar41({ firstName }: { firstName: string }) {
                         <Award className="h-6 w-6 text-[#FFB800]/50" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-white/75">Certificado da Semana do Despertar #41</p>
+                        <p className="text-sm font-semibold text-white/75">Certificado da Semana do Despertar #43</p>
                         <p className="text-xs text-white/30 leading-relaxed mt-0.5">
                           Ao final do curso, você retorna aqui e insere as 3 palavras-chave reveladas nas aulas para resgatar seu certificado.
                         </p>
@@ -684,7 +684,7 @@ export function SemanaDespertar41({ firstName }: { firstName: string }) {
                           </div>
                         </div>
                         <p className="text-[11px] text-white/25 leading-relaxed">
-                          📅 23/07 às 22h (Horário de Brasília) — ao final da 3ª aula ao vivo
+                          📅 06/08 às 22h (Horário de Brasília) — ao final da 3ª aula ao vivo
                         </p>
                       </div>
                     ) : todasAulasFeitas ? (

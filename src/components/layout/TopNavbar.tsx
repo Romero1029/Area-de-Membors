@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Bell, Menu, X, ShoppingBag, Award, User, LogOut, ChevronDown, CalendarDays, Shield } from 'lucide-react'
+import { Bell, Menu, X, ShoppingBag, Award, User, LogOut, ChevronDown, CalendarDays, Shield, Home } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/lib/actions/auth'
 import { IdmWordmark } from './IdmWordmark'
@@ -19,6 +19,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 const navLinks = [
+  { href: '/dashboard', label: 'Início', icon: Home, highlight: false },
   { href: '/lancamento', label: 'Semana do Despertar', icon: CalendarDays, highlight: true },
 ]
 

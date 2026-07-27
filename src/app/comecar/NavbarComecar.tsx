@@ -130,7 +130,7 @@ export function NavbarComecar() {
           {/* Desktop CTAs */}
           <div className="hidden lg:flex items-center gap-3 shrink-0">
             <a
-              href="#franqueado"
+              href="https://www.idmpsifranquia.com.br"
               className="text-sm font-semibold px-4 py-2 rounded-lg border border-[#FFB800]/50 text-[#FFB800] hover:bg-[#FFB800]/10 hover:border-[#FFB800] transition-all duration-200"
             >
               Seja um Franqueado
@@ -212,7 +212,7 @@ export function NavbarComecar() {
                 Acesso Aluno
               </Link>
               <a
-                href="#franqueado"
+                href="https://www.idmpsifranquia.com.br"
                 className="flex items-center justify-center py-3 rounded-xl text-[15px] font-semibold text-[#FFB800] border border-[#FFB800]/40 hover:bg-[#FFB800]/8 transition-colors"
                 onClick={() => setMobileOpen(false)}
               >
