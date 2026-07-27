@@ -4,8 +4,7 @@ import { WhatsAppButton } from '@/app/comecar/WhatsAppButton'
 import { StickyCTA } from '@/app/comecar/StickyCTA'
 import { CookieBanner } from '@/app/comecar/CookieBanner'
 import { PsicanaliseContent, type ProductData } from './PsicanaliseContent'
-import Link from 'next/link'
-import Image from 'next/image'
+import { SiteFooter } from '@/components/marketing/SiteFooter'
 
 const PRODUCT_SLUG = 'psicanalise-integrativa'
 
@@ -46,21 +45,7 @@ export default async function PsicanaliseIntegrativaPage() {
 
       <PsicanaliseContent product={product} />
 
-      <footer className="border-t border-white/5 bg-[#050505]">
-        <div className="max-w-5xl mx-auto px-6 sm:px-10 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Link href="/comecar" className="flex items-center gap-2.5">
-            <Image src="/despertamente-simbolo-branco.png" alt="IDM" width={22} height={22} className="object-contain opacity-60" />
-            <span style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-sm font-bold text-[#404040]">
-              Instituto <span className="text-[#505050]">Despertamente</span>
-            </span>
-          </Link>
-          <div className="flex gap-5 text-xs text-[#383838]">
-            <Link href="/privacidade" className="hover:text-[#606060] transition-colors">Privacidade</Link>
-            <Link href="/termos" className="hover:text-[#606060] transition-colors">Termos</Link>
-            <Link href="/comecar" className="hover:text-[#606060] transition-colors">Início</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

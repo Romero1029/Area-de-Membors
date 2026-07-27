@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Check, MessageCircle, Video, Award, BookOpen, Zap } from 'lucide-react'
 import { registrarLead } from './actions'
+import { SiteFooter } from '@/components/marketing/SiteFooter'
 
 const BENEFICIOS = [
   { icon: MessageCircle, texto: 'Grupo VIP exclusivo no WhatsApp' },
@@ -149,6 +150,7 @@ export default function Turma38Page() {
           </div>
         </div>
       </div>
+      <SiteFooter />
     </div>
   )
 }

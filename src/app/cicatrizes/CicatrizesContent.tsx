@@ -21,6 +21,7 @@ import {
 import { useCheckoutModal } from '@/components/checkout/CheckoutModal'
 import { LeadFormModal } from './LeadFormModal'
 import { VideoPlayer } from './VideoPlayer'
+import { SiteFooter } from '@/components/marketing/SiteFooter'
 
 // Vídeo provisório — trocar pelo vídeo de vendas real assim que estiver pronto.
 const VIDEO_VENDAS_YOUTUBE_ID = 'megMz1qsixU'
@@ -645,6 +646,8 @@ export function CicatrizesContent() {
           </p>
         </Reveal>
       </section>
+
+      <SiteFooter parceira="Jocimara Anjos" />
     </>
   )
 }
