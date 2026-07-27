@@ -337,7 +337,7 @@ export function CicatrizesContent() {
 
       {/* ── AUTORIDADE / PROVA SOCIAL ─────────────── */}
       <section className="relative bg-[#0A1232] border-y border-white/5 overflow-hidden">
-        <Reveal className="relative max-w-2xl mx-auto px-6 sm:px-10 py-10 text-center">
+        <Reveal className="relative max-w-2xl mx-auto px-6 sm:px-10 py-8 text-center">
           <p className="text-[15px] sm:text-base text-white/60 leading-relaxed">
             Conduzido pela equipe pedagógica do <span className="text-white font-semibold">Instituto Despertamente</span>,
             com uma metodologia já aplicada a mais de <span className="text-[#FFB800] font-semibold">12.000 alunos em todo o país</span>.
@@ -351,7 +351,7 @@ export function CicatrizesContent() {
           className="absolute inset-0 pointer-events-none opacity-[0.35]"
           style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,184,0,0.08), transparent)' }}
         />
-        <Reveal className="relative max-w-2xl mx-auto px-6 sm:px-10 py-16 space-y-7">
+        <Reveal className="relative max-w-2xl mx-auto px-6 sm:px-10 py-12 space-y-7">
           <Quote className="h-6 w-6 text-[#FFB800]/40 mx-auto" strokeWidth={1.5} />
           <p
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
@@ -367,7 +367,7 @@ export function CicatrizesContent() {
 
       {/* ── O QUE É ──────────────────────────────── */}
       <Reveal>
-        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-24">
+        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-14 sm:py-16">
           <Eyebrow>O workshop</Eyebrow>
           <h2
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
@@ -400,7 +400,7 @@ export function CicatrizesContent() {
 
       {/* ── QUEM CONDUZ ──────────────────────────── */}
       <Reveal>
-        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-24">
+        <section className="max-w-5xl mx-auto px-6 sm:px-10 py-14 sm:py-16">
           <Eyebrow>Quem conduz</Eyebrow>
           <div className="grid sm:grid-cols-[auto_1fr] gap-8 sm:gap-12 items-center">
             <div className="relative mx-auto sm:mx-0 shrink-0">
@@ -442,7 +442,7 @@ export function CicatrizesContent() {
 
       {/* ── PRA QUEM É ───────────────────────────── */}
       <Reveal>
-        <section className="max-w-3xl mx-auto px-6 sm:px-10 py-24">
+        <section className="max-w-3xl mx-auto px-6 sm:px-10 py-14 sm:py-16">
           <Eyebrow>É pra você?</Eyebrow>
           <h2
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
@@ -479,7 +479,7 @@ export function CicatrizesContent() {
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
             style={{ background: 'radial-gradient(circle, #FFB800, transparent 70%)' }}
           />
-          <div className="relative max-w-5xl mx-auto px-6 sm:px-10 py-24">
+          <div className="relative max-w-5xl mx-auto px-6 sm:px-10 py-14 sm:py-16">
             <Eyebrow>Sua vaga</Eyebrow>
             <h2
               style={{ fontFamily: "'Fraunces', Georgia, serif" }}
@@ -578,7 +578,7 @@ export function CicatrizesContent() {
 
       {/* ── FAQ ──────────────────────────────────── */}
       <Reveal>
-        <section className="max-w-3xl mx-auto px-6 sm:px-10 py-24">
+        <section className="max-w-3xl mx-auto px-6 sm:px-10 py-14 sm:py-16">
           <Eyebrow>Perguntas frequentes</Eyebrow>
           <h2
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
@@ -608,7 +608,7 @@ export function CicatrizesContent() {
       </Reveal>
 
       {/* ── CTA FINAL ─────────────────────────────── */}
-      <section className="relative overflow-hidden py-32 bg-[#0A1232] border-t border-white/5">
+      <section className="relative overflow-hidden py-20 bg-[#0A1232] border-t border-white/5">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
