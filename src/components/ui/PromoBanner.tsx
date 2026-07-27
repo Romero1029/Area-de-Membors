@@ -64,7 +64,8 @@ function SinglePromo({ slide }: { slide: BannerSlide }) {
             src={slide.image_url}
             alt={slide.title}
             fill
-            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            style={{ objectPosition: 'center 80%' }}
           />
         ) : (
           <div className="absolute inset-0" style={{ background: slide.gradient ?? 'linear-gradient(135deg, #0A1232, #0D1638)' }} />
@@ -110,7 +111,8 @@ function SmallPromo({ slide }: { slide: BannerSlide }) {
           src={slide.image_url}
           alt={slide.title}
           fill
-          className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          style={{ objectPosition: 'center 80%' }}
         />
       ) : (
         <div className="absolute inset-0" style={{ background: slide.gradient ?? 'linear-gradient(135deg, #0A1232, #0D1638)' }} />
