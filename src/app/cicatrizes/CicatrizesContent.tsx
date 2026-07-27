@@ -17,6 +17,41 @@ import { VideoPlayer } from './VideoPlayer'
 // Vídeo provisório — trocar pelo vídeo de vendas real assim que estiver pronto.
 const VIDEO_VENDAS_YOUTUBE_ID = 'megMz1qsixU'
 
+// Próxima turma: 08/08/2026 é uma exceção manual (combinada com a Jocimara).
+// A partir de setembro/2026 em diante, sempre o primeiro sábado do mês —
+// calculado automaticamente, não precisa mexer aqui todo mês.
+const PROXIMA_TURMA_EXCECAO = new Date(2026, 7, 8) // mês 7 = agosto (índice 0-based)
+const HORARIO_TURMA = 'Das 09h30 às 12h'
+
+function primeiroSabado(ano: number, mesIndex: number) {
+  const d = new Date(ano, mesIndex, 1)
+  const offset = (6 - d.getDay() + 7) % 7
+  d.setDate(1 + offset)
+  return d
+}
+
+function proximaTurma(hoje = new Date()): Date {
+  const hojeSemHora = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate())
+  if (hojeSemHora <= PROXIMA_TURMA_EXCECAO) return PROXIMA_TURMA_EXCECAO
+
+  let ano = hoje.getFullYear()
+  let mes = hoje.getMonth()
+  if (ano === 2026 && mes === 7) mes = 8 // pula reto pra setembro depois da excecao de agosto
+
+  let candidata = primeiroSabado(ano, mes)
+  if (candidata < hojeSemHora) {
+    mes += 1
+    if (mes > 11) { mes = 0; ano += 1 }
+    candidata = primeiroSabado(ano, mes)
+  }
+  return candidata
+}
+
+function formatarProximaTurma(data: Date) {
+  const texto = new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' }).format(data)
+  return texto.charAt(0).toUpperCase() + texto.slice(1)
+}
+
 const WA_URL = 'https://wa.me/5511919434040?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Cicatrizes%20que%20Curam.'
 
 const bonusStack = [
@@ -47,7 +82,7 @@ const faqItems = [
   },
   {
     q: 'Com que frequência o workshop acontece?',
-    a: 'Uma turma por mês, com vagas limitadas de propósito — o objetivo é manter o espaço de escuta próximo, não lotar a sala.',
+    a: 'Uma turma por mês, sempre no primeiro sábado, das 9h30 às 12h — com vagas limitadas de propósito, pra manter o espaço de escuta próximo, não lotar a sala.',
   },
   {
     q: 'Ganhei o Cicatrizes que Curam de bônus em outro produto. Preciso pagar?',
@@ -74,6 +109,7 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
 
 export function CicatrizesContent() {
   const lead = useCheckoutModal()
+  const dataProximaTurma = proximaTurma()
 
   return (
     <>
@@ -112,7 +148,11 @@ export function CicatrizesContent() {
             </div>
             <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
               <CalendarDays className="h-3.5 w-3.5 text-[#FFB800]/70" />
-              <span className="text-xs text-white/60">Uma turma por mês</span>
+              <span className="text-xs text-white/60">{formatarProximaTurma(dataProximaTurma)}</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
+              <Clock className="h-3.5 w-3.5 text-[#FFB800]/70" />
+              <span className="text-xs text-white/60">{HORARIO_TURMA}</span>
             </div>
           </motion.div>
 

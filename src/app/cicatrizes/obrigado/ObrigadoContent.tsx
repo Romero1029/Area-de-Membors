@@ -2,8 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { CheckCircle2, PlayCircle, ArrowRight, Info } from 'lucide-react'
+import { CheckCircle2, PlayCircle, ArrowRight, Info, MessageCircle } from 'lucide-react'
 import { CheckoutModal, useCheckoutModal } from '@/components/checkout/CheckoutModal'
+
+// Grupo da turma atual (WhatsApp) — troca todo mês, junto com a virada de turma.
+// Turma #06 (08/08/2026).
+const GRUPO_WHATSAPP_TURMA_URL = 'https://chat.whatsapp.com/HsIblKWWBCzISDnkuEUYjC'
 
 type Etapa = 'upsell' | 'downsell' | 'fim'
 
@@ -42,6 +46,15 @@ export function ObrigadoContent() {
             Enviamos a confirmação e o acesso à sua área de membros por e-mail e WhatsApp — é lá que
             ficam os conteúdos complementares e, assim que sua turma acontecer, a gravação completa do workshop.
           </p>
+          <a
+            href={GRUPO_WHATSAPP_TURMA_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#25D366]/10 border border-[#25D366]/30 px-5 py-2.5 text-sm font-semibold text-[#25D366] hover:bg-[#25D366]/15 transition-colors"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Entrar no grupo da sua turma
+          </a>
         </div>
 
         {etapa === 'upsell' && (
