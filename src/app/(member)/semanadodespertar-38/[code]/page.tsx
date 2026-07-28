@@ -30,7 +30,7 @@ export default async function SemanaDespertar38Page({
 
   return (
     <>
-      <MetaPixelEvent event="CompleteRegistration" />
+      <MetaPixelEvent event="CompleteRegistration" email={user.email} phone={user.user_metadata?.whatsapp} name={user.user_metadata?.full_name} />
       <SemanaDespertar38 firstName={firstName} />
     </>
   )
