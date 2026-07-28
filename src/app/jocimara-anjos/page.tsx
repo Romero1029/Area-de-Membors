@@ -69,7 +69,7 @@ const links = [
   },
 ]
 
-export default function LinksCarmenPage() {
+export default function JocimaraAnjosPage() {
   return (
     <div className="min-h-screen relative overflow-hidden flex flex-col items-center px-6 py-16" style={{ background: '#FBF3E7' }}>
       {/* watercolor blooms */}
