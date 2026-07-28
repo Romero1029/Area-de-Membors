@@ -49,6 +49,10 @@ export async function POST(req: NextRequest) {
     const nome = String(body?.nome ?? '').trim()
     const email = String(body?.email ?? '').trim()
     const whatsapp = String(body?.whatsapp ?? '').trim()
+    const utm_source = body?.utm_source ? String(body.utm_source).trim() || null : null
+    const utm_medium = body?.utm_medium ? String(body.utm_medium).trim() || null : null
+    const utm_campaign = body?.utm_campaign ? String(body.utm_campaign).trim() || null : null
+    const utm_content = body?.utm_content ? String(body.utm_content).trim() || null : null
 
     if (!nome || !email || whatsapp.replace(/\D/g, '').length < 10) {
       return NextResponse.json({ error: 'Dados incompletos.' }, { status: 400 })
@@ -57,7 +61,7 @@ export async function POST(req: NextRequest) {
     const admin = createAdminClient()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: lead, error } = await (admin.from('leads_cicatrizes') as any)
-      .insert({ nome, email, whatsapp })
+      .insert({ nome, email, whatsapp, utm_source, utm_medium, utm_campaign, utm_content })
       .select('id')
       .single()
 

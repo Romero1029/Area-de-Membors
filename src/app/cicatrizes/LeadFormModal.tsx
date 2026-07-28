@@ -4,7 +4,9 @@ import { useState } from 'react'
 import { X, Loader2 } from 'lucide-react'
 
 // URL do checkout hospedado pelo SyncPay pro Cicatrizes que Curam.
-const SYNCPAY_CHECKOUT_URL = 'https://syncpay.link/bWOKbO'
+// syncpay.link foi descontinuado pela SyncPay (DNS caiu em 2026-07-28) --
+// novo dominio de link curto deles e link.syncpayments.com.br.
+const SYNCPAY_CHECKOUT_URL = 'https://link.syncpayments.com.br/FX5FYc'
 
 function maskPhone(v: string) {
   const d = v.replace(/\D/g, '').slice(0, 11)
@@ -24,10 +26,17 @@ export function LeadFormModal({ open, onClose }: { open: boolean; onClose: () =>
     setErro('')
     setEnviando(true)
     try {
+      const utm = new URLSearchParams(window.location.search)
       const res = await fetch('/api/leads/cicatrizes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, email, whatsapp }),
+        body: JSON.stringify({
+          nome, email, whatsapp,
+          utm_source: utm.get('utm_source'),
+          utm_medium: utm.get('utm_medium'),
+          utm_campaign: utm.get('utm_campaign'),
+          utm_content: utm.get('utm_content'),
+        }),
       })
       if (!res.ok) {
         const json = await res.json().catch(() => ({}))
