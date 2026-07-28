@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { VoltarLink } from '@/components/marketing/VoltarLink'
 
 export const metadata = {
   title: 'Termos de Uso — Instituto Despertamente',
@@ -21,9 +22,9 @@ export default function TermosPage() {
               Instituto <span className="text-[#FFB800]">Despertamente</span>
             </span>
           </Link>
-          <Link href="/comecar" className="text-xs text-[#606060] hover:text-[#a0a0a0] transition-colors">
+          <VoltarLink className="text-xs text-[#606060] hover:text-[#a0a0a0] transition-colors">
             ← Voltar
-          </Link>
+          </VoltarLink>
         </div>
       </header>
 
@@ -187,9 +188,9 @@ export default function TermosPage() {
           <Link href="/privacidade" className="text-[#606060] hover:text-[#a0a0a0] transition-colors">
             Política de Privacidade
           </Link>
-          <Link href="/comecar" className="text-[#606060] hover:text-[#a0a0a0] transition-colors">
+          <VoltarLink className="text-[#606060] hover:text-[#a0a0a0] transition-colors">
             ← Voltar ao site
-          </Link>
+          </VoltarLink>
         </div>
       </main>
     </div>

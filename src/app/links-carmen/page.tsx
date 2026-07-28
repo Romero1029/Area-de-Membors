@@ -10,7 +10,7 @@ export const metadata = {
   description: 'Terapeuta, Psicanálise Integrativa. Agende sua sessão, conheça o Cicatrizes que Curam e o Mapa Numerológico.',
 }
 
-const WA_SESSAO = 'https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20sess%C3%A3o%20com%20a%20Jocimara.'
+const WA_SESSAO = 'https://wa.me/5511919434040?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20sess%C3%A3o%20com%20a%20Jocimara.'
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-[18px] h-[18px]">

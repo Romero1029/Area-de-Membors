@@ -11,7 +11,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-const WA_URL = 'https://wa.me/5511999999999?text=Olá! Quero saber mais sobre o IDM pelo Brasil.'
+const WA_URL = 'https://wa.me/5511919434040?text=Olá! Quero saber mais sobre o IDM pelo Brasil.'
 
 const diasPrograma = [
   {
