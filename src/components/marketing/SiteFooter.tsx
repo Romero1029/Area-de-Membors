@@ -112,6 +112,18 @@ export function SiteFooter({ parceira }: { parceira?: string } = {}) {
             Feito no Brasil 🇧🇷 · LGPD compliant
           </p>
         </div>
+        <p className="mt-3 text-center text-xs text-white/30">
+          Desenvolvido com carinho pela{' '}
+          <a
+            href="https://www.onzedigitalstrategy.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/45 hover:text-white/70 transition-colors"
+          >
+            Onze Digital Strategy
+          </a>
+          {' '}· Grupo DespertaMENTE
+        </p>
       </div>
     </footer>
   )
