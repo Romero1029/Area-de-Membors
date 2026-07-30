@@ -64,10 +64,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Requisição inválida.' }, { status: 400 })
   }
 
-  const { nome, telefone, email, palavra1, palavra2, palavra3 } = body
+  const { nome, telefone, email, cidade, palavra1, palavra2, palavra3 } = body
 
   // 2. Validar campos obrigatórios
-  if (!nome?.trim() || !telefone?.trim() || !email?.trim() || !palavra1?.trim() || !palavra2?.trim() || !palavra3?.trim()) {
+  if (!nome?.trim() || !telefone?.trim() || !email?.trim() || !cidade?.trim() || !palavra1?.trim() || !palavra2?.trim() || !palavra3?.trim()) {
     return NextResponse.json({ error: 'Todos os campos são obrigatórios.' }, { status: 400 })
   }
 
@@ -152,6 +152,7 @@ export async function POST(request: NextRequest) {
     nome:     sanitize(nome),
     telefone: telefoneNorm,
     email:    emailNorm,
+    cidade:   sanitize(cidade, 100),
     ip,
     acertou,
   })

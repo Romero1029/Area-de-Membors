@@ -33,6 +33,7 @@ export function CertificadoForm() {
   const [fullName, setFullName] = useState('')
   const [telefone, setTelefone] = useState('')
   const [email, setEmail] = useState('')
+  const [cidade, setCidade] = useState('')
   const [palavra1, setPalavra1] = useState('')
   const [palavra2, setPalavra2] = useState('')
   const [palavra3, setPalavra3] = useState('')
@@ -63,6 +64,7 @@ export function CertificadoForm() {
           nome:     fullName.trim(),
           telefone: telefone.trim(),
           email:    email.trim(),
+          cidade:   cidade.trim(),
           palavra1: palavra1.trim(),
           palavra2: palavra2.trim(),
           palavra3: palavra3.trim(),
@@ -221,6 +223,19 @@ export function CertificadoForm() {
               className={inputCls}
             />
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-white/70 block">Cidade</label>
+          <input
+            type="text"
+            value={cidade}
+            onChange={e => setCidade(e.target.value)}
+            placeholder="Sua cidade"
+            required
+            disabled={status === 'loading'}
+            className={inputCls}
+          />
         </div>
       </div>
 
