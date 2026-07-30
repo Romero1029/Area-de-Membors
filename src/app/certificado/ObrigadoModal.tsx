@@ -1,6 +1,6 @@
 'use client'
 
-import { X, Award, Gift } from 'lucide-react'
+import { X, Award, Gift, Download } from 'lucide-react'
 import { WA_URL, WhatsAppIcon } from './whatsapp'
 
 const INSTAGRAM_URL = 'https://www.instagram.com/institutodespertamente'
@@ -15,17 +15,16 @@ const InstagramIcon = () => (
 
 type Props = {
   nome: string
-  onClose: () => void
+  onContinue: () => void
 }
 
-export function ObrigadoModal({ nome, onClose }: Props) {
+export function ObrigadoModal({ nome, onContinue }: Props) {
   const primeiroNome = nome.trim().split(' ')[0] || 'tudo bem'
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: 'rgba(3,6,20,0.75)', backdropFilter: 'blur(6px)' }}
-      onClick={onClose}
     >
       <div
         className="relative w-full max-w-sm rounded-3xl p-7 space-y-5"
@@ -34,11 +33,10 @@ export function ObrigadoModal({ nome, onClose }: Props) {
           border: '1px solid rgba(255,184,0,0.2)',
           boxShadow: '0 32px 100px rgba(0,0,0,0.6)',
         }}
-        onClick={e => e.stopPropagation()}
       >
         <button
-          onClick={onClose}
-          aria-label="Fechar"
+          onClick={onContinue}
+          aria-label="Ir para o certificado"
           className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-white/10"
         >
           <X className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.5)' }} />
@@ -52,10 +50,10 @@ export function ObrigadoModal({ nome, onClose }: Props) {
             <Award className="w-7 h-7" style={{ color: '#FFB800' }} />
           </div>
           <h2 className="text-xl font-bold text-white">
-            Obrigado por resgatar seu certificado, {primeiroNome}!
+            Parabéns por resgatar seu certificado, {primeiroNome}!
           </h2>
           <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
-            O download do seu PDF já começou. Antes de continuar, dá uma olhada nisso:
+            Seu certificado já está pronto. Antes de baixar, dá uma olhada nisso:
           </p>
         </div>
 
@@ -90,6 +88,18 @@ export function ObrigadoModal({ nome, onClose }: Props) {
           <WhatsAppIcon />
           Quero saber mais da Formação
         </a>
+
+        <button
+          onClick={onContinue}
+          className="w-full h-[52px] rounded-2xl text-sm font-bold text-[#0D1638] flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-[0.98]"
+          style={{
+            background: 'linear-gradient(135deg, #FFB800, #FFC933)',
+            boxShadow: '0 8px 24px rgba(255,184,0,0.3)',
+          }}
+        >
+          <Download className="w-4 h-4" />
+          Ir para o meu certificado
+        </button>
       </div>
     </div>
   )
