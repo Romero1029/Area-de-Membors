@@ -1,24 +1,16 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Caveat } from 'next/font/google'
-import { CalendarHeart, Sparkles, ArrowUpRight } from 'lucide-react'
+import { CalendarHeart, Sparkles } from 'lucide-react'
 
 const caveat = Caveat({ subsets: ['latin'], weight: ['600', '700'], display: 'swap' })
 
 export const metadata = {
   title: 'Jocimara Anjos — Terapeuta',
-  description: 'Terapeuta, Psicanálise Integrativa. Agende sua sessão, conheça o Cicatrizes que Curam e o Mapa Numerológico.',
+  description: 'Terapeuta, Psicanálise Integrativa. Agende sua sessão e conheça o Cicatrizes que Curam.',
 }
 
-const WA_SESSAO = 'https://wa.me/5511919434040?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20sess%C3%A3o%20com%20a%20Jocimara.'
-
-const InstagramIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-[18px] h-[18px]">
-    <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
-    <circle cx="12" cy="12" r="4.3" />
-    <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
-  </svg>
-)
+const WA_SESSAO = 'https://wa.me/5519974084809?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20sess%C3%A3o%20com%20a%20Jocimara.'
 
 const BrainBloomIcon = () => (
   <svg viewBox="0 0 64 64" fill="none" stroke="#C7912F" strokeWidth="1.6" className="w-full h-full">
@@ -33,14 +25,6 @@ const BrainBloomIcon = () => (
 )
 
 const links = [
-  {
-    href: 'https://instagram.com/jocimaraanjos.psi',
-    external: true,
-    style: 'outline' as const,
-    icon: InstagramIcon,
-    title: '@jocimaraanjos.psi',
-    sub: 'Me segue lá pra acompanhar de perto',
-  },
   {
     href: WA_SESSAO,
     external: true,
@@ -57,15 +41,6 @@ const links = [
     title: 'Workshop Cicatrizes que Curam',
     sub: '3h · vagas limitadas · uma vez por mês',
     tag: 'R$ 47,90',
-  },
-  {
-    href: 'https://mapa.seunumerologo.com.br/',
-    external: true,
-    style: 'card' as const,
-    icon: ArrowUpRight,
-    title: 'Mapa Numerológico 7 Esferas',
-    sub: 'Em parceria com Seu Numerólogo',
-    tag: 'R$ 47,60',
   },
 ]
 
@@ -115,7 +90,6 @@ export default function JocimaraAnjosPage() {
             const Wrapper = l.external ? 'a' : Link
             const extraProps = l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
             const isPrimary = l.style === 'primary'
-            const isOutline = l.style === 'outline'
             return (
               <Wrapper
                 key={l.title}
@@ -124,18 +98,16 @@ export default function JocimaraAnjosPage() {
                 className={`group flex items-center gap-3.5 rounded-2xl px-5 py-4 transition-all duration-200 ${
                   isPrimary
                     ? 'active:scale-[0.98]'
-                    : isOutline
-                    ? 'bg-white/50 border-[1.5px] border-[#C7912F]/45 hover:border-[#C7912F]/70 hover:bg-white/70'
                     : 'bg-white/70 border border-[#1E2A52]/10 hover:border-[#1E2A52]/25 hover:bg-white/90'
                 }`}
                 style={isPrimary ? { background: 'linear-gradient(135deg, #E8B056, #C7912F)' } : undefined}
               >
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                    isPrimary ? 'bg-white/25' : isOutline ? 'bg-[#C7912F]/10' : 'bg-[#1E2A52]/6'
+                    isPrimary ? 'bg-white/25' : 'bg-[#1E2A52]/6'
                   }`}
                 >
-                  <Icon className={isPrimary ? 'text-white' : isOutline ? 'text-[#C7912F]' : 'text-[#1E2A52]/70'} />
+                  <Icon className={isPrimary ? 'text-white' : 'text-[#1E2A52]/70'} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className={`text-[15px] font-semibold ${isPrimary ? 'text-white' : 'text-[#1E2A52]'}`}>
@@ -158,8 +130,7 @@ export default function JocimaraAnjosPage() {
         <p className={`${caveat.className} text-[20px] text-[#C7912F]/70 mt-7`}>+ novos links em breve</p>
 
         <div className="flex items-center gap-2 mt-8 opacity-45">
-          <Image src="/despertamente-simbolo.png" alt="IDM" width={15} height={15} className="object-contain" />
-          <span className="text-[11px] text-[#1E2A52]">Instituto Despertamente</span>
+          <Image src="/despertamente-simbolo.png" alt="Instituto Despertamente" width={15} height={15} className="object-contain" />
         </div>
       </div>
     </div>
