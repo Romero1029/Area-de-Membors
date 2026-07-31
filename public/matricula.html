@@ -244,6 +244,49 @@
       line-height: 1.7;
     }
 
+    /* ── CORTESIA GATE (código de autorização) ───────── */
+    .cortesia-gate {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .cortesia-gate-text {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .cortesia-gate-row {
+      display: flex;
+      gap: var(--space-2);
+    }
+    .cortesia-gate-row input {
+      flex: 1;
+      min-width: 0;
+    }
+    .btn-cortesia-validar {
+      padding: 0 var(--space-5);
+      background: var(--navy);
+      color: #F5F0E4;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn-cortesia-validar:hover { background: var(--navy-dark); }
+    .cortesia-gate-msg {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+    }
+    .cortesia-gate-msg.show { display: flex; }
+    .cortesia-gate-msg.error { color: var(--error); }
+
     /* ── ERROR SCREEN ─────────────────────────────── */
     #error-screen { display: none; text-align: center; padding: var(--space-24) var(--space-6); }
     #error-screen.show { display: block; }
@@ -1273,6 +1316,151 @@
       margin-top: var(--space-6);
       line-height: 1.6;
     }
+
+    /* ── REFERRAL / INDICAÇÕES SCREEN ─────────────── */
+    #referral-screen {
+      display: none;
+      position: fixed; inset: 0; z-index: 95;
+      background: var(--surface);
+      overflow-y: auto;
+      animation: fadeIn 0.5s var(--ease-expo);
+    }
+    #referral-screen.show { display: block; }
+
+    .ref-header {
+      background: var(--navy-deeper);
+      padding: var(--space-12) var(--space-6) var(--space-8);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ref-header::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, transparent 100%);
+    }
+    .ref-stars {
+      font-size: 11px;
+      letter-spacing: 18px;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: var(--space-5);
+    }
+    .ref-badge {
+      display: inline-block;
+      background: rgba(184,150,12,0.15);
+      border: 1px solid rgba(184,150,12,0.35);
+      padding: 6px 14px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: var(--space-5);
+    }
+    .ref-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 4.5vw, 2.5rem);
+      font-weight: 700;
+      color: #F5F0E4;
+      margin-bottom: var(--space-4);
+      letter-spacing: -0.02em;
+    }
+    .ref-subtitle {
+      font-size: 0.9375rem;
+      color: rgba(245,240,228,0.6);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .ref-body {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: var(--space-10) var(--space-6) var(--space-16);
+    }
+
+    .ref-offer-card {
+      background: var(--surface-alt);
+      border: 1px solid var(--border-gold);
+      border-left: 3px solid var(--gold);
+      padding: var(--space-6);
+      margin-bottom: var(--space-8);
+      text-align: center;
+    }
+    .ref-offer-icon { font-size: 32px; margin-bottom: var(--space-3); }
+    .ref-offer-text {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.65;
+      margin-bottom: var(--space-3);
+    }
+    .ref-offer-subtext {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .ref-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-8);
+    }
+    .ref-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      border: 1.5px solid var(--border);
+      background: #fff;
+      padding: var(--space-3) var(--space-4);
+    }
+    .ref-row-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--navy);
+      color: var(--gold-light);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ref-row-fields {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-3);
+      flex: 1;
+    }
+    @media (max-width: 560px) {
+      .ref-row-fields { grid-template-columns: 1fr; }
+    }
+    .ref-row-fields input {
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+    }
+
+    .ref-skip {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: var(--space-4);
+      padding: var(--space-2);
+      font-family: var(--font-body);
+    }
+    .ref-skip:hover { color: var(--text); }
+
+    .ref-footnote {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: var(--space-6);
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
@@ -1503,6 +1691,89 @@
     </p>
 
   </div><!-- /pay-body -->
+</div>
+
+<!-- ── REFERRAL / INDICAÇÕES SCREEN ── -->
+<div id="referral-screen">
+  <div class="ref-header">
+    <div class="ref-stars" aria-hidden="true">✦ ✦ ✦</div>
+    <div class="ref-badge">🎉 Você desbloqueou um privilégio raro</div>
+    <h2 class="ref-title">Parabéns, <span id="ref-nome">!</span></h2>
+    <p class="ref-subtitle">Você acabou de dar o primeiro passo de uma jornada que vai transformar sua vida. Agora chegou a sua vez de transformar a vida de mais 5 pessoas que você ama.</p>
+  </div>
+
+  <div class="ref-body">
+
+    <div class="ref-offer-card">
+      <div class="ref-offer-icon">🎁</div>
+      <p class="ref-offer-text">
+        Separe agora o nome de <strong>5 pessoas</strong> que vão viver essa mesma jornada de transformação
+        ao seu lado, nas <strong>mesmas condições especiais</strong> que você garantiu hoje — e você ainda
+        ganha um <strong>bônus exclusivo</strong> para cada uma delas.
+      </p>
+      <p class="ref-offer-subtext">
+        Pare um segundo e pense: quem vem à sua cabeça agora? Um filho, uma irmã, uma amiga, alguém que você
+        sabe que precisa disso tanto quanto você precisou. Quem mais cresce na vida é quem não guarda as boas
+        oportunidades só pra si. Essa condição especial não vai ficar aberta pra sempre — escreva os 5 nomes
+        abaixo, sem pensar demais, antes de seguir para o pagamento.
+      </p>
+    </div>
+
+    <div class="ref-list" id="ref-list">
+
+      <div class="ref-row">
+        <div class="ref-row-num">1</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-1" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-1" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-row-num">2</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-2" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-2" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-row-num">3</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-3" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-3" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-row-num">4</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-4" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-4" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-row-num">5</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-5" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-5" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+    </div><!-- /ref-list -->
+
+    <button type="button" class="btn-submit" id="btn-ref-submit" onclick="submitReferrals()">
+      <span class="btn-text">Confirmar minhas 5 indicações e continuar</span>
+      <span class="btn-icon" aria-hidden="true">→</span>
+      <span class="btn-spinner" aria-hidden="true"></span>
+    </button>
+
+    <button type="button" class="ref-skip" onclick="skipReferrals()">Prefiro abrir mão dessa oportunidade agora</button>
+
+    <p class="ref-footnote">Nossa equipe entrará em contato com cada indicação para apresentar essa mesma oportunidade especial. Seus dados e os das suas indicações são protegidos.</p>
+
+  </div>
 </div>
 
 <!-- ── ERROR SCREEN ── -->
@@ -1829,14 +2100,25 @@
                 <span class="venc-grupo-icon">🎓</span>
                 <div>
                   <div class="venc-grupo-title">Bolsa de Estudo</div>
-                  <div class="venc-grupo-desc">Acesso gratuito — sem pagamento necessário</div>
+                  <div class="venc-grupo-desc">Acesso exclusivo mediante código de autorização</div>
                 </div>
               </div>
               <div class="venc-grupo-body">
-                <label class="venc-option-single" id="vopt-cortesia">
-                  <input type="radio" name="dia_vencimento" value="cortesia" />
-                  <span class="venc-option-text">Recebi uma bolsa de estudo</span>
+
+                <div class="cortesia-gate" id="cortesia-gate">
+                  <p class="cortesia-gate-text">Recebeu uma bolsa de estudo da nossa equipe? Digite o código de autorização para liberar esta opção.</p>
+                  <div class="cortesia-gate-row">
+                    <input type="text" id="cortesia-code-input" placeholder="Código de autorização" autocomplete="off" />
+                    <button type="button" class="btn-cortesia-validar" onclick="validarCodigoCortesia()">Validar</button>
+                  </div>
+                  <span class="cortesia-gate-msg" id="cortesia-gate-msg"></span>
+                </div>
+
+                <label class="venc-option-single" id="vopt-cortesia" style="display:none;">
+                  <input type="radio" name="dia_vencimento" value="cortesia" id="radio-cortesia" />
+                  <span class="venc-option-text">✓ Bolsa de estudo autorizada — código validado</span>
                 </label>
+
               </div>
             </div>
 
@@ -1948,6 +2230,7 @@ async function sb(path, opts = {}) {
 const params     = new URLSearchParams(location.search);
 const lancamentoId = params.get('lancamento');
 let   lancamentoData = null;
+let   _pendingSubmitData = null;
 
 async function init() {
   const loadEl = document.getElementById('loading-screen');
@@ -2000,6 +2283,41 @@ document.getElementById('cep').addEventListener('input', function () {
   let v = this.value.replace(/\D/g, '').slice(0, 8);
   if (v.length > 5) v = v.replace(/(\d{5})(\d{0,3})/, '$1-$2');
   this.value = v;
+});
+
+/* ── CÓDIGO DE AUTORIZAÇÃO DA BOLSA/CORTESIA ─────── */
+const CORTESIA_CODE = 'super motivos';
+
+function validarCodigoCortesia() {
+  const input = document.getElementById('cortesia-code-input');
+  const msg   = document.getElementById('cortesia-gate-msg');
+  const val   = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+
+  if (!val) {
+    msg.textContent = 'Digite o código para continuar.';
+    msg.className = 'cortesia-gate-msg show error';
+    return;
+  }
+
+  if (val === CORTESIA_CODE) {
+    document.getElementById('cortesia-gate').style.display = 'none';
+    const optEl = document.getElementById('vopt-cortesia');
+    optEl.style.display = 'flex';
+    const radio = document.getElementById('radio-cortesia');
+    radio.checked = true;
+    radio.dispatchEvent(new Event('change'));
+  } else {
+    msg.textContent = 'Código inválido. Confira com a equipe do Instituto Despertamente.';
+    msg.className = 'cortesia-gate-msg show error';
+    input.classList.add('has-error');
+  }
+}
+
+document.getElementById('cortesia-code-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); validarCodigoCortesia(); }
+});
+document.getElementById('cortesia-code-input').addEventListener('input', function () {
+  this.classList.remove('has-error');
 });
 
 /* ── RADIO VENCIMENTO ────────────────────────────── */
@@ -2219,8 +2537,9 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       await sb('alunos', { method: 'POST', body: JSON.stringify(alunoPayload) });
     }
 
-    // Registro ok → abrir pagamento
-    openPaymentScreen(data);
+    // Registro ok → abrir tela de indicações antes do pagamento
+    _pendingSubmitData = data;
+    openReferralScreen(data);
 
     // Gerar e enviar contrato via Autentique (em background, não bloqueia o fluxo)
     fetch(EDGE_GERAR_CONTRATO, {
@@ -2252,6 +2571,61 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
     btn.disabled = false;
   }
 });
+
+/* ── TELA DE INDICAÇÕES (PÓS-MATRÍCULA, PRÉ-PAGAMENTO) ── */
+function openReferralScreen(data) {
+  const firstName = data.nome.split(' ')[0];
+  document.getElementById('ref-nome').textContent = firstName + '!';
+  document.getElementById('referral-screen').classList.add('show');
+  document.body.style.overflow = 'auto';
+  window.scrollTo(0, 0);
+}
+
+async function submitReferrals() {
+  const btn = document.getElementById('btn-ref-submit');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const referidos = [];
+  for (let i = 1; i <= 5; i++) {
+    const nome = document.getElementById(`ref-nome-${i}`).value.trim();
+    const tel  = document.getElementById(`ref-tel-${i}`).value.trim();
+    if (nome && tel) referidos.push({ nome, tel });
+  }
+
+  try {
+    if (referidos.length > 0 && _pendingSubmitData) {
+      await Promise.all(referidos.map(r => sb('leads', {
+        method: 'POST',
+        body: JSON.stringify({
+          nome:             r.nome,
+          telefone:         r.tel,
+          whatsapp:         r.tel,
+          origem:           'indicacao_matricula',
+          status:           'Indicado',
+          produto:          'lancamento',
+          observacoes:      `Indicado(a) por ${_pendingSubmitData.nome} (${_pendingSubmitData.email} · ${_pendingSubmitData.telefone}) pela Ficha de Matrícula — condição especial + bônus.`,
+          ...(lancamentoId ? { lancamento_id: lancamentoId } : {}),
+          criado_em:        new Date().toISOString(),
+          ultima_atividade: new Date().toISOString(),
+        }),
+      })));
+    }
+  } catch (e) {
+    console.warn('Erro ao salvar indicações (não bloqueia o fluxo):', e.message);
+  }
+
+  finishReferralScreen();
+}
+
+function skipReferrals() {
+  finishReferralScreen();
+}
+
+function finishReferralScreen() {
+  document.getElementById('referral-screen').classList.remove('show');
+  openPaymentScreen(_pendingSubmitData);
+}
 
 /* ── DADOS DO ALUNO (guardados para o MP) ─────────── */
 let _alunoData = null;
