@@ -12,18 +12,6 @@ export const metadata = {
 
 const WA_SESSAO = 'https://wa.me/5519974084809?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20sess%C3%A3o%20com%20a%20Jocimara.'
 
-const BrainBloomIcon = () => (
-  <svg viewBox="0 0 64 64" fill="none" stroke="#C7912F" strokeWidth="1.6" className="w-full h-full">
-    <circle cx="32" cy="32" r="29" strokeWidth="1.2" opacity="0.55" />
-    <path d="M32 15c-5 0-9 3.3-9 8.2 0 2 .8 3.5 2 4.6-2 1-3.3 3-3.3 5.4 0 2.7 1.8 5 4.3 5.8-.2.7-.3 1.4-.3 2.2 0 4 3.2 7 7.3 7s7.3-3 7.3-7c0-.8-.1-1.5-.3-2.2 2.5-.8 4.3-3.1 4.3-5.8 0-2.4-1.3-4.4-3.3-5.4 1.2-1.1 2-2.6 2-4.6 0-4.9-4-8.2-9-8.2-1.4 0-2.7.3-3.9.8"
-      strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M32 18v22" strokeLinecap="round" opacity="0.7" />
-    <path d="M27 24c1.6 1 3.4 1 5 0M27 31c1.6 1 3.4 1 5 0" strokeLinecap="round" opacity="0.6" />
-    <path d="M32 45v6M32 51c-3 0-5.5 2-6.5 4.5M32 51c3 0 5.5 2 6.5 4.5M32 51c-1.6-1.8-1.6-4 0-6M32 51c1.6-1.8 1.6-4 0-6"
-      strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-)
-
 const links = [
   {
     href: WA_SESSAO,
@@ -56,10 +44,6 @@ export default function JocimaraAnjosPage() {
         style={{ background: 'radial-gradient(circle, rgba(232,169,60,0.18), rgba(232,169,60,0) 70%)' }} />
 
       <div className="relative w-full max-w-[420px] flex flex-col items-center">
-        <div className="w-14 h-14 mb-4">
-          <BrainBloomIcon />
-        </div>
-
         <div
           className="w-[112px] h-[112px] rounded-full overflow-hidden mb-5 shrink-0"
           style={{ boxShadow: '0 0 0 5px rgba(255,255,255,0.9), 0 0 0 6.5px rgba(199,145,47,0.35), 0 14px 30px rgba(30,42,82,0.18)' }}
