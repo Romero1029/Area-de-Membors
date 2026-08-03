@@ -1578,7 +1578,7 @@
               <strong>Integração pendente:</strong> configure <code>MP_ACCESS_TOKEN</code> no topo do script para ativar o QR Code automático.
             </div>
 
-            <button class="pay-confirmed-btn" onclick="showSuccess()">Já realizei o pagamento ✓</button>
+            <button class="pay-confirmed-btn" onclick="openReferralScreen()">Já realizei o pagamento ✓</button>
 
           </div>
         </div>
@@ -1610,7 +1610,7 @@
               <strong>Integração pendente:</strong> configure <code>LINK_PAGAMENTO_CARTAO</code> no topo do script para ativar o botão.
             </div>
 
-            <button class="pay-confirmed-btn" onclick="showSuccess()">Já realizei o pagamento ✓</button>
+            <button class="pay-confirmed-btn" onclick="openReferralScreen()">Já realizei o pagamento ✓</button>
 
           </div>
         </div>
@@ -1664,7 +1664,7 @@
               <strong>Integração pendente:</strong> configure <code>MP_ACCESS_TOKEN</code> no topo do script para ativar o QR Code automático.
             </div>
 
-            <button class="pay-confirmed-btn" onclick="showSuccess()">Já realizei o pagamento ✓</button>
+            <button class="pay-confirmed-btn" onclick="openReferralScreen()">Já realizei o pagamento ✓</button>
 
           </div>
         </div>
@@ -1680,7 +1680,7 @@
         Nenhum pagamento é necessário.<br>
         Clique abaixo para confirmar sua vaga e receber as informações de acesso no WhatsApp.
       </p>
-      <button class="pay-confirmed-btn" style="max-width:400px;width:100%;" onclick="showSuccess()">
+      <button class="pay-confirmed-btn" style="max-width:400px;width:100%;" onclick="openReferralScreen()">
         Confirmar minha vaga gratuitamente ✓
       </button>
     </div>
@@ -2230,7 +2230,6 @@ async function sb(path, opts = {}) {
 const params     = new URLSearchParams(location.search);
 const lancamentoId = params.get('lancamento');
 let   lancamentoData = null;
-let   _pendingSubmitData = null;
 
 async function init() {
   const loadEl = document.getElementById('loading-screen');
@@ -2537,9 +2536,8 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       await sb('alunos', { method: 'POST', body: JSON.stringify(alunoPayload) });
     }
 
-    // Registro ok → abrir tela de indicações antes do pagamento
-    _pendingSubmitData = data;
-    openReferralScreen(data);
+    // Registro ok → abrir pagamento
+    openPaymentScreen(data);
 
     // Gerar e enviar contrato via Autentique (em background, não bloqueia o fluxo)
     fetch(EDGE_GERAR_CONTRATO, {
@@ -2572,10 +2570,14 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
   }
 });
 
-/* ── TELA DE INDICAÇÕES (PÓS-MATRÍCULA, PRÉ-PAGAMENTO) ── */
-function openReferralScreen(data) {
-  const firstName = data.nome.split(' ')[0];
+/* ── DADOS DO ALUNO (guardados para o MP) ─────────── */
+let _alunoData = null;
+
+/* ── TELA DE INDICAÇÕES (PÓS-PAGAMENTO, PRÉ-SUCESSO) ── */
+function openReferralScreen() {
+  const firstName = (_alunoData?.nome || '').split(' ')[0];
   document.getElementById('ref-nome').textContent = firstName + '!';
+  document.getElementById('payment-screen').classList.remove('show');
   document.getElementById('referral-screen').classList.add('show');
   document.body.style.overflow = 'auto';
   window.scrollTo(0, 0);
@@ -2594,7 +2596,7 @@ async function submitReferrals() {
   }
 
   try {
-    if (referidos.length > 0 && _pendingSubmitData) {
+    if (referidos.length > 0 && _alunoData) {
       await Promise.all(referidos.map(r => sb('leads', {
         method: 'POST',
         body: JSON.stringify({
@@ -2604,7 +2606,7 @@ async function submitReferrals() {
           origem:           'indicacao_matricula',
           status:           'Indicado',
           produto:          'lancamento',
-          observacoes:      `Indicado(a) por ${_pendingSubmitData.nome} (${_pendingSubmitData.email} · ${_pendingSubmitData.telefone}) pela Ficha de Matrícula — condição especial + bônus.`,
+          observacoes:      `Indicado(a) por ${_alunoData.nome} (${_alunoData.email} · ${_alunoData.telefone}) pela Ficha de Matrícula — condição especial + bônus.`,
           ...(lancamentoId ? { lancamento_id: lancamentoId } : {}),
           criado_em:        new Date().toISOString(),
           ultima_atividade: new Date().toISOString(),
@@ -2624,11 +2626,8 @@ function skipReferrals() {
 
 function finishReferralScreen() {
   document.getElementById('referral-screen').classList.remove('show');
-  openPaymentScreen(_pendingSubmitData);
+  showSuccess();
 }
-
-/* ── DADOS DO ALUNO (guardados para o MP) ─────────── */
-let _alunoData = null;
 
 /* ── ABRIR TELA DE PAGAMENTO ─────────────────────── */
 function openPaymentScreen(data) {
