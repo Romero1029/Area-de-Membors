@@ -93,6 +93,21 @@ export function NpaPresencialClient({ slug }: { slug: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug, lead_id: leadId }),
       })
+      if (res.status === 404) {
+        // Cadastro não existe mais nesse evento (ex.: sincronização externa do CRM
+        // substituiu os leads) — limpa a identificação salva e volta pro formulário,
+        // em vez de ficar travado mostrando um estado antigo pra sempre.
+        try {
+          localStorage.removeItem(storageKey(slug))
+        } catch {
+          // segue mesmo assim
+        }
+        setIdentificacao(null)
+        setEbookUrl(null)
+        setTelasLiberado(false)
+        setTelasUrl(null)
+        return
+      }
       if (!res.ok) return
       const data = await res.json()
       setEbookUrl(data.ebook_url ?? null)
