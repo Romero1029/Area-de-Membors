@@ -1317,6 +1317,37 @@
       line-height: 1.6;
     }
 
+    /* ── ASSINATURA DO CONTRATO ────────────────────── */
+    #sign-screen {
+      display: none;
+      position: fixed; inset: 0; z-index: 93;
+      background: var(--surface);
+      overflow-y: auto;
+      animation: fadeIn 0.5s var(--ease-expo);
+    }
+    #sign-screen.show { display: block; }
+
+    .sign-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--space-4);
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .sign-icon { font-size: 40px; }
+    .sign-ready-text, .sign-error-text {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .sign-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: var(--space-2);
+    }
+
     /* ── REFERRAL / INDICAÇÕES SCREEN ─────────────── */
     #referral-screen {
       display: none;
@@ -1578,7 +1609,7 @@
               <strong>Integração pendente:</strong> configure <code>MP_ACCESS_TOKEN</code> no topo do script para ativar o QR Code automático.
             </div>
 
-            <button class="pay-confirmed-btn" onclick="openReferralScreen()">Já realizei o pagamento ✓</button>
+            <button class="pay-confirmed-btn" onclick="openContractScreen()">Já realizei o pagamento ✓</button>
 
           </div>
         </div>
@@ -1610,7 +1641,7 @@
               <strong>Integração pendente:</strong> configure <code>LINK_PAGAMENTO_CARTAO</code> no topo do script para ativar o botão.
             </div>
 
-            <button class="pay-confirmed-btn" onclick="openReferralScreen()">Já realizei o pagamento ✓</button>
+            <button class="pay-confirmed-btn" onclick="openContractScreen()">Já realizei o pagamento ✓</button>
 
           </div>
         </div>
@@ -1664,7 +1695,7 @@
               <strong>Integração pendente:</strong> configure <code>MP_ACCESS_TOKEN</code> no topo do script para ativar o QR Code automático.
             </div>
 
-            <button class="pay-confirmed-btn" onclick="openReferralScreen()">Já realizei o pagamento ✓</button>
+            <button class="pay-confirmed-btn" onclick="openContractScreen()">Já realizei o pagamento ✓</button>
 
           </div>
         </div>
@@ -1680,7 +1711,7 @@
         Nenhum pagamento é necessário.<br>
         Clique abaixo para confirmar sua vaga e receber as informações de acesso no WhatsApp.
       </p>
-      <button class="pay-confirmed-btn" style="max-width:400px;width:100%;" onclick="openReferralScreen()">
+      <button class="pay-confirmed-btn" style="max-width:400px;width:100%;" onclick="openContractScreen()">
         Confirmar minha vaga gratuitamente ✓
       </button>
     </div>
@@ -1691,6 +1722,37 @@
     </p>
 
   </div><!-- /pay-body -->
+</div>
+
+<!-- ── ASSINATURA DO CONTRATO (PÓS-PAGAMENTO) ── -->
+<div id="sign-screen">
+  <div class="ref-header">
+    <div class="ref-badge">📝 Último passo</div>
+    <h2 class="ref-title">Assine seu contrato</h2>
+    <p class="ref-subtitle">Pagamento confirmado! Agora vamos formalizar sua matrícula com a assinatura eletrônica do seu contrato — rápido, seguro e com validade jurídica.</p>
+  </div>
+
+  <div class="ref-body">
+
+    <div class="sign-state" id="sign-loading">
+      <div class="qr-spinner"></div>
+      <p class="sign-ready-text">Gerando seu contrato...</p>
+    </div>
+
+    <div class="sign-state" id="sign-ready" style="display:none;">
+      <div class="sign-icon">📄</div>
+      <p class="sign-ready-text">Seu contrato já está pronto. Clique abaixo para assinar eletronicamente — leva menos de 2 minutos.</p>
+      <a id="sign-link" href="#" class="btn-pay-link" style="margin-top:0;">Assinar contrato agora →</a>
+      <button type="button" class="pay-confirmed-btn" style="margin-top:var(--space-2);" onclick="finishContractScreen()">Já assinei — continuar</button>
+      <p class="sign-note">Você também vai receber esse link por e-mail e WhatsApp, caso prefira assinar depois.</p>
+    </div>
+
+    <div class="sign-state" id="sign-error" style="display:none;">
+      <p class="sign-error-text">Não conseguimos gerar o link do contrato agora. Sem problemas — nossa equipe vai te enviar por WhatsApp em instantes.</p>
+      <button type="button" class="pay-confirmed-btn" onclick="finishContractScreen()">Continuar</button>
+    </div>
+
+  </div>
 </div>
 
 <!-- ── REFERRAL / INDICAÇÕES SCREEN ── -->
@@ -2536,30 +2598,8 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       await sb('alunos', { method: 'POST', body: JSON.stringify(alunoPayload) });
     }
 
-    // Registro ok → abrir pagamento
+    // Registro ok → abrir pagamento (o contrato só é gerado depois do pagamento confirmado)
     openPaymentScreen(data);
-
-    // Gerar e enviar contrato via Autentique (em background, não bloqueia o fluxo)
-    fetch(EDGE_GERAR_CONTRATO, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nome:              data.nome,
-        email:             data.email,
-        whatsapp:          data.telefone,
-        telefone:          data.telefone,
-        cpf:               data.cpf,
-        rg:                data.rg,
-        sexo:              data.sexo,
-        data_nascimento:   data.data_nascimento,
-        endereco:          data.endereco,
-        cep:               data.cep,
-        cidade_estado:     data.cidade_estado,
-        pais:              data.pais,
-        dia_vencimento:    data.dia_vencimento,
-        tipo_pagamento:    alunoPayload.tipo_pagamento,
-      }),
-    }).catch(e => console.warn('Contrato Autentique (background):', e.message));
 
   } catch (err) {
     console.error(err);
@@ -2572,6 +2612,62 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
 
 /* ── DADOS DO ALUNO (guardados para o MP) ─────────── */
 let _alunoData = null;
+
+/* ── TELA DE ASSINATURA DO CONTRATO (PÓS-PAGAMENTO) ── */
+async function openContractScreen() {
+  document.getElementById('payment-screen').classList.remove('show');
+  document.getElementById('sign-screen').classList.add('show');
+  document.body.style.overflow = 'auto';
+  window.scrollTo(0, 0);
+
+  document.getElementById('sign-loading').style.display = 'flex';
+  document.getElementById('sign-ready').style.display   = 'none';
+  document.getElementById('sign-error').style.display   = 'none';
+
+  if (!_alunoData) { finishContractScreen(); return; }
+
+  const tipoPagamento = _alunoData.dia_vencimento === 'a_vista'  ? 'bolsa'
+                      : _alunoData.dia_vencimento === 'cortesia' ? 'cortesia'
+                      : 'mensalidade';
+
+  try {
+    const res = await fetch(EDGE_GERAR_CONTRATO, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome:              _alunoData.nome,
+        email:             _alunoData.email,
+        whatsapp:          _alunoData.telefone,
+        telefone:          _alunoData.telefone,
+        cpf:               _alunoData.cpf,
+        rg:                _alunoData.rg,
+        sexo:              _alunoData.sexo,
+        data_nascimento:   _alunoData.data_nascimento,
+        endereco:          _alunoData.endereco,
+        cep:               _alunoData.cep,
+        cidade_estado:     _alunoData.cidade_estado,
+        pais:              _alunoData.pais,
+        dia_vencimento:    _alunoData.dia_vencimento,
+        tipo_pagamento:    tipoPagamento,
+      }),
+    });
+    const json = await res.json();
+    if (!res.ok || !json.link_assinatura) throw new Error(json.error || 'Sem link de assinatura');
+
+    document.getElementById('sign-link').href = json.link_assinatura;
+    document.getElementById('sign-loading').style.display = 'none';
+    document.getElementById('sign-ready').style.display   = 'flex';
+  } catch (e) {
+    console.warn('Erro ao gerar contrato:', e.message);
+    document.getElementById('sign-loading').style.display = 'none';
+    document.getElementById('sign-error').style.display   = 'flex';
+  }
+}
+
+function finishContractScreen() {
+  document.getElementById('sign-screen').classList.remove('show');
+  openReferralScreen();
+}
 
 /* ── TELA DE INDICAÇÕES (PÓS-PAGAMENTO, PRÉ-SUCESSO) ── */
 function openReferralScreen() {
