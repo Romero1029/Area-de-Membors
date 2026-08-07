@@ -2630,6 +2630,12 @@ async function openContractScreen() {
                       : _alunoData.dia_vencimento === 'cortesia' ? 'cortesia'
                       : 'mensalidade';
 
+  // Boleto/cartão seguem o valor e o número de parcelas reais do lançamento
+  // (quando existir) — sem isso o contrato caía nos valores fixos padrão
+  const usaValoresLancamento = tipoPagamento === 'mensalidade';
+  const valorParcelaLancamento = usaValoresLancamento ? lancamentoData?.valor_mensalidade_destino  : null;
+  const numParcelasLancamento  = usaValoresLancamento ? lancamentoData?.total_mensalidades_destino : null;
+
   try {
     const res = await fetch(EDGE_GERAR_CONTRATO, {
       method: 'POST',
@@ -2649,6 +2655,8 @@ async function openContractScreen() {
         pais:              _alunoData.pais,
         dia_vencimento:    _alunoData.dia_vencimento,
         tipo_pagamento:    tipoPagamento,
+        ...(valorParcelaLancamento ? { valor_parcela: valorParcelaLancamento } : {}),
+        ...(numParcelasLancamento  ? { num_parcelas: numParcelasLancamento }   : {}),
       }),
     });
     const json = await res.json();
