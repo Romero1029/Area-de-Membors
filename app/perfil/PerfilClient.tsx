@@ -4,16 +4,17 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Zap, Clock, Award, BookOpen, Calendar, Download, ExternalLink,
-  TrendingUp, Target, Shield,
+  TrendingUp, Target, Shield, GraduationCap,
 } from "lucide-react";
 import Link from "next/link";
 import { type CourseWithModules } from "@/lib/types";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { Badge } from "@/components/ui/Badge";
 import { AdminBar } from "@/components/admin/AdminBar";
+import type { MyGrade } from "@/lib/queries";
 
 interface SessionUser { name?: string | null; email?: string | null; image?: string | null; role?: string; }
-interface Props { user: SessionUser; courses: CourseWithModules[]; isAdmin: boolean; }
+interface Props { user: SessionUser; courses: CourseWithModules[]; isAdmin: boolean; grades: MyGrade[]; }
 
 const WEEK = [
   { day: "Seg", h: 1.5 }, { day: "Ter", h: 2.0 }, { day: "Qua", h: 0.5 },
@@ -30,8 +31,8 @@ const BADGES = [
   { id: "b6", title: "Guia de Jornada", icon: "🌙", desc: "Inspire outros membros", earned: false },
 ];
 
-export function PerfilClient({ user, courses, isAdmin }: Props) {
-  const [tab, setTab] = useState<"progresso" | "conquistas" | "certificados">("progresso");
+export function PerfilClient({ user, courses, isAdmin, grades }: Props) {
+  const [tab, setTab] = useState<"progresso" | "notas" | "conquistas" | "certificados">("progresso");
   const [editMode, setEditMode] = useState(false);
 
   const inProgress = courses.slice(0, 3);
@@ -133,7 +134,7 @@ export function PerfilClient({ user, courses, isAdmin }: Props) {
 
           {/* Tabs */}
           <div className="flex gap-0 bg-[#0D0D0D] border border-[#161616] rounded-[10px] p-1 w-fit mb-6">
-            {(["progresso", "conquistas", "certificados"] as const).map((t) => (
+            {(["progresso", "notas", "conquistas", "certificados"] as const).map((t) => (
               <button key={t} onClick={() => setTab(t)}
                 className={`px-4 py-2 text-xs font-medium rounded-[8px] transition-all duration-150 ${
                   tab === t ? "bg-[#FFA902] text-black shadow-sm" : "text-[#555555] hover:text-[#888888]"
@@ -167,6 +168,30 @@ export function PerfilClient({ user, courses, isAdmin }: Props) {
                     <Badge variant="inProgress" label="68%" />
                   </div>
                 </Link>
+              ))}
+            </div>
+          )}
+
+          {tab === "notas" && (
+            <div className="space-y-3">
+              {grades.length === 0 ? (
+                <div className="text-center py-12">
+                  <GraduationCap className="w-10 h-10 text-[#222222] mx-auto mb-3" />
+                  <p className="text-sm text-[#555555]">Nenhuma nota publicada ainda.</p>
+                </div>
+              ) : grades.map((g) => (
+                <div key={g.taskId} className="p-4 bg-[#0D0D0D] border border-[#161616] rounded-[12px]">
+                  <div className="flex items-start justify-between gap-3 mb-1">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-[#F0F0F0] truncate">{g.taskTitle}</p>
+                      <p className="text-xs text-[#555555]">{g.moduleTitle}</p>
+                    </div>
+                    <span className="text-lg font-bold text-[#FFA902] flex-shrink-0">{g.finalScore.toFixed(1)}</span>
+                  </div>
+                  {g.finalFeedback && (
+                    <p className="text-xs text-[#888888] leading-relaxed mt-2 whitespace-pre-wrap">{g.finalFeedback}</p>
+                  )}
+                </div>
               ))}
             </div>
           )}

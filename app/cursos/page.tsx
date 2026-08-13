@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default async function CursosPage() {
   const session = await getSession();
-  const isAdmin = (session?.user as any)?.role === "ADMIN";
+  const isAdmin = (session?.user as any)?.role === "admin";
 
   const courses = isAdmin ? await getAllCoursesAdmin() : await getAllCourses();
 

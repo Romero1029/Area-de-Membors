@@ -1,4 +1,4 @@
-// Shared types — safe to import in client components (no DB/Prisma imports)
+// Shared types — safe to import in client components (no DB imports)
 
 export interface LessonData {
   id: string;
@@ -53,6 +53,13 @@ export function getTotalLessons(course: Pick<CourseData, "modules">): number {
 
 export function parseTags(tags: string): string[] {
   try { return JSON.parse(tags); } catch { return []; }
+}
+
+export function formatDuration(seconds: number | null | undefined): string {
+  if (!seconds) return "00:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.round(seconds % 60);
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
 export function extractYouTubeId(url: string): string | null {

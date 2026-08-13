@@ -1,13 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LayoutDashboard, BookOpen, User, Trophy, Settings, LogOut, Sparkles, Shield, Users } from "lucide-react";
+import { LayoutDashboard, BookOpen, User, Trophy, Settings, LogOut, Sparkles, Shield, Users, GraduationCap } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useSupabaseUser } from "@/lib/supabase/useSupabaseUser";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 
 const NAV = [
   { icon: LayoutDashboard, label: "Início",      href: "/dashboard" },
+  { icon: GraduationCap,   label: "Formação IDM", href: "/formacao" },
   { icon: BookOpen,        label: "Cursos",      href: "/cursos" },
   { icon: Trophy,          label: "Conquistas",  href: "/perfil#conquistas" },
   { icon: User,            label: "Meu Perfil",  href: "/perfil" },
@@ -15,10 +17,16 @@ const NAV = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const router = useRouter();
+  const { user, isAdmin } = useSupabaseUser();
 
-  const user = session?.user;
-  const isAdmin = (user as any)?.role === "ADMIN";
+  const handleSignOut = async () => {
+    // scope: "global" revoga o refresh token no servidor (não só limpa localmente) —
+    // evita que um token roubado continue válido depois do logout.
+    await createBrowserSupabaseClient().auth.signOut({ scope: "global" });
+    router.push("/login");
+    router.refresh();
+  };
 
   const active = (href: string) =>
     href === "/dashboard" ? pathname === "/dashboard" || pathname === "/" : pathname.startsWith(href.split("#")[0]);
@@ -97,7 +105,7 @@ export function Sidebar() {
           </div>
         </Link>
         <button
-          onClick={() => signOut({ callbackUrl: "/login" })}
+          onClick={handleSignOut}
           className="w-full flex items-center gap-3 px-3 py-2 rounded-[8px] text-[#4A4A4A] hover:text-red-400 hover:bg-red-500/5 transition-colors"
         >
           <LogOut className="w-4 h-4" />

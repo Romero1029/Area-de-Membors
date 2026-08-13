@@ -1,5 +1,5 @@
 import { getSession } from "@/lib/auth";
-import { getAllCourses } from "@/lib/queries";
+import { getAllCourses, getMyPublishedGrades } from "@/lib/queries";
 import { redirect } from "next/navigation";
 import { PerfilClient } from "./PerfilClient";
 
@@ -11,7 +11,8 @@ export default async function PerfilPage() {
   if (!session) redirect("/login");
 
   const user = session.user!;
-  const isAdmin = (user as any).role === "ADMIN";
+  const isAdmin = (user as any).role === "admin";
+  const grades = await getMyPublishedGrades();
 
-  return <PerfilClient user={user as any} courses={courses} isAdmin={isAdmin} />;
+  return <PerfilClient user={user as any} courses={courses} isAdmin={isAdmin} grades={grades} />;
 }

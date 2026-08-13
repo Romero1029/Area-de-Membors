@@ -1,20 +1,16 @@
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
+import { updateSession } from "@/lib/supabase/middleware";
 
-export default withAuth(
-  function middleware(req) {
-    return NextResponse.next();
-  },
-  {
-    callbacks: {
-      authorized({ token }) {
-        // All dashboard routes require authentication
-        return !!token;
-      },
-    },
-  }
-);
+export async function middleware(request: NextRequest) {
+  return updateSession(request);
+}
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/curso/:path*", "/perfil/:path*", "/player/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/curso/:path*",
+    "/perfil/:path*",
+    "/player/:path*",
+    "/formacao/:path*",
+  ],
 };

@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
+import { isAdmin } from "@/lib/auth";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { randomUUID } from "crypto";
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session || (session.user as any)?.role !== "ADMIN") {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 
@@ -23,11 +20,17 @@ export async function POST(req: NextRequest) {
 
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
   const filename = `${randomUUID()}.${ext}`;
-  const uploadDir = join(process.cwd(), "public", "uploads");
 
-  await mkdir(uploadDir, { recursive: true });
+  const supabase = await createServerSupabaseClient();
   const bytes = await file.arrayBuffer();
-  await writeFile(join(uploadDir, filename), Buffer.from(bytes));
+  const { error } = await supabase.storage
+    .from("uploads")
+    .upload(filename, bytes, { contentType: file.type });
 
-  return NextResponse.json({ url: `/uploads/${filename}` });
+  if (error) {
+    return NextResponse.json({ error: "Falha ao enviar arquivo." }, { status: 500 });
+  }
+
+  const { data } = supabase.storage.from("uploads").getPublicUrl(filename);
+  return NextResponse.json({ url: data.publicUrl });
 }

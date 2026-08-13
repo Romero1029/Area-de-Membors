@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useSupabaseUser } from "@/lib/supabase/useSupabaseUser";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import {
   Shield,
   Plus,
@@ -20,11 +22,17 @@ interface AdminBarProps {
 }
 
 export function AdminBar({ editMode, onToggleEditMode }: AdminBarProps) {
-  const { data: session } = useSession();
+  const router = useRouter();
+  const { isAdmin } = useSupabaseUser();
   const [expanded, setExpanded] = useState(true);
   const [showCreateCourse, setShowCreateCourse] = useState(false);
 
-  const isAdmin = (session?.user as any)?.role === "ADMIN";
+  const handleSignOut = async () => {
+    await createBrowserSupabaseClient().auth.signOut({ scope: "global" });
+    router.push("/login");
+    router.refresh();
+  };
+
   if (!isAdmin) return null;
 
   return (
@@ -83,7 +91,7 @@ export function AdminBar({ editMode, onToggleEditMode }: AdminBarProps) {
 
               {/* Sign out */}
               <button
-                onClick={() => signOut({ callbackUrl: "/login" })}
+                onClick={handleSignOut}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-[#888888] hover:text-red-400 hover:bg-red-500/10 transition-colors duration-150"
               >
                 <LogOut className="w-3 h-3" />

@@ -146,7 +146,7 @@ export function CursosClient({ courses, isAdmin }: Props) {
         </div>
       ) : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <p className="text-sm text-[#555555] mb-3">Nenhum curso encontrado para "{search}"</p>
+          <p className="text-sm text-[#555555] mb-3">Nenhum curso encontrado para &quot;{search}&quot;</p>
           <button onClick={clearFilters} className="text-xs text-[#FFA902] hover:underline">
             Limpar filtros
           </button>

@@ -132,7 +132,7 @@ export function CourseCard({
         <AnimatePresence>
           {showEdit && (
             <EditCourseModal
-              course={{ ...course, tags: course.tags }}
+              course={course}
               onClose={() => setShowEdit(false)}
             />
           )}
@@ -236,7 +236,7 @@ export function CourseCard({
       <AnimatePresence>
         {showEdit && (
           <EditCourseModal
-            course={{ ...course, tags: course.tags }}
+            course={course}
             onClose={() => setShowEdit(false)}
           />
         )}

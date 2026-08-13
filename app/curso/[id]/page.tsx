@@ -17,7 +17,7 @@ export default async function CoursePage({ params }: PageProps) {
 
   if (!course) notFound();
 
-  const isAdmin = (session?.user as any)?.role === "ADMIN";
+  const isAdmin = (session?.user as any)?.role === "admin";
 
   return (
     <CoursePageClient

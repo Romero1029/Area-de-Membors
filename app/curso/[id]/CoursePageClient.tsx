@@ -207,7 +207,7 @@ export function CoursePageClient({ course, isAdmin, totalLessons, tags }: Props)
       {/* Edit course modal */}
       <AnimatePresence>
         {showEditCourse && (
-          <EditCourseModal course={{ ...course, tags: course.tags }} onClose={() => setShowEditCourse(false)} />
+          <EditCourseModal course={course} onClose={() => setShowEditCourse(false)} />
         )}
       </AnimatePresence>
     </div>

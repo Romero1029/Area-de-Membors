@@ -11,16 +11,8 @@ interface CreateCourseModalProps {
   onClose: () => void;
 }
 
-const CATEGORIES = [
-  "Autoconhecimento", "Psicanálise", "Numerologia", "PNL",
-  "Espiritualidade", "Meditação", "Terapia", "Desenvolvimento Pessoal", "Outro"
-];
-
-const LEVELS = ["Iniciante", "Intermediário", "Avançado"] as const;
-
 export function CreateCourseModal({ onClose }: CreateCourseModalProps) {
   const router = useRouter();
-  const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -28,23 +20,13 @@ export function CreateCourseModal({ onClose }: CreateCourseModalProps) {
   const [form, setForm] = useState<CourseInput>({
     title: "",
     description: "",
-    instructor: "",
-    instructorBio: "",
-    instructorAvatar: "",
     thumbnail: "",
-    category: CATEGORIES[0],
-    level: "Intermediário",
-    duration: "",
-    rating: 0,
-    students: 0,
-    isNew: true,
     isFeatured: false,
     published: true,
-    tags: "[]",
   });
 
   const set = (field: keyof CourseInput) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const value =
       e.target.type === "checkbox"
@@ -57,14 +39,7 @@ export function CreateCourseModal({ onClose }: CreateCourseModalProps) {
     setLoading(true);
     setError("");
 
-    // Parse tags from comma-separated string
-    const tagsInput = (form.tags as any) as string;
-    const tagsArray = tagsInput
-      .split(",")
-      .map((t: string) => t.trim())
-      .filter(Boolean);
-
-    const result = await createCourse({ ...form, tags: JSON.stringify(tagsArray) });
+    const result = await createCourse(form);
 
     setLoading(false);
 
@@ -104,29 +79,14 @@ export function CreateCourseModal({ onClose }: CreateCourseModalProps) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#1A1A1A]">
           <div>
             <h2 className="text-base font-semibold text-[#F0F0F0]">Novo curso</h2>
-            <p className="text-xs text-[#555555] mt-0.5">
-              {step === 1 ? "Informações básicas" : "Instrutor & configurações"}
-            </p>
+            <p className="text-xs text-[#555555] mt-0.5">Informações básicas</p>
           </div>
-          <div className="flex items-center gap-3">
-            {/* Step indicator */}
-            <div className="flex items-center gap-1.5">
-              {[1, 2].map((s) => (
-                <div
-                  key={s}
-                  className={`w-6 h-1 rounded-full transition-colors duration-200 ${
-                    s <= step ? "bg-[#FFA902]" : "bg-[#222222]"
-                  }`}
-                />
-              ))}
-            </div>
-            <button
-              onClick={onClose}
-              className="w-8 h-8 rounded-[6px] flex items-center justify-center text-[#555555] hover:text-[#F0F0F0] hover:bg-[#1A1A1A] transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-[6px] flex items-center justify-center text-[#555555] hover:text-[#F0F0F0] hover:bg-[#1A1A1A] transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Success state */}
@@ -144,125 +104,51 @@ export function CreateCourseModal({ onClose }: CreateCourseModalProps) {
           </div>
         ) : (
           <div className="px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto">
-            {step === 1 ? (
-              <>
-                {/* Title */}
-                <Field label="Título do curso *">
-                  <input
-                    value={form.title}
-                    onChange={set("title")}
-                    placeholder="Ex: Psicanálise para o Autoconhecimento"
-                    className={inputCls}
-                  />
-                </Field>
+            {/* Title */}
+            <Field label="Título do curso *">
+              <input
+                value={form.title}
+                onChange={set("title")}
+                placeholder="Ex: Psicanálise para o Autoconhecimento"
+                className={inputCls}
+              />
+            </Field>
 
-                {/* Description */}
-                <Field label="Descrição *">
-                  <textarea
-                    value={form.description}
-                    onChange={set("description")}
-                    placeholder="Descreva o que o aluno vai aprender..."
-                    rows={3}
-                    className={`${inputCls} resize-none`}
-                  />
-                </Field>
+            {/* Description */}
+            <Field label="Descrição *">
+              <textarea
+                value={form.description}
+                onChange={set("description")}
+                placeholder="Descreva o que o aluno vai aprender..."
+                rows={3}
+                className={`${inputCls} resize-none`}
+              />
+            </Field>
 
-                {/* Thumbnail */}
-                <ImageUploader
-                  label="Capa do curso *"
-                  ratio="16/9"
-                  value={form.thumbnail}
-                  onChange={(url) => setForm((p) => ({ ...p, thumbnail: url }))}
-                  hint="Proporção 16:9 · 1280×720px recomendado"
-                />
+            {/* Thumbnail */}
+            <ImageUploader
+              label="Capa do curso *"
+              ratio="16/9"
+              value={form.thumbnail}
+              onChange={(url) => setForm((p) => ({ ...p, thumbnail: url }))}
+              hint="Proporção 16:9 · 1280×720px recomendado"
+            />
 
-                {/* Category + Level */}
-                <div className="grid grid-cols-2 gap-3">
-                  <Field label="Categoria">
-                    <select value={form.category} onChange={set("category")} className={selectCls}>
-                      {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
-                    </select>
-                  </Field>
-                  <Field label="Nível">
-                    <select value={form.level} onChange={set("level")} className={selectCls}>
-                      {LEVELS.map((l) => <option key={l}>{l}</option>)}
-                    </select>
-                  </Field>
-                </div>
-
-                {/* Duration + Tags */}
-                <div className="grid grid-cols-2 gap-3">
-                  <Field label="Duração estimada">
-                    <input
-                      value={form.duration}
-                      onChange={set("duration")}
-                      placeholder="Ex: 24h 30min"
-                      className={inputCls}
-                    />
-                  </Field>
-                  <Field label="Tags (vírgula)">
-                    <input
-                      value={form.tags as any}
-                      onChange={set("tags")}
-                      placeholder="meditação, mente, cura, despertar"
-                      className={inputCls}
-                    />
-                  </Field>
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Instructor */}
-                <Field label="Nome do instrutor *">
-                  <input
-                    value={form.instructor}
-                    onChange={set("instructor")}
-                    placeholder="Nome completo"
-                    className={inputCls}
-                  />
-                </Field>
-
-                <Field label="Bio do instrutor">
-                  <textarea
-                    value={form.instructorBio}
-                    onChange={set("instructorBio")}
-                    placeholder="Experiência e background..."
-                    rows={3}
-                    className={`${inputCls} resize-none`}
-                  />
-                </Field>
-
-                <ImageUploader
-                  label="Foto do instrutor"
-                  ratio="1/1"
-                  value={form.instructorAvatar}
-                  onChange={(url) => setForm((p) => ({ ...p, instructorAvatar: url }))}
-                  hint="Foto quadrada · 400×400px recomendado"
-                />
-
-                {/* Toggles */}
-                <div className="space-y-2 pt-2">
-                  <Toggle
-                    label="Marcar como Novo"
-                    description="Aparece com badge 'Novo' nos cards"
-                    checked={form.isNew}
-                    onChange={(v) => setForm((p) => ({ ...p, isNew: v }))}
-                  />
-                  <Toggle
-                    label="Curso em destaque"
-                    description="Aparece no hero banner do dashboard"
-                    checked={form.isFeatured}
-                    onChange={(v) => setForm((p) => ({ ...p, isFeatured: v }))}
-                  />
-                  <Toggle
-                    label="Publicado"
-                    description="Visível para os alunos"
-                    checked={form.published}
-                    onChange={(v) => setForm((p) => ({ ...p, published: v }))}
-                  />
-                </div>
-              </>
-            )}
+            {/* Toggles */}
+            <div className="space-y-2 pt-2">
+              <Toggle
+                label="Curso em destaque"
+                description="Aparece no hero banner do dashboard"
+                checked={form.isFeatured}
+                onChange={(v) => setForm((p) => ({ ...p, isFeatured: v }))}
+              />
+              <Toggle
+                label="Publicado"
+                description="Visível para os alunos"
+                checked={form.published}
+                onChange={(v) => setForm((p) => ({ ...p, published: v }))}
+              />
+            </div>
 
             {error && (
               <p className="text-sm text-red-400 bg-red-500/8 border border-red-500/20 rounded-[8px] px-3 py-2">
@@ -274,21 +160,14 @@ export function CreateCourseModal({ onClose }: CreateCourseModalProps) {
 
         {/* Footer */}
         {!success && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-[#1A1A1A]">
+          <div className="flex items-center justify-end px-6 py-4 border-t border-[#1A1A1A]">
             <button
-              onClick={step === 1 ? onClose : () => setStep(1)}
-              className="px-4 py-2 text-sm text-[#888888] hover:text-[#F0F0F0] transition-colors"
-            >
-              {step === 1 ? "Cancelar" : "Voltar"}
-            </button>
-
-            <button
-              onClick={step === 1 ? () => setStep(2) : handleSubmit}
-              disabled={loading || (step === 1 && (!form.title || !form.description || !form.thumbnail))}
+              onClick={handleSubmit}
+              disabled={loading || !form.title || !form.description || !form.thumbnail}
               className="flex items-center gap-2 px-5 py-2 bg-[#FFA902] text-black text-sm font-semibold rounded-[8px] hover:bg-[#FFB832] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-              {step === 1 ? "Próximo" : "Criar curso"}
+              Criar curso
             </button>
           </div>
         )}
@@ -299,9 +178,6 @@ export function CreateCourseModal({ onClose }: CreateCourseModalProps) {
 
 const inputCls =
   "w-full bg-[#111111] border border-[#222222] rounded-[8px] px-3 py-2.5 text-sm text-[#F0F0F0] placeholder-[#444444] outline-none focus:border-[#FFA902]/50 focus:ring-1 focus:ring-[#FFA902]/20 transition-all duration-150";
-
-const selectCls =
-  "w-full bg-[#111111] border border-[#222222] rounded-[8px] px-3 py-2.5 text-sm text-[#F0F0F0] outline-none focus:border-[#FFA902]/50 transition-all duration-150";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (

@@ -1,58 +1,41 @@
-import { NextAuthOptions, getServerSession } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
-import { prisma } from "./db";
+import { createServerSupabaseClient } from "./supabase/server";
 
-export const authOptions: NextAuthOptions = {
-  session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/login",
-  },
-  providers: [
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Senha", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
-
-        if (!user) return null;
-
-        const valid = await bcrypt.compare(credentials.password, user.password);
-        if (!valid) return null;
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          image: user.avatar || null,
-        };
-      },
-    }),
-  ],
-  callbacks: {
-    jwt({ token, user }) {
-      if (user) token.role = (user as any).role;
-      return token;
-    },
-    session({ session, token }) {
-      if (session.user) (session.user as any).role = token.role;
-      return session;
-    },
-  },
+export type Session = {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    image: string;
+    role: "admin" | "student";
+  };
 };
 
-export const getSession = () => getServerSession(authOptions);
+export const getSession = async (): Promise<Session | null> => {
+  const supabase = await createServerSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return null;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name, avatar_url, role")
+    .eq("id", user.id)
+    .single();
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email ?? "",
+      name: profile?.full_name || user.email?.split("@")[0] || "",
+      image: profile?.avatar_url || "",
+      role: (profile?.role as "admin" | "student") || "student",
+    },
+  };
+};
 
 export const isAdmin = async () => {
   const session = await getSession();
-  return (session?.user as any)?.role === "ADMIN";
+  return session?.user?.role === "admin";
 };

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Bell, X } from "lucide-react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSupabaseUser } from "@/lib/supabase/useSupabaseUser";
 import { useRouter } from "next/navigation";
 
 interface Course { id: string; title: string; category: string; thumbnail: string; }
@@ -20,13 +20,12 @@ interface HeaderProps {
 }
 
 export function Header({ courses = [] }: HeaderProps) {
-  const { data: session } = useSession();
+  const { user } = useSupabaseUser();
   const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [notifOpen, setNotifOpen] = useState(false);
 
-  const user = session?.user;
   const firstName = user?.name?.split(" ")[0] ?? "Usuário";
   const unread = NOTIFS.filter((n) => n.unread).length;
 

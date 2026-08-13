@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, AlertCircle, ArrowRight, Loader2, Sparkles } from "lucide-react";
 
@@ -18,9 +17,17 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const result = await signIn("credentials", { email, password, redirect: false });
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
     setLoading(false);
-    if (result?.error) { setError("Email ou senha incorretos."); return; }
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      setError(body.error || "Email ou senha incorretos.");
+      return;
+    }
     router.push("/dashboard");
     router.refresh();
   };
@@ -85,7 +92,7 @@ export default function LoginPage() {
             className="border border-[#1A1A1A] rounded-[14px] p-5 bg-[#0D0D0D]/60 backdrop-blur-sm"
           >
             <p className="text-sm text-[#888888] leading-relaxed italic mb-4">
-              "O Instituto Despertamente transformou minha relação comigo mesma. Cada aula é uma descoberta."
+              &quot;O Instituto Despertamente transformou minha relação comigo mesma. Cada aula é uma descoberta.&quot;
             </p>
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFA902]/30 to-violet-500/30 flex items-center justify-center text-sm font-bold text-[#FFA902]">
@@ -101,7 +108,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right panel — form */}
-      <div className="flex-1 lg:max-w-[480px] flex items-center justify-center p-8 bg-[#050505] relative">
+      <div className="flex-1 lg:max-w-[480px] flex items-center justify-center p-8 bg-[#050505] relative overflow-hidden">
         {/* Mobile glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-[#FFA902]/4 rounded-full blur-[100px] pointer-events-none lg:hidden" />
 

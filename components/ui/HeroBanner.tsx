@@ -168,7 +168,7 @@ export function HeroBanner({ course, isAdmin = false, editMode = false, progress
       <AnimatePresence>
         {showEdit && (
           <EditCourseModal
-            course={{ ...course, tags: course.tags }}
+            course={course}
             onClose={() => setShowEdit(false)}
           />
         )}

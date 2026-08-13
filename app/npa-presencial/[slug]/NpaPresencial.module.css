@@ -1,0 +1,306 @@
+.page {
+  min-height: 100vh;
+  background: #0c0800;
+  color: #ede8dc;
+  font-family: Georgia, "Times New Roman", serif;
+  display: flex;
+  justify-content: center;
+  padding: 32px 18px 100px;
+}
+
+.container {
+  width: 100%;
+  max-width: 460px;
+}
+
+.eyebrow {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  color: #d4b06a;
+  text-transform: uppercase;
+}
+
+.eyebrowSub {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #706860;
+  margin-top: 4px;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #8b6e3a, transparent);
+  margin: 20px 0;
+}
+
+.title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 400;
+  color: #f0cc80;
+  margin: 0;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 13px;
+  color: #8a8070;
+  margin-top: 8px;
+}
+
+.centerState {
+  text-align: center;
+  padding: 60px 0;
+  color: #8a8070;
+  font-size: 14px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.input {
+  border: 1px solid #2a1e08;
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #ede8dc;
+  background: #0a0700;
+  font-family: inherit;
+}
+
+.input::placeholder {
+  color: #665f4c;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #8b6e3a;
+}
+
+.submitButton {
+  text-align: center;
+  background: linear-gradient(90deg, #8b6e3a, #d4b06a);
+  color: #0c0800;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  padding: 13px;
+  font-size: 14px;
+  margin-top: 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.errorBox {
+  background: #2a0f0f;
+  border: 1px solid #5a2a2a;
+  color: #ff9b9b;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.retryButton {
+  background: none;
+  border: 1px solid #8b6e3a;
+  color: #d4b06a;
+  border-radius: 5px;
+  padding: 8px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 8px;
+}
+
+.card {
+  border: 1px solid #4a3a1c;
+  background: #140f04;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 14px;
+}
+
+.cardTitle {
+  color: #f0cc80;
+  font-size: 15px;
+  margin: 0;
+}
+
+.cardHint {
+  color: #8a8070;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.cardLink {
+  display: block;
+  text-align: center;
+  border: 1px solid #8b6e3a;
+  color: #d4b06a;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 13px;
+  margin-top: 12px;
+  text-decoration: none;
+}
+
+.cardLink:hover {
+  background: rgba(212, 176, 106, 0.08);
+}
+
+.lockedCard {
+  position: relative;
+  border: 1px solid #2a2015;
+  background: #0a0805;
+  border-radius: 10px;
+  margin-top: 14px;
+  overflow: hidden;
+  min-height: 150px;
+}
+
+.lockedPreview {
+  position: absolute;
+  inset: -20px;
+  filter: blur(10px);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(212, 176, 106, 0.35) 0%, transparent 22%),
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(200, 149, 26, 0.28) 0deg 8deg,
+      transparent 8deg 24deg
+    ),
+    radial-gradient(circle at 30% 70%, rgba(240, 204, 128, 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 70% 30%, rgba(139, 110, 58, 0.25) 0%, transparent 30%);
+}
+
+.lockedOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(10, 8, 5, 0.55) 0%, rgba(10, 8, 5, 0.92) 75%);
+}
+
+.lockedContent {
+  position: relative;
+  padding: 22px 16px;
+  text-align: center;
+}
+
+.lockIcon {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.lockedTitle {
+  color: #d8c9a3;
+  font-size: 15px;
+  margin: 0;
+}
+
+.lockedHint {
+  color: #92876c;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.unlockedCard {
+  border: 1px solid #c8951a;
+  background: linear-gradient(135deg, #1c1305, #0d0902);
+  box-shadow: 0 0 18px rgba(200, 149, 26, 0.15);
+}
+
+.offerCard {
+  border: 1px dashed #8b6e3a;
+  background: #0f0a02;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 14px;
+  text-align: center;
+}
+
+.offerTitle {
+  color: #d4b06a;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.offerHint {
+  color: #8a8070;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.offerPrice {
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.offerPriceOld {
+  color: #665f4c;
+  text-decoration: line-through;
+  margin-right: 8px;
+}
+
+.offerPriceNew {
+  color: #f0cc80;
+  font-weight: bold;
+}
+
+.offerButton {
+  display: block;
+  text-align: center;
+  background: #d4b06a;
+  color: #0c0800;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 11px;
+  font-size: 13px;
+  margin-top: 12px;
+  text-decoration: none;
+}
+
+.socialRow {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  font-size: 12px;
+}
+
+.socialLink {
+  color: #8a8070;
+  text-decoration: none;
+}
+
+.socialLink:hover {
+  color: #d4b06a;
+}
+
+.whatsappFloat {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #25d366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+}

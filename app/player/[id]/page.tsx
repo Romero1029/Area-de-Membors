@@ -13,7 +13,7 @@ export default async function PlayerPage({ params }: { params: { id: string } })
 
   if (!course) notFound();
 
-  const isAdmin = (session?.user as any)?.role === "ADMIN";
+  const isAdmin = (session?.user as any)?.role === "admin";
 
   return <PlayerClient course={course} isAdmin={isAdmin} />;
 }
