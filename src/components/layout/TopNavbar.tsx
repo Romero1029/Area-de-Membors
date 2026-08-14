@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Bell, Menu, X, ShoppingBag, Award, User, LogOut, ChevronDown, CalendarDays, Shield, Home } from 'lucide-react'
+import { Bell, Menu, X, ShoppingBag, Award, User, LogOut, ChevronDown, CalendarDays, Shield, Home, Sparkles, GraduationCap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/lib/actions/auth'
 import { IdmWordmark } from './IdmWordmark'
@@ -18,19 +18,28 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
-const navLinks = [
+type NavLink = { href: string; label: string; icon: typeof Home; highlight: boolean; badge?: string }
+
+const navLinks: NavLink[] = [
   { href: '/dashboard', label: 'Início', icon: Home, highlight: false },
+  { href: '/cursos/formacao-psicanalise', label: 'Formação', icon: GraduationCap, highlight: false },
   { href: '/lancamento', label: 'Semana do Despertar', icon: CalendarDays, highlight: true },
 ]
 
 interface TopNavbarProps {
   profile: Profile
+  hasNpaAccess?: boolean
 }
 
-export function TopNavbar({ profile }: TopNavbarProps) {
+export function TopNavbar({ profile, hasNpaAccess = false }: TopNavbarProps) {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  const links: NavLink[] = [
+    ...navLinks,
+    ...(hasNpaAccess ? [{ href: '/mentoria-npa', label: 'Mentoria NPA', icon: Sparkles, highlight: false, badge: 'NOVO' }] : []),
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -64,12 +73,12 @@ export function TopNavbar({ profile }: TopNavbarProps) {
 
           {/* Nav links — desktop */}
           <nav className="hidden md:flex items-center gap-1 flex-1">
-            {navLinks.map(({ href, label, highlight }) => (
+            {links.map(({ href, label, highlight, badge }) => (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150',
+                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150',
                   isActive(href)
                     ? 'text-[#FFB800] bg-[rgba(255,184,0,0.12)]'
                     : highlight
@@ -78,6 +87,11 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                 )}
               >
                 {label}
+                {badge && (
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#FFB800] text-[#0D1638] leading-none">
+                    {badge}
+                  </span>
+                )}
               </Link>
             ))}
           </nav>
@@ -173,10 +187,10 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                   {/* Links mobile */}
                   <nav className="flex-1 px-3 py-4 space-y-1">
                     {[
-                      ...navLinks,
+                      ...links,
                       { href: '/perfil', label: 'Meu Perfil', icon: User },
                       ...(profile.role === 'admin' ? [{ href: '/admin', label: 'Painel Admin', icon: Shield }] : []),
-                    ].map(({ href, label, icon: Icon }) => (
+                    ].map(({ href, label, icon: Icon, badge }: { href: string; label: string; icon: typeof Home; badge?: string }) => (
                       <Link
                         key={href}
                         href={href}
@@ -190,6 +204,11 @@ export function TopNavbar({ profile }: TopNavbarProps) {
                       >
                         <Icon className="h-4 w-4 flex-shrink-0" />
                         {label}
+                        {badge && (
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#FFB800] text-[#0D1638] leading-none">
+                            {badge}
+                          </span>
+                        )}
                       </Link>
                     ))}
                   </nav>

@@ -1,11 +1,116 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { Users, Search, CheckCircle, XCircle, BookOpen, Mail } from 'lucide-react'
+import { useState, useMemo, useTransition } from 'react'
+import { Users, Search, CheckCircle, XCircle, BookOpen, Mail, UserPlus, Loader2, Copy, Check } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { matricularAlunoManualmente } from '@/lib/actions/admin-alunos'
 import type { AlunoRow } from './page'
 
-export function AlunosClient({ initialRows }: { initialRows: AlunoRow[] }) {
+type ProductOption = { id: string; title: string }
+
+function MatricularForm({ products }: { products: ProductOption[] }) {
+  const [open, setOpen] = useState(false)
+  const [nome, setNome] = useState('')
+  const [email, setEmail] = useState('')
+  const [produtoId, setProdutoId] = useState(products[0]?.id ?? '')
+  const [isPending, startTransition] = useTransition()
+  const [err, setErr] = useState<string | null>(null)
+  const [loginUrl, setLoginUrl] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setErr(null)
+    setLoginUrl(null)
+    startTransition(async () => {
+      const result = await matricularAlunoManualmente({ nome, email, produtoId })
+      if (result.error) {
+        setErr(result.error)
+      } else {
+        setLoginUrl(result.loginUrl ?? null)
+        setNome('')
+        setEmail('')
+      }
+    })
+  }
+
+  function copyLink() {
+    if (!loginUrl) return
+    navigator.clipboard.writeText(loginUrl)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div className="rounded-xl border border-[#1e1e1e] bg-[#0d0d0d] overflow-hidden">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left"
+      >
+        <span className="flex items-center gap-2 text-sm font-semibold text-[#f0f0f0]">
+          <UserPlus className="w-4 h-4 text-[#c79a3b]" />
+          Matricular aluno manualmente
+        </span>
+        <span className="text-xs text-[#606060]">{open ? 'Fechar' : 'Abrir'}</span>
+      </button>
+
+      {open && (
+        <form onSubmit={handleSubmit} className="px-4 pb-4 space-y-3 border-t border-[#1e1e1e] pt-4">
+          <div className="grid sm:grid-cols-3 gap-3">
+            <input
+              type="text"
+              value={nome}
+              onChange={e => setNome(e.target.value)}
+              placeholder="Nome completo"
+              required
+              className="rounded-xl bg-[#111111] border border-[#1e1e1e] text-[#f0f0f0] placeholder:text-[#505050] text-sm px-3 py-2.5 outline-none focus:border-[#c79a3b]"
+            />
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="Email"
+              required
+              className="rounded-xl bg-[#111111] border border-[#1e1e1e] text-[#f0f0f0] placeholder:text-[#505050] text-sm px-3 py-2.5 outline-none focus:border-[#c79a3b]"
+            />
+            <select
+              value={produtoId}
+              onChange={e => setProdutoId(e.target.value)}
+              className="rounded-xl bg-[#111111] border border-[#1e1e1e] text-[#f0f0f0] text-sm px-3 py-2.5 outline-none focus:border-[#c79a3b]"
+            >
+              {products.map(p => (
+                <option key={p.id} value={p.id}>{p.title}</option>
+              ))}
+            </select>
+          </div>
+
+          {err && (
+            <p className="text-xs px-3 py-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20">{err}</p>
+          )}
+
+          {loginUrl && (
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/20">
+              <p className="text-xs text-green-400 flex-1 truncate">Matrícula criada. Link de acesso: {loginUrl}</p>
+              <button type="button" onClick={copyLink} className="text-green-400 hover:text-green-300 shrink-0">
+                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isPending || products.length === 0}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-[#c79a3b] text-[#0a0a0a] disabled:opacity-50"
+          >
+            {isPending ? <><Loader2 className="w-4 h-4 animate-spin" /> Matriculando...</> : 'Matricular'}
+          </button>
+        </form>
+      )}
+    </div>
+  )
+}
+
+export function AlunosClient({ initialRows, products }: { initialRows: AlunoRow[]; products: ProductOption[] }) {
   const [rows, setRows] = useState(initialRows)
   const [busca, setBusca] = useState('')
   const [filtro, setFiltro] = useState<'todos' | 'ativos' | 'inativos'>('todos')
@@ -46,6 +151,8 @@ export function AlunosClient({ initialRows }: { initialRows: AlunoRow[] }) {
           </p>
         </div>
       </div>
+
+      <MatricularForm products={products} />
 
       {/* Busca + Filtros */}
       <div className="flex flex-col sm:flex-row gap-3">

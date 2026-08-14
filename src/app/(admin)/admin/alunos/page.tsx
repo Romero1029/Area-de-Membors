@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getAdminProducts } from '@/lib/actions/admin-store'
 import { AlunosClient } from './AlunosClient'
 
 export const metadata = { title: 'Alunos — Admin IDM' }
@@ -41,6 +42,8 @@ export default async function AdminAlunosPage() {
     emailMap[u.id] = u.email ?? ''
   }
 
+  const products = await getAdminProducts()
+
   const rows: AlunoRow[] = (enrollments ?? []).map((e: {
     id: string; user_id: string; product_id: string; is_active: boolean; created_at: string
     products: { id: string; title: string; slug: string } | null
@@ -58,5 +61,10 @@ export default async function AdminAlunosPage() {
     role: e.profiles?.role ?? 'student',
   }))
 
-  return <AlunosClient initialRows={rows} />
+  return (
+    <AlunosClient
+      initialRows={rows}
+      products={products.map(p => ({ id: p.id, title: p.title }))}
+    />
+  )
 }

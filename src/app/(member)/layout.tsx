@@ -15,13 +15,23 @@ export default async function MemberLayout({ children }: { children: React.React
 
   if (!profile) redirect('/login')
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: npaEnrollment } = await (supabase.from('enrollments') as any)
+    .select('id, products!inner(slug)')
+    .eq('user_id', user.id)
+    .eq('is_active', true)
+    .eq('products.slug', 'mentoria-npa')
+    .maybeSingle()
+
+  const hasNpaAccess = profile.role === 'admin' || Boolean(npaEnrollment)
+
   return (
     <div className="min-h-screen bg-[#0D1638]">
-      <TopNavbar profile={profile as Profile} />
+      <TopNavbar profile={profile as Profile} hasNpaAccess={hasNpaAccess} />
       <main className="pb-20 md:pb-8">
         {children}
       </main>
-      <MobileTabBar />
+      <MobileTabBar hasNpaAccess={hasNpaAccess} />
     </div>
   )
 }
