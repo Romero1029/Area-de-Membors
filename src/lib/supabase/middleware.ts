@@ -32,7 +32,9 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/perfil') ||
     pathname.startsWith('/certificados') ||
     pathname.startsWith('/ao-vivo') ||
-    pathname.startsWith('/aula')
+    pathname.startsWith('/aula') ||
+    pathname.startsWith('/formacao') ||
+    pathname.startsWith('/mentoria-npa')
 
   const isAdminRoute = pathname.startsWith('/admin')
   const isProtected = isMemberRoute || isAdminRoute

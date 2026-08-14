@@ -52,7 +52,7 @@ export default async function CoursesPage({
         .eq('user_id', user.id).eq('is_active', true),
       sb.from('course_progress').select('*').eq('user_id', user.id),
     ])
-    enrollments = enrRes.data ?? []
+    enrollments = (enrRes.data ?? []).filter((e: EnrItem) => e.products?.product_type !== 'formacao')
     progressMap = Object.fromEntries(
       ((progRes.data ?? []) as CourseProgress[]).map((p: CourseProgress) => [p.product_id, p])
     )

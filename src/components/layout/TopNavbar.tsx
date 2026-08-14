@@ -20,25 +20,30 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 type NavLink = { href: string; label: string; icon: typeof Home; highlight: boolean; badge?: string }
 
-const navLinks: NavLink[] = [
+const BASE_LINKS: NavLink[] = [
   { href: '/dashboard', label: 'Início', icon: Home, highlight: false },
-  { href: '/cursos/formacao-psicanalise', label: 'Formação', icon: GraduationCap, highlight: false },
   { href: '/lancamento', label: 'Semana do Despertar', icon: CalendarDays, highlight: true },
 ]
 
 interface TopNavbarProps {
   profile: Profile
   hasNpaAccess?: boolean
+  formacaoEnrolled?: boolean
 }
 
-export function TopNavbar({ profile, hasNpaAccess = false }: TopNavbarProps) {
+export function TopNavbar({ profile, hasNpaAccess = false, formacaoEnrolled = false }: TopNavbarProps) {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
+  // Quem tem acesso à Formação/Mentoria vê essas abas em destaque logo após o Início —
+  // são a área principal dela(s). O link da Formação só existe pra quem está matriculado,
+  // e aponta pra trilha dedicada (/formacao), não pro visualizador genérico de cursos.
   const links: NavLink[] = [
-    ...navLinks,
+    BASE_LINKS[0],
+    ...(formacaoEnrolled ? [{ href: '/formacao', label: 'Formação', icon: GraduationCap, highlight: true }] : []),
     ...(hasNpaAccess ? [{ href: '/mentoria-npa', label: 'Mentoria NPA', icon: Sparkles, highlight: false, badge: 'NOVO' }] : []),
+    BASE_LINKS[1],
   ]
 
   useEffect(() => {
