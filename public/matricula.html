@@ -2547,7 +2547,7 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       ...(lancamentoData?.produto_destino           ? { produto: lancamentoData.produto_destino }             : {}),
       ...(lancamentoData?.valor_mensalidade_destino ? { valor_mensalidade: lancamentoData.valor_mensalidade_destino } : {}),
       ...(lancamentoData?.total_mensalidades_destino ? { total_mensalidades: lancamentoData.total_mensalidades_destino } : {}),
-      ...(vendedorNome                              ? { vendedor: vendedorNome, vendedor_id: vendedorCodigo } : {}),
+      ...(vendedorNome                              ? { vendedor: vendedorNome, vendedor_id: vendedorNome } : {}),
     };
 
     const existingAluno = await sb(`alunos?email=eq.${encodeURIComponent(data.email)}&select=id`);
