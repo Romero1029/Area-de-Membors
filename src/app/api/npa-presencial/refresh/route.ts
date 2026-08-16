@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSistema11Client } from '@/lib/sistema11'
+import { EBOOK_URL_PADRAO } from '@/lib/npaPresencial'
 
 export async function POST(req: NextRequest) {
   try {
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({
-      ebook_url: evento.ebook_url,
+      ebook_url: evento.ebook_url || EBOOK_URL_PADRAO,
       telas_liberado: !!evento.telas_liberado,
       telas_url: evento.telas_liberado ? evento.telas_url : null,
     })

@@ -113,11 +113,13 @@ export function NpaPresencialAdminClient({ initialEventos }: { initialEventos: N
               </div>
 
               <div>
-                <label className="block text-xs text-muted-foreground mb-1.5">Link do e-book</label>
+                <label className="block text-xs text-muted-foreground mb-1.5">
+                  Link do e-book <span className="normal-case">(opcional — o e-book é sempre o mesmo, deixe em branco pra usar o padrão)</span>
+                </label>
                 <Input
                   value={ebookUrl}
                   onChange={(e) => setEbookUrl(e.target.value)}
-                  placeholder="https://..."
+                  placeholder="/materiais/ebook-numerologia-do-destino.pdf"
                 />
               </div>
 

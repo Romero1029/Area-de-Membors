@@ -18,15 +18,16 @@ export default async function MemberLayout({ children }: { children: React.React
 
   const isAdmin = profile.role === 'admin'
 
+  // Mentoria NPA e NPA Presencial (ebook+telas) são produtos separados — qualquer um dos
+  // dois libera o link "Mentoria NPA" na navegação (a própria página trata o que cada um vê).
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: npaEnrollment } = await (supabase.from('enrollments') as any)
+  const { data: npaEnrollments } = await (supabase.from('enrollments') as any)
     .select('id, products!inner(slug)')
     .eq('user_id', user.id)
     .eq('is_active', true)
-    .eq('products.slug', 'mentoria-npa')
-    .maybeSingle()
+    .in('products.slug', ['mentoria-npa', 'ebook-telas-npa'])
 
-  const hasNpaAccess = isAdmin || Boolean(npaEnrollment)
+  const hasNpaAccess = isAdmin || (npaEnrollments ?? []).length > 0
   const formacaoEnrolled = isAdmin || (await isEnrolledInFormacao())
 
   return (

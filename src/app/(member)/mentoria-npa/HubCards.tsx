@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Sparkles, Loader2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Sparkles, Loader2 } from 'lucide-react'
 import { useAbrirPerfilNpa, useAbrirMapaEsferas } from './useAbrirPerfilNpa'
 
 export function VoltarButton() {
@@ -32,12 +32,19 @@ function SsoCard({ href, ready, title, subtitle }: { href: string; ready: boolea
       target="_blank"
       rel="noopener noreferrer"
       aria-disabled={!ready}
-      className="w-full flex items-center gap-4 rounded-2xl p-5 text-left transition-colors hover:border-[#FFB800]/30"
-      style={{ background: '#0A1232', border: '1px solid rgba(255,255,255,0.08)' }}
+      className="group relative w-full flex items-center gap-4 rounded-2xl p-5 text-left transition-all duration-300 hover:-translate-y-0.5"
+      style={{
+        background: 'linear-gradient(160deg, rgba(255,184,0,0.05), rgba(10,18,50,0) 65%), #0A1232',
+        border: '1px solid rgba(255,255,255,0.08)',
+      }}
     >
       <div
-        className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
-        style={{ background: 'rgba(255,184,0,0.10)', border: '1px solid rgba(255,184,0,0.20)' }}
+        className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none"
+        style={{ border: '1px solid rgba(255,184,0,0.30)', boxShadow: 'var(--gold-glow, 0 0 24px rgba(255,184,0,0.20))' }}
+      />
+      <div
+        className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105"
+        style={{ background: 'linear-gradient(135deg, rgba(255,184,0,0.18), rgba(255,184,0,0.06))', border: '1px solid rgba(255,184,0,0.25)' }}
       >
         {!ready ? <Loader2 className="w-4 h-4 text-[#FFB800] animate-spin" /> : <Sparkles className="w-4 h-4 text-[#FFB800]" />}
       </div>
@@ -45,6 +52,7 @@ function SsoCard({ href, ready, title, subtitle }: { href: string; ready: boolea
         <p className="font-semibold text-white">{title}</p>
         <p className="text-sm text-white/50">{subtitle}</p>
       </div>
+      <ArrowRight className="w-4 h-4 text-white/20 shrink-0 transition-all duration-300 group-hover:text-[#FFB800] group-hover:translate-x-0.5" />
     </a>
   )
 }

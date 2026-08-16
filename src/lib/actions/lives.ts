@@ -59,6 +59,8 @@ export async function createLive(formData: FormData) {
   revalidatePath('/ao-vivo')
   revalidatePath('/admin/formacao/calendario')
   revalidatePath('/formacao/calendario')
+  revalidatePath('/admin/mentoria-npa/calendario')
+  revalidatePath('/mentoria-npa/calendario')
 }
 
 export async function updateLive(id: string, formData: FormData) {
@@ -80,6 +82,8 @@ export async function updateLive(id: string, formData: FormData) {
   revalidatePath('/ao-vivo')
   revalidatePath('/admin/formacao/calendario')
   revalidatePath('/formacao/calendario')
+  revalidatePath('/admin/mentoria-npa/calendario')
+  revalidatePath('/mentoria-npa/calendario')
 }
 
 export async function deleteLive(id: string) {
@@ -90,6 +94,8 @@ export async function deleteLive(id: string) {
   revalidatePath('/ao-vivo')
   revalidatePath('/admin/formacao/calendario')
   revalidatePath('/formacao/calendario')
+  revalidatePath('/admin/mentoria-npa/calendario')
+  revalidatePath('/mentoria-npa/calendario')
 }
 
 export async function toggleLiveStatus(id: string, status: Live['status']) {
@@ -100,4 +106,6 @@ export async function toggleLiveStatus(id: string, status: Live['status']) {
   revalidatePath('/ao-vivo')
   revalidatePath('/admin/formacao/calendario')
   revalidatePath('/formacao/calendario')
+  revalidatePath('/admin/mentoria-npa/calendario')
+  revalidatePath('/mentoria-npa/calendario')
 }
