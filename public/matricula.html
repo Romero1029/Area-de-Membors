@@ -2241,6 +2241,15 @@ const params     = new URLSearchParams(location.search);
 const lancamentoId = params.get('lancamento');
 let   lancamentoData = null;
 
+/* ── ATRIBUIÇÃO DE VENDEDOR (link ?v=<código>) ───── */
+const VENDEDORES_POR_CODIGO = {
+  '6be52633': 'Helen Magna',
+  'd95ebfdc': 'Miguel Fogaça',
+  '1b8a0e29': 'Aline Horta',
+};
+const vendedorCodigo = params.get('v');
+const vendedorNome   = vendedorCodigo ? (VENDEDORES_POR_CODIGO[vendedorCodigo] || null) : null;
+
 async function init() {
   const loadEl = document.getElementById('loading-screen');
   const errEl  = document.getElementById('error-screen');
@@ -2495,6 +2504,7 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       ultima_atividade: new Date().toISOString(),
       ...(lancamentoId                           ? { lancamento_id: lancamentoId }                        : {}),
       ...(lancamentoData?.turma_destino_id       ? { turma_id: lancamentoData.turma_destino_id }         : {}),
+      ...(vendedorNome                           ? { vendedor: vendedorNome }                              : {}),
     };
 
     let leadId;
@@ -2537,6 +2547,7 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       ...(lancamentoData?.produto_destino           ? { produto: lancamentoData.produto_destino }             : {}),
       ...(lancamentoData?.valor_mensalidade_destino ? { valor_mensalidade: lancamentoData.valor_mensalidade_destino } : {}),
       ...(lancamentoData?.total_mensalidades_destino ? { total_mensalidades: lancamentoData.total_mensalidades_destino } : {}),
+      ...(vendedorNome                              ? { vendedor: vendedorNome, vendedor_id: vendedorCodigo } : {}),
     };
 
     const existingAluno = await sb(`alunos?email=eq.${encodeURIComponent(data.email)}&select=id`);
