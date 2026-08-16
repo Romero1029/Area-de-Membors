@@ -1555,13 +1555,13 @@
 
     <div class="pay-options">
 
-      <!-- OPÇÃO 1: BOLETO 1+14 -->
+      <!-- OPÇÃO 1: RECORRENTE (CARTÃO OU BOLETO) 15x -->
       <div class="pay-card" id="pay-boleto" onclick="selectPay('boleto')">
         <div class="pay-card-header">
           <div class="pay-card-icon">📄</div>
           <div class="pay-card-info">
-            <div class="pay-card-title">Boleto 1 + 14</div>
-            <div class="pay-card-sub">Entrada via PIX · 14 parcelas no boleto</div>
+            <div class="pay-card-title">Recorrente (Cartão ou Boleto)</div>
+            <div class="pay-card-sub">15 parcelas fixas de R$ 150,00</div>
           </div>
           <div class="pay-card-check" id="check-boleto">✓</div>
         </div>
@@ -1569,7 +1569,7 @@
           <div class="pix-container">
 
             <div class="pix-amount-badge">
-              <span class="pix-amount-label">Entrada PIX</span>
+              <span class="pix-amount-label">1ª parcela (PIX)</span>
               <span class="pix-amount-value" id="boleto-valor-entrada">R$ —</span>
             </div>
 
@@ -1596,8 +1596,8 @@
             </div>
 
             <div class="pix-info-list">
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span><strong>1º pagamento:</strong> entrada via PIX no QR Code acima para confirmar sua vaga</span></div>
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span><strong>Demais parcelas:</strong> os 14 boletos mensais serão enviados por e-mail pela plataforma <strong>Voomp</strong>, nossa parceira e da Faculdade Anhanguera</span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span><strong>1º pagamento:</strong> 1ª de 15 parcelas fixas de <strong>R$ 150,00</strong>, via PIX no QR Code acima, para confirmar sua vaga</span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span><strong>Demais parcelas:</strong> as outras 14 parcelas de <strong>R$ 150,00</strong> serão cobradas mensalmente por cartão recorrente ou boleto, enviadas por e-mail pela plataforma <strong>Voomp</strong>, nossa parceira e da Faculdade Anhanguera</span></div>
               <div class="pix-info-item"><div class="pix-info-dot"></div><span>QR Code válido por 30 minutos</span></div>
             </div>
 
@@ -1621,7 +1621,7 @@
           <div class="pay-card-icon">💳</div>
           <div class="pay-card-info">
             <div class="pay-card-title">Cartão de crédito</div>
-            <div class="pay-card-sub">Parcelamento disponível · Link seguro</div>
+            <div class="pay-card-sub">Em até 12x de R$ 150,00 · Link seguro</div>
           </div>
           <div class="pay-card-check" id="check-cartao">✓</div>
         </div>
@@ -1629,7 +1629,7 @@
           <div class="pix-container">
             <div class="pix-info-list" style="width:100%;max-width:380px;">
               <div class="pix-info-item"><div class="pix-info-dot"></div><span>Você será redirecionado para a página de pagamento seguro</span></div>
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Parcelamento conforme condições do lançamento</span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Em até <strong>12x de R$ 150,00</strong> no cartão de crédito</span></div>
               <div class="pix-info-item"><div class="pix-info-dot"></div><span>Processamento imediato · Aprovação em minutos</span></div>
             </div>
 
@@ -1653,7 +1653,7 @@
           <div class="pay-card-icon">⚡</div>
           <div class="pay-card-info">
             <div class="pay-card-title">À vista no PIX</div>
-            <div class="pay-card-sub">R$ 997,00 · Melhor valor · Aprovação imediata</div>
+            <div class="pay-card-sub">R$ 1.500,00 · Melhor valor · Aprovação imediata</div>
           </div>
           <div class="pay-card-check" id="check-vista">✓</div>
         </div>
@@ -1662,7 +1662,7 @@
 
             <div class="pix-amount-badge">
               <span class="pix-amount-label">Total à vista</span>
-              <span class="pix-amount-value">R$ 997,00</span>
+              <span class="pix-amount-value">R$ 1.500,00</span>
             </div>
 
             <div class="qr-wrapper" id="qr-vista">
@@ -1686,7 +1686,7 @@
             </div>
 
             <div class="pix-info-list">
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Pagamento único de <strong>R$ 997,00</strong> — melhor custo-benefício</span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Pagamento único de <strong>R$ 1.500,00</strong> — melhor custo-benefício</span></div>
               <div class="pix-info-item"><div class="pix-info-dot"></div><span>Aprovação imediata após confirmação</span></div>
               <div class="pix-info-item"><div class="pix-info-dot"></div><span>QR Code válido por 30 minutos</span></div>
             </div>
@@ -2092,7 +2092,7 @@
                 <span class="venc-grupo-icon">📄</span>
                 <div>
                   <div class="venc-grupo-title">Boleto bancário</div>
-                  <div class="venc-grupo-desc">Escolha o melhor dia de vencimento</div>
+                  <div class="venc-grupo-desc">15x de R$ 150,00 · Escolha o melhor dia de vencimento</div>
                 </div>
               </div>
               <div class="venc-grupo-body">
@@ -2128,7 +2128,7 @@
                 <span class="venc-grupo-icon">💳</span>
                 <div>
                   <div class="venc-grupo-title">Cartão de crédito</div>
-                  <div class="venc-grupo-desc">Parcelamento disponível</div>
+                  <div class="venc-grupo-desc">Em até 12x de R$ 150,00</div>
                 </div>
               </div>
               <div class="venc-grupo-body">
@@ -2145,7 +2145,7 @@
                 <span class="venc-grupo-icon">⚡</span>
                 <div>
                   <div class="venc-grupo-title">PIX à vista</div>
-                  <div class="venc-grupo-desc">R$ 997,00 · Melhor valor</div>
+                  <div class="venc-grupo-desc">R$ 1.500,00 · Melhor valor</div>
                 </div>
               </div>
               <div class="venc-grupo-body">
@@ -2633,8 +2633,8 @@ async function openContractScreen() {
   // Boleto/cartão seguem o valor e o número de parcelas reais do lançamento
   // (quando existir) — sem isso o contrato caía nos valores fixos padrão
   const usaValoresLancamento = tipoPagamento === 'mensalidade';
-  const valorParcelaLancamento = usaValoresLancamento ? lancamentoData?.valor_mensalidade_destino  : null;
-  const numParcelasLancamento  = usaValoresLancamento ? lancamentoData?.total_mensalidades_destino : null;
+  const valorParcelaLancamento = usaValoresLancamento ? (lancamentoData?.valor_mensalidade_destino  ?? 150.00) : null;
+  const numParcelasLancamento  = usaValoresLancamento ? (lancamentoData?.total_mensalidades_destino ?? 15)     : null;
 
   try {
     const res = await fetch(EDGE_GERAR_CONTRATO, {
@@ -2744,7 +2744,7 @@ function openPaymentScreen(data) {
   // Valor da entrada no boleto (1ª mensalidade ou valor do lançamento)
   const valorEntrada = lancamentoData?.valor_mensalidade_destino
     ? `R$ ${parseFloat(lancamentoData.valor_mensalidade_destino).toFixed(2).replace('.', ',')}`
-    : 'R$ 109,90';
+    : 'R$ 150,00';
   document.getElementById('boleto-valor-entrada').textContent = valorEntrada;
 
   // Ativar link do cartão se configurado
@@ -2801,8 +2801,8 @@ function selectPay(tipo) {
 /* ── GERAR PIX VIA EDGE FUNCTION ─────────────────── */
 async function gerarPixMP(tipo) {
   const valorMap = {
-    boleto: lancamentoData?.valor_mensalidade_destino ?? 109.90,
-    vista:  997.00,
+    boleto: lancamentoData?.valor_mensalidade_destino ?? 150.00,
+    vista:  1500.00,
   };
   const valor = parseFloat(valorMap[tipo]);
 
