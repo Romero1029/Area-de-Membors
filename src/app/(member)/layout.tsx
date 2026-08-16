@@ -1,20 +1,20 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getCachedUser, getCachedProfile } from '@/lib/supabase/cached-user'
 import { TopNavbar } from '@/components/layout/TopNavbar'
 import { MobileTabBar } from '@/components/layout/MobileTabBar'
 import { isEnrolledInFormacao } from '@/lib/formacao-queries'
 import type { Profile } from '@/types'
 
 export default async function MemberLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) redirect('/login')
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase.from('profiles') as any)
-    .select('*').eq('id', user.id).single()
+  const profile = await getCachedProfile(user.id)
 
   if (!profile) redirect('/login')
+
+  const supabase = await createClient()
 
   const isAdmin = profile.role === 'admin'
 

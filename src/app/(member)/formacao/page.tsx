@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { getCachedUser, getCachedProfile } from '@/lib/supabase/cached-user'
 import { getFormacaoModulesForStudent, isEnrolledInFormacao, getFormacaoProgressSummary, getMyFormacaoTurma } from '@/lib/formacao-queries'
 import { getLives } from '@/lib/actions/lives'
 import { FORMACAO_PRODUCT_ID } from '@/lib/constants'
@@ -8,12 +8,10 @@ import { FormacaoClient } from './FormacaoClient'
 export const metadata = { title: 'Formação em Psicanálise — Instituto Despertamente' }
 
 export default async function FormacaoPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) redirect('/login')
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase as any).from('profiles').select('role, full_name').eq('id', user.id).single()
+  const profile = await getCachedProfile(user.id)
   const isAdmin = profile?.role === 'admin'
 
   const enrolled = isAdmin || (await isEnrolledInFormacao())

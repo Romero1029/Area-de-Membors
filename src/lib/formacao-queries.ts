@@ -1,5 +1,6 @@
 import 'server-only'
 import { createClient } from '@/lib/supabase/server'
+import { getCachedUser } from '@/lib/supabase/cached-user'
 import { FORMACAO_PRODUCT_ID } from '@/lib/constants'
 import type { Lesson } from '@/types'
 
@@ -104,7 +105,7 @@ export async function getFormacaoProgressSummary(): Promise<FormacaoProgressSumm
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sb = supabase as any
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
 
   const { data: syllabus } = await sb.rpc('get_formacao_syllabus')
   const modules = (syllabus ?? []) as { module_id: string; title: string; unlocked: boolean; sort_order: number }[]
@@ -139,7 +140,7 @@ export async function getFormacaoProgressSummary(): Promise<FormacaoProgressSumm
 
 export async function isEnrolledInFormacao(): Promise<boolean> {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) return false
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (supabase as any).from('enrollments').select('id')
@@ -168,7 +169,7 @@ export async function getMyFormacaoTurma(): Promise<Turma | null> {
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sb = supabase as any
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) return null
 
   const { data: enrollment } = await sb.from('enrollments').select('turma_id')
@@ -323,7 +324,7 @@ export async function getModuleTasksForStudent(moduleId: string): Promise<Studen
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sb = supabase as any
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
 
   const { data: tasks } = await sb.from('tasks')
     .select('id, title, description, due_at, task_type, options').eq('module_id', moduleId).eq('is_required', true).order('created_at')
@@ -375,7 +376,7 @@ export async function getMyPublishedFormacaoGrades(): Promise<MyGrade[]> {
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sb = supabase as any
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) return []
 
   const { data } = await sb.from('grades')
