@@ -64,8 +64,15 @@ function SubmissionCard({ submission }: { submission: TaskSubmissionRow }) {
         )}
       </div>
 
+      {submission.mcTotal !== null && submission.mcTotal > 0 && (
+        <div className="rounded-lg bg-[#0d0d0d] border border-[#1a1a1a] p-3 mb-3">
+          <p className="text-[10px] text-[#606060] uppercase tracking-wider mb-1">Múltipla escolha</p>
+          <p className="text-sm text-[#c0c0c0]">{submission.mcScore}/{submission.mcTotal} corretas</p>
+        </div>
+      )}
+
       <div className="rounded-lg bg-[#0d0d0d] border border-[#1a1a1a] p-3 mb-3">
-        <p className="text-[10px] text-[#606060] uppercase tracking-wider mb-1">Resposta do aluno</p>
+        <p className="text-[10px] text-[#606060] uppercase tracking-wider mb-1">Resposta dissertativa</p>
         <p className="text-sm text-[#c0c0c0] whitespace-pre-wrap">{submission.answer}</p>
       </div>
 

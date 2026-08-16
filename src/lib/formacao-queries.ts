@@ -192,6 +192,10 @@ export async function getTurmaModuleReleases(turmaId: string): Promise<TurmaModu
   return data ?? []
 }
 
+export interface McChoice { key: string; text: string }
+export interface McQuestion { id: string; text: string; choices: McChoice[]; correctKey: string | null }
+export interface QuizOptions { mcQuestions: McQuestion[]; essayPrompt: string; declarationText: string }
+
 export interface FormacaoTaskAdmin {
   id: string
   title: string
@@ -203,6 +207,8 @@ export interface FormacaoTaskAdmin {
   published: boolean
   submissionCount: number
   pendingCount: number
+  taskType: string
+  quiz: QuizOptions | null
 }
 
 export async function getFormacaoTasksAdmin(): Promise<FormacaoTaskAdmin[]> {
@@ -211,7 +217,7 @@ export async function getFormacaoTasksAdmin(): Promise<FormacaoTaskAdmin[]> {
   const sb = supabase as any
 
   const { data: tasks } = await sb.from('tasks')
-    .select('id, title, description, rubric, module_id, due_at, is_required, modules(title)')
+    .select('id, title, description, rubric, module_id, due_at, is_required, task_type, options, modules(title)')
     .eq('product_id', FORMACAO_PRODUCT_ID).order('created_at')
   if (!tasks || tasks.length === 0) return []
 
@@ -236,6 +242,8 @@ export async function getFormacaoTasksAdmin(): Promise<FormacaoTaskAdmin[]> {
       published: t.is_required,
       submissionCount: subs.length,
       pendingCount: pending.length,
+      taskType: t.task_type ?? 'text',
+      quiz: t.task_type === 'quiz' ? (t.options as QuizOptions) : null,
     }
   })
 }
@@ -250,6 +258,10 @@ export interface TaskSubmissionRow {
   finalScore: number | null
   finalFeedback: string
   published: boolean
+  mcScore: number | null
+  mcTotal: number | null
+  mcAnswers: Record<string, string> | null
+  declarationAccepted: boolean
 }
 
 export async function getFormacaoTaskSubmissions(taskId: string): Promise<TaskSubmissionRow[]> {
@@ -258,7 +270,7 @@ export async function getFormacaoTaskSubmissions(taskId: string): Promise<TaskSu
   const sb = supabase as any
 
   const { data: submissions } = await sb.from('task_submissions')
-    .select('id, user_id, answer, grades(id, ai_score, ai_feedback, final_score, final_feedback, published)')
+    .select('id, user_id, answer, answer_data, grades(id, ai_score, ai_feedback, final_score, final_feedback, published)')
     .eq('task_id', taskId).order('submitted_at', { ascending: false })
   if (!submissions || submissions.length === 0) return []
 
@@ -268,6 +280,7 @@ export async function getFormacaoTaskSubmissions(taskId: string): Promise<TaskSu
 
   return submissions.map((s: any) => {
     const grade = Array.isArray(s.grades) ? s.grades[0] : s.grades
+    const answerData = s.answer_data ?? null
     return {
       id: s.id,
       studentName: nameById.get(s.user_id) ?? 'Aluno',
@@ -278,6 +291,10 @@ export async function getFormacaoTaskSubmissions(taskId: string): Promise<TaskSu
       finalScore: grade?.final_score ?? null,
       finalFeedback: grade?.final_feedback ?? '',
       published: grade?.published ?? false,
+      mcScore: answerData?.mcScore ?? null,
+      mcTotal: answerData?.mcTotal ?? null,
+      mcAnswers: answerData?.mcAnswers ?? null,
+      declarationAccepted: answerData?.declarationAccepted ?? false,
     }
   })
 }
@@ -287,12 +304,18 @@ export interface StudentTask {
   title: string
   instructions: string
   dueAt: string | null
+  taskType: string
+  quiz: QuizOptions | null
   mySubmission: {
     answer: string
     status: string
     finalScore: number | null
     finalFeedback: string
     published: boolean
+    mcAnswers: Record<string, string> | null
+    mcScore: number | null
+    mcTotal: number | null
+    declarationAccepted: boolean
   } | null
 }
 
@@ -303,12 +326,12 @@ export async function getModuleTasksForStudent(moduleId: string): Promise<Studen
   const { data: { user } } = await supabase.auth.getUser()
 
   const { data: tasks } = await sb.from('tasks')
-    .select('id, title, description, due_at').eq('module_id', moduleId).eq('is_required', true).order('created_at')
+    .select('id, title, description, due_at, task_type, options').eq('module_id', moduleId).eq('is_required', true).order('created_at')
   if (!tasks || tasks.length === 0) return []
 
   const { data: submissions } = user
     ? await sb.from('task_submissions')
-        .select('task_id, answer, status, grades(final_score, final_feedback, published)')
+        .select('task_id, answer, status, answer_data, grades(final_score, final_feedback, published)')
         .eq('user_id', user.id).in('task_id', tasks.map((t: { id: string }) => t.id))
     : { data: [] }
 
@@ -317,17 +340,24 @@ export async function getModuleTasksForStudent(moduleId: string): Promise<Studen
   return tasks.map((t: any) => {
     const s = byTask.get(t.id) as any
     const grade = s ? (Array.isArray(s.grades) ? s.grades[0] : s.grades) : null
+    const answerData = s?.answer_data ?? null
     return {
       id: t.id,
       title: t.title,
       instructions: t.description ?? '',
       dueAt: t.due_at,
+      taskType: t.task_type ?? 'text',
+      quiz: t.task_type === 'quiz' ? (t.options as QuizOptions) : null,
       mySubmission: s ? {
         answer: s.answer,
         status: s.status,
         finalScore: grade?.published ? grade.final_score : null,
         finalFeedback: grade?.published ? grade.final_feedback : '',
         published: grade?.published ?? false,
+        mcAnswers: answerData?.mcAnswers ?? null,
+        mcScore: answerData?.mcScore ?? null,
+        mcTotal: answerData?.mcTotal ?? null,
+        declarationAccepted: answerData?.declarationAccepted ?? false,
       } : null,
     }
   })
