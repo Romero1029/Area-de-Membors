@@ -3,8 +3,21 @@ import { updateSession } from '@/lib/supabase/middleware'
 
 const FRANQUIA_HOSTS = ['idmpsifranquia.com.br', 'idmpsifranquia.com', 'www.idmpsifranquia.com.br', 'www.idmpsifranquia.com']
 
+// Domínios próprios de parceiras que devem mostrar uma página específica
+// do site, sem precisar mexer em rota nem redirecionar visivelmente a URL.
+const DOMINIOS_PARCEIRAS: Record<string, string> = {
+  'links.jocimaraanjos.com.br': '/jocimara-anjos',
+}
+
 export async function proxy(request: NextRequest) {
   const host = request.headers.get('host')?.replace(/:\d+$/, '') || ''
+
+  const destinoParceira = DOMINIOS_PARCEIRAS[host]
+  if (destinoParceira && request.nextUrl.pathname === '/') {
+    const url = request.nextUrl.clone()
+    url.pathname = destinoParceira
+    return NextResponse.rewrite(url)
+  }
 
   if (FRANQUIA_HOSTS.includes(host)) {
     const { pathname } = request.nextUrl
