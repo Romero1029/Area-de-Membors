@@ -17,27 +17,25 @@ export interface Live {
   is_active: boolean
   created_at: string
   updated_at: string
+  product_id: string | null
 }
 
-export async function getLives(): Promise<Live[]> {
+export async function getLives(productId?: string): Promise<Live[]> {
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase as any)
-    .from('lives')
-    .select('*')
-    .eq('is_active', true)
-    .order('sort_order')
+  let query = (supabase as any).from('lives').select('*').eq('is_active', true).order('sort_order')
+  if (productId) query = query.eq('product_id', productId)
+  const { data, error } = await query
   if (error) return []
   return data ?? []
 }
 
-export async function getAllLives(): Promise<Live[]> {
+export async function getAllLives(productId?: string): Promise<Live[]> {
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase as any)
-    .from('lives')
-    .select('*')
-    .order('sort_order')
+  let query = (supabase as any).from('lives').select('*').order('sort_order')
+  if (productId) query = query.eq('product_id', productId)
+  const { data, error } = await query
   if (error) return []
   return data ?? []
 }
@@ -55,9 +53,14 @@ export async function createLive(formData: FormData) {
     join_url:     formData.get('join_url') || null,
     calendar_url: formData.get('calendar_url') || null,
     sort_order:   Number(formData.get('sort_order')) || 0,
+    product_id:   formData.get('product_id') || null,
   })
   revalidatePath('/admin/ao-vivo')
   revalidatePath('/ao-vivo')
+  revalidatePath('/admin/formacao/calendario')
+  revalidatePath('/formacao/calendario')
+  revalidatePath('/admin/mentoria-npa/calendario')
+  revalidatePath('/mentoria-npa/calendario')
 }
 
 export async function updateLive(id: string, formData: FormData) {
@@ -73,9 +76,14 @@ export async function updateLive(id: string, formData: FormData) {
     join_url:     formData.get('join_url') || null,
     calendar_url: formData.get('calendar_url') || null,
     sort_order:   Number(formData.get('sort_order')) || 0,
+    product_id:   formData.get('product_id') || null,
   }).eq('id', id)
   revalidatePath('/admin/ao-vivo')
   revalidatePath('/ao-vivo')
+  revalidatePath('/admin/formacao/calendario')
+  revalidatePath('/formacao/calendario')
+  revalidatePath('/admin/mentoria-npa/calendario')
+  revalidatePath('/mentoria-npa/calendario')
 }
 
 export async function deleteLive(id: string) {
@@ -84,6 +92,10 @@ export async function deleteLive(id: string) {
   await (supabase as any).from('lives').delete().eq('id', id)
   revalidatePath('/admin/ao-vivo')
   revalidatePath('/ao-vivo')
+  revalidatePath('/admin/formacao/calendario')
+  revalidatePath('/formacao/calendario')
+  revalidatePath('/admin/mentoria-npa/calendario')
+  revalidatePath('/mentoria-npa/calendario')
 }
 
 export async function toggleLiveStatus(id: string, status: Live['status']) {
@@ -92,4 +104,8 @@ export async function toggleLiveStatus(id: string, status: Live['status']) {
   await (supabase as any).from('lives').update({ status }).eq('id', id)
   revalidatePath('/admin/ao-vivo')
   revalidatePath('/ao-vivo')
+  revalidatePath('/admin/formacao/calendario')
+  revalidatePath('/formacao/calendario')
+  revalidatePath('/admin/mentoria-npa/calendario')
+  revalidatePath('/mentoria-npa/calendario')
 }

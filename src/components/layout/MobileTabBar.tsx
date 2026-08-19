@@ -2,14 +2,18 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { CalendarDays, ShoppingBag, Award } from 'lucide-react'
+import { CalendarDays, ShoppingBag, Award, Sparkles } from 'lucide-react'
 
-const tabs = [
+const baseTabs = [
   { href: '/lancamento', label: 'Semana', icon: CalendarDays },
 ]
 
-export function MobileTabBar() {
+export function MobileTabBar({ hasNpaAccess = false }: { hasNpaAccess?: boolean }) {
   const pathname = usePathname()
+  const tabs = [
+    ...baseTabs,
+    ...(hasNpaAccess ? [{ href: '/mentoria-npa', label: 'Mentoria NPA', icon: Sparkles, badge: 'NOVO' }] : []),
+  ]
 
   function isActive(href: string) {
     return pathname.startsWith(href)
@@ -27,7 +31,7 @@ export function MobileTabBar() {
       }}
     >
       <div className="flex items-stretch justify-around px-1 pt-1.5 pb-0.5">
-        {tabs.map(({ href, label, icon: Icon }) => {
+        {tabs.map(({ href, label, icon: Icon, badge }: { href: string; label: string; icon: typeof Sparkles; badge?: string }) => {
           const active = isActive(href)
           return (
             <Link
@@ -45,11 +49,17 @@ export function MobileTabBar() {
               )}
 
               <div
-                className="flex items-center justify-center w-9 h-7 rounded-xl transition-all duration-200"
+                className="relative flex items-center justify-center w-9 h-7 rounded-xl transition-all duration-200"
                 style={{
                   background: active ? 'rgba(255,184,0,0.12)' : 'transparent',
                 }}
               >
+                {badge && (
+                  <span
+                    className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full"
+                    style={{ background: '#FFB800' }}
+                  />
+                )}
                 <Icon
                   style={{
                     width: '1.125rem',

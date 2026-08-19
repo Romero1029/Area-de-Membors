@@ -55,6 +55,9 @@ async function getData(slug: string, userId: string) {
 export default async function CoursePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
+  // A Formação tem sua própria área (/formacao) — liberação por turma, tarefas com IA, etc.
+  if (slug === 'formacao-psicanalise') redirect('/formacao')
+
   // Precisamos do userId para o demo
   let userId = 'guest'
   if (!DEMO_MODE) {
