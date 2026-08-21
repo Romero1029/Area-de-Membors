@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-const WA_URL = 'https://wa.me/5511999999999'
+const WA_URL = 'https://wa.me/5511919434040'
 
 const COL_PLATAFORMA = [
   { href: '/login', label: 'Login' },
@@ -10,17 +10,18 @@ const COL_PLATAFORMA = [
   { href: '/loja', label: 'Programas' },
 ]
 
+// Ancoras (#) sempre prefixadas com /comecar -- o rodape aparece em varias
+// paginas, e essas secoes so existem la.
 const COL_CONTEUDO = [
-  { href: '#metodologia', label: 'Nossa metodologia' },
-  { href: '#jornadas', label: 'Jornadas' },
-  { href: '#certificacao', label: 'Certificações' },
-  { href: '#depoimentos', label: 'Depoimentos' },
+  { href: '/comecar#metodologia', label: 'Nossa metodologia' },
+  { href: '/comecar#jornadas', label: 'Jornadas' },
+  { href: '/certificado', label: 'Certificações' },
+  { href: '/comecar#depoimentos', label: 'Depoimentos' },
 ]
 
 const COL_LEGAL = [
   { href: '/privacidade', label: 'Política de Privacidade' },
   { href: '/termos', label: 'Termos de Uso' },
-  { href: '#faq', label: 'FAQ' },
   { href: WA_URL, label: 'Contato' },
 ]
 
@@ -112,6 +113,18 @@ export function SiteFooter({ parceira }: { parceira?: string } = {}) {
             Feito no Brasil 🇧🇷 · LGPD compliant
           </p>
         </div>
+        <p className="mt-3 text-center text-xs text-white/30">
+          Desenvolvido com carinho pela{' '}
+          <a
+            href="https://www.onzedigitalstrategy.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/45 hover:text-white/70 transition-colors"
+          >
+            Onze Digital Strategy
+          </a>
+          {' '}· Grupo DespertaMENTE
+        </p>
       </div>
     </footer>
   )

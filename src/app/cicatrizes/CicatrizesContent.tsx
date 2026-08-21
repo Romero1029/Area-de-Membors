@@ -647,7 +647,10 @@ export function CicatrizesContent() {
         </Reveal>
       </section>
 
-      <SiteFooter parceira="Jocimara Anjos" />
+      {/* pb extra no mobile pra nao ficar tampado pela StickyCTACicatrizes fixa no rodape */}
+      <div className="pb-20 md:pb-0">
+        <SiteFooter parceira="Jocimara Anjos" />
+      </div>
     </>
   )
 }

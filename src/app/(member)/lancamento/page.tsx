@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { SemanaDespertar38 } from './SemanaDespertar38'
+import { SemanaDespertar43 } from './SemanaDespertar43'
 
 export default async function LancamentoPage() {
   const supabase = await createClient()
@@ -16,5 +16,5 @@ export default async function LancamentoPage() {
 
   const firstName = (profile?.full_name ?? 'Aluno').split(' ')[0]
 
-  return <SemanaDespertar38 firstName={firstName} />
+  return <SemanaDespertar43 firstName={firstName} />
 }

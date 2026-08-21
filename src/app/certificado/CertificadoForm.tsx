@@ -16,7 +16,7 @@ function applyPhoneMask(value: string) {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-type Status = 'idle' | 'loading' | 'success' | 'error' | 'blocked'
+type Status = 'idle' | 'loading' | 'gate' | 'success' | 'error' | 'blocked'
 
 const inputCls =
   'w-full h-12 px-4 rounded-2xl text-sm outline-none transition-colors bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:border-[#FFB800]/60 focus:bg-white/8'
@@ -33,6 +33,7 @@ export function CertificadoForm() {
   const [fullName, setFullName] = useState('')
   const [telefone, setTelefone] = useState('')
   const [email, setEmail] = useState('')
+  const [cidade, setCidade] = useState('')
   const [palavra1, setPalavra1] = useState('')
   const [palavra2, setPalavra2] = useState('')
   const [palavra3, setPalavra3] = useState('')
@@ -63,6 +64,7 @@ export function CertificadoForm() {
           nome:     fullName.trim(),
           telefone: telefone.trim(),
           email:    email.trim(),
+          cidade:   cidade.trim(),
           palavra1: palavra1.trim(),
           palavra2: palavra2.trim(),
           palavra3: palavra3.trim(),
@@ -74,12 +76,12 @@ export function CertificadoForm() {
         const url = URL.createObjectURL(blob)
         const filename = `certificado-${fullName.trim().toLowerCase().replace(/\s+/g, '-')}.pdf`
 
-        triggerDownload(url, filename)
-
+        // Não baixa ainda — primeiro mostra o popup, o download só acontece
+        // quando o lead clica no botão "ir para o certificado" dentro dele.
         setDownloadUrl(url)
         setDownloadFilename(filename)
         setNome(fullName.trim())
-        setStatus('success')
+        setStatus('gate')
         setShowObrigadoModal(true)
         return
       }
@@ -103,13 +105,37 @@ export function CertificadoForm() {
     }
   }
 
+  function handleRevealCertificado() {
+    if (downloadUrl && downloadFilename) {
+      triggerDownload(downloadUrl, downloadFilename)
+    }
+    setShowObrigadoModal(false)
+    setStatus('success')
+  }
+
+  // ── Popup antes do certificado (Instagram/WhatsApp) ──────────────────────────
+  if (status === 'gate') {
+    return (
+      <>
+        {showObrigadoModal && (
+          <ObrigadoModal nome={nome} onContinue={handleRevealCertificado} />
+        )}
+        <div className="flex flex-col items-center justify-center gap-3 py-10 text-center">
+          <div
+            className="w-16 h-16 rounded-full flex items-center justify-center"
+            style={{ background: 'rgba(255,184,0,0.15)', border: '2px solid rgba(255,184,0,0.4)' }}
+          >
+            <Award className="w-7 h-7" style={{ color: '#FFB800' }} />
+          </div>
+          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Quase lá...</p>
+        </div>
+      </>
+    )
+  }
+
   // ── Sucesso ──────────────────────────────────────────────────────────────────
   if (status === 'success') {
     return (
-      <>
-      {showObrigadoModal && (
-        <ObrigadoModal nome={nome} onClose={() => setShowObrigadoModal(false)} />
-      )}
       <div className="space-y-6 text-center">
         <div
           className="w-20 h-20 rounded-full flex items-center justify-center mx-auto"
@@ -148,7 +174,6 @@ export function CertificadoForm() {
           Caso o download não tenha iniciado, clique no botão acima.
         </p>
       </div>
-      </>
     )
   }
 
@@ -221,6 +246,19 @@ export function CertificadoForm() {
               className={inputCls}
             />
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-white/70 block">Cidade</label>
+          <input
+            type="text"
+            value={cidade}
+            onChange={e => setCidade(e.target.value)}
+            placeholder="Sua cidade"
+            required
+            disabled={status === 'loading'}
+            className={inputCls}
+          />
         </div>
       </div>
 

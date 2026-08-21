@@ -251,7 +251,7 @@ const TRILHAS = [
 
 function TrilhasSection() {
   return (
-    <section className="bg-[#0D1638] border-t border-white/6">
+    <section id="jornadas" className="bg-[#0D1638] border-t border-white/6">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24">
         <FadeIn direction="none" className="mb-14">
           <p className="text-xs uppercase tracking-[0.22em] text-white/30 mb-3">Jornadas</p>

@@ -11,7 +11,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-const WA_URL = 'https://wa.me/5511999999999?text=Olá! Tenho interesse na Formação em Psicanálise Integrativa.'
+const WA_URL = 'https://wa.me/5511919434040?text=Olá! Tenho interesse na Formação em Psicanálise Integrativa.'
 
 const modulos = [
   {

@@ -244,6 +244,49 @@
       line-height: 1.7;
     }
 
+    /* ── CORTESIA GATE (código de autorização) ───────── */
+    .cortesia-gate {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .cortesia-gate-text {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .cortesia-gate-row {
+      display: flex;
+      gap: var(--space-2);
+    }
+    .cortesia-gate-row input {
+      flex: 1;
+      min-width: 0;
+    }
+    .btn-cortesia-validar {
+      padding: 0 var(--space-5);
+      background: var(--navy);
+      color: #F5F0E4;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn-cortesia-validar:hover { background: var(--navy-dark); }
+    .cortesia-gate-msg {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+    }
+    .cortesia-gate-msg.show { display: flex; }
+    .cortesia-gate-msg.error { color: var(--error); }
+
     /* ── ERROR SCREEN ─────────────────────────────── */
     #error-screen { display: none; text-align: center; padding: var(--space-24) var(--space-6); }
     #error-screen.show { display: block; }
@@ -1273,6 +1316,206 @@
       margin-top: var(--space-6);
       line-height: 1.6;
     }
+
+    /* ── ASSINATURA DO CONTRATO ────────────────────── */
+    #sign-screen {
+      display: none;
+      position: fixed; inset: 0; z-index: 93;
+      background: var(--surface);
+      overflow-y: auto;
+      animation: fadeIn 0.5s var(--ease-expo);
+    }
+    #sign-screen.show { display: block; }
+
+    .sign-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--space-4);
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .sign-icon { font-size: 40px; }
+    .sign-ready-text, .sign-error-text {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .sign-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: var(--space-2);
+    }
+
+    /* Assinatura embutida (Autentique) */
+    #sign-ready {
+      max-width: 900px;
+      width: 100%;
+    }
+    .sign-iframe-wrap {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      position: relative;
+    }
+    #sign-iframe {
+      width: 100%;
+      height: 75vh;
+      min-height: 480px;
+      border: none;
+      display: block;
+    }
+    .sign-fallback-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── REFERRAL / INDICAÇÕES SCREEN ─────────────── */
+    #referral-screen {
+      display: none;
+      position: fixed; inset: 0; z-index: 95;
+      background: var(--surface);
+      overflow-y: auto;
+      animation: fadeIn 0.5s var(--ease-expo);
+    }
+    #referral-screen.show { display: block; }
+
+    .ref-header {
+      background: var(--navy-deeper);
+      padding: var(--space-12) var(--space-6) var(--space-8);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ref-header::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, transparent 100%);
+    }
+    .ref-stars {
+      font-size: 11px;
+      letter-spacing: 18px;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: var(--space-5);
+    }
+    .ref-badge {
+      display: inline-block;
+      background: rgba(184,150,12,0.15);
+      border: 1px solid rgba(184,150,12,0.35);
+      padding: 6px 14px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: var(--space-5);
+    }
+    .ref-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 4.5vw, 2.5rem);
+      font-weight: 700;
+      color: #F5F0E4;
+      margin-bottom: var(--space-4);
+      letter-spacing: -0.02em;
+    }
+    .ref-subtitle {
+      font-size: 0.9375rem;
+      color: rgba(245,240,228,0.6);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .ref-body {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: var(--space-10) var(--space-6) var(--space-16);
+    }
+
+    .ref-offer-card {
+      background: var(--surface-alt);
+      border: 1px solid var(--border-gold);
+      border-left: 3px solid var(--gold);
+      padding: var(--space-6);
+      margin-bottom: var(--space-8);
+      text-align: center;
+    }
+    .ref-offer-icon { font-size: 32px; margin-bottom: var(--space-3); }
+    .ref-offer-text {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.65;
+      margin-bottom: var(--space-3);
+    }
+    .ref-offer-subtext {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .ref-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-8);
+    }
+    .ref-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      border: 1.5px solid var(--border);
+      background: #fff;
+      padding: var(--space-3) var(--space-4);
+    }
+    .ref-row-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--navy);
+      color: var(--gold-light);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ref-row-fields {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-3);
+      flex: 1;
+    }
+    @media (max-width: 560px) {
+      .ref-row-fields { grid-template-columns: 1fr; }
+    }
+    .ref-row-fields input {
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+    }
+
+    .ref-skip {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: var(--space-4);
+      padding: var(--space-2);
+      font-family: var(--font-body);
+    }
+    .ref-skip:hover { color: var(--text); }
+
+    .ref-footnote {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: var(--space-6);
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
@@ -1336,105 +1579,13 @@
 
     <div class="pay-options">
 
-      <!-- OPÇÃO 1: BOLETO 1+14 -->
-      <div class="pay-card" id="pay-boleto" onclick="selectPay('boleto')">
-        <div class="pay-card-header">
-          <div class="pay-card-icon">📄</div>
-          <div class="pay-card-info">
-            <div class="pay-card-title">Boleto 1 + 14</div>
-            <div class="pay-card-sub">Entrada via PIX · 14 parcelas no boleto</div>
-          </div>
-          <div class="pay-card-check" id="check-boleto">✓</div>
-        </div>
-        <div class="pay-card-body">
-          <div class="pix-container">
-
-            <div class="pix-amount-badge">
-              <span class="pix-amount-label">Entrada PIX</span>
-              <span class="pix-amount-value" id="boleto-valor-entrada">R$ —</span>
-            </div>
-
-            <!-- QR Code dinâmico (Mercado Pago) -->
-            <div class="qr-wrapper" id="qr-boleto">
-              <div class="qr-loading" id="qr-boleto-loading">
-                <div class="qr-spinner"></div>
-                <span class="qr-loading-text">Gerando QR Code...</span>
-              </div>
-              <div class="qr-placeholder" id="qr-boleto-placeholder">
-                <div class="qr-placeholder-icon">▣</div>
-                <div class="qr-placeholder-text">QR Code<br>será exibido aqui</div>
-              </div>
-              <img id="qr-boleto-img" src="" alt="QR Code PIX" style="display:none;" />
-            </div>
-
-            <!-- Código copia-e-cola -->
-            <div class="pix-code-wrap" id="pix-code-boleto-wrap" style="display:none;">
-              <div class="pix-code-label">Pix copia e cola</div>
-              <div class="pix-code-box">
-                <div class="pix-code-input" id="pix-code-boleto">—</div>
-                <button class="btn-copy" onclick="copyPix('pix-code-boleto', this)">Copiar</button>
-              </div>
-            </div>
-
-            <div class="pix-info-list">
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span><strong>1º pagamento:</strong> entrada via PIX no QR Code acima para confirmar sua vaga</span></div>
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span><strong>Demais parcelas:</strong> os 14 boletos mensais serão enviados por e-mail pela plataforma <strong>Voomp</strong>, nossa parceira e da Faculdade Anhanguera</span></div>
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>QR Code válido por 30 minutos</span></div>
-            </div>
-
-            <div style="background:rgba(184,150,12,0.08);border:1px solid rgba(184,150,12,0.25);border-radius:10px;padding:12px 16px;margin-top:8px;font-size:0.82rem;color:rgba(245,240,228,0.7);line-height:1.5;">
-              📌 <strong style="color:var(--gold-light);">Importante:</strong> após o pagamento do PIX, você receberá os boletos mensalmente no e-mail informado neste formulário, enviados pela plataforma <strong>Voomp</strong>.
-            </div>
-
-            <div class="integration-notice" id="mp-boleto-notice">
-              <strong>Integração pendente:</strong> configure <code>MP_ACCESS_TOKEN</code> no topo do script para ativar o QR Code automático.
-            </div>
-
-            <button class="pay-confirmed-btn" onclick="showSuccess()">Já realizei o pagamento ✓</button>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- OPÇÃO 2: CARTÃO -->
-      <div class="pay-card" id="pay-cartao" onclick="selectPay('cartao')">
-        <div class="pay-card-header">
-          <div class="pay-card-icon">💳</div>
-          <div class="pay-card-info">
-            <div class="pay-card-title">Cartão de crédito</div>
-            <div class="pay-card-sub">Parcelamento disponível · Link seguro</div>
-          </div>
-          <div class="pay-card-check" id="check-cartao">✓</div>
-        </div>
-        <div class="pay-card-body">
-          <div class="pix-container">
-            <div class="pix-info-list" style="width:100%;max-width:380px;">
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Você será redirecionado para a página de pagamento seguro</span></div>
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Parcelamento conforme condições do lançamento</span></div>
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Processamento imediato · Aprovação em minutos</span></div>
-            </div>
-
-            <a id="btn-link-cartao" href="#" target="_blank" rel="noopener" class="btn-pay-link disabled">
-              Ir para pagamento com cartão →
-            </a>
-
-            <div class="integration-notice" id="cartao-notice">
-              <strong>Integração pendente:</strong> configure <code>LINK_PAGAMENTO_CARTAO</code> no topo do script para ativar o botão.
-            </div>
-
-            <button class="pay-confirmed-btn" onclick="showSuccess()">Já realizei o pagamento ✓</button>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- OPÇÃO 3: À VISTA -->
+      <!-- OPÇÃO 1: À VISTA (SYNCPAY) -->
       <div class="pay-card" id="pay-vista" onclick="selectPay('vista')">
         <div class="pay-card-header">
           <div class="pay-card-icon">⚡</div>
           <div class="pay-card-info">
             <div class="pay-card-title">À vista no PIX</div>
-            <div class="pay-card-sub">R$ 997,00 · Melhor valor · Aprovação imediata</div>
+            <div class="pay-card-sub">R$ 1.500,00 · Melhor valor · Aprovação imediata</div>
           </div>
           <div class="pay-card-check" id="check-vista">✓</div>
         </div>
@@ -1443,40 +1594,49 @@
 
             <div class="pix-amount-badge">
               <span class="pix-amount-label">Total à vista</span>
-              <span class="pix-amount-value">R$ 997,00</span>
+              <span class="pix-amount-value">R$ 1.500,00</span>
             </div>
 
-            <div class="qr-wrapper" id="qr-vista">
-              <div class="qr-loading" id="qr-vista-loading">
-                <div class="qr-spinner"></div>
-                <span class="qr-loading-text">Gerando QR Code...</span>
-              </div>
-              <div class="qr-placeholder" id="qr-vista-placeholder">
-                <div class="qr-placeholder-icon">▣</div>
-                <div class="qr-placeholder-text">QR Code<br>será exibido aqui</div>
-              </div>
-              <img id="qr-vista-img" src="" alt="QR Code PIX" style="display:none;" />
-            </div>
-
-            <div class="pix-code-wrap" id="pix-code-vista-wrap" style="display:none;">
-              <div class="pix-code-label">Pix copia e cola</div>
-              <div class="pix-code-box">
-                <div class="pix-code-input" id="pix-code-vista">—</div>
-                <button class="btn-copy" onclick="copyPix('pix-code-vista', this)">Copiar</button>
-              </div>
-            </div>
-
-            <div class="pix-info-list">
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Pagamento único de <strong>R$ 997,00</strong> — melhor custo-benefício</span></div>
+            <div class="pix-info-list" style="width:100%;max-width:380px;">
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Você será redirecionado para a página de pagamento seguro (PIX)</span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Pagamento único de <strong>R$ 1.500,00</strong> — melhor custo-benefício</span></div>
               <div class="pix-info-item"><div class="pix-info-dot"></div><span>Aprovação imediata após confirmação</span></div>
-              <div class="pix-info-item"><div class="pix-info-dot"></div><span>QR Code válido por 30 minutos</span></div>
             </div>
 
-            <div class="integration-notice" id="mp-vista-notice">
-              <strong>Integração pendente:</strong> configure <code>MP_ACCESS_TOKEN</code> no topo do script para ativar o QR Code automático.
+            <a id="btn-link-vista" href="#" target="_blank" rel="noopener" class="btn-pay-link">
+              Ir para pagamento no PIX →
+            </a>
+
+            <button class="pay-confirmed-btn" onclick="openContractScreen()">Já realizei o pagamento ✓</button>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- OPÇÃO 2: PARCELADO — CARTÃO OU BOLETO (SYNCPAY) -->
+      <div class="pay-card" id="pay-parcelado" onclick="selectPay('parcelado')">
+        <div class="pay-card-header">
+          <div class="pay-card-icon">💳</div>
+          <div class="pay-card-info">
+            <div class="pay-card-title">Parcelado (Cartão ou Boleto)</div>
+            <div class="pay-card-sub">Cartão em até 12x ou boleto em 15x de R$ 150,00</div>
+          </div>
+          <div class="pay-card-check" id="check-parcelado">✓</div>
+        </div>
+        <div class="pay-card-body">
+          <div class="pix-container">
+            <div class="pix-info-list" style="width:100%;max-width:380px;">
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Você será redirecionado para a página de pagamento seguro</span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Cartão de crédito em até <strong>12x de R$ 150,00</strong></span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Ou boleto recorrente em <strong>15x fixas de R$ 150,00</strong></span></div>
+              <div class="pix-info-item"><div class="pix-info-dot"></div><span>Escolha a forma exata na página de pagamento</span></div>
             </div>
 
-            <button class="pay-confirmed-btn" onclick="showSuccess()">Já realizei o pagamento ✓</button>
+            <a id="btn-link-parcelado" href="#" target="_blank" rel="noopener" class="btn-pay-link">
+              Ir para pagamento parcelado →
+            </a>
+
+            <button class="pay-confirmed-btn" onclick="openContractScreen()">Já realizei o pagamento ✓</button>
 
           </div>
         </div>
@@ -1492,7 +1652,7 @@
         Nenhum pagamento é necessário.<br>
         Clique abaixo para confirmar sua vaga e receber as informações de acesso no WhatsApp.
       </p>
-      <button class="pay-confirmed-btn" style="max-width:400px;width:100%;" onclick="showSuccess()">
+      <button class="pay-confirmed-btn" style="max-width:400px;width:100%;" onclick="openContractScreen()">
         Confirmar minha vaga gratuitamente ✓
       </button>
     </div>
@@ -1503,6 +1663,127 @@
     </p>
 
   </div><!-- /pay-body -->
+</div>
+
+<!-- ── ASSINATURA DO CONTRATO (PÓS-PAGAMENTO) ── -->
+<div id="sign-screen">
+  <div class="ref-header">
+    <div class="ref-badge">📝 Último passo</div>
+    <h2 class="ref-title">Assine seu contrato</h2>
+    <p class="ref-subtitle">Pagamento confirmado! Agora vamos formalizar sua matrícula com a assinatura eletrônica do seu contrato — rápido, seguro e com validade jurídica.</p>
+  </div>
+
+  <div class="ref-body">
+
+    <div class="sign-state" id="sign-loading">
+      <div class="qr-spinner"></div>
+      <p class="sign-ready-text">Gerando seu contrato...</p>
+    </div>
+
+    <div class="sign-state" id="sign-ready" style="display:none;">
+      <div class="sign-icon">📄</div>
+      <p class="sign-ready-text">Seu contrato já está pronto. Assine eletronicamente abaixo — leva menos de 2 minutos.</p>
+
+      <div class="sign-iframe-wrap">
+        <iframe id="sign-iframe" title="Assinatura do contrato" src="about:blank" allow="camera"></iframe>
+      </div>
+
+      <p class="sign-fallback-note">Não conseguiu ver o contrato acima? <a id="sign-link" href="#" target="_blank" rel="noopener">Abra a assinatura em uma nova aba</a>.</p>
+
+      <button type="button" class="pay-confirmed-btn" style="margin-top:var(--space-2);" onclick="finishContractScreen()">Já assinei — continuar</button>
+      <button type="button" class="ref-skip" onclick="finishContractScreen()">Prefiro assinar depois</button>
+      <p class="sign-note">Você também vai receber esse link por e-mail e WhatsApp para assinar quando preferir.</p>
+    </div>
+
+    <div class="sign-state" id="sign-error" style="display:none;">
+      <p class="sign-error-text">Não conseguimos gerar o link do contrato agora. Sem problemas — nossa equipe vai te enviar por WhatsApp em instantes.</p>
+      <button type="button" class="pay-confirmed-btn" onclick="finishContractScreen()">Continuar</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── REFERRAL / INDICAÇÕES SCREEN ── -->
+<div id="referral-screen">
+  <div class="ref-header">
+    <div class="ref-stars" aria-hidden="true">✦ ✦ ✦</div>
+    <div class="ref-badge">🎉 Você desbloqueou um privilégio raro</div>
+    <h2 class="ref-title">Parabéns, <span id="ref-nome">!</span></h2>
+    <p class="ref-subtitle">Você acabou de dar o primeiro passo de uma jornada que vai transformar sua vida. Agora chegou a sua vez de transformar a vida de mais 5 pessoas que você ama.</p>
+  </div>
+
+  <div class="ref-body">
+
+    <div class="ref-offer-card">
+      <div class="ref-offer-icon">🎁</div>
+      <p class="ref-offer-text">
+        Separe agora o nome de <strong>5 pessoas</strong> que vão viver essa mesma jornada de transformação
+        ao seu lado, nas <strong>mesmas condições especiais</strong> que você garantiu hoje — e você ainda
+        ganha um <strong>bônus exclusivo</strong> para cada uma delas.
+      </p>
+      <p class="ref-offer-subtext">
+        Pare um segundo e pense: quem vem à sua cabeça agora? Um filho, uma irmã, uma amiga, alguém que você
+        sabe que precisa disso tanto quanto você precisou. Quem mais cresce na vida é quem não guarda as boas
+        oportunidades só pra si. Essa condição especial não vai ficar aberta pra sempre — escreva os 5 nomes
+        abaixo, sem pensar demais, antes de seguir para o pagamento.
+      </p>
+    </div>
+
+    <div class="ref-list" id="ref-list">
+
+      <div class="ref-row">
+        <div class="ref-row-num">1</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-1" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-1" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-row-num">2</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-2" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-2" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-row-num">3</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-3" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-3" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-row-num">4</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-4" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-4" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-row-num">5</div>
+        <div class="ref-row-fields">
+          <input type="text" id="ref-nome-5" placeholder="Nome da pessoa" autocomplete="off" />
+          <input type="tel" id="ref-tel-5" placeholder="WhatsApp com DDD" autocomplete="off" />
+        </div>
+      </div>
+
+    </div><!-- /ref-list -->
+
+    <button type="button" class="btn-submit" id="btn-ref-submit" onclick="submitReferrals()">
+      <span class="btn-text">Confirmar minhas 5 indicações e continuar</span>
+      <span class="btn-icon" aria-hidden="true">→</span>
+      <span class="btn-spinner" aria-hidden="true"></span>
+    </button>
+
+    <button type="button" class="ref-skip" onclick="skipReferrals()">Prefiro abrir mão dessa oportunidade agora</button>
+
+    <p class="ref-footnote">Nossa equipe entrará em contato com cada indicação para apresentar essa mesma oportunidade especial. Seus dados e os das suas indicações são protegidos.</p>
+
+  </div>
 </div>
 
 <!-- ── ERROR SCREEN ── -->
@@ -1759,7 +2040,7 @@
                 <span class="venc-grupo-icon">📄</span>
                 <div>
                   <div class="venc-grupo-title">Boleto bancário</div>
-                  <div class="venc-grupo-desc">Escolha o melhor dia de vencimento</div>
+                  <div class="venc-grupo-desc">15x de R$ 150,00 · Escolha o melhor dia de vencimento</div>
                 </div>
               </div>
               <div class="venc-grupo-body">
@@ -1795,7 +2076,7 @@
                 <span class="venc-grupo-icon">💳</span>
                 <div>
                   <div class="venc-grupo-title">Cartão de crédito</div>
-                  <div class="venc-grupo-desc">Parcelamento disponível</div>
+                  <div class="venc-grupo-desc">Em até 12x de R$ 150,00</div>
                 </div>
               </div>
               <div class="venc-grupo-body">
@@ -1812,7 +2093,7 @@
                 <span class="venc-grupo-icon">⚡</span>
                 <div>
                   <div class="venc-grupo-title">PIX à vista</div>
-                  <div class="venc-grupo-desc">R$ 997,00 · Melhor valor</div>
+                  <div class="venc-grupo-desc">R$ 1.500,00 · Melhor valor</div>
                 </div>
               </div>
               <div class="venc-grupo-body">
@@ -1829,14 +2110,25 @@
                 <span class="venc-grupo-icon">🎓</span>
                 <div>
                   <div class="venc-grupo-title">Bolsa de Estudo</div>
-                  <div class="venc-grupo-desc">Acesso gratuito — sem pagamento necessário</div>
+                  <div class="venc-grupo-desc">Acesso exclusivo mediante código de autorização</div>
                 </div>
               </div>
               <div class="venc-grupo-body">
-                <label class="venc-option-single" id="vopt-cortesia">
-                  <input type="radio" name="dia_vencimento" value="cortesia" />
-                  <span class="venc-option-text">Recebi uma bolsa de estudo</span>
+
+                <div class="cortesia-gate" id="cortesia-gate">
+                  <p class="cortesia-gate-text">Recebeu uma bolsa de estudo da nossa equipe? Digite o código de autorização para liberar esta opção.</p>
+                  <div class="cortesia-gate-row">
+                    <input type="text" id="cortesia-code-input" placeholder="Código de autorização" autocomplete="off" />
+                    <button type="button" class="btn-cortesia-validar" onclick="validarCodigoCortesia()">Validar</button>
+                  </div>
+                  <span class="cortesia-gate-msg" id="cortesia-gate-msg"></span>
+                </div>
+
+                <label class="venc-option-single" id="vopt-cortesia" style="display:none;">
+                  <input type="radio" name="dia_vencimento" value="cortesia" id="radio-cortesia" />
+                  <span class="venc-option-text">✓ Bolsa de estudo autorizada — código validado</span>
                 </label>
+
               </div>
             </div>
 
@@ -1916,10 +2208,10 @@
   });
 })();
 
-/* ── CONFIGURAÇÃO DE PAGAMENTO ───────────────────── */
-const EDGE_GERAR_PIX        = 'https://usqiyekfmwwnvkmkdlej.supabase.co/functions/v1/gerar-pix';
-const EDGE_GERAR_CONTRATO   = 'https://usqiyekfmwwnvkmkdlej.supabase.co/functions/v1/gerar-contrato';
-const LINK_PAGAMENTO_CARTAO = 'https://mpago.la/2j1hJjB';
+/* ── CONFIGURAÇÃO DE PAGAMENTO (SYNCPAY) ─────────── */
+const EDGE_GERAR_CONTRATO  = 'https://usqiyekfmwwnvkmkdlej.supabase.co/functions/v1/gerar-contrato';
+const LINK_SYNCPAY_VISTA     = 'https://link.syncpayments.com.br/K2xfdF';
+const LINK_SYNCPAY_PARCELADO = 'https://link.syncpayments.com.br/MCZdi3';
 
 /* ── CONFIG SUPABASE ─────────────────────────────── */
 const SUPABASE_URL = 'https://usqiyekfmwwnvkmkdlej.supabase.co';
@@ -1948,6 +2240,15 @@ async function sb(path, opts = {}) {
 const params     = new URLSearchParams(location.search);
 const lancamentoId = params.get('lancamento');
 let   lancamentoData = null;
+
+/* ── ATRIBUIÇÃO DE VENDEDOR (link ?v=<código>) ───── */
+const VENDEDORES_POR_CODIGO = {
+  '6be52633': 'Helen Magna',
+  'd95ebfdc': 'Miguel Fogaça',
+  '1b8a0e29': 'Aline Horta',
+};
+const vendedorCodigo = params.get('v');
+const vendedorNome   = vendedorCodigo ? (VENDEDORES_POR_CODIGO[vendedorCodigo] || null) : null;
 
 async function init() {
   const loadEl = document.getElementById('loading-screen');
@@ -2000,6 +2301,41 @@ document.getElementById('cep').addEventListener('input', function () {
   let v = this.value.replace(/\D/g, '').slice(0, 8);
   if (v.length > 5) v = v.replace(/(\d{5})(\d{0,3})/, '$1-$2');
   this.value = v;
+});
+
+/* ── CÓDIGO DE AUTORIZAÇÃO DA BOLSA/CORTESIA ─────── */
+const CORTESIA_CODE = 'super motivos';
+
+function validarCodigoCortesia() {
+  const input = document.getElementById('cortesia-code-input');
+  const msg   = document.getElementById('cortesia-gate-msg');
+  const val   = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+
+  if (!val) {
+    msg.textContent = 'Digite o código para continuar.';
+    msg.className = 'cortesia-gate-msg show error';
+    return;
+  }
+
+  if (val === CORTESIA_CODE) {
+    document.getElementById('cortesia-gate').style.display = 'none';
+    const optEl = document.getElementById('vopt-cortesia');
+    optEl.style.display = 'flex';
+    const radio = document.getElementById('radio-cortesia');
+    radio.checked = true;
+    radio.dispatchEvent(new Event('change'));
+  } else {
+    msg.textContent = 'Código inválido. Confira com a equipe do Instituto Despertamente.';
+    msg.className = 'cortesia-gate-msg show error';
+    input.classList.add('has-error');
+  }
+}
+
+document.getElementById('cortesia-code-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); validarCodigoCortesia(); }
+});
+document.getElementById('cortesia-code-input').addEventListener('input', function () {
+  this.classList.remove('has-error');
 });
 
 /* ── RADIO VENCIMENTO ────────────────────────────── */
@@ -2168,6 +2504,7 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       ultima_atividade: new Date().toISOString(),
       ...(lancamentoId                           ? { lancamento_id: lancamentoId }                        : {}),
       ...(lancamentoData?.turma_destino_id       ? { turma_id: lancamentoData.turma_destino_id }         : {}),
+      ...(vendedorNome                           ? { vendedor: vendedorNome }                              : {}),
     };
 
     let leadId;
@@ -2210,6 +2547,7 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       ...(lancamentoData?.produto_destino           ? { produto: lancamentoData.produto_destino }             : {}),
       ...(lancamentoData?.valor_mensalidade_destino ? { valor_mensalidade: lancamentoData.valor_mensalidade_destino } : {}),
       ...(lancamentoData?.total_mensalidades_destino ? { total_mensalidades: lancamentoData.total_mensalidades_destino } : {}),
+      ...(vendedorNome                              ? { vendedor: vendedorNome, vendedor_id: vendedorNome } : {}),
     };
 
     const existingAluno = await sb(`alunos?email=eq.${encodeURIComponent(data.email)}&select=id`);
@@ -2219,30 +2557,8 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
       await sb('alunos', { method: 'POST', body: JSON.stringify(alunoPayload) });
     }
 
-    // Registro ok → abrir pagamento
+    // Registro ok → abrir pagamento (o contrato só é gerado depois do pagamento confirmado)
     openPaymentScreen(data);
-
-    // Gerar e enviar contrato via Autentique (em background, não bloqueia o fluxo)
-    fetch(EDGE_GERAR_CONTRATO, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nome:              data.nome,
-        email:             data.email,
-        whatsapp:          data.telefone,
-        telefone:          data.telefone,
-        cpf:               data.cpf,
-        rg:                data.rg,
-        sexo:              data.sexo,
-        data_nascimento:   data.data_nascimento,
-        endereco:          data.endereco,
-        cep:               data.cep,
-        cidade_estado:     data.cidade_estado,
-        pais:              data.pais,
-        dia_vencimento:    data.dia_vencimento,
-        tipo_pagamento:    alunoPayload.tipo_pagamento,
-      }),
-    }).catch(e => console.warn('Contrato Autentique (background):', e.message));
 
   } catch (err) {
     console.error(err);
@@ -2256,6 +2572,127 @@ document.getElementById('matricula-form').addEventListener('submit', async (e) =
 /* ── DADOS DO ALUNO (guardados para o MP) ─────────── */
 let _alunoData = null;
 
+/* ── TELA DE ASSINATURA DO CONTRATO (PÓS-PAGAMENTO) ── */
+async function openContractScreen() {
+  document.getElementById('payment-screen').classList.remove('show');
+  document.getElementById('sign-screen').classList.add('show');
+  document.body.style.overflow = 'auto';
+  window.scrollTo(0, 0);
+
+  document.getElementById('sign-loading').style.display = 'flex';
+  document.getElementById('sign-ready').style.display   = 'none';
+  document.getElementById('sign-error').style.display   = 'none';
+
+  if (!_alunoData) { finishContractScreen(); return; }
+
+  const tipoPagamento = _alunoData.dia_vencimento === 'a_vista'  ? 'bolsa'
+                      : _alunoData.dia_vencimento === 'cortesia' ? 'cortesia'
+                      : 'mensalidade';
+
+  // Boleto/cartão seguem o valor e o número de parcelas reais do lançamento
+  // (quando existir) — sem isso o contrato caía nos valores fixos padrão
+  const usaValoresLancamento = tipoPagamento === 'mensalidade';
+  const valorParcelaLancamento = usaValoresLancamento ? (lancamentoData?.valor_mensalidade_destino  ?? 150.00) : null;
+  const numParcelasLancamento  = usaValoresLancamento ? (lancamentoData?.total_mensalidades_destino ?? 15)     : null;
+
+  try {
+    const res = await fetch(EDGE_GERAR_CONTRATO, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome:              _alunoData.nome,
+        email:             _alunoData.email,
+        whatsapp:          _alunoData.telefone,
+        telefone:          _alunoData.telefone,
+        cpf:               _alunoData.cpf,
+        rg:                _alunoData.rg,
+        sexo:              _alunoData.sexo,
+        data_nascimento:   _alunoData.data_nascimento,
+        endereco:          _alunoData.endereco,
+        cep:               _alunoData.cep,
+        cidade_estado:     _alunoData.cidade_estado,
+        pais:              _alunoData.pais,
+        dia_vencimento:    _alunoData.dia_vencimento,
+        tipo_pagamento:    tipoPagamento,
+        ...(valorParcelaLancamento ? { valor_parcela: valorParcelaLancamento } : {}),
+        ...(numParcelasLancamento  ? { num_parcelas: numParcelasLancamento }   : {}),
+      }),
+    });
+    const json = await res.json();
+    if (!res.ok || !json.link_assinatura) throw new Error(json.error || 'Sem link de assinatura');
+
+    document.getElementById('sign-link').href   = json.link_assinatura;
+    document.getElementById('sign-iframe').src  = json.link_assinatura;
+    document.getElementById('sign-loading').style.display = 'none';
+    document.getElementById('sign-ready').style.display   = 'flex';
+  } catch (e) {
+    console.warn('Erro ao gerar contrato:', e.message);
+    document.getElementById('sign-loading').style.display = 'none';
+    document.getElementById('sign-error').style.display   = 'flex';
+  }
+}
+
+function finishContractScreen() {
+  document.getElementById('sign-screen').classList.remove('show');
+  openReferralScreen();
+}
+
+/* ── TELA DE INDICAÇÕES (PÓS-PAGAMENTO, PRÉ-SUCESSO) ── */
+function openReferralScreen() {
+  const firstName = (_alunoData?.nome || '').split(' ')[0];
+  document.getElementById('ref-nome').textContent = firstName + '!';
+  document.getElementById('payment-screen').classList.remove('show');
+  document.getElementById('referral-screen').classList.add('show');
+  document.body.style.overflow = 'auto';
+  window.scrollTo(0, 0);
+}
+
+async function submitReferrals() {
+  const btn = document.getElementById('btn-ref-submit');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const referidos = [];
+  for (let i = 1; i <= 5; i++) {
+    const nome = document.getElementById(`ref-nome-${i}`).value.trim();
+    const tel  = document.getElementById(`ref-tel-${i}`).value.trim();
+    if (nome && tel) referidos.push({ nome, tel });
+  }
+
+  try {
+    if (referidos.length > 0 && _alunoData) {
+      await Promise.all(referidos.map(r => sb('leads', {
+        method: 'POST',
+        body: JSON.stringify({
+          nome:             r.nome,
+          telefone:         r.tel,
+          whatsapp:         r.tel,
+          origem:           'indicacao_matricula',
+          status:           'Indicado',
+          produto:          'lancamento',
+          observacoes:      `Indicado(a) por ${_alunoData.nome} (${_alunoData.email} · ${_alunoData.telefone}) pela Ficha de Matrícula — condição especial + bônus.`,
+          ...(lancamentoId ? { lancamento_id: lancamentoId } : {}),
+          criado_em:        new Date().toISOString(),
+          ultima_atividade: new Date().toISOString(),
+        }),
+      })));
+    }
+  } catch (e) {
+    console.warn('Erro ao salvar indicações (não bloqueia o fluxo):', e.message);
+  }
+
+  finishReferralScreen();
+}
+
+function skipReferrals() {
+  finishReferralScreen();
+}
+
+function finishReferralScreen() {
+  document.getElementById('referral-screen').classList.remove('show');
+  showSuccess();
+}
+
 /* ── ABRIR TELA DE PAGAMENTO ─────────────────────── */
 function openPaymentScreen(data) {
   _alunoData = data;
@@ -2264,19 +2701,9 @@ function openPaymentScreen(data) {
   const firstName = data.nome.split(' ')[0];
   document.getElementById('pay-header-name').textContent = `Olá, ${firstName}!`;
 
-  // Valor da entrada no boleto (1ª mensalidade ou valor do lançamento)
-  const valorEntrada = lancamentoData?.valor_mensalidade_destino
-    ? `R$ ${parseFloat(lancamentoData.valor_mensalidade_destino).toFixed(2).replace('.', ',')}`
-    : 'R$ 109,90';
-  document.getElementById('boleto-valor-entrada').textContent = valorEntrada;
-
-  // Ativar link do cartão se configurado
-  if (LINK_PAGAMENTO_CARTAO) {
-    const btn = document.getElementById('btn-link-cartao');
-    btn.href = LINK_PAGAMENTO_CARTAO;
-    btn.classList.remove('disabled');
-    document.getElementById('cartao-notice').style.display = 'none';
-  }
+  // Links de pagamento SyncPay
+  document.getElementById('btn-link-vista').href     = LINK_SYNCPAY_VISTA;
+  document.getElementById('btn-link-parcelado').href = LINK_SYNCPAY_PARCELADO;
 
   // Cortesia: esconde pagamento, mostra box especial
   const venc = data.dia_vencimento;
@@ -2293,9 +2720,8 @@ function openPaymentScreen(data) {
   // Pré-selecionar opção de pagamento
   if (!isCortesia) {
     let preSelect = null;
-    if (venc === 'a_vista')                   preSelect = 'vista';
-    else if (venc === 'cartao')               preSelect = 'cartao';
-    else if (['10','20','30'].includes(venc)) preSelect = 'boleto';
+    if (venc === 'a_vista') preSelect = 'vista';
+    else if (venc === 'cartao' || ['10','20','30'].includes(venc)) preSelect = 'parcelado';
     if (preSelect) selectPay(preSelect);
   }
 
@@ -2312,90 +2738,8 @@ function selectPay(tipo) {
   if (_paySelected === tipo) return; // toggle off ignorado — mantém aberto
   _paySelected = tipo;
 
-  ['boleto', 'cartao', 'vista'].forEach(t => {
+  ['vista', 'parcelado'].forEach(t => {
     document.getElementById(`pay-${t}`).classList.toggle('active', t === tipo);
-  });
-
-  // Gerar QR quando necessário
-  if (tipo === 'boleto') gerarPixMP('boleto');
-  if (tipo === 'vista')  gerarPixMP('vista');
-}
-
-/* ── GERAR PIX VIA EDGE FUNCTION ─────────────────── */
-async function gerarPixMP(tipo) {
-  const valorMap = {
-    boleto: lancamentoData?.valor_mensalidade_destino ?? 109.90,
-    vista:  997.00,
-  };
-  const valor = parseFloat(valorMap[tipo]);
-
-  const loadEl   = document.getElementById(`qr-${tipo}-loading`);
-  const phEl     = document.getElementById(`qr-${tipo}-placeholder`);
-  const imgEl    = document.getElementById(`qr-${tipo}-img`);
-  const mpNotice = document.getElementById(`mp-${tipo}-notice`);
-  const codeWrap = document.getElementById(`pix-code-${tipo}-wrap`);
-  const codeEl   = document.getElementById(`pix-code-${tipo}`);
-
-  loadEl.classList.add('show');
-  phEl.style.display = 'none';
-  if (mpNotice) mpNotice.style.display = 'none';
-
-  try {
-    const [firstName, ...rest] = (_alunoData.nome || 'Aluno IDM').split(' ');
-    const lastName = rest.join(' ') || 'IDM';
-
-    const res = await fetch(EDGE_GERAR_PIX, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: valor,
-        description: tipo === 'vista'
-          ? 'Formacao IDM — Pagamento a vista'
-          : 'Formacao IDM — Entrada 1a parcela',
-        payer: {
-          email:      _alunoData.email,
-          first_name: firstName,
-          last_name:  lastName,
-          cpf:        _alunoData.cpf,
-        },
-      }),
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.error || 'Erro ao gerar PIX');
-
-    loadEl.classList.remove('show');
-
-    if (json.qr_code_base64) {
-      imgEl.src = `data:image/png;base64,${json.qr_code_base64}`;
-      imgEl.style.display = 'block';
-    } else {
-      phEl.style.display = 'flex';
-    }
-
-    if (json.qr_code) {
-      codeEl.textContent = json.qr_code;
-      codeWrap.style.display = 'block';
-    }
-
-  } catch (err) {
-    console.error('PIX error:', err);
-    loadEl.classList.remove('show');
-    phEl.style.display = 'flex';
-    if (mpNotice) {
-      mpNotice.innerHTML = `<strong>Erro ao gerar PIX:</strong> ${err.message}`;
-      mpNotice.style.display = 'block';
-    }
-  }
-}
-
-/* ── COPIAR PIX ──────────────────────────────────── */
-function copyPix(elId, btn) {
-  const text = document.getElementById(elId).textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = 'Copiado!';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2500);
   });
 }
 
